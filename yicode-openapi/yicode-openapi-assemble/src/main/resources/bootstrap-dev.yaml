@@ -17,5 +17,14 @@ spring:
           - data-id: yicode-openapi-dev.yaml
             group: YICODE_DEV
             refresh: true
+    sentinel:
+      filter:
+        url-patterns: /**
+        enabled: true
+      eager: true # 是否饥饿加载。默认为 false 关闭
+      transport:
+        dashboard: 127.0.0.1:8081
+        clientIp: 127.0.0.1
+        port: 8719
 
 

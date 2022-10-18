@@ -23,14 +23,7 @@ spring:
         enabled: true
       eager: true # 是否饥饿加载。默认为 false 关闭
       transport:
-        dashboard: 0.0.0.0:8081
-        clientIp: 0.0.0.0
+        dashboard: 127.0.0.1:8081
+        clientIp: 127.0.0.1
         port: 8719
-
-    gateway:
-      discovery:
-        locator:
-          # 网关开启服务注册与服务发现
-          enabled: true
-          lower-case-service-id: true
 
