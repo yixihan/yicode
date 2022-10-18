@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 8c2ee21d-78f7-48fc-8ba3-66ce5183571f
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 8c2ee21d-78f7-48fc-8ba3-66ce5183571f
+        extension-configs:
+          - data-id: yicode-common.yaml
+            group: YICODE_DEV
+            refresh: true
+          - data-id: yicode-gateway-dev.yaml
+            group: YICODE_DEV
+            refresh: true
+        file-extension: yaml
+    sentinel:
+      filter:
+        url-patterns: /**
+        enabled: true
+      eager: true # 是否饥饿加载。默认为 false 关闭
+      transport:
+        dashboard: 0.0.0.0:8081
+        clientIp: 0.0.0.0
+        port: 8719
+
+    gateway:
+      discovery:
+        locator:
+          # 网关开启服务注册与服务发现
+          enabled: true
+          lower-case-service-id: true
+

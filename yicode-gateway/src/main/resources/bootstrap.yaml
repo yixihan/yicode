@@ -1,0 +1,8 @@
+server:
+  port: 11000
+
+spring:
+  application:
+    name: yicode-gateway
+  profiles:
+    active: dev
