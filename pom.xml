@@ -15,6 +15,7 @@
         <module>renren-generator</module>
         <module>yicode-openapi</module>
         <module>yicode-gateway</module>
+        <module>yicode-auth</module>
     </modules>
 
     <properties>
