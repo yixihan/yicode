@@ -9,6 +9,7 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         namespace: 8c2ee21d-78f7-48fc-8ba3-66ce5183571f
+        file-extension: yaml
         extension-configs:
           - data-id: yicode-common.yaml
             group: YICODE_DEV
@@ -16,4 +17,3 @@ spring:
           - data-id: yicode-auth-dev.yaml
             group: YICODE_DEV
             refresh: true
-        file-extension: yaml

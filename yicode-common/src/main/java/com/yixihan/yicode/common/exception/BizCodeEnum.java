@@ -42,7 +42,36 @@ public enum BizCodeEnum implements CommonError {
     SENTINEL_DEGRADE_ERR(40002, "服务降级"),
     SENTINEL_PARAM_FLOW_ERR(40003, "热点参数限流"),
     SENTINEL_SYSTEM_BLOCK_ERR(40004, "系统规则（负载/...不满足要求）"),
-    SENTINEL_AUTH_ERR(40005, "授权规则不通过");
+    SENTINEL_AUTH_ERR(40005, "授权规则不通过"),
+
+    // 登录异常
+    /**
+     * 用户名或密码错误
+     */
+    USERNAME_PASSWORD_ERR(10001, "用户名或密码错误"),
+
+    /**
+     * 账户已被禁用
+     */
+    ACCOUNT_DISABLED(10002, "账户已被禁用"),
+
+    /**
+     * 账户已被锁定
+     */
+    ACCOUNT_LOCKED(10003, "账户已被锁定"),
+
+    /**
+     * 账户已过期
+     */
+    ACCOUNT_EXPIRED(10004, "账户已过期"),
+
+    /**
+     * 账户凭据已过期
+     */
+    CREDENTIALS_EXPIRED(10005, "账户凭据已过期"),
+
+
+    ;
 
 
     /**

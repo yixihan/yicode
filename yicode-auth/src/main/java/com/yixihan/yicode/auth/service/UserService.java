@@ -1,7 +1,8 @@
 package com.yixihan.yicode.auth.service;
 
-import com.yixihan.yicode.auth.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixihan.yicode.auth.pojo.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * <p>
@@ -11,6 +12,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yixihan
  * @since 2022-10-20
  */
-public interface UserService extends IService<User> {
+public interface UserService extends IService<User>, UserDetailsService {
 
+
+    /**
+     * 通过用户名获取用户对象
+     *
+     * @param userName username
+     * @return {@link User}
+     */
+    User getUserByUserName(String userName);
 }

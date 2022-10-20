@@ -2,6 +2,7 @@ package com.yixihan.yicode.auth.mapper;
 
 import com.yixihan.yicode.auth.pojo.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author yixihan
  * @since 2022-10-20
  */
+@Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
 }
