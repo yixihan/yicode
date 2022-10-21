@@ -1,3 +1,30 @@
+spring:
+
+  # redis 配置
+  redis:
+    host: ${yicode.redis.host}
+    port: ${yicode.redis.port}
+    database: ${yicode.redis.database}
+    password: ${yicode.redis.password}
+
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jwk-set-uri: 'http://localhost:13100/rsa/publicKey'
+
+  # 运行对 bean 进行重写
+  main:
+    allow-bean-definition-overriding: true
+
+secure:
+  ignore:
+    # 配置白名单路径
+    urls:
+      - "/actuator/**"
+      - "/auth/oauth/token"
+
+
 management:
   endpoints:
     web:
@@ -9,7 +36,4 @@ management:
       enabled: true
       show-details: always # 永远展示完整信息
 
-spring:
-  main:
-    allow-bean-definition-overriding: true
 
