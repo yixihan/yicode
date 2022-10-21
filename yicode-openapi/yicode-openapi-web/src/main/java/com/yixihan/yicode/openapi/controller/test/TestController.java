@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController implements TestOpenApi {
 
-    @Value ("${test.username}")
-    private String username;
+    @Value ("${yicode.db.port}")
+    private Integer prot;
 
     @Override
     public JsonResponse<String> testGetYaml() {
-        return JsonResponse.ok (username);
+        return JsonResponse.ok (prot.toString ());
     }
 
     @Override

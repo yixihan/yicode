@@ -6,10 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author yixihan
- * @date 2022-10-20-16:50
+ * @date 2022-10-21-11:18
  */
 @SpringBootTest
-public class PropertyTest {
+public class YamlTest {
 
     @Value("${yicode.auth.client.client-id}")
     private String clientId;
@@ -46,6 +46,4 @@ public class PropertyTest {
         assert "jwt.jks".equals (fileName);
         assert "yicode".equals (password);
     }
-
-
 }
