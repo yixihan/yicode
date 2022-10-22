@@ -16,6 +16,7 @@
         <module>yicode-gateway</module>
         <module>yicode-auth</module>
         <module>yicode-user</module>
+        <module>yicode-user-openapi</module>
     </modules>
 
     <properties>
