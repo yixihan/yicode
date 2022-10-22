@@ -27,20 +27,24 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.yixihan</groupId>
-            <artifactId>yicode-openapi-web</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-
+        <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- yicode-openapi-web -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-openapi-web</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

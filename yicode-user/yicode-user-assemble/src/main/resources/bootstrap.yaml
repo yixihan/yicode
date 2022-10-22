@@ -1,0 +1,8 @@
+server:
+  port: 14100
+
+spring:
+  application:
+    name: yicode-user
+  profiles:
+    active: dev

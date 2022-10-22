@@ -1,11 +1,5 @@
 # 项目排除路径
-/yicode-common/target/
-/yicode-gateway/target/
-/yicode-openapi/yicode-openapi-api/target/
-/yicode-openapi/yicode-openapi-assemble/target/
-/yicode-openapi/yicode-openapi-web/target/
-/yicode-openapi/yicode-openapi-biz/target/
-/yicode-auth/target
+**/target
 /tool
 
 ### JetBrains template

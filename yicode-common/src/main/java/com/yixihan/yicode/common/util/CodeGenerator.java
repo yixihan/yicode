@@ -71,7 +71,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(null);
-        pc.setParent("com.yixihan.yicode");
+        pc.setParent("com.yixihan.yicode.user");
         pc.setEntity("pojo");
         mpg.setPackageInfo(pc);
 

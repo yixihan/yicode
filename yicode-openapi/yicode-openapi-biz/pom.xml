@@ -17,9 +17,6 @@
     </properties>
 
     <dependencies>
-
-        <!-- 引入调用模块的 api 模块 -->
-
         <!-- feign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -34,6 +31,23 @@
                     <groupId>org.hdrhistogram</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- 引入调用模块的 api 模块 -->
+
+        <!-- yicode-openapi-dal -->
+
+        <!-- yicode-openapi-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-openapi-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
         <!-- cache -->

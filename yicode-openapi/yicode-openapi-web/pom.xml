@@ -18,18 +18,25 @@
 
     <dependencies>
 
+        <!-- yicode-openapi-biz -->
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-openapi-biz</artifactId>
             <version>0.0.1</version>
         </dependency>
+
+        <!-- yicode-openapi-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-openapi-api</artifactId>
             <version>0.0.1</version>
         </dependency>
 
-
+        <!-- webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

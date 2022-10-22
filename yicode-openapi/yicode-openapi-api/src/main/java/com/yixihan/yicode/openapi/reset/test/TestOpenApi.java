@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author yixihan
  * @date 2022-10-14-13:35
  */
-@Api("test")
+@Api(tags = "test")
 @RequestMapping("/open/test")
 public interface TestOpenApi {
 
