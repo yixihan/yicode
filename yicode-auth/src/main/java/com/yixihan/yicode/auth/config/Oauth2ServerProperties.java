@@ -22,9 +22,6 @@ public class Oauth2ServerProperties {
     @Value("${yicode.auth.client.scopes}")
     private String scopes;
 
-    @Value("${yicode.auth.client.grand-type}")
-    private String grandType;
-
     @Value("${yicode.auth.client.access-token-validity-seconds}")
     private Integer accessTokenValiditySeconds;
 

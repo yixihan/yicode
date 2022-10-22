@@ -1,3 +1,18 @@
+spring:
+  # redis 配置
+  redis:
+    host: ${yicode.redis.host}
+    port: ${yicode.redis.port}
+    database: ${yicode.redis.database}
+    password: ${yicode.redis.password}
+
+
+feign:
+  client:
+    yicode-user:
+      name: yicode-user
+
+
 management:
   endpoints:
     web:

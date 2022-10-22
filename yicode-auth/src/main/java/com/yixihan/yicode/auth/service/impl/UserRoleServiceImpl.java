@@ -3,7 +3,6 @@ package com.yixihan.yicode.auth.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.auth.mapper.UserRoleMapper;
-import com.yixihan.yicode.auth.pojo.Role;
 import com.yixihan.yicode.auth.pojo.UserRole;
 import com.yixihan.yicode.auth.service.RoleService;
 import com.yixihan.yicode.auth.service.UserRoleService;
@@ -28,7 +27,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private RoleService roleService;
 
     @Override
-    public List<Role> getUserRoleByUserId(Long userId) {
+    public List<String> getUserRoleByUserId(Long userId) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
         wrapper.eq ("user_id", userId);
         List<UserRole> userRoleIdList = baseMapper.selectList (wrapper);

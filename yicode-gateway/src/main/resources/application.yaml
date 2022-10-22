@@ -21,6 +21,7 @@ secure:
   ignore:
     # 配置白名单路径
     urls:
+      - "/**"
       - "/actuator/**"
       - "/auth/oauth/token"
 

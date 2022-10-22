@@ -3,6 +3,9 @@ package com.yixihan.yicode.auth;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.annotation.Resource;
 
 /**
  * @author yixihan
@@ -35,6 +38,8 @@ public class YamlTest {
     @Value("${yicode.auth.jwt.password}")
     private String password;
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
     @Test
     public void testGetProperty () {
         assert "yicode".equals (clientId);

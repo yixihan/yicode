@@ -3,7 +3,6 @@ package com.yixihan.yicode.auth.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.auth.mapper.UserMapper;
-import com.yixihan.yicode.auth.pojo.Role;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserRoleService;
 import com.yixihan.yicode.auth.service.UserService;
@@ -75,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Cacheable(cacheNames = "userRoleList", key = "userRoleList")
     public void initUserRoleInfo() {
         // 查询所有用户
-        Map<Long, List<Role>> userRoleList = new HashMap<> ();
+        Map<Long, List<String>> userRoleList = new HashMap<> ();
         baseMapper.selectList (null).stream ().map (User::getUserId).forEach (userId -> {
             userRoleList.put (userId, userRoleService.getUserRoleByUserId (userId));
         });

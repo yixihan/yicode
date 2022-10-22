@@ -9,5 +9,5 @@ public class RedisConstant {
     /**
      * 用户角色缓存 key
      */
-    public static final String RESOURCE_ROLES_MAP = "AUTH:RESOURCE_ROLES_MAP";
+    public static final String RESOURCE_ROLES_MAP = "userRoleList";
 }

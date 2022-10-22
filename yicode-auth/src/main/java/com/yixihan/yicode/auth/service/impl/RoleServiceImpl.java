@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -23,10 +24,10 @@ import java.util.List;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Override
-    public List<Role> getRoleList(List<Long> roleIdList) {
+    public List<String> getRoleList(List<Long> roleIdList) {
         QueryWrapper<Role> wrapper = new QueryWrapper<> ();
         wrapper.in (CollectionUtil.isEmpty (roleIdList),"role_id", roleIdList);
-        List<Role> roleList = baseMapper.selectList (wrapper);
+        List<String> roleList = baseMapper.selectList (wrapper).stream ().map (Role::getRoleName).collect (Collectors.toList ());
         return CollectionUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
     }
 }

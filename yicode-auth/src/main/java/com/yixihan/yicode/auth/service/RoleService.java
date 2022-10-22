@@ -20,5 +20,5 @@ public interface RoleService extends IService<Role> {
      * @param roleIdList
      * @return
      */
-    List<Role> getRoleList(List<Long> roleIdList);
+    List<String> getRoleList(List<Long> roleIdList);
 }
