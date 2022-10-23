@@ -64,6 +64,12 @@ spring:
     # 允许重载 bean
     allow-bean-definition-overriding: true
 
+# feign 配置
+feign:
+  client:
+    yicode-user:
+      name: yicode-user
+
 management:
   endpoints:
     web:

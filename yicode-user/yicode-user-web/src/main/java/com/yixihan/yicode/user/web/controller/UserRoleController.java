@@ -1,8 +1,14 @@
 package com.yixihan.yicode.user.web.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
+import com.yixihan.yicode.user.api.rest.UserRoleApi;
+import com.yixihan.yicode.user.biz.service.UserRoleService;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -13,7 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-10-22
  */
 @RestController
-@RequestMapping("/user/userrole")
-public class UserRoleController {
+public class UserRoleController implements UserRoleApi {
 
+    @Resource
+    private UserRoleService userRoleService;
+
+    @Override
+    public ApiResult<List<RoleDtoResult>> getUserRoleList(Long userId) {
+        return ApiResult.create (userRoleService.getUserRoleByUserId (userId));
+    }
 }

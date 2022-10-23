@@ -76,6 +76,19 @@
             </exclusions>
         </dependency>
 
+        <!-- feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- yicode-user-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-user-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

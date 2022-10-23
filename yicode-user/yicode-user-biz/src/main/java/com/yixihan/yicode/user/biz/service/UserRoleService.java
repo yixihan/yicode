@@ -1,7 +1,7 @@
 package com.yixihan.yicode.user.biz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.user.dal.pojo.Role;
+import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.dal.pojo.UserRole;
 
 import java.util.List;
@@ -22,5 +22,5 @@ public interface UserRoleService extends IService<UserRole> {
      * @param userId 用户 id
      * @return
      */
-    List<Role> getUserRoleByUserId(Long userId);
+    List<RoleDtoResult> getUserRoleByUserId(Long userId);
 }

@@ -1,8 +1,6 @@
 package com.yixihan.yicode.auth.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,10 +31,6 @@ public class User implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
     @ApiModelProperty(value = "用户 id")
     private Long userId;
 
@@ -56,24 +49,15 @@ public class User implements Serializable, UserDetails {
     @ApiModelProperty(value = "用户邮箱")
     private String userEmail;
 
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "修改时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "乐观锁")
-    private Integer version;
-
-    @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
-
     @ApiModelProperty(value = "用户角色列表")
     @TableField(exist = false)
     private List<Role> roleList;
 
+    @ApiModelProperty(value = "逻辑删除")
+    private Integer isDeleted;
+
     /**
-     * Returns the authorities granted to the user. Cannot return <code>null</code>.
+     * 获取用户的权限信息
      *
      * @return the authorities, sorted by natural key (never <code>null</code>)
      */

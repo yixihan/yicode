@@ -10,7 +10,6 @@ import com.yixihan.yicode.user.api.dto.response.UserInfoDtoResult;
 import com.yixihan.yicode.user.biz.service.UserRoleService;
 import com.yixihan.yicode.user.biz.service.UserService;
 import com.yixihan.yicode.user.dal.mapper.UserMapper;
-import com.yixihan.yicode.user.dal.pojo.Role;
 import com.yixihan.yicode.user.dal.pojo.User;
 import com.yixihan.yicode.user.dal.pojo.UserInfo;
 import org.springframework.stereotype.Service;
@@ -42,15 +41,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return new UserDetailInfoDtoResult ();
         }
 
-        List<Role> userRoleList = userRoleService.getUserRoleByUserId (userId);
+        List<RoleDtoResult> userRoleList = userRoleService.getUserRoleByUserId (userId);
 
         // TODO 查询用户资料信息
         UserInfo userInfo = new UserInfo ();
 
         // 转换实体类
         UserDtoResult userDtoResult = CopyUtils.copySingle (UserDtoResult.class, user);
-        List<RoleDtoResult> roleDtoResultList = CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
         UserInfoDtoResult userInfoDtoResult = CopyUtils.copySingle (UserInfoDtoResult.class, userInfo);
-        return new UserDetailInfoDtoResult (userDtoResult, roleDtoResultList, userInfoDtoResult);
+        return new UserDetailInfoDtoResult (userDtoResult, userRoleList, userInfoDtoResult);
+    }
+
+    @Override
+    public UserDtoResult getUserById(Long userId) {
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq ("user_id", userId);
+        User user = baseMapper.selectOne (wrapper);
+        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+    }
+
+    @Override
+    public UserDtoResult getUserByUserName(String userName) {
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq ("user_name", userName);
+        User user = baseMapper.selectOne (wrapper);
+        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
 }

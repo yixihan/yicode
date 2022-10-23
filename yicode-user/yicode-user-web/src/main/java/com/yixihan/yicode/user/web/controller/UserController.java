@@ -3,6 +3,7 @@ package com.yixihan.yicode.user.web.controller;
 
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
+import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
 import com.yixihan.yicode.user.api.rest.UserApi;
 import com.yixihan.yicode.user.biz.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,15 @@ public class UserController implements UserApi {
     @Override
     public ApiResult<UserDetailInfoDtoResult> getUserInfo(Long userId) {
         return ApiResult.create (userService.getUserInfo (userId));
+    }
+
+    @Override
+    public ApiResult<UserDtoResult> getUserByUserId(Long userId) {
+        return ApiResult.create (userService.getUserById (userId));
+    }
+
+    @Override
+    public ApiResult<UserDtoResult> getUserByUserName(String userName) {
+        return ApiResult.create (userService.getUserByUserName (userName));
     }
 }

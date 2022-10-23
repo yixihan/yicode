@@ -1,28 +1,19 @@
 package com.yixihan.yicode.auth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.auth.mapper.UserMapper;
+import com.yixihan.yicode.auth.feign.UserFeignClient;
 import com.yixihan.yicode.auth.pojo.User;
-import com.yixihan.yicode.auth.service.UserRoleService;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -34,10 +25,10 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Resource
-    private UserRoleService userRoleService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -51,13 +42,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         if (!user.isEnabled ()) {
-            throw new DisabledException (BizCodeEnum.ACCOUNT_DISABLED.getMsg ());
+            throw new BizException (BizCodeEnum.ACCOUNT_DISABLED);
         } else if (!user.isAccountNonLocked ()) {
-            throw new LockedException (BizCodeEnum.ACCOUNT_LOCKED.getMsg ());
+            throw new BizException (BizCodeEnum.ACCOUNT_LOCKED);
         } else if (!user.isAccountNonExpired ()) {
-            throw new AccountExpiredException (BizCodeEnum.ACCOUNT_EXPIRED.getMsg ());
+            throw new BizException (BizCodeEnum.ACCOUNT_EXPIRED);
         } else if (!user.isCredentialsNonExpired ()) {
-            throw new CredentialsExpiredException (BizCodeEnum.CREDENTIALS_EXPIRED.getMsg ());
+            throw new BizException (BizCodeEnum.CREDENTIALS_EXPIRED);
         }
 
         return user;
@@ -65,20 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserByUserName(String userName) {
-        QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_name", userName);
-        return baseMapper.selectOne (wrapper);
-    }
-
-    @PostConstruct
-    @Cacheable(cacheNames = "userRoleList", key = "userRoleList")
-    public void initUserRoleInfo() {
-        // 查询所有用户
-        Map<Long, List<String>> userRoleList = new HashMap<> ();
-        baseMapper.selectList (null).stream ().map (User::getUserId).forEach (userId -> {
-            userRoleList.put (userId, userRoleService.getUserRoleByUserId (userId));
-        });
-        log.info ("userRoleList = {}", userRoleList);
-        redisTemplate.opsForValue ().set ("userRoleList", userRoleList);
+        UserDtoResult user = userFeignClient.getUserByUserName (userName).getResult ();
+        return CopyUtils.copySingle (User.class, user);
     }
 }

@@ -44,8 +44,7 @@ public class UserRole implements Serializable {
     @ApiModelProperty(value = "乐观锁")
     private Integer version;
 
-    @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+
 
 
 }

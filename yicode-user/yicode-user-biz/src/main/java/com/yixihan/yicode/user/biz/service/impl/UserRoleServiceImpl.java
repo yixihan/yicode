@@ -2,6 +2,8 @@ package com.yixihan.yicode.user.biz.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.RoleService;
 import com.yixihan.yicode.user.biz.service.UserRoleService;
 import com.yixihan.yicode.user.dal.mapper.UserRoleMapper;
@@ -28,7 +30,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private RoleService roleService;
 
     @Override
-    public List<Role> getUserRoleByUserId(Long userId) {
+    public List<RoleDtoResult> getUserRoleByUserId(Long userId) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
         wrapper.eq ("user_id", userId);
         List<UserRole> userRoleIdList = baseMapper.selectList (wrapper);
@@ -37,6 +39,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         for (UserRole role : userRoleIdList) {
             roleIdList.add (role.getRoleId ());
         }
-        return roleService.getRoleList (roleIdList);
+        List<Role> userRoleList = roleService.getRoleList (roleIdList);
+        return CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
     }
 }
