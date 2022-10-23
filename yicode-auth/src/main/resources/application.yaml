@@ -58,7 +58,7 @@ spring:
 
 
   cache:
-    cache-names: userRoleList
+    cache-names: userRole
 
   main:
     # 允许重载 bean

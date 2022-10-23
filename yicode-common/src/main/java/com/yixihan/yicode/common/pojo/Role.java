@@ -1,10 +1,9 @@
-package com.yixihan.yicode.auth.pojo;
+package com.yixihan.yicode.common.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 
@@ -19,7 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Role对象", description="角色表")
-public class Role implements Serializable, GrantedAuthority {
+public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,15 +27,4 @@ public class Role implements Serializable, GrantedAuthority {
 
     @ApiModelProperty(value = "角色名")
     private String roleName;
-
-
-    /**
-     * 获取用户的权限信息
-     *
-     * @return
-     */
-    @Override
-    public String getAuthority() {
-        return roleName;
-    }
 }

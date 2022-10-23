@@ -17,13 +17,17 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+feign:
+  client:
+    yicode-user:
+      name: yicode-user
+
 secure:
   ignore:
     # 配置白名单路径
     urls:
-      - "/**"
       - "/actuator/**"
-      - "/auth/oauth/token"
+      - "/api/yicode-auth/oauth/token"
 
 
 management:

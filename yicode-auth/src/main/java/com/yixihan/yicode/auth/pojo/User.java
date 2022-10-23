@@ -51,7 +51,7 @@ public class User implements Serializable, UserDetails {
 
     @ApiModelProperty(value = "用户角色列表")
     @TableField(exist = false)
-    private List<Role> roleList;
+    private List<Role> authorities;
 
     @ApiModelProperty(value = "逻辑删除")
     private Integer isDeleted;
@@ -63,7 +63,7 @@ public class User implements Serializable, UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roleList;
+        return authorities;
     }
 
     /**
