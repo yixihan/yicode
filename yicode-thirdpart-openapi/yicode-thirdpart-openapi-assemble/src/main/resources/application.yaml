@@ -6,6 +6,13 @@ spring:
     database: ${yicode.redis.database}
     password: ${yicode.redis.password}
 
+  cloud:
+    alicloud:
+      access-key: ${yicode.alicloud.oss.access-key}
+      secret-key: ${yicode.alicloud.oss.secret-key}
+      oss:
+        endpoint: ${yicode.alicloud.oss.endpoint}
+
 
 feign:
   client:
