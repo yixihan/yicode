@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 初始化接口权限数据, 缓存至 Redis 中
+ * <p>
+ * key : auth:methodRoleMap
+ *
  * @author yixihan
  * @date 2022-10-23-22:34
  */

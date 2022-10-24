@@ -22,6 +22,7 @@
         <module>yicode-runcode-openapi/yicode-runcode-openapi-assemble</module>
         <module>yicode-runcode-openapi/yicode-runcode-openapi-biz</module>
         <module>yicode-runcode-openapi/yicode-runcode-openapi-web</module>
+        <module>yicode-thirdpart-openapi</module>
     </modules>
 
     <properties>

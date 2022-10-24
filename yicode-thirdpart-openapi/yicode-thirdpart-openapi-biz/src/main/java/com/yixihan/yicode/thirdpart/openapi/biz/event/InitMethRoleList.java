@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.biz.event;
+package com.yixihan.yicode.thirdpart.openapi.biz.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.valid.RoleAccess;
@@ -13,7 +13,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 初始化接口权限数据, 缓存至 Redis 中
