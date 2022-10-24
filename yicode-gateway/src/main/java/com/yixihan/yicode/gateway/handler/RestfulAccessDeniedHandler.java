@@ -1,6 +1,7 @@
 package com.yixihan.yicode.gateway.handler;
 
 import cn.hutool.json.JSONUtil;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.JsonResponse;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +26,10 @@ import java.nio.charset.StandardCharsets;
 public class RestfulAccessDeniedHandler implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
-        // TODO 自定义返回结果
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.OK);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        String body= JSONUtil.toJsonStr(JsonResponse.error (denied.getMessage()));
+        String body= JSONUtil.toJsonStr(JsonResponse.error (BizCodeEnum.NO_METHOD_ROLE));
         DataBuffer buffer =  response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }

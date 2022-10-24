@@ -73,7 +73,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 authorities.addAll(Convert.toList(String.class, methodRolesMap.get(pattern)));
             }
         }
-        log.info ("当前访问方法使用权限 : {}", authorities);
+        log.info ("当前访问方法 : {}, 访问需有使用权限 : {}", uri.getPath (), authorities);
 
         // 认证通过且角色匹配的用户可访问当前路径
         return mono

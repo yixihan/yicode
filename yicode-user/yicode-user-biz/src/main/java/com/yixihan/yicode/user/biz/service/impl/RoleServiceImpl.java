@@ -25,7 +25,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Role> getRoleList(List<Long> roleIdList) {
         QueryWrapper<Role> wrapper = new QueryWrapper<> ();
-        wrapper.in (CollectionUtil.isEmpty (roleIdList), "role_id", roleIdList);
+        wrapper.in (!CollectionUtil.isEmpty (roleIdList), "role_id", roleIdList);
         List<Role> roleList = baseMapper.selectList (wrapper);
         return CollectionUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
     }

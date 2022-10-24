@@ -14,17 +14,7 @@ public enum BizCodeEnum implements CommonError {
     FAILED_TYPE_INTERNAL(500, "服务器错误"),
 
     /**
-     * 失败类型：内部异常
-     */
-    USER_LOGIN_ERROR(502, "登录失败"),
-
-    /**
-     * 失败类型：业务异常, 默认业务异常码为：20000
-     */
-    FAILED_TYPE_BUSINESS (20000, "业务异常"),
-
-    /**
-     * 失败类型：
+     * 请求异常
      */
     FAILED_TYPE_BAD_REQUEST (400, "请求异常"),
 
@@ -38,12 +28,45 @@ public enum BizCodeEnum implements CommonError {
      */
     FAILED_TYPE_FORBIDDEN (403, "禁止访问"),
 
+    /**
+     * 业务异常 (默认)
+     */
+    FAILED_TYPE_BUSINESS (20000, "业务异常"),
 
-    // sentinel 异常
+    /**
+     * 参数校验异常
+     */
+    PARAMS_VALID_ERR(20001, "参数校验异常"),
+
+    /**
+     * 空指针异常
+     */
+    NULL_ERR(20002, "空指针异常"),
+
+    // ===== sentinel 异常 ==== //
+    /**
+     * 系统限流
+     */
     SENTINEL_FLOW_ERR(40001, "系统限流，请稍等"),
+
+    /**
+     * 服务降级
+     */
     SENTINEL_DEGRADE_ERR(40002, "服务降级"),
+
+    /**
+     * 热点参数限流
+     */
     SENTINEL_PARAM_FLOW_ERR(40003, "热点参数限流"),
+
+    /**
+     * 系统规则
+     */
     SENTINEL_SYSTEM_BLOCK_ERR(40004, "系统规则（负载/...不满足要求）"),
+
+    /**
+     * 授权规则不通过
+     */
     SENTINEL_AUTH_ERR(40005, "授权规则不通过"),
 
     // 登录异常
@@ -71,6 +94,16 @@ public enum BizCodeEnum implements CommonError {
      * 账户凭据已过期
      */
     CREDENTIALS_EXPIRED(10005, "账户凭据已过期"),
+
+    /**
+     * token 过期
+     */
+    TOKEN_EXPIRED(10006, "登录凭证已过期, 请重新登录"),
+
+    /**
+     * 没有访问权限
+     */
+    NO_METHOD_ROLE(10007, "没有访问权限");
 
 
     ;

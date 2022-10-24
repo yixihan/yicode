@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserByUserName (username);
 
         if (user == null) {
-            throw new UsernameNotFoundException (BizCodeEnum.USERNAME_PASSWORD_ERR.getMsg ());
+            throw new BizException (BizCodeEnum.USERNAME_PASSWORD_ERR);
         }
 
         if (!user.isEnabled ()) {
