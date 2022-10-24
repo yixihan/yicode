@@ -22,6 +22,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
+ * 资源服务配置
+ *
  * @author yixihan
  * @date 2022-10-21-17:30
  */
@@ -39,9 +41,9 @@ public class ResourceServerConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.oauth2ResourceServer ().jwt ().jwtAuthenticationConverter (jwtAuthenticationConverter ());
-        //自定义处理JWT请求头过期或签名错误的结果
+        // 自定义处理 jwt 请求头过期或签名错误的结果
         http.oauth2ResourceServer ().authenticationEntryPoint (restAuthenticationEntryPoint);
-        //对白名单路径，直接移除JWT请求头
+        // 对白名单路径, 直接移除 jwt 请求头
         http.addFilterBefore (ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         http.authorizeExchange ().pathMatchers (ArrayUtil.toArray (ignoreUrlsConfig.getUrls (), String.class)).permitAll ()//白名单配置
                 .anyExchange ().access (authorizationManager)//鉴权管理器配置

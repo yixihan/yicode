@@ -3,7 +3,7 @@ package com.yixihan.yicode.user.openapi.web.controller;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.UserOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
-import com.yixihan.yicode.user.openapi.biz.server.UserService;
+import com.yixihan.yicode.user.openapi.biz.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;

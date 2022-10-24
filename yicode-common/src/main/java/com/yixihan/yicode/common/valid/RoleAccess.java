@@ -4,6 +4,7 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 /**
+ * 自定义注解, 配置接口可访问角色信息
  * @author yixihan
  * @date 2022-10-23-21:55
  */

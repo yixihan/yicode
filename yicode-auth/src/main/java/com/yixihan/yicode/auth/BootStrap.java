@@ -1,7 +1,6 @@
 package com.yixihan.yicode.auth;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.Arrays;
 
 /**
- * 认证授权主启动类
+ * yicode auth 主启动类
  *
  * @author yixihan
  * @date 2022-10-20-15:15
@@ -25,7 +24,6 @@ import java.util.Arrays;
 @EnableScheduling
 @RefreshScope
 @EnableCaching
-@MapperScan("com.yixihan.yicode.auth.mapper")
 @SpringBootApplication
 public class BootStrap {
 

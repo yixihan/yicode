@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * @author : wq
+ * mp 代码自动生成
+ *
+ * @author : yixihan
  * @create : 2021-11-13-23:14
  */
 public class CodeGenerator {
@@ -71,7 +73,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(null);
-        pc.setParent("com.yixihan.yicode.user");
+        pc.setParent("com.yixihan.yicode.runcode");
         pc.setEntity("pojo");
         mpg.setPackageInfo(pc);
 

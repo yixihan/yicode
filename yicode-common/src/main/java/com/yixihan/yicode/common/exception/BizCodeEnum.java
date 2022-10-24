@@ -1,6 +1,8 @@
 package com.yixihan.yicode.common.exception;
 
 /**
+ * 异常枚举类
+ *
  * @author yixihan
  * @date 2022-10-14-10:59
  */

@@ -15,7 +15,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 import java.util.Arrays;
 
 /**
- * 用户模块主启动类
+ * yicode user 主启动类
  *
  * @author yixihan
  * @date 2022-10-22-16:19

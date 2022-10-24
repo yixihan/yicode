@@ -17,6 +17,11 @@
         <module>yicode-auth</module>
         <module>yicode-user</module>
         <module>yicode-user-openapi</module>
+        <module>yicode-runcode</module>
+        <module>yicode-runcode-openapi</module>
+        <module>yicode-runcode-openapi/yicode-runcode-openapi-assemble</module>
+        <module>yicode-runcode-openapi/yicode-runcode-openapi-biz</module>
+        <module>yicode-runcode-openapi/yicode-runcode-openapi-web</module>
     </modules>
 
     <properties>
