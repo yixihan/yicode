@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.openapi.api.reset;
+package com.yixihan.yicode.thirdpart.openapi.api.reset.oss;
 
 import com.yixihan.yicode.common.util.JsonResponse;
 import io.swagger.annotations.Api;

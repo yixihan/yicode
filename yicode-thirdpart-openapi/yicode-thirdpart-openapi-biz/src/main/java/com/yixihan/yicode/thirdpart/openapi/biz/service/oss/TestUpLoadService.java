@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.openapi.biz.service;
+package com.yixihan.yicode.thirdpart.openapi.biz.service.oss;
 
 import org.springframework.web.multipart.MultipartFile;
 

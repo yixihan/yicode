@@ -1,11 +1,11 @@
-package com.yixihan.yicode.thirdpart.openapi.biz.service.impl;
+package com.yixihan.yicode.thirdpart.openapi.biz.service.oss.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.yixihan.yicode.thirdpart.openapi.biz.constant.OssConstant;
-import com.yixihan.yicode.thirdpart.openapi.biz.service.TestUpLoadService;
+import com.yixihan.yicode.thirdpart.openapi.biz.service.oss.TestUpLoadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
