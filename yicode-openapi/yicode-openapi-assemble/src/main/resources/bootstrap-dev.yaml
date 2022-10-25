@@ -1,8 +1,8 @@
 spring:
   cloud:
     nacos:
-      username: nacos
-      password: nacos
+      username: yicode
+      password: yicode
       discovery:
         server-addr: 175.24.163.161:3333
         namespace: dev
