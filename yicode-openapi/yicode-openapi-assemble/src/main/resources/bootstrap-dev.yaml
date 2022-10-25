@@ -4,11 +4,11 @@ spring:
       username: nacos
       password: nacos
       discovery:
-        server-addr: 127.0.0.1:8848
-        namespace: 8c2ee21d-78f7-48fc-8ba3-66ce5183571f
+        server-addr: 175.24.163.161:3333
+        namespace: dev
       config:
-        server-addr: 127.0.0.1:8848
-        namespace: 8c2ee21d-78f7-48fc-8ba3-66ce5183571f
+        server-addr: 175.24.163.161:3333
+        namespace: dev
         file-extension: yaml
         extension-configs:
           - data-id: yicode-common-dev.yaml
@@ -23,7 +23,7 @@ spring:
         enabled: true
       eager: true # 是否饥饿加载。默认为 false 关闭
       transport:
-        dashboard: 127.0.0.1:8081
+        dashboard: 175.24.163.161:8081
         clientIp: 127.0.0.1
         port: 8719
 
