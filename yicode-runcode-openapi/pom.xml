@@ -13,6 +13,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>yicode-runcode-openapi-api</module>
+        <module>yicode-runcode-openapi-biz</module>
+        <module>yicode-runcode-openapi-assemble</module>
+        <module>yicode-runcode-openapi-web</module>
     </modules>
 
     <properties>

@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>yicode-thirdpart-openapi</artifactId>
+        <artifactId>yicode-thirdpart</artifactId>
         <groupId>com.yixihan</groupId>
         <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>yicode-thirdpart-openapi-web</artifactId>
+    <artifactId>yicode-thirdpart-web</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,14 +21,14 @@
         <!-- yicode-runcode-biz -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-thirdpart-openapi-biz</artifactId>
+            <artifactId>yicode-thirdpart-biz</artifactId>
             <version>0.0.1</version>
         </dependency>
 
         <!-- yicode-thirdpart-openapi-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-thirdpart-openapi-api</artifactId>
+            <artifactId>yicode-thirdpart-api</artifactId>
             <version>0.0.1</version>
         </dependency>
 
