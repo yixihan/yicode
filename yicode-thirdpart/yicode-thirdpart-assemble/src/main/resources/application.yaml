@@ -1,4 +1,5 @@
 spring:
+
   # redis 配置
   redis:
     host: ${yicode.redis.host}
@@ -6,6 +7,7 @@ spring:
     database: ${yicode.redis.database}
     password: ${yicode.redis.password}
 
+  # oss
   cloud:
     alicloud:
       access-key: ${yicode.alicloud.oss.access-key}
@@ -13,7 +15,21 @@ spring:
       oss:
         endpoint: ${yicode.alicloud.oss.endpoint}
 
+  #邮件发送配置
+  mail:
+    username: ${yicode.email.username}
+    password: ${yicode.email.password}
+    host: smtp.qq.com
+    # 开启加密授权验证
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable:
+              true
 
+
+# feign
 feign:
   client:
     yicode-user:

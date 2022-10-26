@@ -3,6 +3,6 @@ server:
 
 spring:
   application:
-    name: yicode-thirdpart-openapi
+    name: yicode-thirdpart
   profiles:
     active: dev

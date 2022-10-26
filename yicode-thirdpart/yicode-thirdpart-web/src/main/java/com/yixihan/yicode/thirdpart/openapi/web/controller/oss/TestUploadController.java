@@ -1,7 +1,7 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.oss;
 
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.thirdpart.openapi.api.reset.oss.TestUploadOpenApi;
+import com.yixihan.yicode.thirdpart.openapi.api.reset.oss.TestUploadApi;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.oss.TestUpLoadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
-public class TestUploadController implements TestUploadOpenApi {
+public class TestUploadController implements TestUploadApi {
 
     @Resource
     private TestUpLoadService testUpLoadService;

@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Api(tags = "测试 oss")
 @RequestMapping("/test/")
-public interface TestUploadOpenApi {
+public interface TestUploadApi {
 
     @ApiOperation ("测试 oss 上传字符串")
     @PostMapping(value = "/uploadfile")

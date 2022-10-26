@@ -14,7 +14,7 @@ spring:
           - data-id: yicode-common-dev.yaml
             group: YICODE_DEV
             refresh: true
-          - data-id: yicode-thirdpart-openapi-dev.yaml
+          - data-id: yicode-thirdpart-dev.yaml
             group: YICODE_DEV
             refresh: true
 
