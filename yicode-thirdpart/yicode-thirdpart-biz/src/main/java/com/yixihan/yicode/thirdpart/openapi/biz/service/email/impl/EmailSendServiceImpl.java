@@ -1,8 +1,10 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.constant.EmailConstant;
-import com.yixihan.yicode.thirdpart.openapi.biz.service.CodeService;
+import com.yixihan.yicode.thirdpart.openapi.biz.service.impl.CodeServiceImpl;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +16,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
+ * 邮件发送服务类
+ *
  * @author yixihan
  * @date 2022-10-26-11:02
  */
@@ -25,7 +29,7 @@ public class EmailSendServiceImpl implements EmailSendService {
     private JavaMailSender mailSender;
 
     @Resource
-    private CodeService codeService;
+    private CodeServiceImpl codeService;
 
     @Resource
     private EmailConstant emailConstant;
@@ -59,10 +63,10 @@ public class EmailSendServiceImpl implements EmailSendService {
             mailSender.send(mailMessage);
 
         } catch (MessagingException e) {
-            return "短信发送失败";
+            log.error ("邮件发送失败 : {}", e.getMessage (), new BizException (BizCodeEnum.EMAIL_SEND_ERR));
         }
 
-        return "短信发送成功";
+        return "邮件发送成功";
     }
 
 }

@@ -103,9 +103,24 @@ public enum BizCodeEnum implements CommonError {
     /**
      * 没有访问权限
      */
-    NO_METHOD_ROLE(10007, "没有访问权限");
+    NO_METHOD_ROLE(10007, "没有访问权限"),
 
 
+    // 第三方服务
+    /**
+     * 文件上传失败
+     */
+    OSS_ERR(90001, "文件上传失败"),
+
+    /**
+     * 邮件发送失败
+     */
+    EMAIL_SEND_ERR(90002, "邮件发送失败"),
+
+    /**
+     * 短信发送失败
+     */
+    SMS_SEND_ERR(90003, "短信发送失败"),
     ;
 
 

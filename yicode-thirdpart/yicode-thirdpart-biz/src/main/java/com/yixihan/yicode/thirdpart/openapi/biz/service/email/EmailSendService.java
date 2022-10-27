@@ -3,6 +3,8 @@ package com.yixihan.yicode.thirdpart.openapi.biz.service.email;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
 
 /**
+ * 邮件发送服务类
+ *
  * @author yixihan
  * @date 2022-10-26-11:02
  */

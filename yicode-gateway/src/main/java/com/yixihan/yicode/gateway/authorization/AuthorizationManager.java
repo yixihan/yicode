@@ -3,8 +3,6 @@ package com.yixihan.yicode.gateway.authorization;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
-import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.gateway.config.IgnoreUrlsConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -60,7 +58,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         // 校验权限
         String token = request.getHeaders ().getFirst (AuthConstant.JWT_TOKEN_HEADER);
         if (StrUtil.isEmpty (token)) {
-            return Mono.error (new BizException (BizCodeEnum.FAILED_TYPE_UNAUTHORIZED));
+            return Mono.just (new AuthorizationDecision (false));
         }
 
         // 获取当前访问方法的使用角色权限
