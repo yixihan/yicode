@@ -1,0 +1,103 @@
+spring:
+
+  # 数据库配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      # ${yicode.db.port}
+      url: jdbc:mysql://${yicode.db.host}:${yicode.db.port}/${yicode.db.db}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+      username: ${yicode.db.username}
+      password: ${yicode.db.password}
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username: ${yicode.db.admin.username}
+        login-password: ${yicode.db.admin.password}
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+
+  # redis 配置
+  redis:
+    host: ${yicode.redis.host}
+    port: ${yicode.redis.port}
+    database: ${yicode.redis.database}
+    password: ${yicode.redis.password}
+
+  # rabbitmq消息队列配置
+  rabbitmq:
+    host: ${yicode.rabbitmq.host}
+    port: ${yicode.rabbitmq.port}
+    username: ${yicode.rabbitmq.username}
+    password: ${yicode.rabbitmq.password}
+    #虚拟host 可以不设置,使用server默认host
+    #virtual-host: JCcccHost
+    #开启发送失败返回
+    publisher-returns: true
+    #配置确认回调
+    publisher-confirm-type: correlated
+    listener:
+      simple:
+        #指定最小的消费者数量.
+        concurrency: 5
+        #指定最大的消费者数量.
+        max-concurrency: 10
+        #开启ack
+        acknowledge-mode: auto
+        # 最多一次消费多少条数据 -限流
+        prefetch: 1
+      #开启ack
+      direct:
+        acknowledge-mode: auto
+    #支持消息的确认与返回
+    template:
+      mandatory: true
+
+  # 运行对 bean 进行重写
+  main:
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 开放所有端点 默认值只打开 health 和 info 两个端点
+  endpoint:
+    # health 端点配置项
+    health:
+      enabled: true
+      show-details: always # 永远展示完整信息
+
+

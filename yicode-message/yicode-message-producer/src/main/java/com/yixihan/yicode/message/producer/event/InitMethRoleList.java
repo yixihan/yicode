@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.biz.event;
+package com.yixihan.yicode.message.producer.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.valid.RoleAccess;
@@ -12,7 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 初始化接口权限数据, 缓存至 Redis 中
@@ -25,20 +28,18 @@ import java.util.*;
 @Component
 public class InitMethRoleList {
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource(name = "requestMappingHandlerMapping")
-    private RequestMappingHandlerMapping mapping;
-
-    @Value ("${spring.application.name}")
-    private String applicationName;
-
-    static List<String> defaultRoleList = new ArrayList<>();
+    static List<String> defaultRoleList = new ArrayList<> ();
 
     static {
         defaultRoleList.add ("超级管理员");
     }
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name = "requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping mapping;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     @PostConstruct
     public void initUrlRole() {

@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    nacos:
+      username: yicode
+      password: yicode
+      discovery:
+        server-addr: 175.24.163.161:3333
+        namespace: dev
+      config:
+        server-addr: 175.24.163.161:3333
+        namespace: dev
+        extension-configs:
+          - data-id: yicode-common-dev.yaml
+            group: YICODE_DEV
+            refresh: true
+          - data-id: yicode-message-consumer-dev.yaml
+            group: YICODE_DEV
+            refresh: true
+        file-extension: yaml

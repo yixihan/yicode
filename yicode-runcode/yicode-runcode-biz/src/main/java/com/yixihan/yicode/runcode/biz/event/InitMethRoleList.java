@@ -60,7 +60,7 @@ public class InitMethRoleList {
 
             // 获取方法 url
             PatternsRequestCondition p = info.getPatternsCondition ();
-            String completeUrl = "/api/" + applicationName + "/";
+            String completeUrl = "/api/" + applicationName;
             String methodUrl = "";
             for (String url : p.getPatterns ()) {
                 methodUrl = url;
