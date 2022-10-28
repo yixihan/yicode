@@ -16,22 +16,22 @@ public enum EmailTypeEnums {
     /**
      * 登录模板
      */
-    LOGIN(1L, "登录模板"),
+    LOGIN(10000000L, "登录模板"),
 
     /**
      * 注册模板
      */
-    REGISTER(2L, "注册模板"),
+    REGISTER(10000001L, "注册模板"),
 
     /**
      * 更新密码模板
      */
-    UPDATE_PASSWORD(3L, "更新密码模板"),
+    UPDATE_PASSWORD(10000002L, "更新密码模板"),
 
     /**
      * 通用模板
      */
-    COMMON(4L, "通用模板")
+    COMMON(10000003L, "通用模板")
 
     ;
 

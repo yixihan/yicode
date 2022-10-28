@@ -32,9 +32,6 @@ public class EmailTemplate implements Serializable {
     @ApiModelProperty(value = "模板名字")
     private String templateName;
 
-    @ApiModelProperty(value = "模板 id")
-    private String templateId;
-
     @ApiModelProperty(value = "模板内容")
     private String templateContent;
 

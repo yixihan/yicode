@@ -17,6 +17,9 @@ public class EmailConstant {
     @Value("${yicode.email.username}")
     private String sendEmail;
 
+    @Value (("${yicode.name}"))
+    private String title;
+
     // **** redis key **** //
 
     @Value ("${yicode.thirdpart.email.login-key}")

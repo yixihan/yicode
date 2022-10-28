@@ -4,7 +4,9 @@ import com.yixihan.yicode.common.enums.EmailTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.biz.constant.CodeConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.constant.EmailConstant;
+import com.yixihan.yicode.thirdpart.openapi.biz.service.EmailTemplateService;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.impl.CodeServiceImpl;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +35,25 @@ public class EmailSendServiceImpl implements EmailSendService {
     private CodeServiceImpl codeService;
 
     @Resource
+    private EmailTemplateService emailTemplateService;
+
+    @Resource
+    private CodeConstant codeConstant;
+
+    @Resource
     private EmailConstant emailConstant;
 
 
     @Override
     public String sendEmail(SendEmailDtoReq dtoReq) {
+
+        EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getType ());
+
         // 生成 keyName
-        String keyName = getRedisKey (dtoReq);
+        String keyName = getRedisKey (dtoReq, emailType);
 
         // TODO 获取模板内容
-        String emailContent = "";
+        String emailContent = emailTemplateService.getEmailContent (emailType.getId ());
 
         try {
             // 生成验证码
@@ -54,9 +65,8 @@ public class EmailSendServiceImpl implements EmailSendService {
             // 组装邮件
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage,true,"utf-8");
 
-            helper.setSubject("你好");
-            helper.setText("<h1 style='color:red'>验证码为" + code + "</h1>" +
-                    "<p>有效期为 10 分钟,.请尽快填写, 打死也不要告诉别人哦</p>",true);
+            helper.setSubject(emailConstant.getTitle ());
+            helper.setText(String.format (emailContent, code, codeConstant.getTimeOut ()),true);
 
             // 收件人
             helper.setTo(dtoReq.getEmail ());
@@ -77,10 +87,11 @@ public class EmailSendServiceImpl implements EmailSendService {
      * 获取 redis key
      *
      * @param dtoReq
+     * @param emailType
      * @return
      */
-    private String getRedisKey (SendEmailDtoReq dtoReq) {
-        EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getType ());
+    private String getRedisKey (SendEmailDtoReq dtoReq, EmailTypeEnums emailType) {
+
         String key;
         if (emailType == EmailTypeEnums.LOGIN) {
             key = String.format (emailConstant.getLoginKey (), dtoReq.getEmail ());

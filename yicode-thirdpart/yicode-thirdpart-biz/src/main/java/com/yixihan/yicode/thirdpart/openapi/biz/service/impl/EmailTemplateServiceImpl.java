@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailTemplateServiceImpl extends ServiceImpl<EmailTemplateMapper, EmailTemplate> implements EmailTemplateService {
 
+    @Override
+    public String getEmailContent(Long id) {
+        return baseMapper.selectById (id).getTemplateContent ();
+    }
 }
