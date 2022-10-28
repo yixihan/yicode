@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.api.rest;
 
+import com.yixihan.yicode.common.enums.RoleEnum;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserApi {
 
     @ApiOperation("获取用户详细信息")
-    @RoleAccess(value = "用户")
+    @RoleAccess(value = RoleEnum.USER)
     @PostMapping(value = "/userdetailinfo", produces = "application/json")
     ApiResult<UserDetailInfoDtoResult> getUserInfo(@RequestParam("userId") Long userId);
 
@@ -28,7 +29,6 @@ public interface UserApi {
     ApiResult<UserDtoResult> getUserByUserId(@RequestParam("userId") Long userId);
 
     @ApiOperation ("通过 userId 获取用户信息")
-    @RoleAccess(value = "超级管理员")
     @PostMapping(value = "/userbyname", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserName(@RequestParam("userName") String userName);
 

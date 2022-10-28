@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.openapi.api.rset;
 
+import com.yixihan.yicode.common.enums.RoleEnum;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
-    @RoleAccess(value = "用户")
+    @RoleAccess(value = RoleEnum.USER)
     @PostMapping(value = "/userinfo", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(@RequestParam("userId") Long userId);
 

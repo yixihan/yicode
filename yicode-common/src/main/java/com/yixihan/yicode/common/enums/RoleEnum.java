@@ -13,9 +13,19 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RoleEnum {
 
-
+    /**
+     * 超级管理员
+     */
     SUPER_ADMIN(1L, "超级管理员"),
+
+    /**
+     * 管理员
+     */
     ADMIN(2L, "管理员"),
+
+    /**
+     * 用户
+     */
     USER(3L, "用户");
 
 

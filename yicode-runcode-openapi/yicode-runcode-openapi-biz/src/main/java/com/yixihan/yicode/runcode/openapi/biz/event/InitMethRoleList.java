@@ -1,6 +1,7 @@
 package com.yixihan.yicode.runcode.openapi.biz.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
+import com.yixihan.yicode.common.enums.RoleEnum;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,21 +32,19 @@ import java.util.Map;
 public class InitMethRoleList {
 
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
 
-    @Resource(name = "requestMappingHandlerMapping")
-    private RequestMappingHandlerMapping mapping;
-
-    @Value ("${spring.application.name}")
-    private String applicationName;
-
-    static List<String> defaultRoleList = new ArrayList<>();
+    static List<RoleEnum> defaultRoleList = new ArrayList<> ();
 
     static {
-        defaultRoleList.add ("超级管理员");
+        defaultRoleList.add (RoleEnum.SUPER_ADMIN);
     }
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name = "requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping mapping;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     @PostConstruct
     public void initUrlRole() {
@@ -54,7 +53,7 @@ public class InitMethRoleList {
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods ();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet ()) {
             // 获取方法所需的角色权限
-            List<String> roleList;
+            List<RoleEnum> roleList;
             RequestMappingInfo info = m.getKey ();
             HandlerMethod method = m.getValue ();
             RoleAccess roleAccess = method.getMethodAnnotation (RoleAccess.class);

@@ -43,6 +43,4 @@ public interface AuthConstant {
      * 用户信息Http请求头
      */
     String USER_TOKEN_HEADER = "user";
-
-    String[] DEFAULT_ROLE = new String[]{"超级管理员"};
 }

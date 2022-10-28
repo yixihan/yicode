@@ -1,6 +1,7 @@
 package com.yixihan.yicode.runcode.biz.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
+import com.yixihan.yicode.common.enums.RoleEnum;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,10 +29,11 @@ import java.util.Map;
 @Component
 public class InitMethRoleList {
 
-    static List<String> defaultRoleList = new ArrayList<> ();
+
+    static List<RoleEnum> defaultRoleList = new ArrayList<> ();
 
     static {
-        defaultRoleList.add ("超级管理员");
+        defaultRoleList.add (RoleEnum.SUPER_ADMIN);
     }
 
     @Resource
@@ -48,11 +50,11 @@ public class InitMethRoleList {
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods ();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet ()) {
             // 获取方法所需的角色权限
-            List<String> roleList;
+            List<RoleEnum> roleList;
             RequestMappingInfo info = m.getKey ();
             HandlerMethod method = m.getValue ();
             RoleAccess roleAccess = method.getMethodAnnotation (RoleAccess.class);
-            if (roleAccess == null || roleAccess.value () == null) {
+            if (roleAccess == null || roleAccess.value () == null || roleAccess.value ().length == 0) {
                 roleList = defaultRoleList;
             } else {
                 roleList = new ArrayList<> (Arrays.asList (roleAccess.value ()));
