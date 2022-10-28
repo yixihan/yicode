@@ -7,6 +7,7 @@ import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
+import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.yixihan.yicode.common.enums.SMSTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
@@ -84,9 +85,16 @@ public class SMSServiceImpl implements SMSService {
 
             // 返回的resp是一个SendSmsResponse的实例，与请求对象对应
             SendSmsResponse resp = client.SendSms(req);
-            // 输出json格式的字符串回包
             log.info ("response : {}", SendSmsResponse.toJsonString(resp));
-            return "短信发送成功";
+            SendStatus sendStatus = resp.getSendStatusSet ()[0];
+            if ("Ok".equals (sendStatus.getCode ())) {
+                return "短信发送成功";
+            } else {
+                log.error (sendStatus.getMessage(), new BizException (BizCodeEnum.SMS_SEND_ERR));
+                return "短信发送失败";
+            }
+            // 输出json格式的字符串回包
+
         } catch (TencentCloudSDKException e) {
             log.error (e.getMessage (), new BizException (BizCodeEnum.SMS_SEND_ERR));
             return "短信发送失败";
