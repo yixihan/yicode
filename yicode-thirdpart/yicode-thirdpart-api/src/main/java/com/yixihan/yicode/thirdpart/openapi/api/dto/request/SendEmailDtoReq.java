@@ -20,5 +20,5 @@ public class SendEmailDtoReq {
     private String email;
 
     @ApiModelProperty(value = "发送类型")
-    private Integer emailType;
+    private String type;
 }

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * oss
+ * oss常量
  *
  * @author yixihan
  * @date 2022-10-24-15:29

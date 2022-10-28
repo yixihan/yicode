@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms;
 
+import com.yixihan.yicode.common.enums.SMSTypeEnums;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendSMSDtoReq;
 
 /**
@@ -11,10 +12,12 @@ import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendSMSDtoReq;
 public interface SMSService {
 
     /**
-     * 测试发送手机短信
+     * 发送手机短信
+     * <p>
+     * 短信发送类型枚举类 : {@link SMSTypeEnums}
      *
      * @param dtoReq
      * @return
      */
-    String testSend(SendSMSDtoReq dtoReq);
+    String send(SendSMSDtoReq dtoReq);
 }

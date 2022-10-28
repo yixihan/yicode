@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SMSApi {
 
     @ApiOperation ("测试发送短信")
-    @PostMapping("/testsend")
-    ApiResult<String> testSend (@RequestBody SendSMSDtoReq dtoReq);
+    @PostMapping("/send")
+    ApiResult<String> send (@RequestBody SendSMSDtoReq dtoReq);
 
 }

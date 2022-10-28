@@ -22,7 +22,7 @@ public class SMSController implements SMSApi {
 
 
     @Override
-    public ApiResult<String> testSend(SendSMSDtoReq dtoReq) {
-        return ApiResult.create (smsService.testSend (dtoReq));
+    public ApiResult<String> send(SendSMSDtoReq dtoReq) {
+        return ApiResult.create (smsService.send (dtoReq));
     }
 }

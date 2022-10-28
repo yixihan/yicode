@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
+import com.yixihan.yicode.common.enums.EmailTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
@@ -38,7 +39,10 @@ public class EmailSendServiceImpl implements EmailSendService {
     @Override
     public String sendEmail(SendEmailDtoReq dtoReq) {
         // 生成 keyName
-        String keyName = String.format(EmailConstant.LOGIN_FORMAT, dtoReq.getEmail ());
+        String keyName = getRedisKey (dtoReq);
+
+        // TODO 获取模板内容
+        String emailContent = "";
 
         try {
             // 生成验证码
@@ -67,6 +71,30 @@ public class EmailSendServiceImpl implements EmailSendService {
         }
 
         return "邮件发送成功";
+    }
+
+    /**
+     * 获取 redis key
+     *
+     * @param dtoReq
+     * @return
+     */
+    private String getRedisKey (SendEmailDtoReq dtoReq) {
+        EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getType ());
+        String key;
+        if (emailType == EmailTypeEnums.LOGIN) {
+            key = String.format (emailConstant.getLoginKey (), dtoReq.getEmail ());
+        } else if (emailType == EmailTypeEnums.REGISTER) {
+            key = String.format (emailConstant.getRegisterKey (), dtoReq.getEmail ());
+        } else if (emailType == EmailTypeEnums.UPDATE_PASSWORD) {
+            key = String.format (emailConstant.getUpdatePasswordKey (), dtoReq.getEmail ());
+        } else if (emailType == EmailTypeEnums.COMMON) {
+            key = String.format (emailConstant.getUpdatePasswordKey (), dtoReq.getEmail ());
+        } else {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+
+        return key;
     }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 邮件发送
+ * 邮件发送常量
  *
  * @author yixihan
  * @date 2022-10-26-11:11
@@ -17,10 +17,18 @@ public class EmailConstant {
     @Value("${yicode.email.username}")
     private String sendEmail;
 
-    public static final String LOGIN_FORMAT = "email::login::%s";
+    // **** redis key **** //
 
-    public static final String REGISTER_FORMAT = "email::register::%s";
+    @Value ("${yicode.thirdpart.email.login-key}")
+    private String loginKey;
 
-    public static final String UPDATE_PASSWORD_FORMAT = "email::update-password::%s";
+    @Value ("${yicode.thirdpart.email.register-key}")
+    private String registerKey;
+
+    @Value ("${yicode.thirdpart.email.update-password-key}")
+    private String updatePasswordKey;
+
+    @Value ("${yicode.thirdpart.email.common-key}")
+    private String commonKey;
 
 }
