@@ -17,5 +17,34 @@ spring:
           - data-id: yicode-thirdpart-dev.yaml
             group: YICODE_DEV
             refresh: true
+    sentinel:
+      filter:
+        url-patterns: /**
+        enabled: true
+      eager: true # 是否饥饿加载。默认为 false 关闭
+      transport:
+        dashboard: 127.0.0.1:8081
+        port: 8719
+      datasource:
+        flow:
+          nacos:
+            server-addr: 175.24.163.161:3333 #nacos的访问地址，根据上面准备工作中启动的实例配置
+            username: yicode
+            password: yicode
+            dataId: cloud-sentinel-flow-service #nacos中存储规则的dataId
+            groupId: GATEWAY #nacos中存储规则的groupId
+            namespace: dev #Nacos 命名空间的ID
+            data-type: json #配置文件类型
+            rule-type: flow #类型来自RuleType类 - 流控规则
+        degrade:
+          nacos:
+            server-addr: 175.24.163.161:3333 #nacos的访问地址，根据上面准备工作中启动的实例配置
+            username: yicode
+            password: yicode
+            dataId: cloud-sentinel-degrade-service #nacos中存储规则的dataId
+            groupId: GATEWAY #nacos中存储规则的groupId
+            namespace: dev #Nacos 命名空间的ID
+            data-type: json #配置文件类型
+            rule-type: degrade #类型来自RuleType类 - 熔断规则
 
 
