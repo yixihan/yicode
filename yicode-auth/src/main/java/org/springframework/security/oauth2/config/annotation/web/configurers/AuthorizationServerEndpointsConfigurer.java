@@ -1,5 +1,6 @@
 package org.springframework.security.oauth2.config.annotation.web.configurers;
 
+import com.yixihan.yicode.auth.oauth.email.EmailTokenGranter;
 import com.yixihan.yicode.auth.oauth.sms.SMSTokenGranter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ObjectFactory;
@@ -532,6 +533,9 @@ public final class AuthorizationServerEndpointsConfigurer {
             // 自定义部分
             // 添加 sms 验证方式
             tokenGranters.add (new SMSTokenGranter (authenticationManager, tokenServices,
+                    clientDetails, requestFactory));
+            // 添加 emial 验证方式
+            tokenGranters.add (new EmailTokenGranter (authenticationManager, tokenServices,
                     clientDetails, requestFactory));
         }
         return tokenGranters;

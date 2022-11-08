@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         if (!result) {
             return null;
         }
-        return findUserByMobile (dtoReq.getEmail ());
+        return findUserByEmail (dtoReq.getEmail ());
     }
 
     @Override
