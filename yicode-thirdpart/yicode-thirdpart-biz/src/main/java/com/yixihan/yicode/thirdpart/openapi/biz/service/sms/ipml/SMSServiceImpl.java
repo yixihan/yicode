@@ -11,7 +11,8 @@ import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.yixihan.yicode.common.enums.SMSTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendSMSDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.constant.CodeConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.constant.SMSConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.SmsTemplateService;
@@ -46,12 +47,12 @@ public class SMSServiceImpl implements SMSService {
 
 
     @Override
-    public String send(SendSMSDtoReq dtoReq) {
+    public String send(SMSSendDtoReq dtoReq) {
 
         SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getType ());
 
         // 生成 keyName
-        String keyName = getRedisKey (dtoReq, smsType);
+        String keyName = getRedisKey (dtoReq.getMobile (), smsType);
 
         // 生成验证码
         String code = codeService.getCode(keyName);
@@ -101,25 +102,39 @@ public class SMSServiceImpl implements SMSService {
         }
     }
 
+    @Override
+    public Boolean validate(SMSValidateDtoReq dtoReq) {
+        // 生成 keyName
+        SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getMobileType ());
+        String keyName = getRedisKey (dtoReq.getMobile (), smsType);
+
+        return codeService.validate (keyName, dtoReq.getCode ());
+    }
+
     /**
      * 获取 redis key
      *
-     * @param dtoReq
+     * @param mobile
      * @param smsType
      * @return
      */
-    private String getRedisKey (SendSMSDtoReq dtoReq, SMSTypeEnums smsType) {
+    private String getRedisKey (String mobile, SMSTypeEnums smsType) {
         String key;
-        if (smsType == SMSTypeEnums.LOGIN) {
-            key = String.format (smsConstant.getLoginKey (), dtoReq.getMobile ());
-        } else if (smsType == SMSTypeEnums.REGISTER) {
-            key = String.format (smsConstant.getRegisterKey (), dtoReq.getMobile ());
-        } else if (smsType == SMSTypeEnums.UPDATE_PASSWORD) {
-            key = String.format (smsConstant.getUpdatePasswordKey (), dtoReq.getMobile ());
-        } else if (smsType == SMSTypeEnums.COMMON) {
-            key = String.format (smsConstant.getUpdatePasswordKey (), dtoReq.getMobile ());
-        } else {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        switch (smsType) {
+            case LOGIN:
+                key = String.format (smsConstant.getLoginKey (), mobile);
+                break;
+            case REGISTER:
+                key = String.format (smsConstant.getRegisterKey (), mobile);
+                break;
+            case UPDATE_PASSWORD:
+                key = String.format (smsConstant.getUpdatePasswordKey (), mobile);
+                break;
+            case COMMON:
+                key = String.format (smsConstant.getCommonKey (), mobile);
+                break;
+            default:
+                throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
 
         return key;

@@ -1,7 +1,8 @@
 package com.yixihan.yicode.thirdpart.openapi.api.reset.email;
 
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/email/")
 public interface EmailSendApi {
 
-
     @ApiOperation ("/发送邮件")
     @PostMapping("/sendemail")
-    ApiResult<String> sendEmail(@RequestBody SendEmailDtoReq req);
+    ApiResult<String> sendEmail(@RequestBody EmailSendDtoReq req);
+
+    @ApiOperation ("校验验证码")
+    @PostMapping("/validate")
+    ApiResult<Boolean> validate (@RequestBody EmailValidateDtoReq dtoReq);
 }

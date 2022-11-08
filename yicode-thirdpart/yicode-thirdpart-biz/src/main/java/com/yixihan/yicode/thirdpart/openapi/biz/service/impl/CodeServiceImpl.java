@@ -26,15 +26,7 @@ public class CodeServiceImpl implements CodeService {
 
     private static final char[] RANDOM_Arr = "1234567890".toCharArray ();
 
-    /**
-     * 生成验证码, 设置为 10 分钟有效期
-     * 保存到 redis 数据库中
-     *
-     * @param keyName
-     */
-    public String getCode (String keyName) {
-
-
+    public String getCode(String keyName) {
         // 生成验证码
         String code = getRandomCode ();
 
@@ -45,7 +37,19 @@ public class CodeServiceImpl implements CodeService {
         stringRedisTemplate.expire(keyName, codeConstant.getTimeOut (), TimeUnit.MINUTES);
 
         return code;
+    }
 
+    @Override
+    public Boolean validate(String keyName, String code) {
+        // 校验验证码是否过期
+        // 校验验证码是否已经过期
+        Long expire = stringRedisTemplate.getExpire(keyName);
+
+        if (expire == null || expire < 0L) {
+            return false;
+        }
+
+        return code.equals(stringRedisTemplate.opsForValue().get(keyName));
     }
 
     /**
@@ -53,9 +57,9 @@ public class CodeServiceImpl implements CodeService {
      *
      * @return
      */
-    private synchronized String getRandomCode () {
+    private synchronized String getRandomCode() {
         int len = codeConstant.getCodeLen ();
-        Random random = new Random();
+        Random random = new Random ();
         StringBuilder sb = new StringBuilder (len);
         for (int i = 0; i < len; i++) {
             sb.append (RANDOM_Arr[random.nextInt (RANDOM_Arr.length)]);

@@ -67,4 +67,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
+
+    @Override
+    public UserDtoResult getUserByMobile(String mobile) {
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq ("user_phone", mobile);
+        User user = baseMapper.selectOne (wrapper);
+        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+    }
+
+    @Override
+    public UserDtoResult getUserByEmail(String email) {
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq ("user_email", email);
+        User user = baseMapper.selectOne (wrapper);
+        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+    }
 }

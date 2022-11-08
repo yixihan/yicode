@@ -38,4 +38,21 @@ public interface UserService extends IService<User> {
      * @return {@link UserDtoResult}
      */
     UserDtoResult getUserByUserName(String userName);
+
+    /**
+     * 通过 mobile 获取用户信息
+     *
+     * @param mobile 手机号
+     * @return {@link UserDtoResult}
+     */
+    UserDtoResult getUserByMobile(String mobile);
+
+
+    /**
+     * 通过 email 获取用户信息
+     *
+     * @param email 邮箱
+     * @return {@link UserDtoResult}
+     */
+    UserDtoResult getUserByEmail(String email);
 }

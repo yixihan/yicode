@@ -1,6 +1,8 @@
 package com.yixihan.yicode.auth.service;
 
 import com.yixihan.yicode.auth.pojo.User;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -20,6 +22,38 @@ public interface UserService extends UserDetailsService {
      * @param userName username
      * @return {@link User}
      */
-    User getUserByUserName(String userName);
+    User findUserByUserName(String userName);
+
+    /**
+     * 通过手机号获取用户对象
+     *
+     * @param mobile 手机号
+     * @return {@link User}
+     */
+    User findUserByMobile (String mobile);
+
+    /**
+     * 通过邮箱获取用户对象
+     *
+     * @param email 邮箱
+     * @return {@link User}
+     */
+    User findUserByEmail (String email);
+
+    /**
+     * 校验邮箱验证码
+     *
+     * @param dtoReq
+     * @return
+     */
+    User validateEmailCode (EmailValidateDtoReq dtoReq);
+
+    /**
+     * 校验手机验证码
+     *
+     * @param dtoReq
+     * @return
+     */
+    User validateMobileCode (SMSValidateDtoReq dtoReq);
 
 }

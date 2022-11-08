@@ -2,7 +2,8 @@ package com.yixihan.yicode.thirdpart.openapi.web.controller.email;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.reset.email.EmailSendApi;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailSendService;
 import com.yixihan.yicode.thirdpart.openapi.web.fallback.EmailFallback;
@@ -22,8 +23,13 @@ public class EmailSendController implements EmailSendApi {
 
     @Override
     @SentinelResource(value = "sendEmail", blockHandlerClass = EmailFallback.class, blockHandler = "emailBlockHandler")
-    public ApiResult<String> sendEmail(SendEmailDtoReq req) {
+    public ApiResult<String> sendEmail(EmailSendDtoReq req) {
         return ApiResult.create (emailSendService.sendEmail (req));
+    }
+
+    @Override
+    public ApiResult<Boolean> validate(EmailValidateDtoReq dtoReq) {
+        return ApiResult.create (emailSendService.validate (dtoReq));
     }
 
 }

@@ -1,6 +1,8 @@
 package com.yixihan.yicode.auth.service.impl;
 
 import cn.hutool.json.JSONUtil;
+import com.yixihan.yicode.auth.feign.EmailFeignClient;
+import com.yixihan.yicode.auth.feign.SMSFeignClient;
 import com.yixihan.yicode.auth.feign.UserFeignClient;
 import com.yixihan.yicode.auth.feign.UserRoleFeignClient;
 import com.yixihan.yicode.auth.pojo.Role;
@@ -10,6 +12,8 @@ import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +21,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,22 +36,39 @@ import java.util.List;
  * @since 2022-10-20
  */
 @Slf4j
-@Service
+@Service(value = "userService")
 public class UserServiceImpl implements UserService {
 
     @Resource
     private UserFeignClient userFeignClient;
 
     @Resource
+    private SMSFeignClient smsFeignClient;
+
+    @Resource
+    private EmailFeignClient emailFeignClient;
+
+    @Resource
     private UserRoleFeignClient userRoleFeignClient;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = getUserByUserName (username);
-
+        boolean flag = false;
+        // 如果是采用非账号密码的登录方式
+        if (username.contains ("~~other")) {
+            flag = true;
+            username = username.substring (0, username.length () - 7);
+        }
+        User user = findUserByUserName (username);
+        if (flag) {
+            user.setUserPassword (passwordEncoder.encode (user.getPassword ()));
+        }
         if (user == null) {
             throw new BizException (BizCodeEnum.USERNAME_PASSWORD_ERR);
         }
@@ -66,8 +88,42 @@ public class UserServiceImpl implements UserService {
 
     @CachePut(cacheNames = "user", key = "#userName")
     @Override
-    public User getUserByUserName(String userName) {
+    public User findUserByUserName(String userName) {
         UserDtoResult userDtoResult = userFeignClient.getUserByUserName (userName).getResult ();
+        return getUser (userDtoResult);
+    }
+
+    @Override
+    public User findUserByMobile(String mobile) {
+        UserDtoResult userDtoResult = userFeignClient.getUserByMobile (mobile).getResult ();
+        return getUser (userDtoResult);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        UserDtoResult userDtoResult = userFeignClient.getUserByEmail (email).getResult ();
+        return getUser (userDtoResult);
+    }
+
+    @Override
+    public User validateEmailCode(EmailValidateDtoReq dtoReq) {
+        Boolean result = emailFeignClient.validate (dtoReq).getResult ();
+        if (!result) {
+            return null;
+        }
+        return findUserByMobile (dtoReq.getEmail ());
+    }
+
+    @Override
+    public User validateMobileCode(SMSValidateDtoReq dtoReq) {
+        Boolean result = smsFeignClient.validate (dtoReq).getResult ();
+        if (!result) {
+            return null;
+        }
+        return findUserByMobile (dtoReq.getMobile ());
+    }
+
+    private User getUser (UserDtoResult userDtoResult) {
         List<RoleDtoResult> roleDtoResults = userRoleFeignClient.getUserRoleList (userDtoResult.getUserId ()).getResult ();
         User user = CopyUtils.copySingle (User.class, userDtoResult);
         List<Role> userRoleList = CopyUtils.copyMulti (Role.class, roleDtoResults);

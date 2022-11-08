@@ -2,7 +2,7 @@ package com.yixihan.yicode.thirdpart.openapi.web.fallback;
 
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
 
 /**
  * @author yixihan
@@ -10,7 +10,7 @@ import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SendEmailDtoReq;
  */
 public class EmailFallback {
 
-    public ApiResult<String> emailBlockHandler (SendEmailDtoReq dtoReq) {
+    public ApiResult<String> emailBlockHandler (EmailSendDtoReq dtoReq) {
         return ApiResult.create (BizCodeEnum.SENTINEL_FLOW_ERR.getErrorMsg ());
     }
 }

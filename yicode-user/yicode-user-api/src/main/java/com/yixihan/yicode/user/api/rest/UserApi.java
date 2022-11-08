@@ -32,4 +32,12 @@ public interface UserApi {
     @PostMapping(value = "/userbyname", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserName(@RequestParam("userName") String userName);
 
+    @ApiOperation ("通过 mobile 获取用户信息")
+    @PostMapping(value = "/userbymobile", produces = "application/json")
+    ApiResult<UserDtoResult> getUserByMobile(@RequestParam("mobile") String mobile);
+
+    @ApiOperation ("通过 email 获取用户信息")
+    @PostMapping(value = "/userbyemail", produces = "application/json")
+    ApiResult<UserDtoResult> getUserByEmail(@RequestParam("email") String email);
+
 }

@@ -23,6 +23,7 @@ spring:
         enabled: true
       eager: true # 是否饥饿加载。默认为 false 关闭
       transport:
+#        dashboard: 175.24.163.161:8081
         dashboard: 127.0.0.1:8081
         port: 8719
       datasource:
@@ -46,5 +47,6 @@ spring:
             namespace: dev #Nacos 命名空间的ID
             data-type: json #配置文件类型
             rule-type: degrade #类型来自RuleType类 - 熔断规则
+
 
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("手机短信发送请求参数")
-public class SendSMSDtoReq {
+public class SMSSendDtoReq {
 
     @ApiModelProperty("手机号")
     private String mobile;

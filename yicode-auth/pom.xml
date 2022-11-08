@@ -83,6 +83,13 @@
             <version>0.0.1</version>
         </dependency>
 
+        <!-- yicode-thirdpart-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-thirdpart-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

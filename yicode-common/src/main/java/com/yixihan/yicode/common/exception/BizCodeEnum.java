@@ -121,7 +121,26 @@ public enum BizCodeEnum implements CommonError {
      * 短信发送失败
      */
     SMS_SEND_ERR(90003, "短信发送失败"),
-    ;
+
+    /**
+     * 手机号为空
+     */
+    MOBILE_EMPTY_ERR (90004, "手机号不能为空"),
+
+    /**
+     * 邮箱为空
+     */
+    EMAIL_EMPTY_ERR (90005, "邮箱不能为空"),
+
+    /**
+     * 验证码为空
+     */
+    CODE_EMPTY_ERR (90006, "验证码不能为空"),
+
+    /**
+     * 验证码错误
+     */
+    CODE_VALIDATE_ERR (90007, "验证码错误");
 
 
     /**

@@ -32,12 +32,16 @@ import java.util.List;
 @AllArgsConstructor
 public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    @Resource
     private final PasswordEncoder passwordEncoder;
-    
+
+    @Resource
     private final UserService userService;
 
+    @Resource
     private final AuthenticationManager authenticationManager;
 
+    @Resource
     private final JwtTokenEnhancer jwtTokenEnhancer;
 
     @Resource
@@ -49,7 +53,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient (properties.getClientId ())
                 .secret (passwordEncoder.encode (properties.getRawPassword ()))
                 .scopes (properties.getScopes ())
-                .authorizedGrantTypes ("password", "refresh_token", "authorization_code")
+                .authorizedGrantTypes ("password", "refresh_token", "authorization_code", "sms")
                 .accessTokenValiditySeconds (properties.getAccessTokenValiditySeconds ())
                 .refreshTokenValiditySeconds (properties.getRefreshTokenValiditySeconds ());
     }
@@ -71,7 +75,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.allowFormAuthenticationForClients ();
+        security.allowFormAuthenticationForClients()
+                .tokenKeyAccess("isAuthenticated()")
+                .checkTokenAccess("permitAll()");
     }
 
     @Bean

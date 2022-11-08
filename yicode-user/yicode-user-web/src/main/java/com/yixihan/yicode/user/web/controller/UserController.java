@@ -38,4 +38,14 @@ public class UserController implements UserApi {
     public ApiResult<UserDtoResult> getUserByUserName(String userName) {
         return ApiResult.create (userService.getUserByUserName (userName));
     }
+
+    @Override
+    public ApiResult<UserDtoResult> getUserByMobile(String mobile) {
+        return ApiResult.create (userService.getUserByMobile (mobile));
+    }
+
+    @Override
+    public ApiResult<UserDtoResult> getUserByEmail(String email) {
+        return ApiResult.create (userService.getUserByEmail (email));
+    }
 }

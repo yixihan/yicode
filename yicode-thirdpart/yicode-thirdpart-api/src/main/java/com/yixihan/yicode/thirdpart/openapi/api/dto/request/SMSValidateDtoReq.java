@@ -7,18 +7,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 电话校验
+ *
  * @author yixihan
- * @date 2022-10-24-20:10
+ * @date 2022/11/8 9:58
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("邮件发送请求实体类")
-public class SendEmailDtoReq {
+@ApiModel("电话校验")
+public class SMSValidateDtoReq {
 
-    @ApiModelProperty(value = "邮箱")
-    private String email;
+    @ApiModelProperty(value = "手机号")
+    private String mobile;
 
     @ApiModelProperty(value = "发送类型")
-    private String type;
+    private String mobileType;
+
+    @ApiModelProperty(value = "验证码")
+    private String code;
 }

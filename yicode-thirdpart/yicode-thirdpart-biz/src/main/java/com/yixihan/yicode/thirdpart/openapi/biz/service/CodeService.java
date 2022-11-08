@@ -15,4 +15,13 @@ public interface CodeService {
      * @return
      */
     String getCode (String keyName);
+
+    /**
+     * 验证码校验
+     *
+     * @param keyName redis 缓存 key
+     * @param code 验证码
+     * @return
+     */
+    Boolean validate (String keyName, String code);
 }

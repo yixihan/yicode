@@ -28,6 +28,7 @@ secure:
     urls:
       - "/actuator/**"
       - "/api/yicode-auth/oauth/token"
+      - "/api/yicode-auth/auth/login"
 
 
 management:
