@@ -3,6 +3,7 @@ package com.yixihan.yicode.user.openapi.web.controller;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.UserOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.RegisterUserReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.ResetPasswordReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
 import com.yixihan.yicode.user.openapi.biz.service.UserService;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,11 @@ public class UserController implements UserOpenApi {
 
     @Override
     public JsonResponse<Boolean> register(RegisterUserReq req) {
+        return null;
+    }
+
+    @Override
+    public JsonResponse<Boolean> resetPassword(ResetPasswordReq req) {
         return null;
     }
 }

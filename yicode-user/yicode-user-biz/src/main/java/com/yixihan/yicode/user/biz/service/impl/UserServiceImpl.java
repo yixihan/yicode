@@ -71,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserByMobile(String mobile) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_phone", mobile);
+        wrapper.eq ("user_mobile", mobile);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
