@@ -1,5 +1,6 @@
 package com.yixihan.yicode.gateway.authorization;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
@@ -72,6 +73,11 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             }
         }
         log.info ("当前访问方法 : {}, 访问需有使用权限 : {}", uri.getPath (), authorities);
+
+        // 如果访问方法权限设置为空, 则放行
+        if (CollectionUtil.isEmpty (authorities)) {
+            return Mono.just (new AuthorizationDecision (true));
+        }
 
         // 认证通过且角色匹配的用户可访问当前路径
         return mono

@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.impl;
 
-import com.yixihan.yicode.thirdpart.openapi.biz.constant.CodeConstant;
+import com.yixihan.yicode.thirdpart.openapi.api.constant.CodeConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

@@ -6,7 +6,7 @@ import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.thirdpart.openapi.biz.constant.OssConstant;
+import com.yixihan.yicode.thirdpart.openapi.api.constant.OssConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.oss.OSSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
