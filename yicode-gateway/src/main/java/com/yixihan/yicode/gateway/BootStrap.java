@@ -30,7 +30,7 @@ public class BootStrap {
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(BootStrap.class);
         Environment env = springApplication.run(args).getEnvironment();
-        log.info("gateway modules server has started : {}, CPU core : {}"
-                , Arrays.toString(env.getActiveProfiles()), Runtime.getRuntime().availableProcessors());
+        log.info("gateway modules server has started : {}, CPU core : {}",
+                Arrays.toString(env.getActiveProfiles()), Runtime.getRuntime().availableProcessors());
     }
 }
