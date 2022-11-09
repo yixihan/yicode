@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.openapi.biz.event;
+package com.yixihan.yicode.user.openapi.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.enums.RoleEnum;
@@ -14,10 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 初始化接口权限数据, 缓存至 Redis 中
@@ -34,10 +31,6 @@ public class InitMethRoleList {
 
 
     static List<RoleEnum> defaultRoleList = new ArrayList<> ();
-
-    static {
-        defaultRoleList.add (RoleEnum.SUPER_ADMIN);
-    }
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;

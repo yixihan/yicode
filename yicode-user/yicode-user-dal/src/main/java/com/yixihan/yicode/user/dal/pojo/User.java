@@ -1,6 +1,8 @@
 package com.yixihan.yicode.user.dal.pojo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,6 +36,7 @@ public class User implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "用户 id")
+    @TableField(fill = FieldFill.INSERT)
     private Long userId;
 
     @ApiModelProperty(value = "用户名")
@@ -42,14 +45,14 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户密码")
     private String userPassword;
 
-    @ApiModelProperty(value = "盐")
-    private String userSalt;
-
     @ApiModelProperty(value = "用户手机号")
-    private String userPhone;
+    private String userMobile;
 
     @ApiModelProperty(value = "用户邮箱")
     private String userEmail;
+
+    @ApiModelProperty(value = "注册方式")
+    private String registerType;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;

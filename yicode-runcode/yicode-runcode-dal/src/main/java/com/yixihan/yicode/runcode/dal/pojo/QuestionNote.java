@@ -1,6 +1,8 @@
 package com.yixihan.yicode.runcode.dal.pojo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,7 +35,11 @@ public class QuestionNote implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "问题 id")
+    private Long questionId;
+
     @ApiModelProperty(value = "题解 id")
+    @TableField(fill = FieldFill.INSERT)
     private Long noteId;
 
     @ApiModelProperty(value = "题解标题")

@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.biz.config;
+package com.yixihan.yicode.user.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
