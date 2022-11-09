@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 问题题解表
+ * 题解标签表
  * </p>
  *
  * @author yixihan
@@ -24,7 +24,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="NoteLabel对象", description="问题题解表")
+@ApiModel(value="NoteLabel对象", description="题解标签表")
 public class NoteLabel implements Serializable {
 
     private static final long serialVersionUID = 1L;

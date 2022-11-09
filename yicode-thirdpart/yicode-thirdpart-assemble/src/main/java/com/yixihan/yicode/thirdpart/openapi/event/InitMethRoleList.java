@@ -1,9 +1,8 @@
-package com.yixihan.yicode.runcode.openapi.biz.event;
+package com.yixihan.yicode.thirdpart.openapi.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.enums.RoleEnum;
 import com.yixihan.yicode.common.valid.RoleAccess;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -27,17 +26,11 @@ import java.util.Map;
  * @author yixihan
  * @date 2022-10-23-22:34
  */
-@Slf4j
 @Component
 public class InitMethRoleList {
 
 
-
     static List<RoleEnum> defaultRoleList = new ArrayList<> ();
-
-    static {
-        defaultRoleList.add (RoleEnum.SUPER_ADMIN);
-    }
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;

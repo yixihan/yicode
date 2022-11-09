@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.openapi.biz.config;
+package com.yixihan.yicode.runcode.openapi.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

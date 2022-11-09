@@ -1,6 +1,8 @@
 package com.yixihan.yicode.user.dal.pojo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,6 +36,7 @@ public class Role implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "角色 id")
+    @TableField(fill = FieldFill.INSERT)
     private Long roleId;
 
     @ApiModelProperty(value = "角色名")

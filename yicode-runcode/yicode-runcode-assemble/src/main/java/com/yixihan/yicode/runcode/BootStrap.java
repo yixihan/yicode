@@ -1,7 +1,6 @@
 package com.yixihan.yicode.runcode;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -27,7 +26,6 @@ import java.util.Arrays;
 @EnableScheduling
 @RefreshScope
 @EnableOpenApi
-@MapperScan("com.yixihan.yicode.runcode.dal.mapper")
 @SpringBootApplication
 public class BootStrap {
 

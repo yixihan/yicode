@@ -32,10 +32,6 @@ public class InitMethRoleList {
 
     static List<RoleEnum> defaultRoleList = new ArrayList<> ();
 
-    static {
-        defaultRoleList.add (RoleEnum.SUPER_ADMIN);
-    }
-
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Resource(name = "requestMappingHandlerMapping")
