@@ -3,6 +3,8 @@ package com.yixihan.yicode.gateway.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
+ * userRole FeignClient
+ *
  * @author yixihan
  * @date 2022-10-23-13:51
  */

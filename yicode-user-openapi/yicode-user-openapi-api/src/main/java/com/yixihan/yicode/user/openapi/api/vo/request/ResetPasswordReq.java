@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * description
+ * 重置密码-req
  *
  * @author yixihan
  * @date 2022/11/9 11:08
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("重置密码")
+@ApiModel("重置密码-req")
 public class ResetPasswordReq {
 
     private String mobile;

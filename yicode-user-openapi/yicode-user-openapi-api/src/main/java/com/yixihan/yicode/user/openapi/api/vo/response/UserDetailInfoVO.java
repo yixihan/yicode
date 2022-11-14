@@ -9,13 +9,15 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * 用户详细信息-vo
+ *
  * @author yixihan
  * @date 2022-10-22-17:55
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户信息")
+@ApiModel("用户详细信息-vo")
 public class UserDetailInfoVO {
 
     @ApiModelProperty("用户信息")

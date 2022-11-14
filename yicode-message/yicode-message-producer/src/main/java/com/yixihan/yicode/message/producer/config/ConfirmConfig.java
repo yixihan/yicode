@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 
 /**
- * 配置类 - 发布确认
+ * 配置类-发布确认
  *
  * @author yixihan
  * @date 2022-10-27-23:30
@@ -49,7 +49,7 @@ public class ConfirmConfig {
 
 
     /**
-     * 直连型交换机 - 确认发布
+     * 直连型交换机-确认发布
      *
      * @return
      */
@@ -95,7 +95,7 @@ public class ConfirmConfig {
     }
 
     /**
-     * 队列 - 发布确认
+     * 队列-发布确认
      * @return
      */
     @Bean("confirmQueue")
@@ -105,7 +105,7 @@ public class ConfirmConfig {
 
 
     /**
-     * 队列绑定交换机 - 发布确认队列
+     * 队列绑定交换机-发布确认队列
      *
      * @param confirmExchange
      * @param confirmQueue
@@ -120,7 +120,7 @@ public class ConfirmConfig {
     }
 
     /**
-     * 队列绑定交换机 - 备份队列
+     * 队列绑定交换机-备份队列
      *
      * @param confirmExchange
      * @param backupQueue
@@ -135,7 +135,7 @@ public class ConfirmConfig {
     }
 
     /**
-     * 队列绑定交换机 - 报警队列
+     * 队列绑定交换机-报警队列
      *
      * @param confirmExchange
      * @param warningQueue

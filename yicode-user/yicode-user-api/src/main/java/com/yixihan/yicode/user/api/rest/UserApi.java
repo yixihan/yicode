@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * 用户 api
+ *
  * @author yixihan
  * @date 2022-10-22-17:33
  */
-@Api(tags = "用户信息 - Api")
+@Api(tags = "用户 api")
 @RequestMapping("/user/")
 public interface UserApi {
 

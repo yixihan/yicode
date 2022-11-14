@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * 用户信息-vo
+ *
  * @author yixihan
  * @date 2022-10-22-17:56
  */
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "User对象", description = "用户表")
+@ApiModel("用户信息-vo")
 public class UserVO {
 
     @ApiModelProperty(value = "用户 id")

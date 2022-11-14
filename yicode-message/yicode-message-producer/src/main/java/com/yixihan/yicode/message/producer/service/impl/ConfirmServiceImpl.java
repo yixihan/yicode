@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * 发布确认 - 生产者 - 服务类
+ * 发布确认-生产者-服务类
  *
  * @author yixihan
  * @date 2022-10-27-23:56

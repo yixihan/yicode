@@ -22,7 +22,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
         this.strictInsertFill(metaObject, "roleId", Long.class, SnowFlake.nextId ());
         this.strictInsertFill(metaObject, "userId", Long.class, SnowFlake.nextId ());
-        this.strictInsertFill(metaObject, "favoriteId", Long.class, SnowFlake.nextId ());
     }
 
     @Override

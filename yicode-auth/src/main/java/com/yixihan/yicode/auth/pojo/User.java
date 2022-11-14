@@ -54,7 +54,7 @@ public class User implements Serializable, UserDetails {
     private List<Role> authorities;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+    private Integer delFlag;
 
     /**
      * 获取用户的权限信息
@@ -129,6 +129,6 @@ public class User implements Serializable, UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return isDeleted == 0;
+        return delFlag == 0;
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 发布确认 - 生产者
+ * 发布确认-生产者
  *
  * @author yixihan
  * @date 2022-10-27-23:58

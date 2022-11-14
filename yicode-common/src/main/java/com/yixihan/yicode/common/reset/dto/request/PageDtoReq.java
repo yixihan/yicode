@@ -1,5 +1,6 @@
 package com.yixihan.yicode.common.reset.dto.request;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,12 +9,15 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * 分页请求-dtoReq
+ *
  * @author yixihan
  * @date 2022-09-29-14:44
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel("分页请求-dtoReq")
 public class PageDtoReq implements Serializable {
 
     private static final long serialVersionUID = 7234584781842150083L;

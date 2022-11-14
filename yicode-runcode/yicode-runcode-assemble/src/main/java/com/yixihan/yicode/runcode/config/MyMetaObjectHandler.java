@@ -20,12 +20,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
         this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
-        this.strictInsertFill(metaObject, "replyId", Long.class, SnowFlake.nextId ());
-        this.strictInsertFill(metaObject, "rootId", Long.class, SnowFlake.nextId ());
-        this.strictInsertFill(metaObject, "labelId", Long.class, SnowFlake.nextId ());
-        this.strictInsertFill(metaObject, "noteId", Long.class, SnowFlake.nextId ());
         this.strictInsertFill(metaObject, "questionId", Long.class, SnowFlake.nextId ());
-        this.strictInsertFill(metaObject, "labelId", Long.class, SnowFlake.nextId ());
     }
 
     @Override

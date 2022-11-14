@@ -4,6 +4,8 @@ import com.yixihan.yicode.user.api.rest.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
+ * user feignClient
+ *
  * @author yixihan
  * @date 2022-10-23-13:18
  */

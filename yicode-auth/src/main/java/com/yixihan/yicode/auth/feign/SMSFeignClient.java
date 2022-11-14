@@ -4,7 +4,7 @@ import com.yixihan.yicode.thirdpart.openapi.api.reset.sms.SMSApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
- * description
+ * sms feignClient
  *
  * @author yixihan
  * @date 2022/11/8 10:06

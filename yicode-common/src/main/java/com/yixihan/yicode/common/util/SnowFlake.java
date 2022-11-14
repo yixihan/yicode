@@ -1,5 +1,11 @@
 package com.yixihan.yicode.common.util;
 
+/**
+ * 雪花算法
+ *
+ * @author yixihan
+ * @date 2022-11-12-14:15
+ */
 public class SnowFlake {
 
     /**

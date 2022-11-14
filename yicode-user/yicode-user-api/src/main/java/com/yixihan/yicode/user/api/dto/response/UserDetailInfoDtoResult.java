@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 用户信息
+ * 用户详细信息-dtoResult
  *
  * @author yixihan
  * @date 2022-10-22-17:44
@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户信息")
+@ApiModel("用户详细信息-dtoResult")
 public class UserDetailInfoDtoResult {
 
     @ApiModelProperty("用户信息")

@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 手机短信发送-dtoReq
+ *
  * @author yixihan
  * @date 2022-10-27-15:45
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("手机短信发送请求参数")
+@ApiModel("手机短信发送-dtoReq")
 public class SMSSendDtoReq {
 
     @ApiModelProperty("手机号")

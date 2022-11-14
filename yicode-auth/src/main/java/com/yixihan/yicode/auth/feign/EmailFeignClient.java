@@ -4,7 +4,7 @@ import com.yixihan.yicode.thirdpart.openapi.api.reset.email.EmailSendApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
- * description
+ * email feignClient
  *
  * @author yixihan
  * @date 2022/11/8 10:14

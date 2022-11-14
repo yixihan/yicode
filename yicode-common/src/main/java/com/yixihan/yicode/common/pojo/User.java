@@ -51,5 +51,5 @@ public class User implements Serializable {
     private List<Role> authorities;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+    private Integer delFlag;
 }

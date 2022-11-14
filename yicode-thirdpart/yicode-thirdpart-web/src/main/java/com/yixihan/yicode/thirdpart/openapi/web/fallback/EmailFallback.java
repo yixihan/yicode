@@ -5,6 +5,8 @@ import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
 
 /**
+ * 邮箱 sentinel fallback
+ *
  * @author yixihan
  * @date 2022-10-28-14:16
  */

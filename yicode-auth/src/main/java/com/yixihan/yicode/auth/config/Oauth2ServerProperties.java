@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * oauth2 参数类
+ *
  * @author yixihan
  * @date 2022-10-21-11:35
  */
