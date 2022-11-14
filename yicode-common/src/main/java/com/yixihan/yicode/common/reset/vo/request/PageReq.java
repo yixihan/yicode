@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * open 层分页请求类
+ * 分页请求-req
+ *
  * @author yixihan
  * @date 2022-09-29-14:30
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("open 层分页请求类")
+@ApiModel("分页请求-req")
 public class PageReq implements Serializable {
 
     private static final long serialVersionUID = 7234584781842150083L;

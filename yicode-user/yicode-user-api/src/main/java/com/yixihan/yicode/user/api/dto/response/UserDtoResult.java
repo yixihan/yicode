@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * 用户个人资料-dtoResult
+ *
  * @author yixihan
  * @date 2022-10-22-18:14
  */
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "User对象", description = "用户表")
+@ApiModel("用户个人资料-dtoResult")
 public class UserDtoResult {
 
     @ApiModelProperty(value = "用户 id")
@@ -34,7 +36,7 @@ public class UserDtoResult {
     private String userEmail;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+    private Integer delFlag;
 
 
 

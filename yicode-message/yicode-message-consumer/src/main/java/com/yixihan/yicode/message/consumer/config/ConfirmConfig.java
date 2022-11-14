@@ -3,7 +3,7 @@ package com.yixihan.yicode.message.consumer.config;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 配置类 - 发布确认
+ * 配置类-发布确认
  *
  * @author yixihan
  * @date 2022-10-27-23:30

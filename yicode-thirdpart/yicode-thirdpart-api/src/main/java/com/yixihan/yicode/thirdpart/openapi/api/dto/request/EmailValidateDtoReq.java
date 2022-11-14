@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 短信验证
+ * 短信验证-dtoReq
  *
  * @author yixihan
  * @date 2022/11/8 9:30
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("短信验证")
+@ApiModel("短信验证-dtoReq")
 public class EmailValidateDtoReq {
 
     @ApiModelProperty(value = "邮箱")

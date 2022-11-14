@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 /**
- * 用户模块 - 用户权限
+ * 用户权限 api
  *
  * @author yixihan
  * @date 2022-10-22-15:32
  */
-@Api(tags = "用户模块 - 用户权限")
+@Api(tags = "用户权限 api")
 @RequestMapping("/user/role")
 public interface UserRoleApi {
 

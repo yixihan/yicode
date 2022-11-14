@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
+ * 用户信息-vo
+ *
  * @author yixihan
  * @date 2022-10-22-18:14
  */
@@ -17,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "UserInfo对象", description = "用户信息表")
+@ApiModel("用户信息-vo")
 public class UserInfoDtoResult {
 
     @ApiModelProperty(value = "用户 id")

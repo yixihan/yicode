@@ -16,7 +16,7 @@ import java.util.List;
 public interface RoleService extends IService<Role> {
 
     /**
-     * 通过 角色id 获取角色信息 - 列表查询
+     * 通过 角色id 获取角色信息-列表查询
      *
      * @param roleIdList 角色 id
      * @return

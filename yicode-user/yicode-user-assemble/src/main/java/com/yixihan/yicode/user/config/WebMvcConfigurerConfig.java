@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.web.config;
+package com.yixihan.yicode.user.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;

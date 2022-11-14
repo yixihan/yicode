@@ -10,14 +10,15 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * open 层分页封装类
+ * 分页-vo
+ *
  * @author yixihan
  * @date 2022-09-29-14:15
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("open 层分页封装类")
+@ApiModel("分页-vo")
 public class PageVO<T> implements Serializable {
 
     private static final long serialVersionUID = -2763957656843891790L;

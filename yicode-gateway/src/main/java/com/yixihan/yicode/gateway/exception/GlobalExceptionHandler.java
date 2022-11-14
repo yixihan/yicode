@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 全局异常捕获器
+ *
  * @author yixihan
  * @date 2022-10-23-14:31
  */

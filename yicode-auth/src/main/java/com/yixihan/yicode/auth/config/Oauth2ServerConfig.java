@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * oauth2 配置类
+ *
  * @author yixihan
  * @date 2022-10-20-16:28
  */

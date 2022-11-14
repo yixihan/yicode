@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 电话校验
+ * 电话校验-dtoReq
  *
  * @author yixihan
  * @date 2022/11/8 9:58
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("电话校验")
+@ApiModel("电话校验-dtoReq")
 public class SMSValidateDtoReq {
 
     @ApiModelProperty(value = "手机号")

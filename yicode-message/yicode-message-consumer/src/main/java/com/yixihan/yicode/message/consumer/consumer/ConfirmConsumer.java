@@ -7,7 +7,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
- * 发布确认 -消费者
+ * 发布确认-消费者
  *
  * @author yixihan
  * @date 2022-10-28-0:01

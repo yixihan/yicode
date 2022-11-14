@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 175.24.229.41&MySQL5.7
+ Source Server         : 175.24.229.41@mysql5.7
  Source Server Type    : MySQL
  Source Server Version : 50736
  Source Host           : 175.24.229.41:1617
@@ -11,15 +11,11 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 09/11/2022 09:30:44
+ Date: 12/11/2022 23:14:04
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
-drop database if exists `yicode`;
-create database if not exists `yicode`;
-use `yicode`;
 
 -- ----------------------------
 -- Table structure for collection
@@ -33,7 +29,7 @@ CREATE TABLE `collection`
     `create_time`   datetime            NOT NULL COMMENT '创建时间',
     `update_time`   datetime            NOT NULL COMMENT '修改时间',
     `version`       int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`      int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE,
     UNIQUE INDEX `collection_id` (`collection_id`) USING BTREE
@@ -41,7 +37,11 @@ CREATE TABLE `collection`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户收藏表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of collection
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for comment_reply
@@ -60,7 +60,7 @@ CREATE TABLE `comment_reply`
     `create_time` datetime                                        NOT NULL COMMENT '创建时间',
     `update_time` datetime                                        NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `reply_id` (`reply_id`) USING BTREE,
     UNIQUE INDEX `root_id` (`root_id`) USING BTREE,
@@ -70,7 +70,11 @@ CREATE TABLE `comment_reply`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '子评论表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of comment_reply
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for comment_root
@@ -90,7 +94,7 @@ CREATE TABLE `comment_root`
     `create_time` datetime                                        NOT NULL COMMENT '创建时间',
     `update_time` datetime                                        NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `root_id` (`root_id`) USING BTREE,
     UNIQUE INDEX `answer_id` (`answer_id`) USING BTREE,
@@ -99,7 +103,11 @@ CREATE TABLE `comment_root`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '父评论表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of comment_root
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for daily_question
@@ -114,7 +122,7 @@ CREATE TABLE `daily_question`
     `create_time` datetime            NOT NULL COMMENT '创建时间',
     `update_time` datetime            NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
@@ -122,7 +130,11 @@ CREATE TABLE `daily_question`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '每日一题表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of daily_question
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for email_template
@@ -136,13 +148,13 @@ CREATE TABLE `email_template`
     `create_time`      datetime                                        NOT NULL COMMENT '创建时间',
     `update_time`      datetime                                        NOT NULL COMMENT '修改时间',
     `version`          int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`       int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`         int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000004
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '邮件模板表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of email_template
@@ -176,14 +188,18 @@ CREATE TABLE `label`
     `create_time` datetime                                        NOT NULL COMMENT '创建时间',
     `update_time` datetime                                        NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `label_id` (`label_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '标签表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of label
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for note_label
@@ -197,15 +213,19 @@ CREATE TABLE `note_label`
     `create_time` datetime            NOT NULL COMMENT '创建时间',
     `update_time` datetime            NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `note_id` (`note_id`) USING BTREE,
     UNIQUE INDEX `label_id` (`label_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
-  COLLATE = utf8_bin COMMENT = '问题题解表'
-  ROW_FORMAT = Dynamic;
+  COLLATE = utf8_bin COMMENT = '题解标签表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of note_label
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for question
@@ -224,14 +244,18 @@ CREATE TABLE `question`
     `create_time`         datetime                                        NOT NULL COMMENT '创建时间',
     `update_time`         datetime                                        NOT NULL COMMENT '修改时间',
     `version`             int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`          int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`            int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of question
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for question_answer
@@ -250,14 +274,18 @@ CREATE TABLE `question_answer`
     `create_time`           datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`           datetime                                         NOT NULL COMMENT '修改时间',
     `version`               int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`            int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`              int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题答案表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of question_answer
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for question_label
@@ -271,7 +299,7 @@ CREATE TABLE `question_label`
     `create_time` datetime            NOT NULL COMMENT '创建时间',
     `update_time` datetime            NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
     UNIQUE INDEX `label_id` (`label_id`) USING BTREE
@@ -279,7 +307,11 @@ CREATE TABLE `question_label`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题标签表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of question_label
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for question_note
@@ -288,6 +320,7 @@ DROP TABLE IF EXISTS `question_note`;
 CREATE TABLE `question_note`
 (
     `id`               bigint(20) UNSIGNED                             NOT NULL AUTO_INCREMENT COMMENT '主键 id',
+    `question_id`      bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '问题 id',
     `note_id`          bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '题解 id',
     `note_name`        varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '题解标题',
     `note_content`     text CHARACTER SET utf8 COLLATE utf8_bin        NULL COMMENT '题解内容',
@@ -298,15 +331,20 @@ CREATE TABLE `question_note`
     `create_time`      datetime                                        NOT NULL COMMENT '创建时间',
     `update_time`      datetime                                        NOT NULL COMMENT '修改时间',
     `version`          int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`       int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`         int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `note_id` (`note_id`) USING BTREE,
+    UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题题解表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of question_note
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for role
@@ -320,14 +358,14 @@ CREATE TABLE `role`
     `create_time` datetime                                        NOT NULL COMMENT '创建时间',
     `update_time` datetime                                        NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `role_id` (`role_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000003
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '角色表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role
@@ -351,13 +389,13 @@ CREATE TABLE `sms_template`
     `create_time`   datetime                                        NOT NULL COMMENT '创建时间',
     `update_time`   datetime                                        NOT NULL COMMENT '修改时间',
     `version`       int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`      int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000004
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '短信模板表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sms_template
@@ -381,23 +419,30 @@ CREATE TABLE `user`
     `user_id`       bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '用户 id',
     `user_name`     varchar(20) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户名',
     `user_password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户密码',
-    `user_phone`    char(11) CHARACTER SET utf8 COLLATE utf8_bin     NULL     DEFAULT NULL COMMENT '用户手机号',
+    `user_mobile`   char(11) CHARACTER SET utf8 COLLATE utf8_bin     NULL     DEFAULT NULL COMMENT '用户手机号',
     `user_email`    varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NULL     DEFAULT NULL COMMENT '用户邮箱',
     `register_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '注册方式',
     `create_time`   datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`   datetime                                         NOT NULL COMMENT '修改时间',
     `version`       int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`    int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`      int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
-    UNIQUE INDEX `user_phone` (`user_phone`) USING BTREE,
+    UNIQUE INDEX `user_mobile` (`user_mobile`) USING BTREE,
     UNIQUE INDEX `user_email` (`user_email`) USING BTREE,
     INDEX `idx_user_name` (`user_name`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000004
+  AUTO_INCREMENT = 10000005
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user`
+VALUES (10000004, 1, 'yixihan', '$2a$10$P9BwEkOq4yL10r9eMHnrn2elJyqNaRHAawdb6feZnxrrCeW3PjOSBO', '17623850426',
+        '3113788997@qq.com', 'USERNAME', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_commit_record
@@ -411,14 +456,18 @@ CREATE TABLE `user_commit_record`
     `create_time`  datetime            NOT NULL COMMENT '创建时间',
     `update_time`  datetime            NOT NULL COMMENT '修改时间',
     `version`      int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`   int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`     int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户提交记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_commit_record
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_favorite
@@ -434,14 +483,18 @@ CREATE TABLE `user_favorite`
     `create_time`    datetime                                        NOT NULL COMMENT '创建时间',
     `update_time`    datetime                                        NOT NULL COMMENT '修改时间',
     `version`        int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`     int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`       int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户收藏表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_favorite
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_follow
@@ -459,7 +512,7 @@ CREATE TABLE `user_follow`
     `create_time`        datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`        datetime                                         NOT NULL COMMENT '修改时间',
     `version`            int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`         int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`           int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
     UNIQUE INDEX `follow_user_id` (`follow_user_id`) USING BTREE
@@ -467,7 +520,11 @@ CREATE TABLE `user_follow`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户关注表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_follow
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_info
@@ -489,14 +546,18 @@ CREATE TABLE `user_info`
     `create_time`    datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`    datetime                                         NOT NULL COMMENT '修改时间',
     `version`        int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`     int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`       int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_language
@@ -511,14 +572,18 @@ CREATE TABLE `user_language`
     `create_time` datetime                                        NOT NULL COMMENT '创建时间',
     `update_time` datetime                                        NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户语言表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_language
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_msg
@@ -534,13 +599,17 @@ CREATE TABLE `user_msg`
     `create_time`    datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`    datetime                                         NOT NULL COMMENT '修改时间',
     `version`        int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`     int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`       int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户消息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_msg
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_question_record
@@ -554,7 +623,7 @@ CREATE TABLE `user_question_record`
     `create_time` datetime            NOT NULL COMMENT '创建时间',
     `update_time` datetime            NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE
@@ -562,7 +631,11 @@ CREATE TABLE `user_question_record`
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户题目通过记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_question_record
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_role
@@ -576,13 +649,23 @@ CREATE TABLE `user_role`
     `create_time` datetime            NOT NULL COMMENT '创建时间',
     `update_time` datetime            NOT NULL COMMENT '修改时间',
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`  int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000007
+  AUTO_INCREMENT = 10000010
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户角色对应表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role`
+VALUES (10000007, 1, 1, '2022-11-10 15:17:19', '2022-11-10 15:17:19', 1, 0);
+INSERT INTO `user_role`
+VALUES (10000008, 1, 2, '2022-11-10 15:17:19', '2022-11-10 15:17:19', 1, 0);
+INSERT INTO `user_role`
+VALUES (10000009, 1, 3, '2022-11-10 15:17:19', '2022-11-10 15:17:19', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_website
@@ -596,13 +679,17 @@ CREATE TABLE `user_website`
     `create_time`  datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`  datetime                                         NOT NULL COMMENT '修改时间',
     `version`      int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '乐观锁',
-    `is_deleted`   int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `del_flag`     int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户个人网站表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_website
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 邮件发送
+ * 邮件发送 api
+ *
  * @author yixihan
  * @date 2022-10-24-20:07
  */

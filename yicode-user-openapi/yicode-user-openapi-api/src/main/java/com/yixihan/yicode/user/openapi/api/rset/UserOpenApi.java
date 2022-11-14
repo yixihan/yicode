@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 用户信息 - OpenApi
+ * 用户 OpenApi
  *
  * @author yixihan
  * @date 2022-10-22-18:01
  */
-@Api(tags = "用户信息 - OpenApi")
+@Api(tags = "用户 OpenApi")
 @RequestMapping("/open/user/")
 public interface UserOpenApi {
 

@@ -3,6 +3,8 @@ package com.yixihan.yicode.user.openapi.biz.service;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
 
 /**
+ * 用户 服务类
+ *
  * @author yixihan
  * @date 2022-10-22-18:06
  */

@@ -74,11 +74,6 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         }
         log.info ("当前访问方法 : {}, 访问需有使用权限 : {}", uri.getPath (), authorities);
 
-        // 如果访问方法权限设置为空, 则放行
-        if (CollectionUtil.isEmpty (authorities)) {
-            return Mono.just (new AuthorizationDecision (true));
-        }
-
         // 认证通过且角色匹配的用户可访问当前路径
         return mono
                 .filter (Authentication::isAuthenticated)
@@ -88,7 +83,11 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                     return roleList;
                 })
                 .map (GrantedAuthority::getAuthority)
-                .any (authorities::contains)
+                .any (o -> {
+                    boolean flag = CollectionUtil.isEmpty (authorities) || authorities.contains (o);
+                    log.info ("是否具有访问权限 : {}", flag);
+                    return flag;
+                })
                 .map (AuthorizationDecision::new)
                 .defaultIfEmpty (new AuthorizationDecision (false));
     }

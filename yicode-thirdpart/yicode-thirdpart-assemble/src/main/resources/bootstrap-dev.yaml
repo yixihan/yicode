@@ -36,7 +36,7 @@ spring:
             groupId: GATEWAY #nacos中存储规则的groupId
             namespace: dev #Nacos 命名空间的ID
             data-type: json #配置文件类型
-            rule-type: flow #类型来自RuleType类 - 流控规则
+            rule-type: flow #类型来自RuleType类-流控规则
         degrade:
           nacos:
             server-addr: 175.24.163.161:3333 #nacos的访问地址，根据上面准备工作中启动的实例配置
@@ -46,7 +46,7 @@ spring:
             groupId: GATEWAY #nacos中存储规则的groupId
             namespace: dev #Nacos 命名空间的ID
             data-type: json #配置文件类型
-            rule-type: degrade #类型来自RuleType类 - 熔断规则
+            rule-type: degrade #类型来自RuleType类-熔断规则
 
 
 

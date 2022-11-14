@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 通过用户名+密码方式注册
+ * 用户注册-req
  *
  * @author yixihan
  * @date 2022/11/9 9:24
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("通过用户名+密码方式注册")
+@ApiModel("用户注册-req")
 public class RegisterUserReq {
 
     @ApiModelProperty(value = "用户名")
