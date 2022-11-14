@@ -1,8 +1,7 @@
 package com.yixihan.yicode.runcode.web.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.yixihan.yicode.runcode.api.rset.QuestionApi;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-10-24
  */
 @RestController
-@RequestMapping("/question")
-public class QuestionController {
+public class QuestionController implements QuestionApi {
 
 }
