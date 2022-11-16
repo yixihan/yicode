@@ -9,6 +9,6 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author yixihan
  * @date 2022/11/14 10:17
  */
-@FeignClient(value = "${feign.client.yicode_runcode.name}")
+@FeignClient(value = "${feign.client.yicode-runcode.name}")
 public interface QuestionFeignClient extends QuestionApi {
 }
