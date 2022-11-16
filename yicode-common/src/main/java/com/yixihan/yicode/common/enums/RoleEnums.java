@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RoleEnum {
+public enum RoleEnums {
 
     /**
      * 超级管理员

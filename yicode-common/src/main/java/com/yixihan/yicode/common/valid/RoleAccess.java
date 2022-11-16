@@ -1,6 +1,6 @@
 package com.yixihan.yicode.common.valid;
 
-import com.yixihan.yicode.common.enums.RoleEnum;
+import com.yixihan.yicode.common.enums.RoleEnums;
 
 import javax.validation.Payload;
 import java.lang.annotation.*;
@@ -21,5 +21,5 @@ public @interface RoleAccess {
     Class<? extends Payload>[] payload() default {};
 
     // 角色信息
-    RoleEnum[] value() default {};
+    RoleEnums[] value() default {};
 }

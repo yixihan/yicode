@@ -3,7 +3,7 @@ package com.yixihan.yicode.gateway;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
-import com.yixihan.yicode.common.enums.RoleEnum;
+import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.pojo.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.AntPathMatcher;
@@ -36,8 +36,8 @@ public class CommonTest {
         List<Role> roleList = new ArrayList<> (authorities.length);
         for (int i = 0; i < authorities.length; i++) {
             authorities[i] = authorities[i].substring (1, authorities[i].length () - 1);
-            RoleEnum roleEnum = RoleEnum.valueOf (authorities[i]);
-            roleList.add (new Role (roleEnum.getRoleId (), roleEnum.getRoleName ()));
+            RoleEnums roleEnums = RoleEnums.valueOf (authorities[i]);
+            roleList.add (new Role (roleEnums.getRoleId (), roleEnums.getRoleName ()));
         }
         System.out.println (roleList);
         System.out.println (jwtClaimsSet);;

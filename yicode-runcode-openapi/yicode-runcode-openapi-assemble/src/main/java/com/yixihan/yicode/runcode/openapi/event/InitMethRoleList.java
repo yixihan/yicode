@@ -1,7 +1,7 @@
 package com.yixihan.yicode.runcode.openapi.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
-import com.yixihan.yicode.common.enums.RoleEnum;
+import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class InitMethRoleList {
 
 
 
-    static List<RoleEnum> defaultRoleList = new ArrayList<> ();
+    static List<RoleEnums> defaultRoleList = new ArrayList<> ();
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -49,7 +49,7 @@ public class InitMethRoleList {
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods ();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet ()) {
             // 获取方法所需的角色权限
-            List<RoleEnum> roleList;
+            List<RoleEnums> roleList;
             RequestMappingInfo info = m.getKey ();
             HandlerMethod method = m.getValue ();
             RoleAccess roleAccess = method.getMethodAnnotation (RoleAccess.class);

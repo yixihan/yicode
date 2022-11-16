@@ -1,6 +1,6 @@
 package com.yixihan.yicode.user.openapi.api.rset;
 
-import com.yixihan.yicode.common.enums.RoleEnum;
+import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.request.RegisterUserReq;
@@ -23,12 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
-    @RoleAccess(value = RoleEnum.USER)
+    @RoleAccess(value = RoleEnums.USER)
     @PostMapping(value = "/userinfo/{userId}", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(@PathVariable Long userId);
 
     @ApiOperation ("获取当前登录用户详细信息")
-    @RoleAccess(value = RoleEnum.USER)
+    @RoleAccess(value = RoleEnums.USER)
     @PostMapping(value = "/userinfo/now", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(HttpServletRequest request);
 
