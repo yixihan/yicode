@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validateEmailCode(EmailValidateDtoReq dtoReq) {
-        Boolean result = emailFeignClient.validate (dtoReq).getResult ();
+        Boolean result = emailFeignClient.validate (dtoReq).getResult ().getData ();
         if (!result) {
             return null;
         }
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validateMobileCode(SMSValidateDtoReq dtoReq) {
-        Boolean result = smsFeignClient.validate (dtoReq).getResult ();
+        Boolean result = smsFeignClient.validate (dtoReq).getResult ().getData ();
         if (!result) {
             return null;
         }

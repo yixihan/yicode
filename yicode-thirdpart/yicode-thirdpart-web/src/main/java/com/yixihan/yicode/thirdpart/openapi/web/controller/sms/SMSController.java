@@ -1,6 +1,7 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.sms;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;
@@ -28,12 +29,12 @@ public class SMSController implements SMSApi {
 
     @Override
     @SentinelResource(value = "sendSMS", blockHandlerClass = SMSFallback.class, blockHandler = "emailBlockHandler")
-    public ApiResult<String> send(SMSSendDtoReq dtoReq) {
+    public ApiResult<CommonDtoResult<Boolean>> send(SMSSendDtoReq dtoReq) {
         return ApiResult.create (smsService.send (dtoReq));
     }
 
     @Override
-    public ApiResult<Boolean> validate(SMSValidateDtoReq dtoReq) {
+    public ApiResult<CommonDtoResult<Boolean>> validate(SMSValidateDtoReq dtoReq) {
         return ApiResult.create (smsService.validate (dtoReq));
     }
 }

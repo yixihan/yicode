@@ -1,16 +1,16 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.oss.impl;
 
-import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.constant.OssConstant;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSUploadDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.oss.OSSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -32,18 +32,20 @@ public class OSSServiceImpl implements OSSService {
     private OssConstant ossConstant;
 
     @Override
-    public String uploadFile(MultipartFile file) {
+    public CommonDtoResult<String> uploadFile(OSSUploadDtoReq dtoReq) {
         PutObjectRequest request;
         try {
-            request = new PutObjectRequest (ossConstant.getBucketName (), file.getOriginalFilename (), file.getInputStream ());
+            String fileName = dtoReq.getUserId () + "/" + dtoReq.getFileDir () + "/" +
+                    dtoReq.getFileName () + "." + dtoReq.getFileSuffix ();
+            request = new PutObjectRequest (ossConstant.getBucketName (), fileName, dtoReq.getFile ().getInputStream ());
             PutObjectResult result = ossClient.putObject (request);
             log.info ("result : {}", result.toString ());
-
-            return JSONUtil.toJsonStr (result);
+            String url = "https://" + ossConstant.getHost () + "/" + fileName;
+            return new CommonDtoResult<> (url, "文件上传成功");
         } catch (IOException e) {
             log.error ("文件上传失败 : {}", e.getMessage (), new BizException (BizCodeEnum.OSS_ERR));
         }
 
-        return "文件上传失败";
+        return new CommonDtoResult<> (null, "文件上传失败");
     }
 }

@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.api.reset.sms;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;
@@ -21,10 +22,10 @@ public interface SMSApi {
 
     @ApiOperation ("发送短信")
     @PostMapping("/sendmobile")
-    ApiResult<String> send (@RequestBody SMSSendDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> send (@RequestBody SMSSendDtoReq dtoReq);
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")
-    ApiResult<Boolean> validate (@RequestBody SMSValidateDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> validate (@RequestBody SMSValidateDtoReq dtoReq);
 
 }

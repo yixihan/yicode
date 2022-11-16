@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.impl;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.constant.CodeConstant;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -29,10 +30,8 @@ public class CodeServiceImpl implements CodeService {
     public String getCode(String keyName) {
         // 生成验证码
         String code = getRandomCode ();
-
         // 存入 redis
         stringRedisTemplate.opsForValue().set(keyName, code);
-
         // 设置过期时间
         stringRedisTemplate.expire(keyName, codeConstant.getTimeOut (), TimeUnit.MINUTES);
 
@@ -40,16 +39,21 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public Boolean validate(String keyName, String code) {
+    public CommonDtoResult<Boolean> validate(String keyName, String code) {
         // 校验验证码是否过期
         // 校验验证码是否已经过期
         Long expire = stringRedisTemplate.getExpire(keyName);
 
         if (expire == null || expire < 0L) {
-            return false;
+            return new CommonDtoResult<> (false, "验证码已过期");
         }
 
-        return code.equals(stringRedisTemplate.opsForValue().get(keyName));
+        boolean flag = code.equals (stringRedisTemplate.opsForValue ().get (keyName));
+        if (flag) {
+            return new CommonDtoResult<> (true, "验证码校验成功");
+        } else {
+            return new CommonDtoResult<> (false, "验证码错误");
+        }
     }
 
     /**

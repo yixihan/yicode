@@ -1,5 +1,7 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+
 /**
  * 验证码服务类
  *
@@ -23,5 +25,5 @@ public interface CodeService {
      * @param code 验证码
      * @return
      */
-    Boolean validate (String keyName, String code);
+    CommonDtoResult<Boolean> validate (String keyName, String code);
 }

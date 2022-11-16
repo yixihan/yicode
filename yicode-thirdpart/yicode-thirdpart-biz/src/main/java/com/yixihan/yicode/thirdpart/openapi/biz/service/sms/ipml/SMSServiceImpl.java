@@ -11,6 +11,7 @@ import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.yixihan.yicode.common.enums.SMSTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.constant.CodeConstant;
@@ -47,17 +48,11 @@ public class SMSServiceImpl implements SMSService {
 
 
     @Override
-    public String send(SMSSendDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> send(SMSSendDtoReq dtoReq) {
 
         SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getType ());
-
-        // 生成 keyName
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
-
-        // 生成验证码
         String code = codeService.getCode(keyName);
-
-        // TODO 获取模板 id
         String templateId = smsTemplateService.getSMSTemplateId (smsType.getId ());
 
         try{
@@ -76,38 +71,32 @@ public class SMSServiceImpl implements SMSService {
             SendSmsRequest req = new SendSmsRequest();
             String[] phoneNumberSet1 = {dtoReq.getMobile ()};
             req.setPhoneNumberSet(phoneNumberSet1);
-
             req.setSmsSdkAppId(smsConstant.getSmsSdkAppId ());
             req.setSignName(smsConstant.getSignName ());
             req.setTemplateId(templateId);
-
             String[] templateParamSet1 = {code, String.valueOf (codeConstant.getTimeOut ())};
             req.setTemplateParamSet(templateParamSet1);
-
             // 返回的resp是一个SendSmsResponse的实例，与请求对象对应
             SendSmsResponse resp = client.SendSms(req);
             log.info ("response : {}", SendSmsResponse.toJsonString(resp));
             SendStatus sendStatus = resp.getSendStatusSet ()[0];
             if ("Ok".equals (sendStatus.getCode ())) {
-                return "短信发送成功";
+                return new CommonDtoResult<> (true, "短线发送成功");
             } else {
                 log.error (sendStatus.getMessage(), new BizException (BizCodeEnum.SMS_SEND_ERR));
-                return "短信发送失败";
+                return new CommonDtoResult<> (false, "短信发送失败");
             }
-            // 输出json格式的字符串回包
-
         } catch (TencentCloudSDKException e) {
             log.error (e.getMessage (), new BizException (BizCodeEnum.SMS_SEND_ERR));
-            return "短信发送失败";
+            return new CommonDtoResult<> (false, "短信发送失败");
         }
     }
 
     @Override
-    public Boolean validate(SMSValidateDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> validate(SMSValidateDtoReq dtoReq) {
         // 生成 keyName
         SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getMobileType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
-
         return codeService.validate (keyName, dtoReq.getCode ());
     }
 

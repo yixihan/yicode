@@ -3,6 +3,7 @@ package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 import com.yixihan.yicode.common.enums.EmailTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.constant.CodeConstant;
@@ -46,50 +47,39 @@ public class EmailSendServiceImpl implements EmailSendService {
 
 
     @Override
-    public String sendEmail(EmailSendDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> sendEmail(EmailSendDtoReq dtoReq) {
 
         EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getType ());
-
-        // 生成 keyName
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
-
-        // TODO 获取模板内容
         String emailContent = emailTemplateService.getEmailContent (emailType.getId ());
 
         try {
-            // 生成验证码
             String code = codeService.getCode(keyName);
-
             // 创建一个复杂的文件
             MimeMessage mailMessage = mailSender.createMimeMessage();
-
             // 组装邮件
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage,true,"utf-8");
-
             helper.setSubject(emailConstant.getTitle ());
             helper.setText(String.format (emailContent, code, codeConstant.getTimeOut ()),true);
-
             // 收件人
             helper.setTo(dtoReq.getEmail ());
             // 发件人
             helper.setFrom(emailConstant.getSendEmail ());
-
             // 发送
             mailSender.send(mailMessage);
-
         } catch (MessagingException e) {
             log.error ("邮件发送失败 : {}", e.getMessage (), new BizException (BizCodeEnum.EMAIL_SEND_ERR));
+            return new CommonDtoResult<> (false, "邮箱发送失败");
         }
 
-        return "邮件发送成功";
+        return new CommonDtoResult<> (true, "邮件发送成功");
     }
 
     @Override
-    public Boolean validate(EmailValidateDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> validate(EmailValidateDtoReq dtoReq) {
         // 生成 keyName
         EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getEmailType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
-
         return codeService.validate (keyName, dtoReq.getCode ());
     }
 
@@ -102,7 +92,6 @@ public class EmailSendServiceImpl implements EmailSendService {
      * @return
      */
     private String getRedisKey (String email, EmailTypeEnums emailType) {
-
         String key;
         switch (emailType) {
             case LOGIN:

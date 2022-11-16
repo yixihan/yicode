@@ -1,6 +1,7 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.oss;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSUploadDtoReq;
 
 /**
  * oss 服务类
@@ -11,10 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface OSSService {
 
     /**
-     * 测试 oss 上传文件
+     * oss 上传文件
      *
-     * @param file 文件
+     * @param dtoReq
      * @return
      */
-    String uploadFile(MultipartFile file);
+    CommonDtoResult<String> uploadFile(OSSUploadDtoReq dtoReq);
 }

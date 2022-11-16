@@ -1,11 +1,12 @@
 package com.yixihan.yicode.thirdpart.openapi.api.reset.oss;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSUploadDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * oss api
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/oss/")
 public interface OSSApi {
 
-    @ApiOperation ("测试 oss 上传字符串")
+    @ApiOperation (value = "上传文件", notes = "商城文件路径 : [userId/fileDir/fileName.fileSuffix]")
     @PostMapping(value = "/upload/file")
-    JsonResponse<String> testUploadFile(MultipartFile file);
+    JsonResponse<CommonDtoResult<String>> testUploadFile(OSSUploadDtoReq dtoReq);
 }

@@ -1,5 +1,4 @@
 spring:
-
   # 数据库配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

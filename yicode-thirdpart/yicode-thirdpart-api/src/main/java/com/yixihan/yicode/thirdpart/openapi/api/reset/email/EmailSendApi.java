@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.api.reset.email;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
@@ -21,9 +22,9 @@ public interface EmailSendApi {
 
     @ApiOperation ("/发送邮件")
     @PostMapping("/sendemail")
-    ApiResult<String> sendEmail(@RequestBody EmailSendDtoReq req);
+    ApiResult<CommonDtoResult<Boolean>> sendEmail(@RequestBody EmailSendDtoReq req);
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")
-    ApiResult<Boolean> validate (@RequestBody EmailValidateDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> validate (@RequestBody EmailValidateDtoReq dtoReq);
 }

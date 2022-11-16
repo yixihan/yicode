@@ -1,6 +1,8 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.oss;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSUploadDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.reset.oss.OSSApi;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.oss.OSSService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,7 @@ public class OSSController implements OSSApi {
     private OSSService ossService;
 
     @Override
-    public JsonResponse<String> testUploadFile(MultipartFile file) {
-        return JsonResponse.ok (ossService.uploadFile (file));
+    public JsonResponse<CommonDtoResult<String>> testUploadFile(OSSUploadDtoReq dtoReq) {
+        return JsonResponse.ok (ossService.uploadFile (dtoReq));
     }
 }
