@@ -3,6 +3,8 @@ package com.yixihan.yicode.gateway.authorization;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
+import com.yixihan.yicode.common.component.SecurityContext;
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.gateway.config.IgnoreUrlsConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +63,8 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         if (StrUtil.isEmpty (token)) {
             return Mono.just (new AuthorizationDecision (false));
         }
+        SecurityContext context = new SecurityContext (token.substring (AuthConstant.TOKEN_SUB_INDEX));
+        redisTemplate.opsForHash ().put (AuthConstant.USER_MAP_KEY, context.getToken (), JSONUtil.toJsonStr (context.getUser ()));
 
         // 获取当前访问方法的使用角色权限
         Map<Object, Object> methodRolesMap = redisTemplate.opsForHash().entries(AuthConstant.METHOD_ROLE_MAP_KEY);

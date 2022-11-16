@@ -1,7 +1,9 @@
 package com.yixihan.yicode.user.biz.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
@@ -12,10 +14,12 @@ import com.yixihan.yicode.user.biz.service.UserService;
 import com.yixihan.yicode.user.dal.mapper.UserMapper;
 import com.yixihan.yicode.user.dal.pojo.User;
 import com.yixihan.yicode.user.dal.pojo.UserInfo;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -30,6 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserRoleService userRoleService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserDetailInfoDtoResult getUserInfo(Long userId) {
@@ -82,5 +89,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.eq ("user_email", email);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+    }
+
+    @Override
+    public UserDtoResult getUserByToken(String token) {
+        String str = Objects.requireNonNull (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token)).toString ();
+        return JSONUtil.toBean (str, UserDtoResult.class);
     }
 }

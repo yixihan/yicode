@@ -55,4 +55,11 @@ public interface UserService extends IService<User> {
      * @return {@link UserDtoResult}
      */
     UserDtoResult getUserByEmail(String email);
+
+    /**
+     * 通过缓存 （token） 获取用户信息
+     * @param token tokne
+     * @return {@link UserDtoResult}
+     */
+    UserDtoResult getUserByToken(String token);
 }

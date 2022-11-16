@@ -48,4 +48,9 @@ public class UserController implements UserApi {
     public ApiResult<UserDtoResult> getUserByEmail(String email) {
         return ApiResult.create (userService.getUserByEmail (email));
     }
+
+    @Override
+    public ApiResult<UserDtoResult> getUserByToken(String token) {
+        return ApiResult.create (userService.getUserByToken (token));
+    }
 }

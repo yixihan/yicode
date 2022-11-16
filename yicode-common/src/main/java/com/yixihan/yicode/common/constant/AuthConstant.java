@@ -22,7 +22,7 @@ public interface AuthConstant {
     /**
      * Redis 用户缓存权限规则 key
      */
-    String RESOURCE_ROLES_MAP_KEY = "auth:resourceRolesMap";
+    String USER_MAP_KEY = "auth:userMap";
 
     /**
      * Redis 方法缓存权限规则 key
@@ -43,4 +43,9 @@ public interface AuthConstant {
      * 用户信息Http请求头
      */
     String USER_TOKEN_HEADER = "user";
+
+    /**
+     *  token 信息起始索引
+     */
+    Integer TOKEN_SUB_INDEX = 7;
 }

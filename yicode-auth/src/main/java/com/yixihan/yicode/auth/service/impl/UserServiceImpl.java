@@ -1,6 +1,5 @@
 package com.yixihan.yicode.auth.service.impl;
 
-import cn.hutool.json.JSONUtil;
 import com.yixihan.yicode.auth.feign.EmailFeignClient;
 import com.yixihan.yicode.auth.feign.SMSFeignClient;
 import com.yixihan.yicode.auth.feign.UserFeignClient;
@@ -8,7 +7,6 @@ import com.yixihan.yicode.auth.feign.UserRoleFeignClient;
 import com.yixihan.yicode.auth.pojo.Role;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
-import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -128,7 +126,6 @@ public class UserServiceImpl implements UserService {
         User user = CopyUtils.copySingle (User.class, userDtoResult);
         List<Role> userRoleList = CopyUtils.copyMulti (Role.class, roleDtoResults);
         user.setAuthorities (userRoleList);
-        redisTemplate.opsForHash ().put (AuthConstant.RESOURCE_ROLES_MAP_KEY, user.getUserId ().toString (), JSONUtil.toJsonStr (user));
         return user;
     }
 }

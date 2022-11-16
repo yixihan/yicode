@@ -26,20 +26,24 @@ public interface UserApi {
     @PostMapping(value = "/userdetailinfo", produces = "application/json")
     ApiResult<UserDetailInfoDtoResult> getUserInfo(@RequestParam("userId") Long userId);
 
-    @ApiOperation ("通过 userId 获取用户信息")
-    @PostMapping(value = "/userbyid", produces = "application/json")
+    @ApiOperation("通过 userId 获取用户信息")
+    @PostMapping(value = "/user/id", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserId(@RequestParam("userId") Long userId);
 
-    @ApiOperation ("通过 userId 获取用户信息")
-    @PostMapping(value = "/userbyname", produces = "application/json")
+    @ApiOperation("通过 userId 获取用户信息")
+    @PostMapping(value = "/user/name", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserName(@RequestParam("userName") String userName);
 
-    @ApiOperation ("通过 mobile 获取用户信息")
-    @PostMapping(value = "/userbymobile", produces = "application/json")
+    @ApiOperation("通过 mobile 获取用户信息")
+    @PostMapping(value = "/user/mobile", produces = "application/json")
     ApiResult<UserDtoResult> getUserByMobile(@RequestParam("mobile") String mobile);
 
-    @ApiOperation ("通过 email 获取用户信息")
-    @PostMapping(value = "/userbyemail", produces = "application/json")
+    @ApiOperation("通过 email 获取用户信息")
+    @PostMapping(value = "/user/email", produces = "application/json")
     ApiResult<UserDtoResult> getUserByEmail(@RequestParam("email") String email);
+
+    @ApiOperation("通过缓存获取用户信息")
+    @PostMapping(value = "/user/token", produces = "application/json")
+    ApiResult<UserDtoResult> getUserByToken(@RequestParam("token") String token);
 
 }
