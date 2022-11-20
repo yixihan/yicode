@@ -1,7 +1,10 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.oss;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSPolicyDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.OSSUploadDtoReq;
+
+import java.util.Map;
 
 /**
  * oss 服务类
@@ -18,4 +21,10 @@ public interface OSSService {
      * @return
      */
     CommonDtoResult<String> uploadFile(OSSUploadDtoReq dtoReq);
+
+    /**
+     * 获取上传密钥
+     * @param dtoReq
+     */
+    Map<String, String> policy(OSSPolicyDtoReq dtoReq);
 }

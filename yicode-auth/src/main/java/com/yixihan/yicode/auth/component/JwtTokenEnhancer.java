@@ -29,6 +29,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         info.put ("userName", securityUser.getUsername ());
         info.put ("userMobile", securityUser.getUserMobile ());
         info.put ("userEmail", securityUser.getUserEmail ());
+        info.put ("code", 200);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation (info);
 
         return accessToken;
