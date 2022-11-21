@@ -1,21 +1,33 @@
 package com.yixihan.yicode.user.biz.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.AuthConstant;
+import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.user.api.dto.request.*;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserInfoDtoResult;
+import com.yixihan.yicode.user.biz.service.UserInfoService;
 import com.yixihan.yicode.user.biz.service.UserRoleService;
 import com.yixihan.yicode.user.biz.service.UserService;
 import com.yixihan.yicode.user.dal.mapper.UserMapper;
 import com.yixihan.yicode.user.dal.pojo.User;
 import com.yixihan.yicode.user.dal.pojo.UserInfo;
+import com.yixihan.yicode.user.dal.pojo.UserRole;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,11 +41,18 @@ import java.util.Objects;
  * @author yixihan
  * @since 2022-10-22
  */
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
     private UserRoleService userRoleService;
+
+    @Resource
+    private UserInfoService userInfoService;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -42,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserDetailInfoDtoResult getUserInfo(Long userId) {
         // 根据 id 查询用户信息
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_id", userId);
+        wrapper.eq (User.USER_ID, userId);
         User user = baseMapper.selectOne (wrapper);
         if (user == null) {
             return new UserDetailInfoDtoResult ();
@@ -62,7 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserById(Long userId) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_id", userId);
+        wrapper.eq (User.USER_ID, userId);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
@@ -70,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserByUserName(String userName) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_name", userName);
+        wrapper.eq (User.USER_NAME, userName);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
@@ -78,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserByMobile(String mobile) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_mobile", mobile);
+        wrapper.eq (User.USER_MOBILE, mobile);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
@@ -86,7 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserByEmail(String email) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_email", email);
+        wrapper.eq (User.USER_EMAIL, email);
         User user = baseMapper.selectOne (wrapper);
         return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
     }
@@ -95,5 +114,178 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserDtoResult getUserByToken(String token) {
         String str = Objects.requireNonNull (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token)).toString ();
         return JSONUtil.toBean (str, UserDtoResult.class);
+    }
+
+    @Override
+    @Transactional(rollbackFor = BizException.class)
+    public CommonDtoResult<Boolean> register(RegisterUserDtoReq dtoReq) {
+        if (StrUtil.isBlank (dtoReq.getUserName ())) {
+            dtoReq.setUserName ("用户_" + RandomUtil.randomString (5));
+        }
+        if (StrUtil.isBlank (dtoReq.getPassword ())) {
+            dtoReq.setPassword (RandomUtil.randomString (10));
+        }
+        User user = new User ();
+        boolean flag;
+        user.setUserName (dtoReq.getUserName ());
+        user.setUserPassword (passwordEncoder.encode (dtoReq.getPassword ()));
+        user.setUserEmail (dtoReq.getEmail ());
+        user.setUserMobile (dtoReq.getMobile ());
+        user.setRegisterType (dtoReq.getType ());
+
+        // 插入用户表
+        flag = baseMapper.insert (user) == 1;
+        if (!flag) {
+            log.error ("用户注册-用户表插入失败!");
+            throw new BizException ("用户注册-用户表插入失败!");
+        }
+
+        UserRole userRole = new UserRole ();
+        userRole.setUserId (user.getUserId ());
+        userRole.setRoleId (RoleEnums.USER.getRoleId ());
+
+        // 插入用户权限表
+        flag = userRoleService.save (userRole);
+        if (!flag) {
+            log.error ("用户注册-用户权限表插入失败!");
+            throw new BizException ("用户注册-用户权限表插入失败!");
+        }
+
+        UserInfo userInfo = new UserInfo ();
+        userInfo.setUserId (user.getUserId ());
+
+        // 插入用户信息表
+        flag = userInfoService.save (userInfo);
+        if (!flag) {
+            log.error ("用户注册-用户信息表插入失败!");
+            throw new BizException ("用户注册-用户信息表插入失败!");
+        }
+
+        return new CommonDtoResult<> (true, "用户注册成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> resetPassword(ResetPasswordDtoReq dtoReq) {
+        User user = new User ();
+        user.setUserId (dtoReq.getUserId ());
+        user.setUserPassword (passwordEncoder.encode (dtoReq.getNewPassword ()));
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, user.getUserId ())
+                .set (User.USER_PASSWORD, user.getUserPassword ());
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "重置密码成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> bindEmail(BindEmailDtoReq dtoReq) {
+        UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
+        if (!StrUtil.isBlank (userDtoResult.getUserEmail ())) {
+            return new CommonDtoResult<> (false, "请先解绑邮箱");
+        }
+
+        User user = new User ();
+        user.setUserId (dtoReq.getUserId ());
+        user.setUserEmail (dtoReq.getEmail ());
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, user.getUserId ())
+                .set (User.USER_EMAIL, user.getUserEmail ());
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定邮箱成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> unbindEmail(Long userId) {
+        User user = new User ();
+        user.setUserId (userId);
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, userId)
+                .set (User.USER_EMAIL, null);
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "解绑邮箱成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> bindMobile(BindMobileDtoReq dtoReq) {
+        UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
+        if (!StrUtil.isBlank (userDtoResult.getUserMobile ())) {
+            return new CommonDtoResult<> (false, "请先解绑手机号");
+        }
+
+        User user = new User ();
+        user.setUserId (dtoReq.getUserId ());
+        user.setUserEmail (dtoReq.getMobile ());
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, user.getUserId ())
+                .set (User.USER_MOBILE, user.getUserMobile ());
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定手机号成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> unbindMobile(Long userId) {
+        User user = new User ();
+        user.setUserId (userId);
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, userId)
+                .set (User.USER_MOBILE, null);
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "解绑手机号成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> resetUserName(ResetUserNameDtoReq dtoReq) {
+        User user = new User ();
+        user.setUserId (dtoReq.getUserId ());
+        user.setUserPassword (dtoReq.getUserName ());
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, user.getUserId ())
+                .set (User.USER_NAME, user.getUserName ());
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "修改用户名成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> cancellation(Long userId) {
+        User user = new User ();
+        user.setUserId (userId);
+        user.setDelFlag (1);
+
+        UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (User.USER_ID, user.getUserId ())
+                .set (User.DEL_FLAG, user.getDelFlag ());
+        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "注销成功");
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> verifyUserName(String userName) {
+        if (StrUtil.isBlank (userName)) {
+            return new CommonDtoResult<> (false, "校验的用户名为空!");
+        }
+
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq (User.USER_NAME, userName);
+        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> verifyUserEmail(String email) {
+        if (StrUtil.isBlank (email)) {
+            return new CommonDtoResult<> (false, "校验的用户名为空!");
+        }
+
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq (User.USER_EMAIL, email);
+        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> verifyUserMobile(String mobile) {
+        if (StrUtil.isBlank (mobile)) {
+            return new CommonDtoResult<> (false, "校验的用户名为空!");
+        }
+
+        QueryWrapper<User> wrapper = new QueryWrapper<> ();
+        wrapper.eq (User.USER_MOBILE, mobile);
+        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
     }
 }

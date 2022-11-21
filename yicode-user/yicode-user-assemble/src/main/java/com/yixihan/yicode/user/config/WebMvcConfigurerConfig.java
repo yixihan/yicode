@@ -1,8 +1,11 @@
 package com.yixihan.yicode.user.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.text.ParseException;
@@ -10,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 日期格式化配置类
+ * WebMvc 配置类
  *
  * @author yixihan
  * @date 2022-10-22-16:03
@@ -41,5 +44,10 @@ public class WebMvcConfigurerConfig extends WebMvcConfigurationSupport {
 
 
         });
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder ();
     }
 }

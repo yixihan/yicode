@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.api.vo.request;
+package com.yixihan.yicode.user.api.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,25 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 用户注册-req
+ * 重置密码-req
  *
  * @author yixihan
- * @date 2022/11/9 9:24
+ * @date 2022/11/9 11:08
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户注册-req")
-public class RegisterUserReq {
+@ApiModel("重置密码-req")
+public class ResetPasswordDtoReq {
 
-    @ApiModelProperty(value = "用户名")
-    private String userName;
-
-    @ApiModelProperty(value = "密码")
-    private String password;
-
-    @ApiModelProperty(value = "验证码")
-    private String code;
+    @ApiModelProperty(value = "用户 ID")
+    private Long userId;
 
     @ApiModelProperty(value = "邮箱")
     private String email;
@@ -33,6 +27,9 @@ public class RegisterUserReq {
     @ApiModelProperty(value = "电话号码")
     private String mobile;
 
-    @ApiModelProperty(value = "注册方式")
+    @ApiModelProperty(value = "新密码")
+    private String newPassword;
+
+    @ApiModelProperty(value = "重置密码方式")
     private String type;
 }
