@@ -22,14 +22,6 @@ feign:
     yicode-user:
       name: yicode-user
 
-secure:
-  ignore:
-    # 配置白名单路径
-    urls:
-      - "/actuator/**"
-      - "/api/yicode-auth/oauth/token"
-      - "/api/yicode-auth/auth/login"
-
 
 management:
   endpoints:
