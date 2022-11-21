@@ -1,8 +1,7 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.ShearCaptcha;
-import cn.hutool.captcha.generator.RandomGenerator;
+import cn.hutool.captcha.CircleCaptcha;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.constant.CodeConstant;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.CodeValidateDtoReq;
@@ -62,12 +61,7 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        //定义图形验证码的长、宽、验证码字符数、干扰线宽度
-        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 100, codeConstant.getCodeLen (), 4);
-        // 自定义纯数字的验证码
-        RandomGenerator randomGenerator = new RandomGenerator(new String (RANDOM_Arr), codeConstant.getCodeLen ());
-        captcha.setGenerator (randomGenerator);
-        captcha.createCode ();
+        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
         String code = captcha.getCode ();
         String keyName = String.format (codeConstant.getCommonKey (), uuid);
         // 存入 redis
