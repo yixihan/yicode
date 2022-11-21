@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.api.rset;
 
 import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.request.RegisterUserReq;
@@ -8,7 +9,10 @@ import com.yixihan.yicode.user.openapi.api.vo.request.ResetPasswordReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,9 +38,9 @@ public interface UserOpenApi {
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")
-    JsonResponse<Boolean> register (@RequestBody RegisterUserReq req);
+    JsonResponse<CommonVO<Boolean>> register (@RequestBody RegisterUserReq req);
 
     @ApiOperation ("重置密码")
-    @PostMapping(value = "/resetpasswrod", produces = "application/json")
-    JsonResponse<Boolean> resetPassword (@RequestBody ResetPasswordReq req);
+    @PostMapping(value = "/reset/password", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> resetPassword (@RequestBody ResetPasswordReq req);
 }

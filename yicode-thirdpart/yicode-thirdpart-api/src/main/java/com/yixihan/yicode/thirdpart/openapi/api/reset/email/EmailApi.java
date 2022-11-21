@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Api(tags = "邮件发送")
 @RequestMapping("/email/")
-public interface EmailSendApi {
+public interface EmailApi {
 
     @ApiOperation ("/发送邮件")
     @PostMapping("/sendemail")

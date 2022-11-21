@@ -18,4 +18,9 @@ public class CodeConstant {
 
     @Value ("${yicode.thirdpart.code.time-out}")
     private Integer timeOut;
+
+    // **** redis key **** //
+
+    @Value ("${yicode.thirdpart.code.common-key}")
+    private String commonKey;
 }

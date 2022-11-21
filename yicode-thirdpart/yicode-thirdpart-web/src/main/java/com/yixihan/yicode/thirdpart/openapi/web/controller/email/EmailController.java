@@ -5,7 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.openapi.api.reset.email.EmailSendApi;
+import com.yixihan.yicode.thirdpart.openapi.api.reset.email.EmailApi;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailSendService;
 import com.yixihan.yicode.thirdpart.openapi.web.fallback.EmailFallback;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @date 2022-10-24-20:04
  */
 @RestController
-public class EmailSendController implements EmailSendApi {
+public class EmailController implements EmailApi {
 
     @Resource
     private EmailSendService emailSendService;

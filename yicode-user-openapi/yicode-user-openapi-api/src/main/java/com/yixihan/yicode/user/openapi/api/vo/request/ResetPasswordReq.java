@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.api.vo.request;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,18 @@ import lombok.NoArgsConstructor;
 @ApiModel("重置密码-req")
 public class ResetPasswordReq {
 
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "电话号码")
     private String mobile;
+
+    @ApiModelProperty(value = "密码")
+    private String password;
+
+    @ApiModelProperty(value = "新密码")
+    private String newPassword;
+
+    @ApiModelProperty(value = "重置密码方式")
+    private String type;
 }

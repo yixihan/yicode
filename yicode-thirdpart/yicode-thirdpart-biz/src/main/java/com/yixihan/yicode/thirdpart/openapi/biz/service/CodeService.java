@@ -1,6 +1,10 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.CodeValidateDtoReq;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 验证码服务类
@@ -26,4 +30,18 @@ public interface CodeService {
      * @return
      */
     CommonDtoResult<Boolean> validate (String keyName, String code);
+
+    /**
+     * 生产图片验证码
+     * @param response response
+     * @param uuid 随机 ID
+     */
+    void createCode(HttpServletResponse response, String uuid) throws IOException;
+
+    /**
+     * 校验图片验证码
+     * @param dtoReq
+     * @return
+     */
+    CommonDtoResult<Boolean> validateCode(CodeValidateDtoReq dtoReq);
 }

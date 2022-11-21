@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.openapi.web.controller;
 
+import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.UserOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.RegisterUserReq;
@@ -36,12 +37,12 @@ public class UserController implements UserOpenApi {
     }
 
     @Override
-    public JsonResponse<Boolean> register(RegisterUserReq req) {
+    public JsonResponse<CommonVO<Boolean>> register(RegisterUserReq req) {
         return null;
     }
 
     @Override
-    public JsonResponse<Boolean> resetPassword(ResetPasswordReq req) {
+    public JsonResponse<CommonVO<Boolean>> resetPassword(ResetPasswordReq req) {
         return null;
     }
 }
