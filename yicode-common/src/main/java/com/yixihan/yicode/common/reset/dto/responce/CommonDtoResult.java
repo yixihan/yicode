@@ -23,4 +23,8 @@ public class CommonDtoResult<T> {
 
     @ApiModelProperty(value = "信息")
     private String message;
+
+    public CommonDtoResult(T data) {
+        this.data = data;
+    }
 }

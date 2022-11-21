@@ -9,6 +9,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 @EnableScheduling
 @RefreshScope
 @EnableOpenApi
+@EnableTransactionManagement
 @SpringBootApplication
 public class BootStrap {
 

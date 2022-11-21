@@ -33,6 +33,7 @@ public class User implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "用户 id")
+    @TableField(fill = FieldFill.INSERT)
     private Long userId;
 
     @ApiModelProperty(value = "用户名")

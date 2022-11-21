@@ -4,8 +4,7 @@ import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
-import com.yixihan.yicode.user.openapi.api.vo.request.RegisterUserReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.ResetPasswordReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,12 +26,11 @@ import javax.servlet.http.HttpServletRequest;
 public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
-    @RoleAccess(value = RoleEnums.USER)
+    @RoleAccess(value = RoleEnums.ADMIN)
     @PostMapping(value = "/userinfo/{userId}", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(@PathVariable Long userId);
 
     @ApiOperation ("获取当前登录用户详细信息")
-    @RoleAccess(value = RoleEnums.USER)
     @PostMapping(value = "/userinfo/now", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(HttpServletRequest request);
 
@@ -43,4 +41,28 @@ public interface UserOpenApi {
     @ApiOperation ("重置密码")
     @PostMapping(value = "/reset/password", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> resetPassword (@RequestBody ResetPasswordReq req);
+
+    @ApiOperation ("绑定邮箱")
+    @PostMapping(value = "/bind/email", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> bindEmail (HttpServletRequest request, @RequestBody BindEmailReq req);
+
+    @ApiOperation ("解绑邮箱")
+    @PostMapping(value = "/unbind/email", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> unbindEmail (HttpServletRequest request);
+
+    @ApiOperation ("绑定手机号")
+    @PostMapping(value = "/bind/mobile", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> bindMobile (HttpServletRequest request, @RequestBody BindMobileReq req);
+
+    @ApiOperation ("解绑手机号")
+    @PostMapping(value = "/unbind/mobile", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> unbindMobile (HttpServletRequest request);
+
+    @ApiOperation ("修改用户名")
+    @PostMapping(value = "/reset/username", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> resetUserName (HttpServletRequest request, @RequestBody ResetUserNameReq req);
+
+    @ApiOperation ("用户注销")
+    @PostMapping(value = "/cancellation", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> cancellation (HttpServletRequest request);
 }

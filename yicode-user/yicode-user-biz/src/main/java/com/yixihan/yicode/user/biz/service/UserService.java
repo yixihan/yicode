@@ -1,6 +1,8 @@
 package com.yixihan.yicode.user.biz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.user.api.dto.request.*;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
 import com.yixihan.yicode.user.dal.pojo.User;
@@ -62,4 +64,81 @@ public interface UserService extends IService<User> {
      * @return {@link UserDtoResult}
      */
     UserDtoResult getUserByToken(String token);
+
+    /**
+     * 用户注册
+     *
+     * @param dtoReq 请求参数
+     */
+    CommonDtoResult<Boolean> register(RegisterUserDtoReq dtoReq);
+
+    /**
+     * 重置密码
+     *
+     * @param dtoReq 请求参数
+     */
+    CommonDtoResult<Boolean> resetPassword(ResetPasswordDtoReq dtoReq);
+
+    /**
+     * 绑定邮箱
+     *
+     * @param dtoReq 请求参数
+     */
+    CommonDtoResult<Boolean> bindEmail(BindEmailDtoReq dtoReq);
+
+    /**
+     * 解绑邮箱
+     *
+     * @param userId 用户 ID
+     */
+    CommonDtoResult<Boolean> unbindEmail(Long userId);
+
+    /**
+     * 绑定手机号
+     *
+     * @param dtoReq 请求参数
+     */
+    CommonDtoResult<Boolean> bindMobile(BindMobileDtoReq dtoReq);
+
+    /**
+     * 解绑手机号
+     *
+     * @param userId 用户 ID
+     */
+    CommonDtoResult<Boolean> unbindMobile(Long userId);
+
+    /**
+     * 更改用户名
+     *
+     * @param dtoReq 请求参数
+     */
+    CommonDtoResult<Boolean> resetUserName(ResetUserNameDtoReq dtoReq);
+
+    /**
+     * 用户注销
+     *
+     * @param userId 用户 ID
+     */
+    CommonDtoResult<Boolean> cancellation(Long userId);
+
+    /**
+     * 校验用户名
+     *
+     * @param userName 用户名
+     */
+    CommonDtoResult<Boolean> verifyUserName (String userName);
+
+    /**
+     * 校验邮箱
+     *
+     * @param email 邮箱
+     */
+    CommonDtoResult<Boolean> verifyUserEmail (String email);
+
+    /**
+     * 校验手机号
+     *
+     * @param mobile 手机号
+     */
+    CommonDtoResult<Boolean> verifyUserMobile (String mobile);
 }
