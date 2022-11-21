@@ -1,15 +1,13 @@
 package com.yixihan.yicode.auth.service.impl;
 
-import com.yixihan.yicode.auth.feign.EmailFeignClient;
-import com.yixihan.yicode.auth.feign.SMSFeignClient;
-import com.yixihan.yicode.auth.feign.UserFeignClient;
-import com.yixihan.yicode.auth.feign.UserRoleFeignClient;
+import com.yixihan.yicode.auth.feign.*;
 import com.yixihan.yicode.auth.pojo.Role;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
@@ -45,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private EmailFeignClient emailFeignClient;
+
+    @Resource
+    private CodeFeignClient codeFeignClient;
 
     @Resource
     private UserRoleFeignClient userRoleFeignClient;
@@ -119,6 +120,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return findUserByMobile (dtoReq.getMobile ());
+    }
+
+    @Override
+    public Boolean validatePhotoCode(CodeValidateDtoReq dtoReq) {
+        return codeFeignClient.validateCode (dtoReq).getResult ().getData ();
     }
 
     private User getUser (UserDtoResult userDtoResult) {

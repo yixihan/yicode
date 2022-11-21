@@ -25,7 +25,7 @@ public interface CodeApi {
 
     @ApiOperation("/生成验证码")
     @PostMapping("/create/code/{uuid}")
-    void createCode(HttpServletResponse response, @PathVariable String uuid) throws IOException;
+    void createCode(HttpServletResponse response, @PathVariable("uuid") String uuid) throws IOException;
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")

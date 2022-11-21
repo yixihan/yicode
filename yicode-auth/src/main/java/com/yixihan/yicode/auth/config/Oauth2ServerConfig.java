@@ -55,7 +55,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient (properties.getClientId ())
                 .secret (passwordEncoder.encode (properties.getRawPassword ()))
                 .scopes (properties.getScopes ())
-                .authorizedGrantTypes ("password", "refresh_token", "authorization_code", "sms", "email")
+                .authorizedGrantTypes ("password", "refresh_token", "authorization_code", "sms", "email", "verify_code")
                 .accessTokenValiditySeconds (properties.getAccessTokenValiditySeconds ())
                 .refreshTokenValiditySeconds (properties.getRefreshTokenValiditySeconds ());
     }

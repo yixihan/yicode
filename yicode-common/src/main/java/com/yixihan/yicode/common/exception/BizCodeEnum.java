@@ -11,7 +11,7 @@ public enum BizCodeEnum implements CommonError {
     /**
      * 失败类型：内部异常
      */
-    FAILED_TYPE_INTERNAL(500, "服务器错误"),
+    FAILED_TYPE_INTERNAL (500, "服务器错误"),
 
     /**
      * 请求异常
@@ -36,91 +36,91 @@ public enum BizCodeEnum implements CommonError {
     /**
      * 参数校验异常
      */
-    PARAMS_VALID_ERR(20001, "参数校验异常"),
+    PARAMS_VALID_ERR (20001, "参数校验异常"),
 
     /**
      * 空指针异常
      */
-    NULL_ERR(20002, "空指针异常"),
+    NULL_ERR (20002, "空指针异常"),
 
     // ===== sentinel 异常 ==== //
     /**
      * 系统限流
      */
-    SENTINEL_FLOW_ERR(40001, "系统限流，请稍等"),
+    SENTINEL_FLOW_ERR (40001, "系统限流，请稍等"),
 
     /**
      * 服务降级
      */
-    SENTINEL_DEGRADE_ERR(40002, "服务降级"),
+    SENTINEL_DEGRADE_ERR (40002, "服务降级"),
 
     /**
      * 热点参数限流
      */
-    SENTINEL_PARAM_FLOW_ERR(40003, "热点参数限流"),
+    SENTINEL_PARAM_FLOW_ERR (40003, "热点参数限流"),
 
     /**
      * 系统规则
      */
-    SENTINEL_SYSTEM_BLOCK_ERR(40004, "系统规则（负载/...不满足要求）"),
+    SENTINEL_SYSTEM_BLOCK_ERR (40004, "系统规则（负载/...不满足要求）"),
 
     /**
      * 授权规则不通过
      */
-    SENTINEL_AUTH_ERR(40005, "授权规则不通过"),
+    SENTINEL_AUTH_ERR (40005, "授权规则不通过"),
 
     // 登录异常
     /**
      * 用户名或密码错误
      */
-    USERNAME_PASSWORD_ERR(10001, "用户名或密码错误"),
+    USERNAME_PASSWORD_ERR (10001, "用户名或密码错误"),
 
     /**
      * 账户已被禁用
      */
-    ACCOUNT_DISABLED(10002, "账户已被禁用"),
+    ACCOUNT_DISABLED (10002, "账户已被禁用"),
 
     /**
      * 账户已被锁定
      */
-    ACCOUNT_LOCKED(10003, "账户已被锁定"),
+    ACCOUNT_LOCKED (10003, "账户已被锁定"),
 
     /**
      * 账户已过期
      */
-    ACCOUNT_EXPIRED(10004, "账户已过期"),
+    ACCOUNT_EXPIRED (10004, "账户已过期"),
 
     /**
      * 账户凭据已过期
      */
-    CREDENTIALS_EXPIRED(10005, "账户凭据已过期"),
+    CREDENTIALS_EXPIRED (10005, "账户凭据已过期"),
 
     /**
      * token 过期
      */
-    TOKEN_EXPIRED(10006, "登录凭证已过期, 请重新登录"),
+    TOKEN_EXPIRED (10006, "登录凭证已过期, 请重新登录"),
 
     /**
      * 没有访问权限
      */
-    NO_METHOD_ROLE(10007, "没有访问权限"),
+    NO_METHOD_ROLE (10007, "没有访问权限"),
 
 
     // 第三方服务
     /**
      * 文件上传失败
      */
-    OSS_ERR(90001, "文件上传失败"),
+    OSS_ERR (90001, "文件上传失败"),
 
     /**
      * 邮件发送失败
      */
-    EMAIL_SEND_ERR(90002, "邮件发送失败"),
+    EMAIL_SEND_ERR (90002, "邮件发送失败"),
 
     /**
      * 短信发送失败
      */
-    SMS_SEND_ERR(90003, "短信发送失败"),
+    SMS_SEND_ERR (90003, "短信发送失败"),
 
     /**
      * 手机号为空
@@ -133,6 +133,11 @@ public enum BizCodeEnum implements CommonError {
     EMAIL_EMPTY_ERR (90005, "邮箱不能为空"),
 
     /**
+     * uuid 为空
+     */
+    UUID_EMPTY_ERR (90008, "uuid不能为空"),
+
+    /**
      * 验证码为空
      */
     CODE_EMPTY_ERR (90006, "验证码不能为空"),
@@ -140,7 +145,9 @@ public enum BizCodeEnum implements CommonError {
     /**
      * 验证码错误
      */
-    CODE_VALIDATE_ERR (90007, "验证码错误");
+    CODE_VALIDATE_ERR (90007, "验证码错误"),
+
+    ;
 
 
     /**
@@ -153,7 +160,7 @@ public enum BizCodeEnum implements CommonError {
      */
     private final String msg;
 
-    BizCodeEnum(int code,String msg){
+    BizCodeEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

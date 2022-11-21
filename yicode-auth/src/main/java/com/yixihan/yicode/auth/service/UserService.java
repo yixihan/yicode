@@ -1,6 +1,7 @@
 package com.yixihan.yicode.auth.service;
 
 import com.yixihan.yicode.auth.pojo.User;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,5 +56,10 @@ public interface UserService extends UserDetailsService {
      * @return
      */
     User validateMobileCode (SMSValidateDtoReq dtoReq);
+
+    /**
+     * 校验图片验证码
+     */
+    Boolean validatePhotoCode (CodeValidateDtoReq dtoReq);
 
 }

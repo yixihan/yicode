@@ -1,13 +1,12 @@
-package com.yixihan.yicode.auth.oauth.email;
+package com.yixihan.yicode.auth.oauth.password;
 
 import cn.hutool.core.util.StrUtil;
-import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
 import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.thirdpart.openapi.api.dto.request.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.openapi.api.dto.request.CodeValidateDtoReq;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
@@ -19,29 +18,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 自定义邮箱验证码验证类
+ * 自定义用户名密码验证码严重类
  *
  * @author yixihan
- * @date 2022/11/8 15:32
+ * @date 2022/11/21 16:40
  */
-public class EmailTokenGranter extends AbstractTokenGranter {
+public class PasswordTokenGranter extends AbstractTokenGranter {
 
-    private static final String GRANT_TYPE = "email";
+    private static final String GRANT_TYPE = "verify_code";
 
     private final AuthenticationManager authenticationManager;
 
-    public EmailTokenGranter(AuthenticationManager authenticationManager,
-                           AuthorizationServerTokenServices tokenServices,
-                           ClientDetailsService clientDetailsService,
-                           OAuth2RequestFactory requestFactory) {
+    public PasswordTokenGranter(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
         this (authenticationManager, tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
     }
 
-    protected EmailTokenGranter(AuthenticationManager authenticationManager,
-                              AuthorizationServerTokenServices tokenServices,
-                              ClientDetailsService clientDetailsService,
-                              OAuth2RequestFactory requestFactory,
-                              String grantType) {
+    protected PasswordTokenGranter(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory, String grantType) {
         super (tokenServices, clientDetailsService, requestFactory, grantType);
         this.authenticationManager = authenticationManager;
     }
@@ -77,42 +69,36 @@ public class EmailTokenGranter extends AbstractTokenGranter {
     }
 
     /**
-     * 校验 email 验证码
+     * 校验 图片 验证码
+     *
      * @param parameters
      */
     private void checkEmailCode(Map<String, String> parameters) {
-        String email = parameters.get ("username");
-        String emailType = parameters.get ("send-type");
+        String uuid = parameters.get ("uuid");
         String code = parameters.get ("code");
 
-        if (StrUtil.isBlank (email)) {
-            throw new BizException (BizCodeEnum.EMAIL_EMPTY_ERR);
+        if (StrUtil.isBlank (uuid)) {
+            throw new BizException (BizCodeEnum.UUID_EMPTY_ERR);
         }
         if (StrUtil.isBlank (code)) {
             throw new BizException (BizCodeEnum.CODE_EMPTY_ERR);
         }
 
         UserService userService = getUserService ();
-        EmailValidateDtoReq dtoReq = new EmailValidateDtoReq ();
-        dtoReq.setEmail (email);
-        dtoReq.setEmailType (emailType);
+        CodeValidateDtoReq dtoReq = new CodeValidateDtoReq ();
+        dtoReq.setUuid (uuid);
         dtoReq.setCode (code);
-        User user = userService.validateEmailCode (dtoReq);
-        if (user == null) {
+        if (!userService.validatePhotoCode (dtoReq)) {
             throw new BizException (BizCodeEnum.CODE_VALIDATE_ERR);
         }
-
-        parameters.put ("username", user.getUsername () + "~~other");
-        parameters.put ("password", user.getPassword ());
-
-
     }
 
     /**
      * 获取 userService
+     *
      * @return {@link UserService}
      */
-    private UserService getUserService () {
+    private UserService getUserService() {
         return SpringUtils.getBean (UserServiceImpl.class);
     }
 
