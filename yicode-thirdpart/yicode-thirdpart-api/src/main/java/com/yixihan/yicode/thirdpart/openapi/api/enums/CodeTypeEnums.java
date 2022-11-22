@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * description
+ * 验证码类型枚举类
  *
  * @author yixihan
  * @date 2022/11/22 9:13

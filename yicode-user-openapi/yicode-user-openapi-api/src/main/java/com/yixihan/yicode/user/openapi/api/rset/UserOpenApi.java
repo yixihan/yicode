@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 用户 OpenApi
  *
@@ -32,7 +30,7 @@ public interface UserOpenApi {
 
     @ApiOperation ("获取当前登录用户详细信息")
     @PostMapping(value = "/userinfo/now", produces = "application/json")
-    JsonResponse<UserDetailInfoVO> getUserInfo(HttpServletRequest request);
+    JsonResponse<UserDetailInfoVO> getUserInfo();
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")
@@ -44,25 +42,25 @@ public interface UserOpenApi {
 
     @ApiOperation ("绑定邮箱")
     @PostMapping(value = "/bind/email", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> bindEmail (HttpServletRequest request, @RequestBody BindEmailReq req);
+    JsonResponse<CommonVO<Boolean>> bindEmail (@RequestBody BindEmailReq req);
 
     @ApiOperation ("解绑邮箱")
     @PostMapping(value = "/unbind/email", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> unbindEmail (HttpServletRequest request);
+    JsonResponse<CommonVO<Boolean>> unbindEmail ();
 
     @ApiOperation ("绑定手机号")
     @PostMapping(value = "/bind/mobile", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> bindMobile (HttpServletRequest request, @RequestBody BindMobileReq req);
+    JsonResponse<CommonVO<Boolean>> bindMobile (@RequestBody BindMobileReq req);
 
     @ApiOperation ("解绑手机号")
     @PostMapping(value = "/unbind/mobile", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> unbindMobile (HttpServletRequest request);
+    JsonResponse<CommonVO<Boolean>> unbindMobile ();
 
     @ApiOperation ("修改用户名")
     @PostMapping(value = "/reset/username", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> resetUserName (HttpServletRequest request, @RequestBody ResetUserNameReq req);
+    JsonResponse<CommonVO<Boolean>> resetUserName (@RequestBody ResetUserNameReq req);
 
     @ApiOperation ("用户注销")
     @PostMapping(value = "/cancellation", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> cancellation (HttpServletRequest request);
+    JsonResponse<CommonVO<Boolean>> cancellation ();
 }

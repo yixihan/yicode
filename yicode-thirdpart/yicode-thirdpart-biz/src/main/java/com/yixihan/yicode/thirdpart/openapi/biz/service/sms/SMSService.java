@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms;
 
-import com.yixihan.yicode.common.enums.SMSTemplateEnums;
+import com.yixihan.yicode.thirdpart.openapi.api.enums.SMSTemplateEnums;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;

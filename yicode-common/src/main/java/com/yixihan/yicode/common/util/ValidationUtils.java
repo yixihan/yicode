@@ -51,7 +51,7 @@ public class ValidationUtils {
     /**
      * 密码最大长度
      */
-    private static final Integer USERNAME_MAX_LENGTH = 8;
+    private static final Integer USERNAME_MAX_LENGTH = 12;
 
     /**
      * 校验邮箱

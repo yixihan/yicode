@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户 前端控制器
@@ -31,8 +30,8 @@ public class UserController implements UserOpenApi {
     }
 
     @Override
-    public JsonResponse<UserDetailInfoVO> getUserInfo(HttpServletRequest request) {
-        return JsonResponse.ok (userService.getUserInfo (request));
+    public JsonResponse<UserDetailInfoVO> getUserInfo() {
+        return JsonResponse.ok (userService.getUserInfo ());
     }
 
     @Override
@@ -46,32 +45,32 @@ public class UserController implements UserOpenApi {
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindEmail(HttpServletRequest request, BindEmailReq req) {
-        return JsonResponse.ok (userService.bindEmail (request, req));
+    public JsonResponse<CommonVO<Boolean>> bindEmail(BindEmailReq req) {
+        return JsonResponse.ok (userService.bindEmail (req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindEmail(HttpServletRequest request) {
-        return JsonResponse.ok (userService.unbindEmail (request));
+    public JsonResponse<CommonVO<Boolean>> unbindEmail() {
+        return JsonResponse.ok (userService.unbindEmail ());
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindMobile(HttpServletRequest request, BindMobileReq req) {
-        return JsonResponse.ok (userService.bindMobile (request, req));
+    public JsonResponse<CommonVO<Boolean>> bindMobile(BindMobileReq req) {
+        return JsonResponse.ok (userService.bindMobile (req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindMobile(HttpServletRequest request) {
-        return JsonResponse.ok (userService.unbindMobile (request));
+    public JsonResponse<CommonVO<Boolean>> unbindMobile() {
+        return JsonResponse.ok (userService.unbindMobile ());
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> resetUserName(HttpServletRequest request, ResetUserNameReq req) {
-        return JsonResponse.ok (userService.resetUserName(request, req));
+    public JsonResponse<CommonVO<Boolean>> resetUserName(ResetUserNameReq req) {
+        return JsonResponse.ok (userService.resetUserName(req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> cancellation(HttpServletRequest request) {
-        return JsonResponse.ok (userService.cancellation (request));
+    public JsonResponse<CommonVO<Boolean>> cancellation() {
+        return JsonResponse.ok (userService.cancellation ());
     }
 }

@@ -1,5 +1,6 @@
 package com.yixihan.yicode.common.component;
 
+import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
@@ -46,8 +47,10 @@ public class SecurityContext {
             setUser (new User ());
             getUser ().setUserId (Long.valueOf (jwtClaimsSet.getClaim ("userId").toString ()));
             getUser ().setUserName (jwtClaimsSet.getClaim ("userName").toString ());
-            getUser ().setUserEmail (jwtClaimsSet.getClaim ("userEmail").toString ());
-            getUser ().setUserMobile (jwtClaimsSet.getClaim ("userMobile").toString ());
+            getUser ().setUserEmail (StrUtil.isBlankIfStr (jwtClaimsSet.getClaim ("userEmail")) ?
+                    null : jwtClaimsSet.getClaim ("userEmail").toString ());
+            getUser ().setUserMobile (StrUtil.isBlankIfStr (jwtClaimsSet.getClaim ("userMobile")) ?
+                    null : jwtClaimsSet.getClaim ("userMobile").toString ());
             getUser ().setAuthorities (getAuthorities (jwtClaimsSet.getClaim ("authorities").toString ()));
         } catch (ParseException e) {
             throw new RuntimeException (e);

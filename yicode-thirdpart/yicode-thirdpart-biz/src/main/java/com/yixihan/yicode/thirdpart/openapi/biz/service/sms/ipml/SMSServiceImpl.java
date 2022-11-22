@@ -8,7 +8,7 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.yixihan.yicode.common.enums.SMSTemplateEnums;
+import com.yixihan.yicode.thirdpart.openapi.api.enums.SMSTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -81,7 +81,7 @@ public class SMSServiceImpl implements SMSService {
             log.info ("response : {}", SendSmsResponse.toJsonString(resp));
             SendStatus sendStatus = resp.getSendStatusSet ()[0];
             if ("Ok".equals (sendStatus.getCode ())) {
-                return new CommonDtoResult<> (true, "短线发送成功");
+                return new CommonDtoResult<> (true, "短信发送成功");
             } else {
                 log.error (sendStatus.getMessage(), new BizException (BizCodeEnum.SMS_SEND_ERR));
                 return new CommonDtoResult<> (false, "短信发送失败");
@@ -116,7 +116,7 @@ public class SMSServiceImpl implements SMSService {
             case REGISTER:
                 key = String.format (smsConstant.getRegisterKey (), mobile);
                 break;
-            case UPDATE_PASSWORD:
+            case RESET_PASSWORD:
                 key = String.format (smsConstant.getUpdatePasswordKey (), mobile);
                 break;
             case COMMON:

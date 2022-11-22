@@ -6,11 +6,23 @@ spring:
     database: ${yicode.redis.database}
     password: ${yicode.redis.password}
 
+  main:
+    allow-bean-definition-overriding: true
+
 
 feign:
   client:
     yicode-user:
       name: yicode-user
+    yicode-thirdpart:
+      name: yicode-thirdpart
+    config:
+      yicode-user:
+        connect-timeout: 5000
+        read-timeout: 5000
+      yicode-thirdpart:
+        connect-timeout: 5000
+        read-timeout: 5000
 
 
 management:
