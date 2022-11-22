@@ -95,4 +95,19 @@ public class UserController implements UserApi {
     public ApiResult<CommonDtoResult<Boolean>> cancellation(Long userId) {
         return ApiResult.create (userService.cancellation (userId));
     }
+
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyUserName(String userName) {
+        return ApiResult.create (userService.verifyUserName (userName));
+    }
+
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyUserEmail(String email) {
+        return ApiResult.create (userService.verifyUserEmail (email));
+    }
+
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyUserMobile(String mobile) {
+        return ApiResult.create (userService.verifyUserMobile (mobile));
+    }
 }
