@@ -5,6 +5,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
 import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.pojo.Role;
+import com.yixihan.yicode.common.util.ValidationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -41,5 +42,19 @@ public class CommonTest {
         }
         System.out.println (roleList);
         System.out.println (jwtClaimsSet);;
+    }
+
+    @Test
+    public void testPassword () {
+        String password = "Theyear123，";
+
+        System.out.println (ValidationUtils.validatePassword (password));
+    }
+
+    @Test
+    public void testUserName () {
+        String userName = "易·曦·翰";
+
+        System.out.println (ValidationUtils.validateUserName (userName));
     }
 }
