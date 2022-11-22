@@ -2,6 +2,8 @@ package com.yixihan.yicode.thirdpart.dal.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -42,10 +44,12 @@ public class SmsTemplate implements Serializable {
     private Date updateTime;
 
     @ApiModelProperty(value = "乐观锁")
+    @Version
     private Integer version;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+    @TableLogic
+    private Integer delFlag;
 
 
 }

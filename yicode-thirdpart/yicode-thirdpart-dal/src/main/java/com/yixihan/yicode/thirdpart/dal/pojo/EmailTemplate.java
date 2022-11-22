@@ -45,7 +45,7 @@ public class EmailTemplate implements Serializable {
     private Integer version;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDeleted;
+    private Integer delFlag;
 
 
 }
