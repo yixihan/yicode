@@ -8,6 +8,9 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author yixihan
  * @date 2022-10-14-13:40
@@ -18,6 +21,9 @@ public class TestController implements TestOpenApi {
 
     @Value ("${yicode.db.port}")
     private Integer prot;
+
+    @Resource
+    private HttpServletRequest httpServletRequest;
 
     @Override
     public JsonResponse<String> testGetYaml() {
@@ -34,6 +40,11 @@ public class TestController implements TestOpenApi {
     @SentinelResource(value = "testDegrade", blockHandler = "degradeBlockHandler")
     public JsonResponse<String> testDegrade() {
         return JsonResponse.ok ("本次访问服务未降级");
+    }
+
+    @Override
+    public JsonResponse<String> testHttpServletRequest() {
+        return JsonResponse.ok (httpServletRequest.getHeader ("test"));
     }
 
     public JsonResponse<String> flowBlockHandler (BlockException e) {

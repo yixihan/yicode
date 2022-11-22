@@ -26,4 +26,9 @@ public interface TestOpenApi {
     @ApiModelProperty("测试服务降级")
     @PostMapping(value = "/testDegrade", produces = "application/json")
     JsonResponse<String> testDegrade();
+
+
+    @ApiModelProperty("测试 HttpServletRequest")
+    @PostMapping(value = "/testRequest", produces = "application/json")
+    JsonResponse<String> testHttpServletRequest();
 }
