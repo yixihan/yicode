@@ -80,5 +80,17 @@ public interface UserApi {
     @ApiOperation ("用户注销")
     @PostMapping(value = "/cancellation", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> cancellation (@RequestParam("userId") Long userId);
+    
+    @ApiOperation ("校验用户名")
+    @PostMapping(value = "/verify/username", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyUserName (@RequestParam("userName") String userName);
+    
+    @ApiOperation ("校验邮箱")
+    @PostMapping(value = "/verify/email", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyUserEmail (@RequestParam("email")String email);
+    
+    @ApiOperation ("校验手机号")
+    @PostMapping(value = "/verify/mobile", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyUserMobile (@RequestParam("mobile")String mobile);
 
 }
