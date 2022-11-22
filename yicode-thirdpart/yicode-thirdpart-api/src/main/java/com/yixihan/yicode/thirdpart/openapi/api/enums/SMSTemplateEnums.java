@@ -1,17 +1,17 @@
-package com.yixihan.yicode.common.enums;
+package com.yixihan.yicode.thirdpart.openapi.api.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 邮件发送类型枚举类
+ * 短信发送类型模板
  *
  * @author yixihan
- * @date 2022-10-28-9:53
+ * @date 2022-10-28-10:04
  */
 @AllArgsConstructor
 @Getter
-public enum EmailTemplateEnums {
+public enum SMSTemplateEnums {
 
     /**
      * 登录模板
@@ -26,12 +26,12 @@ public enum EmailTemplateEnums {
     /**
      * 更新密码模板
      */
-    UPDATE_PASSWORD(10000002L, "更新密码模板"),
+    RESET_PASSWORD(10000002L, "更新密码模板"),
 
     /**
      * 通用模板
      */
-    COMMON(10000003L, "通用模板")
+    COMMON(10000003L, "通用模板"),
 
     ;
 

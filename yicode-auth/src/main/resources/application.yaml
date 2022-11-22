@@ -24,7 +24,7 @@ feign:
     config:
       yicode-user:
         connect-timeout: 5000
-        read-timeout: 3000
+        read-timeout: 5000
 
 
 management:

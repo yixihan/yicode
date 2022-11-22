@@ -11,6 +11,7 @@ import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.thirdpart.openapi.api.enums.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.*;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;
@@ -167,12 +168,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CommonDtoResult<Boolean> resetPassword(ResetPasswordDtoReq dtoReq) {
         User user = new User ();
-        user.setUserId (dtoReq.getUserId ());
-        user.setUserPassword (passwordEncoder.encode (dtoReq.getNewPassword ()));
-
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (User.USER_ID, user.getUserId ())
-                .set (User.USER_PASSWORD, user.getUserPassword ());
+        if (VerificationCodeEnums.EMAIL.getMethod ().equals (dtoReq.getType ())) {
+            wrapper.eq (User.USER_EMAIL, dtoReq.getEmail ());
+        } else if (VerificationCodeEnums.SMS.getMethod ().equals (dtoReq.getType ())) {
+            wrapper.eq (User.USER_MOBILE, dtoReq.getMobile ());
+        }
+        wrapper.set (User.USER_PASSWORD,passwordEncoder.encode (dtoReq.getNewPassword ()));
         return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "重置密码成功");
     }
 
@@ -184,19 +186,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         User user = new User ();
-        user.setUserId (dtoReq.getUserId ());
-        user.setUserEmail (dtoReq.getEmail ());
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (User.USER_ID, user.getUserId ())
-                .set (User.USER_EMAIL, user.getUserEmail ());
+        wrapper.eq (User.USER_ID, dtoReq.getUserId ())
+                .set (User.USER_EMAIL, dtoReq.getEmail ());
         return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定邮箱成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> unbindEmail(Long userId) {
         User user = new User ();
-        user.setUserId (userId);
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, userId)
@@ -212,19 +211,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         User user = new User ();
-        user.setUserId (dtoReq.getUserId ());
-        user.setUserEmail (dtoReq.getMobile ());
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (User.USER_ID, user.getUserId ())
-                .set (User.USER_MOBILE, user.getUserMobile ());
+        wrapper.eq (User.USER_ID, dtoReq.getUserId ())
+                .set (User.USER_MOBILE, dtoReq.getMobile ());
         return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定手机号成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> unbindMobile(Long userId) {
         User user = new User ();
-        user.setUserId (userId);
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, userId)
@@ -235,24 +231,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CommonDtoResult<Boolean> resetUserName(ResetUserNameDtoReq dtoReq) {
         User user = new User ();
-        user.setUserId (dtoReq.getUserId ());
-        user.setUserPassword (dtoReq.getUserName ());
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (User.USER_ID, user.getUserId ())
-                .set (User.USER_NAME, user.getUserName ());
+        wrapper.eq (User.USER_ID, dtoReq.getUserId ())
+                .set (User.USER_NAME, dtoReq.getUserName ());
         return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "修改用户名成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> cancellation(Long userId) {
         User user = new User ();
-        user.setUserId (userId);
-        user.setDelFlag (1);
 
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (User.USER_ID, user.getUserId ())
-                .set (User.DEL_FLAG, user.getDelFlag ());
+        wrapper.eq (User.USER_ID, userId)
+                .set (User.DEL_FLAG, 1);
         return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "注销成功");
     }
 

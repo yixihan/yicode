@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
-import com.yixihan.yicode.common.enums.EmailTemplateEnums;
+import com.yixihan.yicode.thirdpart.openapi.api.enums.EmailTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -100,7 +100,7 @@ public class EmailSendServiceImpl implements EmailSendService {
             case REGISTER:
                 key = String.format (emailConstant.getRegisterKey (), email);
                 break;
-            case UPDATE_PASSWORD:
+            case RESET_PASSWORD:
                 key = String.format (emailConstant.getUpdatePasswordKey (), email);
                 break;
             case COMMON:
