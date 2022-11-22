@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
             return new CommonVO<> (false, "错误的验证码方式!");
         }
 
-        if (ValidationUtils.validatePassword (req.getNewPassword ())) {
+        if (!ValidationUtils.validatePassword (req.getNewPassword ())) {
             return new CommonVO<> (false, "密码不符合规范！");
         }
 
