@@ -8,7 +8,7 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.yixihan.yicode.common.enums.SMSTypeEnums;
+import com.yixihan.yicode.common.enums.SMSTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -50,7 +50,7 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public CommonDtoResult<Boolean> send(SMSSendDtoReq dtoReq) {
 
-        SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getType ());
+        SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
         String code = codeService.getCode(keyName);
         String templateId = smsTemplateService.getSMSTemplateId (smsType.getId ());
@@ -95,7 +95,7 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public CommonDtoResult<Boolean> validate(SMSValidateDtoReq dtoReq) {
         // 生成 keyName
-        SMSTypeEnums smsType = SMSTypeEnums.valueOf (dtoReq.getMobileType ());
+        SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getMobileType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
         return codeService.validate (keyName, dtoReq.getCode ());
     }
@@ -107,7 +107,7 @@ public class SMSServiceImpl implements SMSService {
      * @param smsType
      * @return
      */
-    private String getRedisKey (String mobile, SMSTypeEnums smsType) {
+    private String getRedisKey (String mobile, SMSTemplateEnums smsType) {
         String key;
         switch (smsType) {
             case LOGIN:

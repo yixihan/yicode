@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum SMSTypeEnums {
+public enum SMSTemplateEnums {
 
     /**
      * 登录模板
