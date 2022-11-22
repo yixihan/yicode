@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
-import com.yixihan.yicode.common.enums.EmailTypeEnums;
+import com.yixihan.yicode.common.enums.EmailTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -49,7 +49,7 @@ public class EmailSendServiceImpl implements EmailSendService {
     @Override
     public CommonDtoResult<Boolean> sendEmail(EmailSendDtoReq dtoReq) {
 
-        EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getType ());
+        EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
         String emailContent = emailTemplateService.getEmailContent (emailType.getId ());
 
@@ -78,7 +78,7 @@ public class EmailSendServiceImpl implements EmailSendService {
     @Override
     public CommonDtoResult<Boolean> validate(EmailValidateDtoReq dtoReq) {
         // 生成 keyName
-        EmailTypeEnums emailType = EmailTypeEnums.valueOf (dtoReq.getEmailType ());
+        EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getEmailType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
         return codeService.validate (keyName, dtoReq.getCode ());
     }
@@ -88,10 +88,10 @@ public class EmailSendServiceImpl implements EmailSendService {
      * 获取 redis key
      *
      * @param email email
-     * @param emailType 邮箱类型 {@link EmailTypeEnums}
+     * @param emailType 邮箱类型 {@link EmailTemplateEnums}
      * @return
      */
-    private String getRedisKey (String email, EmailTypeEnums emailType) {
+    private String getRedisKey (String email, EmailTemplateEnums emailType) {
         String key;
         switch (emailType) {
             case LOGIN:

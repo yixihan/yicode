@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms;
 
-import com.yixihan.yicode.common.enums.SMSTypeEnums;
+import com.yixihan.yicode.common.enums.SMSTemplateEnums;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.openapi.api.dto.request.SMSSendDtoReq;
@@ -16,7 +16,7 @@ public interface SMSService {
     /**
      * 发送手机短信
      * <p>
-     * 短信发送类型枚举类 : {@link SMSTypeEnums}
+     * 短信发送类型枚举类 : {@link SMSTemplateEnums}
      *
      * @param dtoReq
      * @return
@@ -26,7 +26,7 @@ public interface SMSService {
     /**
      * 校验手机验证码
      * <p>
-     * 短信发送类型枚举类 : {@link SMSTypeEnums}
+     * 短信发送类型枚举类 : {@link SMSTemplateEnums}
      * @param dtoReq
      * @return
      */

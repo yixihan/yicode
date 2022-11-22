@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum EmailTypeEnums {
+public enum EmailTemplateEnums {
 
     /**
      * 登录模板
