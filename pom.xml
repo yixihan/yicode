@@ -21,6 +21,7 @@
         <module>yicode-runcode-openapi</module>
         <module>yicode-thirdpart</module>
         <module>yicode-message</module>
+        <module>yicode-thirdpart-openapi</module>
     </modules>
 
     <properties>
