@@ -17,4 +17,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- yicode-thirdpart-biz -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-thirdpart-openapi-biz</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!-- yicode-thirdpart-openapi-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-thirdpart-openapi-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!-- webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
