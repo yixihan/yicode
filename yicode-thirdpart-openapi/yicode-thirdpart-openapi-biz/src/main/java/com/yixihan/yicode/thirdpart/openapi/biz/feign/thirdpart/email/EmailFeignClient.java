@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.email;
 
-import com.yixihan.yicode.thirdpart.open.api.reset.email.EmailOpenApi;
+import com.yixihan.yicode.thirdpart.api.reset.email.EmailApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
@@ -10,5 +10,5 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @date 2022/11/23 14:56
  */
 @FeignClient(value = "${feign.client.yicode-thirdpart.name}")
-public interface EmailFeignClient extends EmailOpenApi {
+public interface EmailFeignClient extends EmailApi {
 }

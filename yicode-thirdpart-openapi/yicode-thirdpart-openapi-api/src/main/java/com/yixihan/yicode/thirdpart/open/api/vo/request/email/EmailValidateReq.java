@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class EmailValidateReq {
 
     @ApiModelProperty(value = "手机号")
-    private String mobile;
+    private String email;
 
     @ApiModelProperty(value = "验证码")
     private String code;

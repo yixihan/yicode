@@ -21,34 +21,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface EmailOpenApi {
 
     @ApiOperation("登录-发送邮件")
-    @PostMapping("/login/send/mobile")
+    @PostMapping("/send/email/login")
     JsonResponse<CommonVO<Boolean>> loginSend (@RequestBody EmailSendReq req);
 
     @ApiOperation ("登录-校验邮件验证码")
-    @PostMapping("/login/validate")
+    @PostMapping("/validate/login")
     JsonResponse<CommonVO<Boolean>> loginValidate (@RequestBody EmailValidateReq req);
 
     @ApiOperation("注册-发送邮件")
-    @PostMapping("/register/send/mobile")
+    @PostMapping("/send/email/register")
     JsonResponse<CommonVO<Boolean>> registerSend (@RequestBody EmailSendReq req);
 
     @ApiOperation ("注册-校验邮件验证码")
-    @PostMapping("/register/validate")
+    @PostMapping("/validate/register")
     JsonResponse<CommonVO<Boolean>> registerValidate (@RequestBody EmailValidateReq req);
 
     @ApiOperation("重置密码-发送邮件")
-    @PostMapping("/reset/send/mobile")
+    @PostMapping("/send/email/reset")
     JsonResponse<CommonVO<Boolean>> resetSend (@RequestBody EmailSendReq req);
 
     @ApiOperation ("重置密码-校验邮件验证码")
-    @PostMapping("/reset/validate")
+    @PostMapping("/validate/reset")
     JsonResponse<CommonVO<Boolean>> resetValidate (@RequestBody EmailValidateReq req);
 
     @ApiOperation("通用-发送邮件")
-    @PostMapping("/common/send/mobile")
+    @PostMapping("/send/email/common")
     JsonResponse<CommonVO<Boolean>> commonSend (@RequestBody EmailSendReq req);
 
     @ApiOperation ("通用-校验邮件验证码")
-    @PostMapping("/common/validate")
+    @PostMapping("/validate/common")
     JsonResponse<CommonVO<Boolean>> commonValidate (@RequestBody EmailValidateReq req);
 }

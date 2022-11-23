@@ -21,4 +21,7 @@ public class OSSUploadReq {
 
     @ApiModelProperty(value = "文件")
     private MultipartFile file;
+
+    @ApiModelProperty(value = "文件后缀")
+    private String fileSuffix;
 }
