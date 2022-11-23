@@ -5,13 +5,10 @@ import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 图形验证码模块 api
@@ -24,8 +21,8 @@ import java.io.IOException;
 public interface CodeApi {
 
     @ApiOperation("生成图形验证码")
-    @PostMapping("/create/{uuid}")
-    void createCode(HttpServletResponse response, @PathVariable("uuid") String uuid) throws IOException;
+    @PostMapping("/create")
+    void createCode(@RequestParam("code") String code, @RequestParam("uuid") String uuid);
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")

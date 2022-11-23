@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 验证码 前端控制器
@@ -26,8 +24,8 @@ public class CodeController implements CodeApi {
     private CodeService codeService;
 
     @Override
-    public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        codeService.createCode (response, uuid);
+    public void createCode(String code, String uuid){
+        codeService.createCode (code, uuid);
     }
 
     @Override

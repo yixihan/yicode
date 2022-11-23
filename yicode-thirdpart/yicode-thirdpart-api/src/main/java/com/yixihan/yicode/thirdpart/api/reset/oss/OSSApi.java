@@ -1,9 +1,7 @@
 package com.yixihan.yicode.thirdpart.api.reset.oss;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSUploadDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +19,6 @@ import java.util.Map;
 @Api(tags = "oss模块 api")
 @RequestMapping("/oss/")
 public interface OSSApi {
-
-    @ApiOperation (value = "上传文件", notes = "商城文件路径 : [userId/fileDir/fileName.fileSuffix]")
-    @PostMapping(value = "/upload/file")
-    ApiResult<CommonDtoResult<String>> uploadFile(OSSUploadDtoReq dtoReq);
 
     @ApiOperation (value = "获取上传密钥")
     @PostMapping(value = "/upload/policy", produces = "application/json")
