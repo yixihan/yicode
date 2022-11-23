@@ -11,7 +11,7 @@ import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
-import com.yixihan.yicode.thirdpart.api.enums.VerificationCodeEnums;
+import com.yixihan.yicode.thirdpart.api.enums.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.*;
 import com.yixihan.yicode.user.api.dto.response.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.UserDetailInfoDtoResult;

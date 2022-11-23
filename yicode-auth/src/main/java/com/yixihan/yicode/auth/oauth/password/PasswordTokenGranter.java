@@ -6,7 +6,7 @@ import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
 import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.thirdpart.api.dto.request.CodeValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;

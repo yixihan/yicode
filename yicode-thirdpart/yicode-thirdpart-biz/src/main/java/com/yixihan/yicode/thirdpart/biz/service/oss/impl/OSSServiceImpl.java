@@ -10,9 +10,9 @@ import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.biz.service.oss.OSSService;
-import com.yixihan.yicode.thirdpart.api.constant.OssConstant;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSPolicyDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSUploadDtoReq;
+import com.yixihan.yicode.thirdpart.api.constant.oss.OssConstant;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSUploadDtoReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * oss 服务类
+ * oss 服务实现类
  *
  * @author yixihan
  * @date 2022-10-24-15:27

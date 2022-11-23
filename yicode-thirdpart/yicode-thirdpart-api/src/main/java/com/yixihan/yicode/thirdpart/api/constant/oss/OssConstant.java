@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.api.constant;
+package com.yixihan.yicode.thirdpart.api.constant.oss;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

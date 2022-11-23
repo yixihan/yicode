@@ -1,14 +1,14 @@
 package com.yixihan.yicode.thirdpart.biz.service.email.impl;
 
-import com.yixihan.yicode.thirdpart.api.enums.EmailTemplateEnums;
+import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailSendDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.constant.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.constant.EmailConstant;
-import com.yixihan.yicode.thirdpart.biz.service.CodeService;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
+import com.yixihan.yicode.thirdpart.api.constant.email.EmailConstant;
+import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import com.yixihan.yicode.thirdpart.biz.service.EmailTemplateService;
 import com.yixihan.yicode.thirdpart.biz.service.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
- * 邮件发送服务类
+ * 邮件服务实现类
  *
  * @author yixihan
  * @date 2022-10-26-11:02

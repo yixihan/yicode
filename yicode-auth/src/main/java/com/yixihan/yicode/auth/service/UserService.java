@@ -1,9 +1,9 @@
 package com.yixihan.yicode.auth.service;
 
 import com.yixihan.yicode.auth.pojo.User;
-import com.yixihan.yicode.thirdpart.api.dto.request.CodeValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.SMSValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**

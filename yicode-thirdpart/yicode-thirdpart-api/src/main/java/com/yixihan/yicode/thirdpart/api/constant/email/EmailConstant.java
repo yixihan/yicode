@@ -1,11 +1,11 @@
-package com.yixihan.yicode.thirdpart.api.constant;
+package com.yixihan.yicode.thirdpart.api.constant.email;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 邮件发送常量
+ * 邮件常量
  *
  * @author yixihan
  * @date 2022-10-26-11:11

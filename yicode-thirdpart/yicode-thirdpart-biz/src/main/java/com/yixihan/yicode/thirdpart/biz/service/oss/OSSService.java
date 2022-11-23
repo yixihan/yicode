@@ -1,8 +1,8 @@
 package com.yixihan.yicode.thirdpart.biz.service.oss;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSPolicyDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSUploadDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSUploadDtoReq;
 
 import java.util.Map;
 

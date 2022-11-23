@@ -1,11 +1,11 @@
-package com.yixihan.yicode.thirdpart.api.constant;
+package com.yixihan.yicode.thirdpart.api.constant.sms;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 短信发送常量
+ * SMS常量
  *
  * @author yixihan
  * @date 2022-10-26-11:08

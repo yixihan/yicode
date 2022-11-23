@@ -1,11 +1,11 @@
 package com.yixihan.yicode.thirdpart.web.controller.oss;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSUploadDtoReq;
 import com.yixihan.yicode.thirdpart.api.reset.oss.OSSApi;
 import com.yixihan.yicode.thirdpart.biz.service.oss.OSSService;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSPolicyDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.OSSUploadDtoReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,12 +26,12 @@ public class OSSController implements OSSApi {
     private OSSService ossService;
 
     @Override
-    public JsonResponse<CommonDtoResult<String>> testUploadFile(OSSUploadDtoReq dtoReq) {
-        return JsonResponse.ok (ossService.uploadFile (dtoReq));
+    public ApiResult<CommonDtoResult<String>> uploadFile(OSSUploadDtoReq dtoReq) {
+        return ApiResult.create (ossService.uploadFile (dtoReq));
     }
 
     @Override
-    public JsonResponse<Map<String, String>> policy(OSSPolicyDtoReq dtoReq) {
-        return JsonResponse.ok (ossService.policy(dtoReq));
+    public ApiResult<Map<String, String>> policy(OSSPolicyDtoReq dtoReq) {
+        return ApiResult.create (ossService.policy(dtoReq));
     }
 }

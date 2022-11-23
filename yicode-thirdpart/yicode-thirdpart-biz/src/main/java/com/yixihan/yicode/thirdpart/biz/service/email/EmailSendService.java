@@ -1,11 +1,11 @@
 package com.yixihan.yicode.thirdpart.biz.service.email;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailSendDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 
 /**
- * 邮件发送服务类
+ * 邮件服务类
  *
  * @author yixihan
  * @date 2022-10-26-11:02

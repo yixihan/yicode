@@ -8,15 +8,15 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.yixihan.yicode.thirdpart.biz.service.impl.CodeServiceImpl;
-import com.yixihan.yicode.thirdpart.api.enums.SMSTemplateEnums;
+import com.yixihan.yicode.thirdpart.biz.service.code.impl.CodeServiceImpl;
+import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.SMSSendDtoReq;
-import com.yixihan.yicode.thirdpart.api.constant.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.constant.SMSConstant;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
+import com.yixihan.yicode.thirdpart.api.constant.sms.SMSConstant;
 import com.yixihan.yicode.thirdpart.biz.service.SmsTemplateService;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * 短信发送服务类
+ * 短信服务实现类
  *
  * @author yixihan
  * @date 2022-10-27-15:49

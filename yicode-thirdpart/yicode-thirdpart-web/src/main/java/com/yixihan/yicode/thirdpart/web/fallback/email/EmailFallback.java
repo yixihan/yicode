@@ -1,8 +1,8 @@
-package com.yixihan.yicode.thirdpart.web.fallback;
+package com.yixihan.yicode.thirdpart.web.fallback.email;
 
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 
 /**
  * 邮箱 sentinel fallback

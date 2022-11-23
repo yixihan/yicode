@@ -1,11 +1,11 @@
-package com.yixihan.yicode.thirdpart.web.fallback;
+package com.yixihan.yicode.thirdpart.web.fallback.sms;
 
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.SMSSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 
 /**
- * sms sentinel fallback
+ * 短信 sentinel fallback
  *
  * @author yixihan
  * @date 2022-10-28-14:12

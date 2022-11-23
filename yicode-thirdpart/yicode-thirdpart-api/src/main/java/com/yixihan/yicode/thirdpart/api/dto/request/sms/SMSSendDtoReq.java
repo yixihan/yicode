@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.api.dto.request;
+package com.yixihan.yicode.thirdpart.api.dto.request.sms;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

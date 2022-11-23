@@ -1,11 +1,11 @@
-package com.yixihan.yicode.thirdpart.biz.service.impl;
+package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.constant.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.dto.request.CodeValidateDtoReq;
-import com.yixihan.yicode.thirdpart.biz.service.CodeService;
+import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
+import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
+import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.api.enums;
+package com.yixihan.yicode.thirdpart.api.enums.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

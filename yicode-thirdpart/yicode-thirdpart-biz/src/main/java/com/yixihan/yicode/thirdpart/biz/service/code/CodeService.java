@@ -1,7 +1,7 @@
-package com.yixihan.yicode.thirdpart.biz.service;
+package com.yixihan.yicode.thirdpart.biz.service.code;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.CodeValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
