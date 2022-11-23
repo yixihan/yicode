@@ -1,6 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.feign;
 
-import com.yixihan.yicode.thirdpart.openapi.api.reset.sms.SMSApi;
+import com.yixihan.yicode.thirdpart.api.reset.sms.SMSApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
