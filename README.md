@@ -1,6 +1,6 @@
 <div align="center">
   <div><h1>yicode -- 在线编程平台</h1></div>
-  <div style="position: relative; left: 160px">
+  <div style="position: relative">
     <img
       src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=3000&center=%E9%94%99%E8%AF%AF%E7%9A%84&vCenter=%E9%94%99%E8%AF%AF%E7%9A%84&width=435&lines=Buddha+bless%2Csimple+code+every+time!"
       alt="Typing SVG"
