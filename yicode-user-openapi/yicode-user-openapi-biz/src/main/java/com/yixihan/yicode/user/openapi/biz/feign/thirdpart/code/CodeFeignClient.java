@@ -1,4 +1,4 @@
-package com.yixihan.yicode.auth.feign;
+package com.yixihan.yicode.user.openapi.biz.feign.thirdpart.code;
 
 import com.yixihan.yicode.thirdpart.api.reset.code.CodeApi;
 import org.springframework.cloud.openfeign.FeignClient;

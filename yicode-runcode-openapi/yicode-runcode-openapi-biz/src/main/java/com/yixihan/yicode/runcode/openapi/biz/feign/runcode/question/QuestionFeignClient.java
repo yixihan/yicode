@@ -1,4 +1,4 @@
-package com.yixihan.yicode.runcode.openapi.biz.feign;
+package com.yixihan.yicode.runcode.openapi.biz.feign.runcode.question;
 
 import com.yixihan.yicode.runcode.api.rset.QuestionApi;
 import org.springframework.cloud.openfeign.FeignClient;

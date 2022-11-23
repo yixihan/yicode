@@ -1,6 +1,10 @@
 package com.yixihan.yicode.auth.service.impl;
 
-import com.yixihan.yicode.auth.feign.*;
+import com.yixihan.yicode.auth.feign.thirdpart.code.CodeFeignClient;
+import com.yixihan.yicode.auth.feign.thirdpart.email.EmailFeignClient;
+import com.yixihan.yicode.auth.feign.thirdpart.sms.SMSFeignClient;
+import com.yixihan.yicode.auth.feign.user.user.UserFeignClient;
+import com.yixihan.yicode.auth.feign.user.user.UserRoleFeignClient;
 import com.yixihan.yicode.auth.pojo.Role;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;

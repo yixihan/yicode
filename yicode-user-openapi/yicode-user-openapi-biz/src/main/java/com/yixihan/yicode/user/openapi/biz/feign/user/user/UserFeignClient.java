@@ -1,13 +1,13 @@
-package com.yixihan.yicode.auth.feign;
+package com.yixihan.yicode.user.openapi.biz.feign.user.user;
 
 import com.yixihan.yicode.user.api.rest.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
- * user feignClient
+ * 用户 FeignClient
  *
  * @author yixihan
- * @date 2022-10-23-13:18
+ * @date 2022-10-22-21:17
  */
 @FeignClient(value = "${feign.client.yicode-user.name}")
 public interface UserFeignClient extends UserApi {

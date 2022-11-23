@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.biz.feign;
+package com.yixihan.yicode.auth.feign.thirdpart.sms;
 
 import com.yixihan.yicode.thirdpart.api.reset.sms.SMSApi;
 import org.springframework.cloud.openfeign.FeignClient;

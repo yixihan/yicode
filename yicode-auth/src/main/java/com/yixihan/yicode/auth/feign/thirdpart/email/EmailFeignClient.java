@@ -1,4 +1,4 @@
-package com.yixihan.yicode.auth.feign;
+package com.yixihan.yicode.auth.feign.thirdpart.email;
 
 import com.yixihan.yicode.thirdpart.api.reset.email.EmailApi;
 import org.springframework.cloud.openfeign.FeignClient;

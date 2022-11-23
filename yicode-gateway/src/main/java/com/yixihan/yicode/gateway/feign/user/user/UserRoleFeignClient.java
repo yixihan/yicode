@@ -1,4 +1,4 @@
-package com.yixihan.yicode.gateway.feign;
+package com.yixihan.yicode.gateway.feign.user.user;
 
 import org.springframework.cloud.openfeign.FeignClient;
 
