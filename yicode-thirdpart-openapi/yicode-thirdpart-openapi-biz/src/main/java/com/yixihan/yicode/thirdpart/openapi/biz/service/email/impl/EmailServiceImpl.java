@@ -3,6 +3,7 @@ package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.code.CodeTypeEnums;
@@ -30,6 +31,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> loginSend(EmailSendReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -38,6 +42,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> loginValidate(EmailValidateReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
         dtoReq.setEmailType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
@@ -46,6 +53,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> registerSend(EmailSendReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -54,6 +64,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> registerValidate(EmailValidateReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
         dtoReq.setEmailType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
@@ -62,6 +75,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> resetSend(EmailSendReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -70,6 +86,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> resetValidate(EmailValidateReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
         dtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
@@ -78,6 +97,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> commonSend(EmailSendReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -86,6 +108,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public CommonVO<Boolean> commonValidate(EmailValidateReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
         EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
         dtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
