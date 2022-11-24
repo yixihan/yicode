@@ -45,23 +45,23 @@ public class UserController implements UserOpenApi {
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindEmail(BindEmailReq req) {
+    public JsonResponse<CommonVO<Boolean>> bindEmail(EmailReq req) {
         return JsonResponse.ok (userService.bindEmail (req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindEmail() {
-        return JsonResponse.ok (userService.unbindEmail ());
+    public JsonResponse<CommonVO<Boolean>> unbindEmail(EmailReq req) {
+        return JsonResponse.ok (userService.unbindEmail (req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindMobile(BindMobileReq req) {
+    public JsonResponse<CommonVO<Boolean>> bindMobile(MobileReq req) {
         return JsonResponse.ok (userService.bindMobile (req));
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindMobile() {
-        return JsonResponse.ok (userService.unbindMobile ());
+    public JsonResponse<CommonVO<Boolean>> unbindMobile(MobileReq req) {
+        return JsonResponse.ok (userService.unbindMobile (req));
     }
 
     @Override

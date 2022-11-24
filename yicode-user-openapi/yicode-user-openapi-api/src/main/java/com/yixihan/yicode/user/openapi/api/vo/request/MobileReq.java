@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 手机号绑定-req
+ * 手机号请求-req
  *
  * @author yixihan
  * @date 2022/11/21 20:06
@@ -15,9 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("手机号绑定-req")
-public class BindMobileReq {
+@ApiModel("手机号请求-req")
+public class MobileReq {
 
     @ApiModelProperty(value = "手机号")
     private String mobile;
+
+    @ApiModelProperty(value = "验证码")
+    private String code;
 }

@@ -42,19 +42,19 @@ public interface UserOpenApi {
 
     @ApiOperation ("绑定邮箱")
     @PostMapping(value = "/bind/email", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> bindEmail (@RequestBody BindEmailReq req);
+    JsonResponse<CommonVO<Boolean>> bindEmail (@RequestBody EmailReq req);
 
     @ApiOperation ("解绑邮箱")
     @PostMapping(value = "/unbind/email", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> unbindEmail ();
+    JsonResponse<CommonVO<Boolean>> unbindEmail (@RequestBody EmailReq req);
 
     @ApiOperation ("绑定手机号")
     @PostMapping(value = "/bind/mobile", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> bindMobile (@RequestBody BindMobileReq req);
+    JsonResponse<CommonVO<Boolean>> bindMobile (@RequestBody MobileReq req);
 
     @ApiOperation ("解绑手机号")
     @PostMapping(value = "/unbind/mobile", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> unbindMobile ();
+    JsonResponse<CommonVO<Boolean>> unbindMobile (@RequestBody MobileReq req);
 
     @ApiOperation ("修改用户名")
     @PostMapping(value = "/reset/username", produces = "application/json")

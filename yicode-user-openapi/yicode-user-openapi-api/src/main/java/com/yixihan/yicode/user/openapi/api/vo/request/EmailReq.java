@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 邮箱绑定-req
+ * 邮箱请求-req
  *
  * @author yixihan
  * @date 2022/11/21 20:06
@@ -15,9 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("邮箱绑定-req")
-public class BindEmailReq {
+@ApiModel("邮箱请求-req")
+public class EmailReq {
 
     @ApiModelProperty(value = "邮箱")
     private String email;
+
+    @ApiModelProperty(value = "验证码")
+    private String code;
 }
