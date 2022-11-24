@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.openapi.event;
+package com.yixihan.yicode.openapi.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.enums.RoleEnums;
