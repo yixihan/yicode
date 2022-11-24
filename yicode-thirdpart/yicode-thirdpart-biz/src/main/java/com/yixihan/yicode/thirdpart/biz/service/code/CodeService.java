@@ -3,9 +3,6 @@ package com.yixihan.yicode.thirdpart.biz.service.code;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * 验证码服务类
  *
@@ -33,10 +30,10 @@ public interface CodeService {
 
     /**
      * 生产图片验证码
-     * @param response response
+     * @param code 验证码
      * @param uuid 随机 ID
      */
-    void createCode(HttpServletResponse response, String uuid) throws IOException;
+    void createCode(String code, String uuid);
 
     /**
      * 校验图片验证码

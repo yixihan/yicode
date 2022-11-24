@@ -162,9 +162,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonVO<Boolean> bindEmail(BindEmailReq req) {
+    public CommonVO<Boolean> bindEmail(EmailReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             return new CommonVO<> (false, "邮箱不符合规范！");
+        }
+        EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
+        emailDtoReq.setEmail (req.getEmail ());
+        emailDtoReq.setCode (req.getCode ());
+        emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
+        if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
+            return new CommonVO<> (false, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         BindEmailDtoReq dtoReq = CopyUtils.copySingle (BindEmailDtoReq.class, req);
@@ -174,16 +181,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonVO<Boolean> unbindEmail() {
+    public CommonVO<Boolean> unbindEmail(EmailReq req) {
+        if (!ValidationUtils.validateEmail (req.getEmail ())) {
+            return new CommonVO<> (false, "邮箱不符合规范！");
+        }
+        EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
+        emailDtoReq.setEmail (req.getEmail ());
+        emailDtoReq.setCode (req.getCode ());
+        emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
+        if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
+            return new CommonVO<> (false, "验证码错误!");
+        }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (userInfo.getUser ().getUserId ()).getResult ();
         return CopyUtils.copySingle (CommonVO.class, dtoResult);
     }
 
     @Override
-    public CommonVO<Boolean> bindMobile(BindMobileReq req) {
+    public CommonVO<Boolean> bindMobile(MobileReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             return new CommonVO<> (false, "手机号不符合规范！");
+        }
+        SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
+        smsDtoReq.setMobile (req.getMobile ());
+        smsDtoReq.setCode (req.getCode ());
+        smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
+        if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
+            return new CommonVO<> (false, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         BindMobileDtoReq dtoReq = CopyUtils.copySingle (BindMobileDtoReq.class, req);
@@ -193,7 +217,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonVO<Boolean> unbindMobile() {
+    public CommonVO<Boolean> unbindMobile(MobileReq req) {
+        if (!ValidationUtils.validateMobile (req.getMobile ())) {
+            return new CommonVO<> (false, "手机号不符合规范！");
+        }
+        SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
+        smsDtoReq.setMobile (req.getMobile ());
+        smsDtoReq.setCode (req.getCode ());
+        smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
+        if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
+            return new CommonVO<> (false, "验证码错误!");
+        }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (userInfo.getUser ().getUserId ()).getResult ();
         return CopyUtils.copySingle (CommonVO.class, dtoResult);

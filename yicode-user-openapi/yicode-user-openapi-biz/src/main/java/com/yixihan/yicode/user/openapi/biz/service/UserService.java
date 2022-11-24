@@ -46,26 +46,28 @@ public interface UserService {
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> bindEmail(BindEmailReq req);
+    CommonVO<Boolean> bindEmail(EmailReq req);
 
     /**
      * 解绑邮箱
      *
+     * @param req     请求参数
      */
-    CommonVO<Boolean> unbindEmail();
+    CommonVO<Boolean> unbindEmail(EmailReq req);
 
     /**
      * 绑定手机号
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> bindMobile(BindMobileReq req);
+    CommonVO<Boolean> bindMobile(MobileReq req);
 
     /**
      * 解绑手机号
      *
+     * @param req     请求参数
      */
-    CommonVO<Boolean> unbindMobile();
+    CommonVO<Boolean> unbindMobile(MobileReq req);
 
     /**
      * 更换用户名

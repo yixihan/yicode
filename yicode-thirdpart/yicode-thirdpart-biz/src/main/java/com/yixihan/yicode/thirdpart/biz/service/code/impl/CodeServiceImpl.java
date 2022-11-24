@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.CircleCaptcha;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
@@ -10,8 +8,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -60,14 +56,10 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
-        String code = captcha.getCode ();
+    public void createCode(String code, String uuid) {
         String keyName = String.format (codeConstant.getCommonKey (), uuid);
         // 存入 redis
         addRedis (keyName, code);
-        //图形验证码写出，可以写出到文件，也可以写出到流
-        captcha.write(response.getOutputStream());
     }
 
     @Override

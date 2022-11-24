@@ -9,16 +9,28 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
 
 feign:
   client:
     yicode-thirdpart:
       name: yicode-thirdpart
+    yicode-user:
+      name: yicode-user
     config:
       yicode-thirdpart:
         connect-timeout: 5000
         read-timeout: 5000
+      yicode-user:
+        connect-timeout: 5000
+        read-timeout: 5000
 
+logging:
+  level:
+    com.yixihan.yicode.thirdpart.openapi.biz.feign: debug
 
 management:
   endpoints:
