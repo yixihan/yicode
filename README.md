@@ -57,6 +57,5 @@
 - [ ] 引入 user_commit_record 表并实现相关接口
 - [ ] 引入 user_favorite 表并实现相关接口
 - [ ] 引入 user_question_record 表并实现相关接口
-- [ ] 引入 user_m
-- sg 表并实现相关接口
+- [ ] 引入 user_msg 表并实现相关接口
 - [ ] user_msg 集成 message 模块
