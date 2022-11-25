@@ -1,6 +1,6 @@
 package com.yixihan.yicode.auth.feign.user.user;
 
-import com.yixihan.yicode.user.api.rest.UserRoleApi;
+import com.yixihan.yicode.user.api.rest.base.UserRoleApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
