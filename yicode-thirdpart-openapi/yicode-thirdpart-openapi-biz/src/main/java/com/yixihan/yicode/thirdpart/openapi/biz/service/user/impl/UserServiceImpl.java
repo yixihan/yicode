@@ -5,7 +5,7 @@ import com.yixihan.yicode.common.pojo.User;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user.UserFeignClient;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.user.UserService;
-import com.yixihan.yicode.user.api.dto.response.UserDtoResult;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

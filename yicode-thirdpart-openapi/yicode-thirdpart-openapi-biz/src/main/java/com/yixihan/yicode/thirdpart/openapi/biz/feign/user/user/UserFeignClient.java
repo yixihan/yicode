@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user;
 
-import com.yixihan.yicode.user.api.rest.UserApi;
+import com.yixihan.yicode.user.api.rest.base.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
