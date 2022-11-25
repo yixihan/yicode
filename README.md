@@ -37,7 +37,7 @@
 ![](https://github.com/yixihan/yicode/blob/master/assets/github-contribution-grid-snake.svg)
 </div>
 
-## todo
+## TODO
 
 > 2022-11-23
 
@@ -58,4 +58,9 @@
 - [ ] 引入 user_favorite 表并实现相关接口
 - [ ] 引入 user_question_record 表并实现相关接口
 - [ ] 引入 user_msg 表并实现相关接口
-- [ ] user_msg 集成 message 模块
+- [ ] user_msg 集成 message 模块'
+
+> 2022-11-25
+
+- [ ] thridpart 模块增加二维码生成功能
+- [ ] 完善 README 文件
