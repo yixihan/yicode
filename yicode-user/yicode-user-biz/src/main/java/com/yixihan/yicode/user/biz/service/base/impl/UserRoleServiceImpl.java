@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.biz.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
@@ -12,8 +13,8 @@ import com.yixihan.yicode.user.dal.pojo.base.UserRole;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -35,11 +36,18 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         wrapper.eq ("user_id", userId);
         List<UserRole> userRoleIdList = baseMapper.selectList (wrapper);
         // 提取用户 roleId 列表
-        List<Long> roleIdList = new ArrayList<> ();
-        for (UserRole role : userRoleIdList) {
-            roleIdList.add (role.getRoleId ());
-        }
+        List<Long> roleIdList = userRoleIdList.stream ().map (UserRole::getRoleId).collect(Collectors.toList());
         List<Role> userRoleList = roleService.getRoleList (roleIdList);
         return CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> addRole(Long userId, String role) {
+        return null;
+    }
+
+    @Override
+    public CommonDtoResult<Boolean> delRole(Long userId, String role) {
+        return null;
     }
 }
