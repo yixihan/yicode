@@ -25,15 +25,15 @@ import java.util.List;
 public interface UserLanguageApi {
 
     @ApiOperation("添加用户语言")
-    @PostMapping("/add")
+    @PostMapping(value = "/add", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> addUserLanguage (@RequestBody ModifyUserLanguageDtoReq dtoReq);
 
     @ApiOperation("修改用户语言")
-    @PostMapping("/modify")
+    @PostMapping(value = "/modify", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage (@RequestBody ModifyUserLanguageDtoReq dtoReq);
 
     @ApiOperation("获取用户语言列表")
-    @PostMapping("/get/{userId}")
+    @PostMapping(value = "/get/{userId}", produces = "application/json")
     ApiResult<List<UserLanguageDtoResult>> getUserLanguage (@PathVariable("userId") Long userId);
 
 }

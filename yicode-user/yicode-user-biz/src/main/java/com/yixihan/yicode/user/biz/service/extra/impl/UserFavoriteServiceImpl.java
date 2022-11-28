@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserFavoriteMapper;
@@ -28,7 +29,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     }
 
     @Override
-    public CommonDtoResult<Boolean> modifyFavorite(Long favoriteId, String favoriteName) {
+    public CommonDtoResult<Boolean> modifyFavorite(ModifyFavoriteDtoReq dtoReq) {
         return null;
     }
 

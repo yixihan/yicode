@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
@@ -42,12 +43,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     @Override
-    public CommonDtoResult<Boolean> addRole(Long userId, String role) {
+    public CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq) {
         return null;
     }
 
     @Override
-    public CommonDtoResult<Boolean> delRole(Long userId, String role) {
+    public CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq) {
         return null;
     }
 }

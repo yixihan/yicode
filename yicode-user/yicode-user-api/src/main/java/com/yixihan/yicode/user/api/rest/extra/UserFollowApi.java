@@ -22,26 +22,26 @@ import org.springframework.web.bind.annotation.*;
 public interface UserFollowApi {
 
     @ApiOperation ("关注用户")
-    @PostMapping("/follow-user")
+    @PostMapping(value = "/follow-user", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> followUser (@RequestBody ModifyFollowDtoReq dtoReq);
 
     @ApiOperation ("取消关注用户")
-    @PostMapping("/unfollow-user")
+    @PostMapping(value = "/unfollow-user", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> unfollowUser (@RequestBody ModifyFollowDtoReq dtoReq);
 
     @ApiOperation ("获取关注列表")
-    @PostMapping("/count/follow")
-    ApiResult<CommonDtoResult<Integer>> getFollowCount (@RequestParam("userId") Long userId);
+    @PostMapping(value = "/count/follow/{userId}", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> getFollowCount (@PathVariable("userId") Long userId);
 
     @ApiOperation ("获取关注列表")
-    @GetMapping("/list/follow")
+    @GetMapping(value = "/list/follow", produces = "application/json")
     ApiResult<PageDtoResult<FollowDtoResult>> getFollowList (@RequestBody FollowQueryDtoReq dtoReq);
 
     @ApiOperation ("获取粉丝列表")
-    @PostMapping("/count/fan")
-    ApiResult<CommonDtoResult<Integer>> getFanCount (@RequestParam("userId") Long userId);
+    @PostMapping(value = "/count/fan/{userId}", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> getFanCount (@PathVariable("userId") Long userId);
 
     @ApiOperation ("获取粉丝列表")
-    @PostMapping("/list/fan")
+    @PostMapping(value = "/list/fan", produces = "application/json")
     ApiResult<PageDtoResult<FollowDtoResult>> getFanList (@RequestBody FollowQueryDtoReq dtoReq);
 }

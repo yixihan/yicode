@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 
@@ -28,10 +29,9 @@ public interface UserFavoriteService extends IService<UserFavorite> {
     /**
      * 修改收藏夹
      *
-     * @param favoriteId 收藏夹 ID
-     * @param favoriteName 收藏夹名
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> modifyFavorite(Long favoriteId, String favoriteName);
+    CommonDtoResult<Boolean> modifyFavorite(ModifyFavoriteDtoReq dtoReq);
 
     /**
      * 删除收藏夹

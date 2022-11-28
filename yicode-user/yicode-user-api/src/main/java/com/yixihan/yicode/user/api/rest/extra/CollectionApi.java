@@ -5,12 +5,12 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <p>
@@ -25,14 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface CollectionApi {
 
     @ApiOperation ("收藏内容")
-    @PostMapping(value = "/add")
-    ApiResult<CommonDtoResult<Boolean>> addCollection (@RequestParam("favoriteId") Long favoriteId,
-                                                       @RequestParam("collectionId") Long collectionId);
+    @PostMapping(value = "/add", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> addCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation ("取消收藏内容")
-    @PostMapping(value = "/del")
-    ApiResult<CommonDtoResult<Boolean>> delCollection (@RequestParam("favoriteId") Long favoriteId,
-                                                       @RequestParam("collectionId") Long collectionId);
+    @PostMapping(value = "/del", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> delCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation("获取收藏夹内容")
     @PostMapping(value = "/del", produces = "application/json")

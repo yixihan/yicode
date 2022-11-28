@@ -3,6 +3,7 @@ package com.yixihan.yicode.user.web.controller.base;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.rest.base.UserRoleApi;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
@@ -28,13 +29,13 @@ public class UserRoleController implements UserRoleApi {
     private UserRoleService userRoleService;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addRole(Long userId, String role) {
-        return ApiResult.create (userRoleService.addRole(userId, role));
+    public ApiResult<CommonDtoResult<Boolean>> addRole(ModifyUserRoleDtoReq dtoReq) {
+        return ApiResult.create (userRoleService.addRole(dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delRole(Long userId, String role) {
-        return ApiResult.create (userRoleService.delRole (userId, role));
+    public ApiResult<CommonDtoResult<Boolean>> delRole(ModifyUserRoleDtoReq dtoReq) {
+        return ApiResult.create (userRoleService.delRole (dtoReq));
     }
 
     @Override

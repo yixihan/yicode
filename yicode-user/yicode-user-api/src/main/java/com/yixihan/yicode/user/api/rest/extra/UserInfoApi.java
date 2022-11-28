@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface UserInfoApi {
 
     @ApiOperation("更新用户资料")
-    @PostMapping("/modify")
+    @PostMapping(value = "/modify", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> modifyInfo (@RequestBody ModifyUserInfoDtoReq dtoReq);
 
     @ApiOperation("获取用户资料")
-    @PostMapping("/get/{userId}")
+    @PostMapping(value = "/get/{userId}", produces = "application/json")
     ApiResult<UserInfoDtoResult> getUserInfo (@PathVariable("userId") Long userId);
 }

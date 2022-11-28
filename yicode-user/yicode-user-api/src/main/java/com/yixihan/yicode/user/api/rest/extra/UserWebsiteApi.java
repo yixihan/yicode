@@ -25,19 +25,19 @@ import java.util.List;
 public interface UserWebsiteApi {
 
     @ApiOperation("添加用户个人网站")
-    @PostMapping("/add")
+    @PostMapping(value = "/add", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> addUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("修改用户个人网站")
-    @PostMapping("/modify")
+    @PostMapping(value = "/modify", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("删除用户个人网站")
-    @PostMapping("/del")
+    @PostMapping(value = "/del", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("获取用户个人网站列表")
-    @PostMapping("/get/{userId}")
+    @PostMapping(value = "/get/{userId}", produces = "application/json")
     ApiResult<List<UserWebsiteDtoResult>> getUserLanguage (@PathVariable("userId") Long userId);
 
 }
