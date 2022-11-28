@@ -5,13 +5,15 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 用户收藏夹 api
+ * <p>
+ * 用户收藏 api
+ * </p>
  *
  * @author yixihan
- * @since 2022-11-25
+ * @since 2022-11-28
  */
-@Api (tags = "用户收藏夹 api")
-@RequestMapping("/favorite/")
-public interface UserFavoriteApi {
+@Api(value = "用户收藏 api")
+@RequestMapping("/collection/")
+public interface CollectionApi {
 
 }

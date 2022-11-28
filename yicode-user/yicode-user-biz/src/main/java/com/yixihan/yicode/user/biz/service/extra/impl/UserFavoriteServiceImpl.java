@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 用户收藏表 服务实现类
+ * 用户收藏夹表 服务实现类
  * </p>
  *
  * @author yixihan
