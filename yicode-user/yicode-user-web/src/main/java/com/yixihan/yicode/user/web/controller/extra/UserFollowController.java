@@ -1,7 +1,7 @@
 package com.yixihan.yicode.user.web.controller.extra;
 
 
-import com.yixihan.yicode.user.api.rest.extra.UserFavoriteApi;
+import com.yixihan.yicode.user.api.rest.extra.UserFollowApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-public class UserFollowController implements UserFavoriteApi {
+public class UserFollowController implements UserFollowApi {
 
 }

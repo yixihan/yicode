@@ -37,6 +37,9 @@ public class UserFavorite implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Long favoriteId;
 
+    @ApiModelProperty(value = "用户 id")
+    private Long userId;
+
     @ApiModelProperty(value = "收藏类型 (0:题, 1:题解)")
     private Integer favoriteType;
 

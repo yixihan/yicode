@@ -1,9 +1,16 @@
 package com.yixihan.yicode.user.web.controller.extra;
 
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.rest.extra.CollectionApi;
+import com.yixihan.yicode.user.biz.service.extra.CollectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -17,4 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CollectionController implements CollectionApi {
 
+    @Resource
+    private CollectionService collectionService;
+
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> addCollection(Long favoriteId, Long collectionId) {
+        return ApiResult.create (collectionService.addCollection (favoriteId, collectionId));
+    }
+
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> delCollection(Long favoriteId, Long collectionId) {
+        return ApiResult.create (collectionService.delCollection (favoriteId, collectionId));
+    }
+
+    @Override
+    public <T> ApiResult<PageDtoResult<T>> getCollections(CollectionQueryDtoReq dtoReq) {
+        return ApiResult.create (collectionService.getCollections (dtoReq));
+    }
 }
