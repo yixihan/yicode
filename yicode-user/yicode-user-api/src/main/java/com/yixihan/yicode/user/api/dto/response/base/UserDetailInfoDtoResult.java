@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.api.dto.response.base;
 
+import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * follow-dtoReq
+ * 关注-dtoReq
  *
  * @author yixihan
  * @date 2022/11/28 16:16
@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("follow-dtoReq")
+@ApiModel("关注-dtoReq")
 public class FollowDtoResult {
 
     @ApiModelProperty(value = "用户 id")

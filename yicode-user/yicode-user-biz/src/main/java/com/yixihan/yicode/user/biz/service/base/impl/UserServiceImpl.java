@@ -16,7 +16,7 @@ import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
-import com.yixihan.yicode.user.api.dto.response.base.UserInfoDtoResult;
+import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
 import com.yixihan.yicode.user.biz.service.base.UserService;

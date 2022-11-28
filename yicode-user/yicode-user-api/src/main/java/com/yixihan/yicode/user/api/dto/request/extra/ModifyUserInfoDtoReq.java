@@ -1,26 +1,24 @@
-package com.yixihan.yicode.user.api.dto.response.base;
+package com.yixihan.yicode.user.api.dto.request.extra;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 /**
- * 用户信息-vo
+ * 更新用户资料-dtoReq
  *
  * @author yixihan
- * @date 2022-10-22-18:14
+ * @date 2022/11/28 16:40
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ApiModel("用户信息-vo")
-public class UserInfoDtoResult {
+@ApiModel("更新用户资料-dtoReq")
+public class ModifyUserInfoDtoReq {
 
     @ApiModelProperty(value = "用户 id")
     private Long userId;
@@ -51,6 +49,4 @@ public class UserInfoDtoResult {
 
     @ApiModelProperty(value = "用户技能标签")
     private String userLabel;
-
-
 }
