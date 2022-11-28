@@ -1,6 +1,9 @@
 package com.yixihan.yicode.user.dal.pojo.extra;
 
 import com.baomidou.mybatisplus.annotation.*;
+
+import java.time.LocalDateTime;
+import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,24 +11,24 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 
 /**
 *
-* 用户收藏夹表
+* 用户收藏表
 *
 * @author yixihan
-* @since 2022-11-25
+* @since 2022-11-28
 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "UserFavorite对象", description = "用户收藏夹表")
-public class UserFavorite implements Serializable {
+@ApiModel(value = "Collection对象", description = "用户收藏表")
+public class Collection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,17 +37,10 @@ public class UserFavorite implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "收藏夹 id")
-    @TableField(fill = FieldFill.INSERT)
     private Long favoriteId;
 
-    @ApiModelProperty(value = "收藏类型 (0:题, 1:题解)")
-    private Integer favoriteType;
-
-    @ApiModelProperty(value = "收藏夹名")
-    private String favoriteName;
-
-    @ApiModelProperty(value = "收藏数量")
-    private Integer favoriteCount;
+    @ApiModelProperty(value = "用户收藏内容 id")
+    private Long collectionId;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
@@ -67,11 +63,7 @@ public class UserFavorite implements Serializable {
 
     public static final String FAVORITE_ID = "favorite_id";
 
-    public static final String FAVORITE_TYPE = "favorite_type";
-
-    public static final String FAVORITE_NAME = "favorite_name";
-
-    public static final String FAVORITE_COUNT = "favorite_count";
+    public static final String COLLECTION_ID = "collection_id";
 
     public static final String CREATE_TIME = "create_time";
 

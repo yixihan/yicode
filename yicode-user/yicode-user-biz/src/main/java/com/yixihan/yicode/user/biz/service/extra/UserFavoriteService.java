@@ -5,7 +5,7 @@ import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 
 /**
  * <p>
- * 用户收藏表 服务类
+ * 用户收藏夹表 服务类
  * </p>
  *
  * @author yixihan
