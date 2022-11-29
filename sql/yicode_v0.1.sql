@@ -17,6 +17,11 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP DATABASE IF EXISTS `yicode`;
+CREATE DATABASE IF NOT EXISTS `yicode`;
+
+USE `yicode`;
+
 -- ----------------------------
 -- Table structure for collection
 -- ----------------------------
@@ -442,7 +447,7 @@ CREATE TABLE `user`
 -- ----------------------------
 INSERT INTO `user`
 VALUES (10000004, 1, 'yixihan', '$2a$10$P9BwEkOq4yL10r9eMHnrn2elJyqNaRHAawdb6feZnxrrCeW3PjOSBO', '17623850426',
-        '3113788997@qq.com', 'USERNAME', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
+        '3113788997@qq.com', 'USERNAME_PASSWORD', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_commit_record
@@ -477,6 +482,7 @@ CREATE TABLE `user_favorite`
 (
     `id`             bigint(20) UNSIGNED                             NOT NULL AUTO_INCREMENT COMMENT '主键 id',
     `favorite_id`    bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '收藏夹 id',
+    `user_id`        bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '用户 id',
     `favorite_type`  int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏类型 (0:题, 1:题解)',
     `favorite_name`  varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '收藏夹名',
     `favorite_count` int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏数量',
@@ -485,11 +491,12 @@ CREATE TABLE `user_favorite`
     `version`        int(10) UNSIGNED                                NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`       int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE
+    UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE,
+    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
-  COLLATE = utf8_bin COMMENT = '用户收藏表'
+  COLLATE = utf8_bin COMMENT = '用户收藏夹表'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -502,17 +509,13 @@ CREATE TABLE `user_favorite`
 DROP TABLE IF EXISTS `user_follow`;
 CREATE TABLE `user_follow`
 (
-    `id`                 bigint(20) UNSIGNED                              NOT NULL AUTO_INCREMENT COMMENT '主键 id',
-    `user_id`            bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `user_name`          varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户名',
-    `user_avatar`        varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户头像',
-    `follow_user_id`     bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '关注人用户 id',
-    `follow_user_name`   varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '关注人用户名',
-    `follow_user_avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '关注人用户头像',
-    `create_time`        datetime                                         NOT NULL COMMENT '创建时间',
-    `update_time`        datetime                                         NOT NULL COMMENT '修改时间',
-    `version`            int(10) UNSIGNED                                 NOT NULL DEFAULT 1 COMMENT '乐观锁',
-    `del_flag`           int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `id`             bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键 id',
+    `user_id`        bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户 id',
+    `follow_user_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '关注人用户 id',
+    `create_time`    datetime            NOT NULL COMMENT '创建时间',
+    `update_time`    datetime            NOT NULL COMMENT '修改时间',
+    `version`        int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
+    `del_flag`       int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
     UNIQUE INDEX `follow_user_id` (`follow_user_id`) USING BTREE
