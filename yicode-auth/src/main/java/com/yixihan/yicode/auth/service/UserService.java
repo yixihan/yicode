@@ -44,21 +44,24 @@ public interface UserService extends UserDetailsService {
     /**
      * 校验邮箱验证码
      *
-     * @param dtoReq
-     * @return
+     * @param dtoReq 请求参数
+     * @return {@link User}
      */
     User validateEmailCode (EmailValidateDtoReq dtoReq);
 
     /**
      * 校验手机验证码
      *
-     * @param dtoReq
-     * @return
+     * @param dtoReq 请求参数
+     * @return {@link User}
      */
     User validateMobileCode (SMSValidateDtoReq dtoReq);
 
     /**
      * 校验图片验证码
+     *
+     * @param dtoReq 请求参数
+     * @return 校验成功：true | 校验失败：false
      */
     Boolean validatePhotoCode (CodeValidateDtoReq dtoReq);
 

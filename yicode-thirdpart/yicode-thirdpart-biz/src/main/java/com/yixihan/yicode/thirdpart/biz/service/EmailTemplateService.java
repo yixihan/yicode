@@ -16,8 +16,8 @@ public interface EmailTemplateService extends IService<EmailTemplate> {
     /**
      * 获取邮件正文模板
      *
-     * @param id
-     * @return
+     * @param id 模板 id
+     * @return 模板内容
      */
     String getEmailContent (Long id);
 }

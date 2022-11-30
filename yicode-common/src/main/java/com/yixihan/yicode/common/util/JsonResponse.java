@@ -70,7 +70,7 @@ public class JsonResponse<T> implements Serializable {
     }
 
     public static <T> JsonResponse<T> ok() {
-        JsonResponse<T> jsonResponse = new JsonResponse<T> ();
+        JsonResponse<T> jsonResponse = new JsonResponse<> ();
         jsonResponse.setCode (SUCCESS_CODE);
         jsonResponse.setSuccess (Boolean.TRUE);
         return jsonResponse;
@@ -89,7 +89,7 @@ public class JsonResponse<T> implements Serializable {
     }
 
     public static <T> JsonResponse<T> error(T data, String message) {
-        JsonResponse<T> jsonResponse = new JsonResponse<T> ();
+        JsonResponse<T> jsonResponse = new JsonResponse<> ();
         jsonResponse.setCode (BizCodeEnum.FAILED_TYPE_INTERNAL.getCode ());
         jsonResponse.setSuccess (Boolean.FALSE);
         jsonResponse.setData (data);
@@ -98,10 +98,10 @@ public class JsonResponse<T> implements Serializable {
     }
 
     public static <T> JsonResponse<T> error(int errorCode, String message) {
-        return new JsonResponse<T> (errorCode, message);
+        return new JsonResponse<> (errorCode, message);
     }
 
     public static <T> JsonResponse<T> badRequest(String message) {
-        return new JsonResponse<T> (BizCodeEnum.FAILED_TYPE_BAD_REQUEST.getCode (), message);
+        return new JsonResponse<> (BizCodeEnum.FAILED_TYPE_BAD_REQUEST.getCode (), message);
     }
 }

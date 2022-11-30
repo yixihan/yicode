@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
  * This code is licensed LGPLv3
  * <p>
  * This code is a Java port of the original work in PHP by Cal Hendersen.
- * http://code.iamcal.com/php/lib_filter/
+ * <a href="http://code.iamcal.com/php/lib_filter/">...</a>
  * <p>
  * The trickiest part of the translation was handling the differences in regex handling
- * between PHP and Java.  These resources were helpful in the process:
- * <p>
- * http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html
- * http://us2.php.net/manual/en/reference.pcre.pattern.modifiers.php
- * http://www.regular-expressions.info/modifiers.html
+ * between PHP and Java.  These resources were helpful in the p<a href="rocess:
+ ">* <p>
+ * http://java.sun.com/j2se/1.4.2/docs/api/jav<a href="a/util/</a>regex/Pattern.html
+ ">* http://us2.php.net/manual<a href="/en/ref</a>erence.pcre.pattern.modifiers.php
+ ">* ht</a>tp://www.regular-expressions.info/modifiers.html
  * <p>
  * A note on naming conventions: instance variables are prefixed with a "v"; global
  * constants are in all caps.
@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
  * The class is not thread safe. Create a new instance if in doubt.
  * <p>
  * If you find bugs or have suggestions on improvement (especially regarding
- * performance), please contact us.  The latest version of this
- * source, and our contact details, can be found at http://xss-html-filter.sf.net
+ * performance), please contact us.  The latest versi<a href="on">of this
+ * source, and our</a> contact details, can be found at <a href="http://xss-html-filter.sf.net">...</a>
  *
  * @author yixihan
  * @date 2022-10-10-13:30
@@ -394,11 +394,7 @@ public final class HTMLFilter {
                 for (int ii = 0; ii < paramNames.size (); ii++) {
                     paramName = paramNames.get (ii).toLowerCase ();
                     paramValue = paramValues.get (ii);
-
-                    //          debug( "paramName='" + paramName + "'" );
-                    //          debug( "paramValue='" + paramValue + "'" );
-                    //          debug( "allowed? " + vAllowed.get( name ).contains( paramName ) );
-
+    
                     if (allowedAttribute (name, paramName)) {
                         if (inArray (paramName, vProtocolAtts)) {
                             paramValue = processParamProtocol (paramValue);

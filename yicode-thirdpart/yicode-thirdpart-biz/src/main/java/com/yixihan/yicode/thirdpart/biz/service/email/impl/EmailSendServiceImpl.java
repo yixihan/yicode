@@ -89,7 +89,7 @@ public class EmailSendServiceImpl implements EmailSendService {
      *
      * @param email email
      * @param emailType 邮箱类型 {@link EmailTemplateEnums}
-     * @return
+     * @return redis key
      */
     private String getRedisKey (String email, EmailTemplateEnums emailType) {
         String key;

@@ -19,13 +19,12 @@ public class ListValueValidator implements ConstraintValidator<ListValue, Intege
     /**
      * 可取的范围
      */
-    private Set<Integer> valueSet = new HashSet<> ();
+    private final Set<Integer> valueSet = new HashSet<> ();
 
 
     /**
      * 初始化
      *
-     * @param constraintAnnotation
      */
     @Override
     public void initialize(ListValue constraintAnnotation) {
@@ -38,9 +37,6 @@ public class ListValueValidator implements ConstraintValidator<ListValue, Intege
     /**
      * 是否校验成功
      *
-     * @param integer
-     * @param constraintValidatorContext
-     * @return
      */
     @Override
     public boolean isValid(Integer integer, ConstraintValidatorContext constraintValidatorContext) {

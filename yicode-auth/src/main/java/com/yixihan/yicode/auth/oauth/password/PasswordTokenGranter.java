@@ -71,7 +71,6 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
     /**
      * 校验 图片 验证码
      *
-     * @param parameters
      */
     private void checkEmailCode(Map<String, String> parameters) {
         String uuid = parameters.get ("uuid");

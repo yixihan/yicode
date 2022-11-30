@@ -29,14 +29,9 @@ public class PageVOUtil {
     /**
      * PageVO 转换, 适用于实体类转换
      *
-     * @param source
-     * @param convert
-     * @param <S>
-     * @param <T>
-     * @return
      */
     public static <S, T> PageVO<T> convertPageVO(PageVO<S> source, Function<S, T> convert) {
-        PageVO<T> target = new PageVO<T> ();
+        PageVO<T> target = new PageVO<> ();
         convertPageVO (source, target, convert);
         return target;
     }
@@ -44,11 +39,6 @@ public class PageVOUtil {
     /**
      * PageDtoResult 转换为 PageVO
      *
-     * @param source
-     * @param convert
-     * @param <S>
-     * @param <T>
-     * @return
      */
     public static <S, T> PageVO<T> pageDtoToPageVO(PageDtoResult<S> source, Function<S, T> convert) {
         List<S> records = source.getRecords ();

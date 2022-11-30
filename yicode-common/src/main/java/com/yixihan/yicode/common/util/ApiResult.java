@@ -28,7 +28,7 @@ public class ApiResult<T> implements Serializable {
     }
 
     public static <E> ApiResult<E> ok() {
-        return new ApiResult<E> ();
+        return new ApiResult<> ();
     }
 
 }

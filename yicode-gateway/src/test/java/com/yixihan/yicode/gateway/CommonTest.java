@@ -41,7 +41,7 @@ public class CommonTest {
             roleList.add (new Role (roleEnums.getRoleId (), roleEnums.getRoleName ()));
         }
         System.out.println (roleList);
-        System.out.println (jwtClaimsSet);;
+        System.out.println (jwtClaimsSet);
     }
 
     @Test

@@ -19,7 +19,7 @@ public interface RoleService extends IService<Role> {
      * 通过 角色id 获取角色信息-列表查询
      *
      * @param roleIdList 角色 id
-     * @return
+     * @return Role 集合
      */
     List<Role> getRoleList(List<Long> roleIdList);
 }

@@ -21,7 +21,6 @@ public class FeignConfig {
      * # HEADERS:记录请求和应答的头的基本信息;
      * # FULL:记录请求和响应的头信息,正文和元数据;
      *
-     * @return
      */
     @Bean
     public Logger.Level feignLoggerLevel() {

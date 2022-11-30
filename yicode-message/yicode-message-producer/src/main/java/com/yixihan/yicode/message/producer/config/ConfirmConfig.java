@@ -51,7 +51,6 @@ public class ConfirmConfig {
     /**
      * 直连型交换机-确认发布
      *
-     * @return
      */
     @Bean("confirmExchange")
     public DirectExchange confirmExchange () {
@@ -68,7 +67,6 @@ public class ConfirmConfig {
     /**
      * 备份交换机
      *
-     * @return
      */
     @Bean("backupExchange")
     public FanoutExchange backupExchange () {
@@ -78,7 +76,6 @@ public class ConfirmConfig {
     /**
      * 备份队列
      *
-     * @return
      */
     @Bean("backupQueue")
     public Queue backupQueue () {
@@ -87,7 +84,6 @@ public class ConfirmConfig {
 
     /**
      * 报警队列
-     * @return
      */
     @Bean("warningQueue")
     public Queue warningQueue () {
@@ -96,7 +92,6 @@ public class ConfirmConfig {
 
     /**
      * 队列-发布确认
-     * @return
      */
     @Bean("confirmQueue")
     public Queue confirmQueue () {
@@ -107,9 +102,6 @@ public class ConfirmConfig {
     /**
      * 队列绑定交换机-发布确认队列
      *
-     * @param confirmExchange
-     * @param confirmQueue
-     * @return
      */
     @Bean
     public Binding queueBindingExchange (
@@ -122,9 +114,6 @@ public class ConfirmConfig {
     /**
      * 队列绑定交换机-备份队列
      *
-     * @param confirmExchange
-     * @param backupQueue
-     * @return
      */
     @Bean
     public Binding queueBackupBindingExchangeBackup (
@@ -137,9 +126,6 @@ public class ConfirmConfig {
     /**
      * 队列绑定交换机-报警队列
      *
-     * @param confirmExchange
-     * @param warningQueue
-     * @return
      */
     @Bean
     public Binding queueWarningBindingExchangeBackup (

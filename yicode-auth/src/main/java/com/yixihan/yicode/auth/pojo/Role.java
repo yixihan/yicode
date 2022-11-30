@@ -33,7 +33,7 @@ public class Role implements Serializable, GrantedAuthority {
     /**
      * 获取用户的权限信息
      *
-     * @return
+     * @return roleName
      */
     @Override
     public String getAuthority() {

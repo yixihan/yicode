@@ -8,16 +8,16 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
-import com.yixihan.yicode.thirdpart.biz.service.code.impl.CodeServiceImpl;
-import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
 import com.yixihan.yicode.thirdpart.api.constant.sms.SMSConstant;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
 import com.yixihan.yicode.thirdpart.biz.service.SmsTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.code.impl.CodeServiceImpl;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -103,9 +103,9 @@ public class SMSServiceImpl implements SMSService {
     /**
      * 获取 redis key
      *
-     * @param mobile
-     * @param smsType
-     * @return
+     * @param mobile 手机号
+     * @param smsType 手机类型 {@link SMSTemplateEnums}
+     * @return redis key
      */
     private String getRedisKey (String mobile, SMSTemplateEnums smsType) {
         String key;

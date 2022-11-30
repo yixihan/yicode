@@ -4,7 +4,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
-import com.yixihan.yicode.user.dal.pojo.extra.Collection;
+import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yixihan
  * @since 2022-11-28
  */
-public interface CollectionService extends IService<Collection> {
+public interface UserCollectionService extends IService<UserCollection> {
 
     /**
      * 收藏内容

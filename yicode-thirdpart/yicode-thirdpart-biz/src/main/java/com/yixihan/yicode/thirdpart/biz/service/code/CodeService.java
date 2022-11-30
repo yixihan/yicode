@@ -15,7 +15,7 @@ public interface CodeService {
      * 验证码生成
      *
      * @param keyName redis 缓存key
-     * @return
+     * @return 验证码
      */
     String getCode (String keyName);
 
@@ -24,12 +24,12 @@ public interface CodeService {
      *
      * @param keyName redis 缓存 key
      * @param code 验证码
-     * @return
      */
     CommonDtoResult<Boolean> validate (String keyName, String code);
 
     /**
      * 生产图片验证码
+     *
      * @param code 验证码
      * @param uuid 随机 ID
      */
@@ -37,8 +37,8 @@ public interface CodeService {
 
     /**
      * 校验图片验证码
-     * @param dtoReq
-     * @return
+     *
+     * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> validateCode(CodeValidateDtoReq dtoReq);
 }

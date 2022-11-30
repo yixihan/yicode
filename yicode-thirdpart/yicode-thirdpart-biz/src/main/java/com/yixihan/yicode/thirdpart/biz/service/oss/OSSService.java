@@ -14,7 +14,8 @@ public interface OSSService {
 
     /**
      * 获取上传密钥
-     * @param dtoReq
+     *
+     * @param dtoReq 请求参数
      */
     Map<String, String> policy(OSSPolicyDtoReq dtoReq);
 }

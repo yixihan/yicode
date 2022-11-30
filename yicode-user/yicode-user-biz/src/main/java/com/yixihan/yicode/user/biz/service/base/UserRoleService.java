@@ -22,7 +22,7 @@ public interface UserRoleService extends IService<UserRole> {
      * 获取用户角色信息
      *
      * @param userId 用户 id
-     * @return
+     * @return {@link RoleDtoResult}
      */
     List<RoleDtoResult> getUserRoleByUserId(Long userId);
 

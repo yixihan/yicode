@@ -35,9 +35,6 @@ public class PageUtil {
     /**
      * 将 mybatisPlus 的 Page 转换为 PageDtoResult
      *
-     * @param page
-     * @param <T>
-     * @return
      */
     public static <T> PageDtoResult<T> pageToPageDtoResult(IPage<T> page) {
         return new PageDtoResult<> (page.getCurrent (), page.getTotal (), page.getSize (), page.getPages (), page.getRecords ());
@@ -47,11 +44,7 @@ public class PageUtil {
     /**
      * 将 mybatisPlus 的 Page 转换为 PageDtoResult
      *
-     * @param page
      * @param convert 实体转换函数
-     * @param <T>
-     * @param <R>
-     * @return
      */
     public static <T, R> PageDtoResult<R> pageToPageDtoResult(IPage<T> page, Function<T, R> convert) {
         List<T> records = page.getRecords ();

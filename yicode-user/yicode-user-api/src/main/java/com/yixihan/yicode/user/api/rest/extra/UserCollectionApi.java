@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Api(value = "用户收藏 api")
 @RequestMapping("/collection/")
-public interface CollectionApi {
+public interface UserCollectionApi {
 
     @ApiOperation ("收藏内容")
     @PostMapping(value = "/add", produces = "application/json")
@@ -33,6 +33,6 @@ public interface CollectionApi {
     ApiResult<CommonDtoResult<Boolean>> delCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation("获取收藏夹内容")
-    @PostMapping(value = "/del", produces = "application/json")
+    @PostMapping(value = "/get", produces = "application/json")
     <T> ApiResult<PageDtoResult<T>> getCollections(@RequestBody CollectionQueryDtoReq dtoReq);
 }

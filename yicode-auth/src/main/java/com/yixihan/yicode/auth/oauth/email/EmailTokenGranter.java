@@ -78,7 +78,6 @@ public class EmailTokenGranter extends AbstractTokenGranter {
 
     /**
      * 校验 email 验证码
-     * @param parameters
      */
     private void checkEmailCode(Map<String, String> parameters) {
         String email = parameters.get ("username");

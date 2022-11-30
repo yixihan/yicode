@@ -15,8 +15,9 @@ public interface SmsTemplateService extends IService<SmsTemplate> {
 
     /**
      * 根据 id 获取 模板id
-     * @param id
-     * @return
+     *
+     * @param id 模板 id
+     * @return 模板内容
      */
     String getSMSTemplateId (Long id);
 

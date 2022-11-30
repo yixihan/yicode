@@ -1,6 +1,6 @@
 package com.yixihan.yicode.user.dal.mapper.extra;
 
-import com.yixihan.yicode.user.dal.pojo.extra.Collection;
+import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-11-28
  */
 @Mapper
-public interface CollectionMapper extends BaseMapper<Collection> {
+public interface UserCollectionMapper extends BaseMapper<UserCollection> {
 
 }

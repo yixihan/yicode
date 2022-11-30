@@ -15,16 +15,14 @@ public interface EmailSendService {
     /**
      * 邮件发送
      *
-     * @param dtoReq
-     * @return
+     * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> sendEmail (EmailSendDtoReq dtoReq);
 
     /**
      * 邮件验证码验证
      *
-     * @param dtoReq
-     * @return
+     * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> validate(EmailValidateDtoReq dtoReq);
 }

@@ -78,7 +78,6 @@ public class SMSTokenGranter extends AbstractTokenGranter {
 
     /**
      * 校验 mobile 验证码
-     * @param parameters
      */
     private void checkMobileCode(Map<String, String> parameters) {
         String mobile = parameters.get ("username");

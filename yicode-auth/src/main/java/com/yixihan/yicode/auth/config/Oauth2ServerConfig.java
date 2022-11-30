@@ -61,7 +61,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain ();
         List<TokenEnhancer> delegates = new ArrayList<> ();
         delegates.add (jwtTokenEnhancer);
@@ -76,7 +76,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients()
                 .tokenKeyAccess("isAuthenticated()")
                 .checkTokenAccess("permitAll()");

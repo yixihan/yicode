@@ -27,7 +27,7 @@ import java.util.*;
 public class InitMethRoleList {
 
 
-    static List<RoleEnums> defaultRoleList = new ArrayList<> ();
+    static final List<RoleEnums> defaultRoleList = new ArrayList<> ();
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;

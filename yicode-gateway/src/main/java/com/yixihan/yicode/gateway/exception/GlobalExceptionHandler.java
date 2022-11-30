@@ -26,8 +26,6 @@ public class GlobalExceptionHandler {
     /**
      * 通用业务异常捕获
      *
-     * @param e
-     * @return
      */
     @ResponseBody
     @ExceptionHandler(value = BizException.class)
@@ -38,8 +36,6 @@ public class GlobalExceptionHandler {
     /**
      * 自定义异常捕获
      *
-     * @param e
-     * @return
      */
     @ResponseBody
     @ExceptionHandler(value = RRException.class)
@@ -52,8 +48,6 @@ public class GlobalExceptionHandler {
      * <br>
      * 针对表单格式校验异常
      *
-     * @param e
-     * @return
      */
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -74,8 +68,6 @@ public class GlobalExceptionHandler {
      * <br>
      * 针对 json 格式校验异常
      *
-     * @param e
-     * @return
      */
     @ResponseBody
     @ExceptionHandler(value = BindException.class)
