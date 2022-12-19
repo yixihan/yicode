@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.rest.extra.UserCollectionApi;
 import com.yixihan.yicode.user.biz.service.extra.UserCollectionService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class UserCollectionController implements UserCollectionApi {
     }
 
     @Override
-    public <T> ApiResult<PageDtoResult<T>> getCollections(CollectionQueryDtoReq dtoReq) {
+    public ApiResult<PageDtoResult<CollectionDtoResult>> getCollections(CollectionQueryDtoReq dtoReq) {
         return ApiResult.create (userCollectionService.getCollections (dtoReq));
     }
 }

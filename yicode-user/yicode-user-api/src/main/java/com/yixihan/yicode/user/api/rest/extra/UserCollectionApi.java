@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +35,5 @@ public interface UserCollectionApi {
 
     @ApiOperation("获取收藏夹内容")
     @PostMapping(value = "/get", produces = "application/json")
-    <T> ApiResult<PageDtoResult<T>> getCollections(@RequestBody CollectionQueryDtoReq dtoReq);
+    ApiResult<PageDtoResult<CollectionDtoResult>> getCollections(@RequestBody CollectionQueryDtoReq dtoReq);
 }

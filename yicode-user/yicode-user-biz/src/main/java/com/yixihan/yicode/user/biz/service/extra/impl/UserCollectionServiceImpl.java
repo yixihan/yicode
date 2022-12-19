@@ -1,13 +1,19 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
-import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
-import com.yixihan.yicode.user.dal.mapper.extra.UserCollectionMapper;
+import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserCollectionService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.user.dal.mapper.extra.UserCollectionMapper;
+import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,16 +29,39 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
 
     @Override
     public CommonDtoResult<Boolean> addCollection(ModifyCollectionDtoReq dtoReq) {
-        return null;
+        UserCollection collection = CopyUtils.copySingle (UserCollection.class, dtoReq);
+        int insert = baseMapper.insert (collection);
+        if (insert == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
 
     @Override
     public CommonDtoResult<Boolean> delCollection(ModifyCollectionDtoReq dtoReq) {
-        return null;
+        QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
+        wrapper.eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
+                .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
+        int delete = baseMapper.delete (wrapper);
+        if (delete == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
 
     @Override
-    public <T> PageDtoResult<T> getCollections(CollectionQueryDtoReq dtoReq) {
-        return null;
+    public PageDtoResult<CollectionDtoResult> getCollections(CollectionQueryDtoReq dtoReq) {
+        QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
+        wrapper.eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
+        Page<UserCollection> values = baseMapper.selectPage (
+                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
+                wrapper);
+        
+        return PageUtil.pageToPageDtoResult (
+                values,
+                (o) -> CopyUtils.copySingle (CollectionDtoResult.class, o)
+        );
     }
 }

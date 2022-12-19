@@ -69,6 +69,8 @@ public class UserFavorite implements Serializable {
     public static final String ID = "id";
 
     public static final String FAVORITE_ID = "favorite_id";
+    
+    public static final String USER_ID = "user_id";
 
     public static final String FAVORITE_TYPE = "favorite_type";
 

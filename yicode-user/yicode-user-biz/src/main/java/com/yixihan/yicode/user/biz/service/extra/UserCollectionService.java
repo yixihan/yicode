@@ -1,11 +1,12 @@
 package com.yixihan.yicode.user.biz.service.extra;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -36,5 +37,5 @@ public interface UserCollectionService extends IService<UserCollection> {
      *
      * @param dtoReq 请求参数
      */
-    <T> PageDtoResult<T> getCollections(CollectionQueryDtoReq dtoReq);
+    PageDtoResult<CollectionDtoResult> getCollections(CollectionQueryDtoReq dtoReq);
 }
