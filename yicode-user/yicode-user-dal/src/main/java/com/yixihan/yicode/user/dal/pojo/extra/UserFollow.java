@@ -60,15 +60,7 @@ public class UserFollow implements Serializable {
 
     public static final String USER_ID = "user_id";
 
-    public static final String USER_NAME = "user_name";
-
-    public static final String USER_AVATAR = "user_avatar";
-
     public static final String FOLLOW_USER_ID = "follow_user_id";
-
-    public static final String FOLLOW_USER_NAME = "follow_user_name";
-
-    public static final String FOLLOW_USER_AVATAR = "follow_user_avatar";
 
     public static final String CREATE_TIME = "create_time";
 
