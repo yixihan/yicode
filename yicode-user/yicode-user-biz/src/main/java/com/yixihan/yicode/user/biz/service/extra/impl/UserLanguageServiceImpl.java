@@ -1,7 +1,11 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserLanguageService;
@@ -9,7 +13,9 @@ import com.yixihan.yicode.user.dal.mapper.extra.UserLanguageMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserLanguage;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -21,19 +27,37 @@ import java.util.List;
  */
 @Service
 public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, UserLanguage> implements UserLanguageService {
-
+    
     @Override
     public CommonDtoResult<Boolean> addUserLanguage(ModifyUserLanguageDtoReq dtoReq) {
-        return null;
+        UserLanguage language = CopyUtils.copySingle (UserLanguage.class, dtoReq);
+        
+        int insert = baseMapper.insert (language);
+        if (insert == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
-
+    
     @Override
     public CommonDtoResult<Boolean> modifyUserLanguage(ModifyUserLanguageDtoReq dtoReq) {
-        return null;
+        UpdateWrapper<UserLanguage> wrapper = new UpdateWrapper<> ();
+        wrapper.eq (UserLanguage.USER_ID, dtoReq.getUserId ()).eq (UserLanguage.LANGUAGE, dtoReq.getLanguage ()).set (UserLanguage.DEAL_COUNT, dtoReq.getDealCount ());
+        
+        int update = baseMapper.update (null, wrapper);
+        if (update == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
-
+    
     @Override
     public List<UserLanguageDtoResult> getUserLanguage(Long userId) {
-        return null;
+        QueryWrapper<UserLanguage> wrapper = new QueryWrapper<> ();
+        wrapper.eq (UserLanguage.USER_ID, userId);
+        List<UserLanguage> values = Optional.ofNullable (baseMapper.selectList (wrapper)).orElse (Collections.emptyList ());
+        return CopyUtils.copyMulti (UserLanguageDtoResult.class, values);
     }
 }
