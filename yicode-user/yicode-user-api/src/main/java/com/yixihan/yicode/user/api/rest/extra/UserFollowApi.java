@@ -29,7 +29,7 @@ public interface UserFollowApi {
     @PostMapping(value = "/unfollow-user", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> unfollowUser (@RequestBody ModifyFollowDtoReq dtoReq);
 
-    @ApiOperation ("获取关注列表")
+    @ApiOperation ("获取关注数量")
     @PostMapping(value = "/count/follow/{userId}", produces = "application/json")
     ApiResult<CommonDtoResult<Integer>> getFollowCount (@PathVariable("userId") Long userId);
 
@@ -37,7 +37,7 @@ public interface UserFollowApi {
     @GetMapping(value = "/list/follow", produces = "application/json")
     ApiResult<PageDtoResult<FollowDtoResult>> getFollowList (@RequestBody FollowQueryDtoReq dtoReq);
 
-    @ApiOperation ("获取粉丝列表")
+    @ApiOperation ("获取粉丝数量")
     @PostMapping(value = "/count/fan/{userId}", produces = "application/json")
     ApiResult<CommonDtoResult<Integer>> getFanCount (@PathVariable("userId") Long userId);
 

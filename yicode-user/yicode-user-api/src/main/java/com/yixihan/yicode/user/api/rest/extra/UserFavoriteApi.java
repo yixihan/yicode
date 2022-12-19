@@ -35,7 +35,7 @@ public interface UserFavoriteApi {
     ApiResult<CommonDtoResult<Boolean>> delFavorite (@PathVariable("favoriteId") Long favoriteId);
 
     @ApiOperation("获取收藏夹数量")
-    @PostMapping(value = "/count{userId}", produces = "application/json")
+    @PostMapping(value = "/count/{userId}", produces = "application/json")
     ApiResult<CommonDtoResult<Integer>> getFavoriteCount (@PathVariable("userId") Long userId);
 
     @ApiOperation("获取所有收藏夹")
