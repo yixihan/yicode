@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.biz.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
@@ -44,11 +45,37 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Override
     public CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq) {
-        return null;
+        if (roleService.hasRole (dtoReq.getRoleId ())) {
+            return new CommonDtoResult<> (Boolean.FALSE, "无此角色！");
+        }
+        
+        UserRole userRole = CopyUtils.copySingle (UserRole.class, dtoReq);
+        int modify = baseMapper.insert (userRole);
+        if (modify == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
 
     @Override
     public CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq) {
-        return null;
+        if (roleService.hasRole (dtoReq.getRoleId ())) {
+            return new CommonDtoResult<> (Boolean.FALSE, "无此角色！");
+        }
+        QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole> ()
+                .eq (UserRole.USER_ID, dtoReq.getUserId ())
+                .eq (UserRole.ROLE_ID, dtoReq.getRoleId ());
+        
+        if (0 >= baseMapper.selectCount (wrapper)) {
+            return new CommonDtoResult<> (Boolean.FALSE, "该用户无此角色！");
+        }
+        
+        int modify = baseMapper.delete (wrapper);
+        if (modify == 1) {
+            return new CommonDtoResult<> (Boolean.TRUE);
+        } else {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        }
     }
 }

@@ -21,6 +21,6 @@ public class ModifyUserRoleDtoReq {
     @ApiModelProperty(value = "用户 ID")
     private Long userId;
 
-    @ApiModelProperty(value = "角色名")
-    private String roleName;
+    @ApiModelProperty(value = "角色 ID")
+    private Long roleId;
 }
