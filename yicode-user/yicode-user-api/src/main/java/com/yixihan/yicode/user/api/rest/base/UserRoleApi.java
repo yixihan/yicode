@@ -20,11 +20,11 @@ import java.util.List;
 @RequestMapping("/user/role/")
 public interface UserRoleApi {
 
-    @ApiOperation ("添加角色")
+    @ApiOperation ("添加用户角色")
     @PostMapping(value = "/add", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> addRole (@RequestBody ModifyUserRoleDtoReq dtoReq);
 
-    @ApiOperation ("删除角色")
+    @ApiOperation ("删除用户角色")
     @PostMapping(value = "/del", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delRole (@RequestBody ModifyUserRoleDtoReq dtoReq);
 

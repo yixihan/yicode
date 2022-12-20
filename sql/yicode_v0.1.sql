@@ -17,11 +17,6 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP DATABASE IF EXISTS `yicode`;
-CREATE DATABASE IF NOT EXISTS `yicode`;
-
-USE `yicode`;
-
 -- ----------------------------
 -- Table structure for collection
 -- ----------------------------
@@ -448,31 +443,6 @@ CREATE TABLE `user`
 INSERT INTO `user`
 VALUES (10000004, 1, 'yixihan', '$2a$10$P9BwEkOq4yL10r9eMHnrn2elJyqNaRHAawdb6feZnxrrCeW3PjOSBO', '17623850426',
         '3113788997@qq.com', 'USERNAME_PASSWORD', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
-
--- ----------------------------
--- Table structure for user_commit_record
--- ----------------------------
-DROP TABLE IF EXISTS `user_commit_record`;
-CREATE TABLE `user_commit_record`
-(
-    `id`           bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键 id',
-    `user_id`      bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `commit_count` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '提交次数',
-    `create_time`  datetime            NOT NULL COMMENT '创建时间',
-    `update_time`  datetime            NOT NULL COMMENT '修改时间',
-    `version`      int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
-    `del_flag`     int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_bin COMMENT = '用户提交记录表'
-  ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of user_commit_record
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for user_favorite
