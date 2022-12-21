@@ -26,18 +26,18 @@ public interface UserWebsiteApi {
 
     @ApiOperation("添加用户个人网站")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> addUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("修改用户个人网站")
     @PostMapping(value = "/modify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> modifyUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("删除用户个人网站")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delUserLanguage (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> delUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("获取用户个人网站列表")
     @PostMapping(value = "/get/{userId}", produces = "application/json")
-    ApiResult<List<UserWebsiteDtoResult>> getUserLanguage (@PathVariable("userId") Long userId);
+    ApiResult<List<UserWebsiteDtoResult>> getUserWebsite (@PathVariable("userId") Long userId);
 
 }

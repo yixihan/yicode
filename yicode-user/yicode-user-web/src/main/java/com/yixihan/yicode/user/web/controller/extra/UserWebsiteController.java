@@ -29,22 +29,22 @@ public class UserWebsiteController implements UserWebsiteApi {
     private UserWebsiteService userWebsiteService;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
-        return ApiResult.create (userWebsiteService.addUserLanguage (dtoReq));
+    public ApiResult<CommonDtoResult<Boolean>> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
+        return ApiResult.create (userWebsiteService.addUserWebsite (dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
-        return ApiResult.create (userWebsiteService.modifyUserLanguage (dtoReq));
+    public ApiResult<CommonDtoResult<Boolean>> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
+        return ApiResult.create (userWebsiteService.modifyUserWebsite (dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
-        return ApiResult.create (userWebsiteService.delUserLanguage (dtoReq));
+    public ApiResult<CommonDtoResult<Boolean>> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
+        return ApiResult.create (userWebsiteService.delUserWebsite (dtoReq));
     }
 
     @Override
-    public ApiResult<List<UserWebsiteDtoResult>> getUserLanguage(Long userId) {
-        return ApiResult.create (userWebsiteService.getUserLanguage (userId));
+    public ApiResult<List<UserWebsiteDtoResult>> getUserWebsite(Long userId) {
+        return ApiResult.create (userWebsiteService.getUserWebsite (userId));
     }
 }

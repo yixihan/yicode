@@ -30,7 +30,7 @@ import java.util.Optional;
 public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserWebsite> implements UserWebsiteService {
 
     @Override
-    public CommonDtoResult<Boolean> addUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
@@ -48,7 +48,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     }
 
     @Override
-    public CommonDtoResult<Boolean> modifyUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
@@ -65,7 +65,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     }
 
     @Override
-    public CommonDtoResult<Boolean> delUserLanguage(ModifyUserWebsiteDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
@@ -83,7 +83,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     }
 
     @Override
-    public List<UserWebsiteDtoResult> getUserLanguage(Long userId) {
+    public List<UserWebsiteDtoResult> getUserWebsite(Long userId) {
         QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserWebsite.USER_ID, userId);
     
