@@ -1,12 +1,14 @@
 package com.yixihan.yicode.user.openapi.api.rset.base;
 
 import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,10 +47,10 @@ public interface RoleOpenApi {
     @ApiOperation ("获取角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)
     @GetMapping(value = "/role/detail", produces = "application/json")
-    JsonResponse<PageVO<RoleVO>> getRoleList ();
+    JsonResponse<PageVO<RoleVO>> getRolePage (@RequestBody PageReq req);
     
     @ApiOperation ("获取用户拥有角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)
-    @GetMapping(value = "/user/role/detail/{userId}", produces = "application/json")
-    JsonResponse<PageVO<RoleVO>> getUserRoleList (@PathVariable Long userId);
+    @GetMapping(value = "/user/role/detail", produces = "application/json")
+    JsonResponse<PageVO<RoleVO>> getUserRolePage (@RequestBody UserRoleQueryReq req);
 }

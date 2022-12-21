@@ -1,9 +1,11 @@
 package com.yixihan.yicode.user.openapi.biz.service.base;
 
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 
 /**
@@ -44,13 +46,15 @@ public interface RoleService {
     
     /**
      * 获取角色列表
+     *
+     * @param req 请求参数
      */
-    PageVO<RoleVO> getRoleList();
+    PageVO<RoleVO> getRolePage(PageReq req);
     
     /**
      * 获取用户拥有角色列表
      *
-     * @param userId 用户 ID
+     * @param req 请求参数
      */
-    PageVO<RoleVO> getUserRoleList(Long userId);
+    PageVO<RoleVO> getUserRolePage(UserRoleQueryReq req);
 }

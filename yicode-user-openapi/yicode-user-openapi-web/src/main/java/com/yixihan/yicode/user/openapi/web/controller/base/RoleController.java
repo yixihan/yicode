@@ -1,11 +1,13 @@
 package com.yixihan.yicode.user.openapi.web.controller.base;
 
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.base.RoleOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import com.yixihan.yicode.user.openapi.biz.service.base.RoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +49,12 @@ public class RoleController implements RoleOpenApi {
     }
     
     @Override
-    public JsonResponse<PageVO<RoleVO>> getRoleList() {
-        return JsonResponse.ok (service.getRoleList ());
+    public JsonResponse<PageVO<RoleVO>> getRolePage(PageReq req) {
+        return JsonResponse.ok (service.getRolePage (req));
     }
     
     @Override
-    public JsonResponse<PageVO<RoleVO>> getUserRoleList(Long userId) {
-        return JsonResponse.ok (service.getUserRoleList (userId));
+    public JsonResponse<PageVO<RoleVO>> getUserRolePage(UserRoleQueryReq req) {
+        return JsonResponse.ok (service.getUserRolePage (req));
     }
 }
