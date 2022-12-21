@@ -1,7 +1,16 @@
 package com.yixihan.yicode.user.openapi.api.rset.base;
 
+import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.common.valid.RoleAccess;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 角色 OpenApi
@@ -12,4 +21,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "角色 OpenApi")
 @RequestMapping("/open/role/")
 public interface RoleOpenApi {
+    
+    @ApiOperation ("添加角色")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @PostMapping(value = "/role/add", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> addRole (@RequestBody AddRoleReq req);
+    
+    @ApiOperation ("删除角色")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @DeleteMapping(value = "/role/del/{roleId}", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delRole (@PathVariable Long roleId);
+    
+    @ApiOperation ("用户添加角色")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @PostMapping(value = "/user/add", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> addUserRole (@RequestBody AddUserRoleReq req);
+    
+    @ApiOperation ("用户删除角色")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @DeleteMapping(value = "/user/del/{roleId}", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delUserRole (@PathVariable Long roleId);
+    
+    @ApiOperation ("获取角色列表")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @GetMapping(value = "/role/detail", produces = "application/json")
+    JsonResponse<PageVO<RoleVO>> getRoleList ();
+    
+    @ApiOperation ("获取用户拥有角色列表")
+    @RoleAccess(value = RoleEnums.ADMIN)
+    @GetMapping(value = "/user/role/detail/{userId}", produces = "application/json")
+    JsonResponse<PageVO<RoleVO>> getUserRoleList (@PathVariable Long userId);
 }

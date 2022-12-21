@@ -2,7 +2,6 @@ package com.yixihan.yicode.common.valid;
 
 import com.yixihan.yicode.common.enums.RoleEnums;
 
-import javax.validation.Payload;
 import java.lang.annotation.*;
 
 /**
@@ -15,10 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RoleAccess {
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
 
     // 角色信息
     RoleEnums[] value() default {};
