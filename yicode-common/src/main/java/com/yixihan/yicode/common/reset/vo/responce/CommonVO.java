@@ -1,5 +1,6 @@
 package com.yixihan.yicode.common.reset.vo.responce;
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,8 @@ public class CommonVO<T> {
 
     @ApiModelProperty(value = "信息")
     private String message;
+    
+    public static <T> CommonVO<T> create (CommonDtoResult<T> dtoResult) {
+        return new CommonVO<> (dtoResult.getData (), dtoResult.getMessage ());
+    }
 }
