@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.biz.feign.user.user;
+package com.yixihan.yicode.user.openapi.biz.feign.user.base;
 
 import com.yixihan.yicode.user.api.rest.base.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,8 +1,8 @@
-package com.yixihan.yicode.user.openapi.biz.service;
+package com.yixihan.yicode.user.openapi.biz.service.base;
 
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.user.openapi.api.vo.request.*;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 
 /**
  * 用户 服务类

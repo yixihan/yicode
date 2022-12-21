@@ -1,11 +1,11 @@
-package com.yixihan.yicode.user.openapi.web.controller;
+package com.yixihan.yicode.user.openapi.web.controller.base;
 
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.user.openapi.api.rset.UserOpenApi;
-import com.yixihan.yicode.user.openapi.api.vo.request.*;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
-import com.yixihan.yicode.user.openapi.biz.service.UserService;
+import com.yixihan.yicode.user.openapi.api.rset.base.UserOpenApi;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 

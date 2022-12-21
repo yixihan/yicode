@@ -1,11 +1,11 @@
-package com.yixihan.yicode.user.openapi.api.rset;
+package com.yixihan.yicode.user.openapi.api.rset.base;
 
 import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
-import com.yixihan.yicode.user.openapi.api.vo.request.*;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;

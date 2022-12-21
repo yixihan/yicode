@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.api.vo.response;
+package com.yixihan.yicode.user.openapi.api.vo.response.base;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

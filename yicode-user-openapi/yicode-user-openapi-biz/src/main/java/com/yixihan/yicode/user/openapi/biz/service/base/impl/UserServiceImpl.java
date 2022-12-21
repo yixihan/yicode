@@ -1,4 +1,4 @@
-package com.yixihan.yicode.user.openapi.biz.service.impl;
+package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizException;
@@ -14,15 +14,15 @@ import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.openapi.api.enums.LoginTypeEnums;
-import com.yixihan.yicode.user.openapi.api.vo.request.*;
-import com.yixihan.yicode.user.openapi.api.vo.response.RoleVO;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserDetailInfoVO;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserInfoVO;
-import com.yixihan.yicode.user.openapi.api.vo.response.UserVO;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 import com.yixihan.yicode.user.openapi.biz.feign.thirdpart.email.EmailFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.thirdpart.sms.SMSFeignClient;
-import com.yixihan.yicode.user.openapi.biz.feign.user.user.UserFeignClient;
-import com.yixihan.yicode.user.openapi.biz.service.UserService;
+import com.yixihan.yicode.user.openapi.biz.feign.user.base.UserFeignClient;
+import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
             return new CommonVO<> (false, "错误的注册方式!");
         }
         CommonDtoResult<Boolean> dtoResult = userFeignClient.register (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
         ResetPasswordDtoReq dtoReq = CopyUtils.copySingle (ResetPasswordDtoReq.class, req);
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetPassword (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
         BindEmailDtoReq dtoReq = CopyUtils.copySingle (BindEmailDtoReq.class, req);
         dtoReq.setUserId (userInfo.getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindEmail (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (userInfo.getUser ().getUserId ()).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
         BindMobileDtoReq dtoReq = CopyUtils.copySingle (BindMobileDtoReq.class, req);
         dtoReq.setUserId (userInfo.getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindMobile (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserService {
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (userInfo.getUser ().getUserId ()).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
         dtoReq.setUserId (userInfo.getUser ().getUserId ());
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetUserName (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
 
     }
 
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
     public CommonVO<Boolean> cancellation() {
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userInfo.getUser ().getUserId ()).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     private UserDetailInfoVO getUserDetailInfoVO(UserDetailInfoDtoResult dtoResult) {
