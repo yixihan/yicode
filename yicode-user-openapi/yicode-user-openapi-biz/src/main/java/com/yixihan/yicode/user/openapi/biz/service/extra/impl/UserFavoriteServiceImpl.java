@@ -1,12 +1,8 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyCollectionReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserCollectionFeignClient;
@@ -58,7 +54,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     }
     
     @Override
-    public PageVO<FavoriteVO> getFavorites(PageReq req) {
+    public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
         return null;
     }
     

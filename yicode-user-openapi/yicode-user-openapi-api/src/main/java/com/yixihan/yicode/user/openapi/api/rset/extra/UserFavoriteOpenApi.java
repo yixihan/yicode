@@ -1,13 +1,9 @@
 package com.yixihan.yicode.user.openapi.api.rset.extra;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyCollectionReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import io.swagger.annotations.Api;
@@ -45,7 +41,7 @@ public interface UserFavoriteOpenApi {
     
     @ApiOperation("获取所有收藏夹")
     @PostMapping(value = "/del", produces = "application/json")
-    JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody PageReq req);
+    JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
     
     @ApiOperation ("收藏内容")
     @PostMapping(value = "/add", produces = "application/json")
