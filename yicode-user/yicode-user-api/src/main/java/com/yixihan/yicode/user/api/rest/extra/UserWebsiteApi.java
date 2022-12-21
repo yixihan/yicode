@@ -27,11 +27,7 @@ public interface UserWebsiteApi {
     @ApiOperation("添加用户个人网站")
     @PostMapping(value = "/add", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> addUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
-
-    @ApiOperation("修改用户个人网站")
-    @PostMapping(value = "/modify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> modifyUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
-
+    
     @ApiOperation("删除用户个人网站")
     @PostMapping(value = "/del", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);

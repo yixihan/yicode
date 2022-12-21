@@ -1,8 +1,8 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -14,6 +14,7 @@ import com.yixihan.yicode.user.dal.mapper.extra.UserWebsiteMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserWebsite;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,45 +32,26 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
 
     @Override
     public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
+        if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
+                dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
         
+        List<UserWebsite> websiteList = new ArrayList<> (dtoReq.getUserWebsite ().size ());
         for (String item : dtoReq.getUserWebsite ()) {
             UserWebsite website = new UserWebsite ();
             website.setUserWebsite (item);
             website.setUserId (dtoReq.getUserId ());
-            int insert = baseMapper.insert (website);
-            if (insert != 1) {
-                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
-            }
+            websiteList.add (website);
         }
-    
-        return new CommonDtoResult<> (Boolean.TRUE);
-    }
-
-    @Override
-    public CommonDtoResult<Boolean> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
-        }
-    
-        UpdateWrapper<UserWebsite> wrapper = new UpdateWrapper<> ();
-        for (String item : dtoReq.getUserWebsite ()) {
-            wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
-                    .set (UserWebsite.USER_WEBSITE, item);
-            int update = baseMapper.update (null, wrapper);
-            if (update != 1) {
-                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
-            }
-        }
-
-        return new CommonDtoResult<> (Boolean.TRUE);
+        boolean modify = this.saveBatch (websiteList);
+        return new CommonDtoResult<> (modify);
     }
 
     @Override
     public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
+        if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
+                dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
     

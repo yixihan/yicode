@@ -24,13 +24,7 @@ public interface UserWebsiteService extends IService<UserWebsite> {
      * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
-
-    /**
-     * 修改用户个人网站
-     *
-     * @param dtoReq 请求参数
-     */
-    CommonDtoResult<Boolean> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
+    
 
     /**
      * 删除用户个人网站

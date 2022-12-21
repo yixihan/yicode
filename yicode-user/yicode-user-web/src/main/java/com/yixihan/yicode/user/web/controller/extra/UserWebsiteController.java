@@ -34,11 +34,6 @@ public class UserWebsiteController implements UserWebsiteApi {
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        return ApiResult.create (userWebsiteService.modifyUserWebsite (dtoReq));
-    }
-
-    @Override
     public ApiResult<CommonDtoResult<Boolean>> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         return ApiResult.create (userWebsiteService.delUserWebsite (dtoReq));
     }
