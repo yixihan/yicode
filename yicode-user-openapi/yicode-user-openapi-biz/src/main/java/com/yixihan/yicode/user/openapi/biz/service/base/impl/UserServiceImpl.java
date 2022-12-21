@@ -60,7 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailInfoVO getUserInfo() {
-        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER).substring (AuthConstant.TOKEN_SUB_INDEX);
+        // 获取请求头附带的 token
+        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
+                .substring (AuthConstant.TOKEN_SUB_INDEX);
         UserDtoResult result = userFeignClient.getUserByToken (token).getResult ();
         UserDetailInfoDtoResult dtoResult = userFeignClient.getUserInfo (result.getUserId ()).getResult ();
         return getUserDetailInfoVO (dtoResult);
@@ -69,8 +71,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> register(RegisterUserReq req) {
         // 合法性校验
-        RegisterUserDtoReq dtoReq = CopyUtils.copySingle (RegisterUserDtoReq.class, req);
-        log.info ("req : {}", req);
         if (LoginTypeEnums.USERNAME_PASSWORD.getType ().equals (req.getType ())) {
             // 用户名+密码注册
             if (!ValidationUtils.validateUserName (req.getUserName ())) {
@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
             if (!userFeignClient.verifyUserEmail (req.getEmail ()).getResult ().getData ()) {
                 return new CommonVO<> (false, "邮箱已被绑定!");
             }
+            // 校验验证码
             EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
             emailDtoReq.setEmail (req.getEmail ());
             emailDtoReq.setCode (req.getCode ());
@@ -105,6 +106,7 @@ public class UserServiceImpl implements UserService {
             if (!userFeignClient.verifyUserMobile (req.getMobile ()).getResult ().getData ()) {
                 return new CommonVO<> (false, "手机号已被绑定!");
             }
+            // 校验验证码
             SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
             smsDtoReq.setMobile (req.getMobile ());
             smsDtoReq.setCode (req.getCode ());
@@ -116,6 +118,7 @@ public class UserServiceImpl implements UserService {
             log.error ("错误的注册方式!", new BizException (800001, "错误的注册方式!"));
             return new CommonVO<> (false, "错误的注册方式!");
         }
+        RegisterUserDtoReq dtoReq = CopyUtils.copySingle (RegisterUserDtoReq.class, req);
         CommonDtoResult<Boolean> dtoResult = userFeignClient.register (dtoReq).getResult ();
         return CommonVO.create (dtoResult);
     }
