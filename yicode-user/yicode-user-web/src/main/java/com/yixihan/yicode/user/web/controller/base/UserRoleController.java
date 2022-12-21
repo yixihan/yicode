@@ -46,7 +46,7 @@ public class UserRoleController implements UserRoleApi {
     }
     
     @Override
-    public ApiResult<PageDtoResult<RoleDtoResult>> getUserRoleList(UserRoleQueryDtoReq dtoReq) {
+    public ApiResult<PageDtoResult<RoleDtoResult>> getUserRolePage(UserRoleQueryDtoReq dtoReq) {
         return ApiResult.create (userRoleService.getUserRoleByUserId (dtoReq));
     }
 }

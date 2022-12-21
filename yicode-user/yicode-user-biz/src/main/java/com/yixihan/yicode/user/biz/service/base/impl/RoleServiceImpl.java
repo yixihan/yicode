@@ -53,7 +53,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
     
     @Override
-    public PageDtoResult<RoleDtoResult> getRoleList(PageDtoReq dtoReq) {
+    public PageDtoResult<RoleDtoResult> getRolePage(PageDtoReq dtoReq) {
         Page<Role> rolePage = baseMapper.selectPage (
                 new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
                 null);
@@ -61,6 +61,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 Optional.ofNullable (rolePage).orElse (new Page<> ()),
                 (o) -> CopyUtils.copySingle (RoleDtoResult.class, o)
         );
+    }
+    
+    @Override
+    public List<RoleDtoResult> getRoleList() {
+        List<Role> roleList = Optional.ofNullable (baseMapper.selectList (null))
+                .orElse (Collections.emptyList ());
+        
+        return CopyUtils.copyMulti (RoleDtoResult.class, roleList);
     }
     
     @Override

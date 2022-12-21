@@ -38,7 +38,9 @@ public interface RoleService extends IService<Role> {
     /**
      * 获取所有角色列表
      */
-    PageDtoResult<RoleDtoResult> getRoleList(PageDtoReq dtoReq);
+    PageDtoResult<RoleDtoResult> getRolePage(PageDtoReq dtoReq);
+    
+    List<RoleDtoResult> getRoleList();
     
     /**
      * 添加角色

@@ -37,8 +37,8 @@ public interface UserRoleApi {
     @PostMapping("/roleList/{userId}")
     ApiResult<List<RoleDtoResult>> getUserRoleList(@PathVariable("userId") Long userId);
 
-    @ApiOperation ("获取用户的角色信息")
+    @ApiOperation ("获取用户的角色信息-分页查询")
     @PostMapping("/role/detail")
-    ApiResult<PageDtoResult<RoleDtoResult>> getUserRoleList(@RequestBody UserRoleQueryDtoReq dtoReq);
+    ApiResult<PageDtoResult<RoleDtoResult>> getUserRolePage(@RequestBody UserRoleQueryDtoReq dtoReq);
 
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -39,7 +40,12 @@ public class RoleController implements RoleApi {
     }
     
     @Override
-    public ApiResult<PageDtoResult<RoleDtoResult>> getRoleList(PageDtoReq dtoReq) {
-        return ApiResult.create (service.getRoleList (dtoReq));
+    public ApiResult<PageDtoResult<RoleDtoResult>> getRolePage(PageDtoReq dtoReq) {
+        return ApiResult.create (service.getRolePage (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<List<RoleDtoResult>> getRoleList() {
+        return ApiResult.create (service.getRoleList ());
     }
 }

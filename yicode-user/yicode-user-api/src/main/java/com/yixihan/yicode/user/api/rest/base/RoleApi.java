@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  * 角色 api
  *
@@ -30,7 +32,11 @@ public interface RoleApi {
     @PostMapping(value = "/del/{roleId}", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delRole (@PathVariable Long roleId);
     
+    @ApiOperation ("获取用户的角色信息-分页查询")
+    @PostMapping("/role/list")
+    ApiResult<PageDtoResult<RoleDtoResult>> getRolePage(@RequestBody PageDtoReq dtoReq);
+    
     @ApiOperation ("获取用户的角色信息")
     @PostMapping("/role/detail")
-    ApiResult<PageDtoResult<RoleDtoResult>> getRoleList(@RequestBody PageDtoReq dtoReq);
+    ApiResult<List<RoleDtoResult>> getRoleList();
 }
