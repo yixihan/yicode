@@ -2,10 +2,14 @@ package com.yixihan.yicode.user.biz.service.base.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -41,11 +46,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
     
     @Override
-    public List<RoleDtoResult> getRoleList() {
-        List<Role> roleList = baseMapper.selectList (null);
-        return CollectionUtil.isEmpty (roleList) ?
-                Collections.emptyList () :
-                CopyUtils.copyMulti (RoleDtoResult.class, roleList);
+    public Page<Role> getRolePage(Page<Role> page, List<Long> roleIdList) {
+        QueryWrapper<Role> wrapper = new QueryWrapper<> ();
+        wrapper.in (!CollectionUtil.isEmpty (roleIdList), "role_id", roleIdList);
+        return baseMapper.selectPage (page, wrapper);
+    }
+    
+    @Override
+    public PageDtoResult<RoleDtoResult> getRoleList(PageDtoReq dtoReq) {
+        Page<Role> rolePage = baseMapper.selectPage (
+                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
+                null);
+        return PageUtil.pageToPageDtoResult (
+                Optional.ofNullable (rolePage).orElse (new Page<> ()),
+                (o) -> CopyUtils.copySingle (RoleDtoResult.class, o)
+        );
     }
     
     @Override

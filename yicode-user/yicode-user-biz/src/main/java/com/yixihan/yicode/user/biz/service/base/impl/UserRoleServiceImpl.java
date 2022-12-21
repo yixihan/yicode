@@ -1,11 +1,15 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
+import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
@@ -31,7 +35,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Resource
     private RoleService roleService;
-
+    
     @Override
     public List<RoleDtoResult> getUserRoleByUserId(Long userId) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
@@ -41,6 +45,28 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         List<Long> roleIdList = userRoleIdList.stream ().map (UserRole::getRoleId).collect(Collectors.toList());
         List<Role> userRoleList = roleService.getRoleList (roleIdList);
         return CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
+    }
+    
+    @Override
+    public PageDtoResult<RoleDtoResult> getUserRoleByUserId(UserRoleQueryDtoReq dtoReq) {
+        QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
+        wrapper.eq ("user_id", dtoReq.getUserId ());
+        Page<UserRole> userRolePage = baseMapper.selectPage (
+                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
+                wrapper
+        );
+        // 提取用户 roleId 列表
+        List<Long> roleIdList = userRolePage.getRecords ()
+                .stream ().map (UserRole::getRoleId).collect(Collectors.toList());
+        Page<Role> rolePage = roleService.getRolePage (
+                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
+                roleIdList
+        );
+    
+        return PageUtil.pageToPageDtoResult (
+                rolePage,
+                (o) -> CopyUtils.copySingle (RoleDtoResult.class, o)
+        );
     }
 
     @Override

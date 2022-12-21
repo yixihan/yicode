@@ -1,12 +1,17 @@
 package com.yixihan.yicode.user.api.rest.base;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
+import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -27,9 +32,13 @@ public interface UserRoleApi {
     @ApiOperation ("删除用户角色")
     @PostMapping(value = "/del", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delRole (@RequestBody ModifyUserRoleDtoReq dtoReq);
-
+    
     @ApiOperation ("获取用户的角色信息")
     @PostMapping("/roleList/{userId}")
     ApiResult<List<RoleDtoResult>> getUserRoleList(@PathVariable("userId") Long userId);
+
+    @ApiOperation ("获取用户的角色信息")
+    @PostMapping("/role/detail")
+    ApiResult<PageDtoResult<RoleDtoResult>> getUserRoleList(@RequestBody UserRoleQueryDtoReq dtoReq);
 
 }

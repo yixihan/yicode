@@ -1,7 +1,9 @@
 package com.yixihan.yicode.user.web.controller.base;
 
 
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.rest.base.RoleApi;
@@ -10,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -38,7 +39,7 @@ public class RoleController implements RoleApi {
     }
     
     @Override
-    public ApiResult<List<RoleDtoResult>> getRoleList() {
-        return ApiResult.create (service.getRoleList ());
+    public ApiResult<PageDtoResult<RoleDtoResult>> getRoleList(PageDtoReq dtoReq) {
+        return ApiResult.create (service.getRoleList (dtoReq));
     }
 }

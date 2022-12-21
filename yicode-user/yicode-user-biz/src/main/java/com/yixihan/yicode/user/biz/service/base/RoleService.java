@@ -1,7 +1,10 @@
 package com.yixihan.yicode.user.biz.service.base;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.dal.pojo.base.Role;
 
@@ -26,9 +29,16 @@ public interface RoleService extends IService<Role> {
     List<Role> getRoleList(List<Long> roleIdList);
     
     /**
+     * 通过 角色id 获取角色信息-分页查询
+     *
+     * @param roleIdList 角色 id
+     */
+    Page<Role> getRolePage(Page<Role> page, List<Long> roleIdList);
+    
+    /**
      * 获取所有角色列表
      */
-    List<RoleDtoResult> getRoleList();
+    PageDtoResult<RoleDtoResult> getRoleList(PageDtoReq dtoReq);
     
     /**
      * 添加角色

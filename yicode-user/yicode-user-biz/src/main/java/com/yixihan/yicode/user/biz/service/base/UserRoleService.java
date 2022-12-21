@@ -2,7 +2,9 @@ package com.yixihan.yicode.user.biz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
+import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.dal.pojo.base.UserRole;
 
@@ -25,6 +27,13 @@ public interface UserRoleService extends IService<UserRole> {
      * @return {@link RoleDtoResult}
      */
     List<RoleDtoResult> getUserRoleByUserId(Long userId);
+    
+    /**
+     * 获取用户角色列表 以分页形式返回
+     *
+     * @param dtoReq 请求参数
+     */
+    PageDtoResult<RoleDtoResult> getUserRoleByUserId(UserRoleQueryDtoReq dtoReq);
 
     /**
      * 添加用户角色

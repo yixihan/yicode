@@ -19,15 +19,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ApiModel("分页请求-dtoReq")
 public class PageDtoReq implements Serializable {
-
+    
     private static final long serialVersionUID = 7234584781842150083L;
-
+    
     @ApiModelProperty("页码")
     private Long page = 0L;
-
+    
     @ApiModelProperty("分页大小")
     private Long pageSize = 10L;
-
+    
     @ApiModelProperty("是否搜索总数据条数")
-    private  Boolean searchCount = true;
+    private Boolean searchCount = true;
 }
