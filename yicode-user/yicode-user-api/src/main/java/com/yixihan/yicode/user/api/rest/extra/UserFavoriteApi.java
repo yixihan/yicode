@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
@@ -39,7 +40,11 @@ public interface UserFavoriteApi {
     ApiResult<CommonDtoResult<Integer>> getFavoriteCount (@PathVariable("userId") Long userId);
 
     @ApiOperation("获取所有收藏夹")
-    @PostMapping(value = "/del", produces = "application/json")
+    @PostMapping(value = "/list", produces = "application/json")
     ApiResult<PageDtoResult<FavoriteDtoResult>> getFavorites (@RequestBody FavoriteQueryDtoReq dtoReq);
+    
+    @ApiOperation("获取收藏夹详情")
+    @PostMapping(value = "/detail", produces = "application/json")
+    ApiResult<FavoriteDtoResult> getFavoriteDetail (@RequestBody FavoriteDetailQueryDtoReq dtoReq);
 
 }

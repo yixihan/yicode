@@ -7,23 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加收藏夹-dtoReq
+ * 收藏夹详情获取-dtoReq
  *
  * @author yixihan
- * @date 2022/11/28 15:22
+ * @date 2022/12/21 15:00
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加收藏夹-dtoReq")
-public class AddFavoriteDtoReq {
-
-    @ApiModelProperty(value = "用户 id")
+@ApiModel("收藏夹详情获取-dtoReq")
+public class FavoriteDetailQueryDtoReq {
+    
+    @ApiModelProperty(value = "用户 ID")
     private Long userId;
-
-    @ApiModelProperty(value = "收藏类型")
-    private String favoriteType;
-
-    @ApiModelProperty(value = "收藏夹名")
-    private String favoriteName;
+    
+    @ApiModelProperty(value = "收藏夹 ID")
+    private Long favoriteId;
 }

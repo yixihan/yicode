@@ -453,7 +453,7 @@ CREATE TABLE `user_favorite`
     `id`             bigint(20) UNSIGNED                             NOT NULL AUTO_INCREMENT COMMENT '主键 id',
     `favorite_id`    bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '收藏夹 id',
     `user_id`        bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `favorite_type`  int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏类型 (0:题, 1:题解)',
+    `favorite_type`  varchar(10)                                     NOT NULL DEFAULT 0 COMMENT '收藏类型(QUESTION : 问题, NOTE : 题解)',
     `favorite_name`  varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '收藏夹名',
     `favorite_count` int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏数量',
     `create_time`    datetime                                        NOT NULL COMMENT '创建时间',

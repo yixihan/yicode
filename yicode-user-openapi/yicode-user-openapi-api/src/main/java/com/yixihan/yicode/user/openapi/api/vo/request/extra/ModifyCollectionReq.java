@@ -21,6 +21,9 @@ public class ModifyCollectionReq {
     @ApiModelProperty(value = "收藏夹 ID")
     private Long favoriteId;
     
+    @ApiModelProperty(value = "收藏类型")
+    private String collectionType;
+    
     @ApiModelProperty(value = "收藏内容 ID")
     private Long collectionId;
 }

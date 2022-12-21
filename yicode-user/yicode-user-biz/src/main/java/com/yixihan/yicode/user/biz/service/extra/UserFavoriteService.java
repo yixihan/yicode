@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
@@ -53,4 +54,11 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * @param dtoReq 请求参数
      */
     PageDtoResult<FavoriteDtoResult> getFavorites(FavoriteQueryDtoReq dtoReq);
+    
+    /**
+     * 获取收藏夹详情
+     *
+     * @param dtoReq 请求参数
+     */
+    FavoriteDtoResult getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq);
 }

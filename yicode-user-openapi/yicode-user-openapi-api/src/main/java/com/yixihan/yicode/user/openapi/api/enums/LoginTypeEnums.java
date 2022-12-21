@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 用户注册方式
+ * 用户注册方式枚举类
  *
  * @author yixihan
  * @date 2022/11/21 20:27

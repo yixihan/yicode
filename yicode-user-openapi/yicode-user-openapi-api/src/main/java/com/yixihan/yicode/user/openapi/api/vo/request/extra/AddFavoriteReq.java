@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @ApiModel("添加收藏夹-req")
 public class AddFavoriteReq {
     
-    @ApiModelProperty(value = "收藏类型 (0:题, 1:题解)")
-    private Integer favoriteType;
+    @ApiModelProperty(value = "收藏类型(QUESTION : 问题, NOTE : 题解)")
+    private String favoriteType;
     
     @ApiModelProperty(value = "收藏夹名")
     private String favoriteName;

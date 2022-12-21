@@ -12,6 +12,7 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
@@ -97,5 +98,15 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
                 values,
                 (o) -> CopyUtils.copySingle (FavoriteDtoResult.class, o)
         );
+    }
+    
+    @Override
+    public FavoriteDtoResult getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq) {
+        QueryWrapper<UserFavorite> wrapper = new QueryWrapper<> ();
+        wrapper.eq (UserFavorite.USER_ID, dtoReq.getUserId ())
+                .eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ());
+        UserFavorite favorite = baseMapper.selectOne (wrapper);
+        
+        return CopyUtils.copySingle (FavoriteDtoResult.class, favorite);
     }
 }

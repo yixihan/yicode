@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
@@ -53,5 +54,10 @@ public class UserFavoriteController implements UserFavoriteApi {
     @Override
     public ApiResult<PageDtoResult<FavoriteDtoResult>> getFavorites(FavoriteQueryDtoReq dtoReq) {
         return ApiResult.create (userFavoriteService.getFavorites (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<FavoriteDtoResult> getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq) {
+        return ApiResult.create (userFavoriteService.getFavoriteDetail (dtoReq));
     }
 }
