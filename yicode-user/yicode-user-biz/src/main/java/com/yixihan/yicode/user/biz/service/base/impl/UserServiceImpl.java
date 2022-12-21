@@ -67,15 +67,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             return new UserDetailInfoDtoResult ();
         }
-
-        List<RoleDtoResult> userRoleList = userRoleService.getUserRoleByUserId (userId);
-
-        // TODO 查询用户资料信息
-        UserInfo userInfo = new UserInfo ();
-
-        // 转换实体类
         UserDtoResult userDtoResult = CopyUtils.copySingle (UserDtoResult.class, user);
-        UserInfoDtoResult userInfoDtoResult = CopyUtils.copySingle (UserInfoDtoResult.class, userInfo);
+    
+        // 查询用户角色信息
+        List<RoleDtoResult> userRoleList = userRoleService.getUserRoleByUserId (userId);
+    
+        // 查询用户资料信息
+        UserInfoDtoResult userInfoDtoResult = userInfoService.getUserInfo (userId);
         return new UserDetailInfoDtoResult (userDtoResult, userRoleList, userInfoDtoResult);
     }
 

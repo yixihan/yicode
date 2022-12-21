@@ -48,9 +48,6 @@ public class ModifyUserInfoReq {
     @ApiModelProperty(value = "用户真实姓名")
     private String userRealName;
     
-    @ApiModelProperty(value = "用户技能标签")
-    private String userLabel;
-    
     @ApiModelProperty(value = "用户个人网址")
     private List<String> userWebsiteList;
 }

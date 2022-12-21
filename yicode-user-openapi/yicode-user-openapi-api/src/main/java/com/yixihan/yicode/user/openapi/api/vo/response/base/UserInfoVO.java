@@ -51,7 +51,7 @@ public class UserInfoVO {
     private String userRealName;
 
     @ApiModelProperty(value = "用户技能标签")
-    private String userLabel;
+    private List<String> userLabel;
     
     @ApiModelProperty(value = "用户个人网址")
     private List<String> userWebsiteList;
