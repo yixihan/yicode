@@ -31,48 +31,51 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
 
     @Override
     public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
+        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
         
-        UserWebsite website = new UserWebsite ();
-        website.setUserWebsite (dtoReq.getUserWebsite ());
-        website.setUserId (dtoReq.getUserId ());
-    
-        int insert = baseMapper.insert (website);
-        if (insert == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        for (String item : dtoReq.getUserWebsite ()) {
+            UserWebsite website = new UserWebsite ();
+            website.setUserWebsite (item);
+            website.setUserId (dtoReq.getUserId ());
+            int insert = baseMapper.insert (website);
+            if (insert != 1) {
+                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+            }
         }
+    
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
     public CommonDtoResult<Boolean> modifyUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
+        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
     
         UpdateWrapper<UserWebsite> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
-                .set (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
-        int update = baseMapper.update (null, wrapper);
-        if (update == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        for (String item : dtoReq.getUserWebsite ()) {
+            wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
+                    .set (UserWebsite.USER_WEBSITE, item);
+            int update = baseMapper.update (null, wrapper);
+            if (update != 1) {
+                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+            }
         }
+
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
     public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (StrUtil.isBlank (dtoReq.getUserWebsite ())) {
+        if (dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
             return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
         }
     
         QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
-                .eq (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
+                .in (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
     
         int delete = baseMapper.delete (wrapper);
         if (delete == 1) {

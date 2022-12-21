@@ -515,7 +515,6 @@ CREATE TABLE `user_info`
     `user_school`    varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户学校',
     `user_birth`     datetime                                         NULL     DEFAULT NULL COMMENT '用户生日',
     `user_real_name` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户真实姓名',
-    `user_label`     varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户技能标签',
     `create_time`    datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`    datetime                                         NOT NULL COMMENT '修改时间',
     `version`        int(10) UNSIGNED                                 NOT NULL DEFAULT 1 COMMENT '乐观锁',

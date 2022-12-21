@@ -59,9 +59,6 @@ public class UserInfo implements Serializable {
     @ApiModelProperty(value = "用户真实姓名")
     private String userRealName;
 
-    @ApiModelProperty(value = "用户技能标签")
-    private String userLabel;
-
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
@@ -98,8 +95,7 @@ public class UserInfo implements Serializable {
     public static final String USER_BIRTH = "user_birth";
 
     public static final String USER_REAL_NAME = "user_real_name";
-
-    public static final String USER_LABEL = "user_label";
+    
 
     public static final String CREATE_TIME = "create_time";
 

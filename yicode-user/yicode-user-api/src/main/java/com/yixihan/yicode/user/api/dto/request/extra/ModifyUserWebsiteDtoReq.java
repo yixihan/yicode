@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 更新用户个人网站-dtoReq
  *
@@ -22,5 +24,5 @@ public class ModifyUserWebsiteDtoReq {
     private Long userId;
 
     @ApiModelProperty(value = "用户个人网站")
-    private String userWebsite;
+    private List<String> userWebsite;
 }

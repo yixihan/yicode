@@ -46,7 +46,4 @@ public class ModifyUserInfoDtoReq {
 
     @ApiModelProperty(value = "用户真实姓名")
     private String userRealName;
-
-    @ApiModelProperty(value = "用户技能标签")
-    private String userLabel;
 }
