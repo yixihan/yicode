@@ -1,7 +1,15 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
+import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.PageVOUtil;
+import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFollowDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FollowQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFollowReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FollowVO;
@@ -14,7 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * 用户收藏 服务实现类
+ * 用户关注 服务实现类
  *
  * @author yixihan
  * @date 2022/12/21 9:45
@@ -31,31 +39,87 @@ public class UserFollowServiceImpl implements UserFollowService {
     
     @Override
     public CommonVO<Boolean> followUser(ModifyFollowReq req) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (req.getFollowUserId ())) {
+            return new CommonVO<> (Boolean.FALSE, "关注者不存在!");
+        }
+    
+        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
+                userService.getUserInfo ().getUser ().getUserId (),
+                req.getFollowUserId ()
+        );
+    
+        CommonDtoResult<Boolean> dtoResult = followFeignClient.followUser (dtoReq).getResult ();
+        return CommonVO.create (dtoResult);
     }
     
     @Override
     public CommonVO<Boolean> unfollowUser(ModifyFollowReq req) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (req.getFollowUserId ())) {
+            return new CommonVO<> (Boolean.FALSE, "关注者不存在!");
+        }
+    
+        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
+                userService.getUserInfo ().getUser ().getUserId (),
+                req.getFollowUserId ()
+        );
+    
+        CommonDtoResult<Boolean> dtoResult = followFeignClient.unfollowUser (dtoReq).getResult ();
+        return CommonVO.create (dtoResult);
     }
     
     @Override
     public CommonVO<Integer> getFollowCount(Long userId) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (userId)) {
+            return new CommonVO<> (NumConstant.NUM_0);
+        }
+    
+        CommonDtoResult<Integer> dtoResult = followFeignClient.getFollowCount (userId).getResult ();
+        return CommonVO.create (dtoResult);
     }
     
     @Override
     public PageVO<FollowVO> getFollowList(FollowQueryReq req) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (req.getUserId ())) {
+            return new PageVO<> ();
+        }
+    
+        FollowQueryDtoReq dtoReq = new FollowQueryDtoReq (req.getUserId ());
+        PageDtoResult<FollowDtoResult> dtoResult = followFeignClient.getFollowList (dtoReq).getResult ();
+        
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                (o) -> CopyUtils.copySingle (FollowVO.class, o)
+        );
     }
     
     @Override
     public CommonVO<Integer> getFanCount(Long userId) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (userId)) {
+            return new CommonVO<> (NumConstant.NUM_0);
+        }
+    
+        CommonDtoResult<Integer> dtoResult = followFeignClient.getFanCount (userId).getResult ();
+        return CommonVO.create (dtoResult);
     }
     
     @Override
     public PageVO<FollowVO> getFanList(FollowQueryReq req) {
-        return null;
+        // 校验 userId
+        if (userService.verifyUserId (req.getUserId ())) {
+            return new PageVO<> ();
+        }
+    
+        FollowQueryDtoReq dtoReq = new FollowQueryDtoReq (req.getUserId ());
+        PageDtoResult<FollowDtoResult> dtoResult = followFeignClient.getFanList (dtoReq).getResult ();
+    
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                (o) -> CopyUtils.copySingle (FollowVO.class, o)
+        );
     }
 }

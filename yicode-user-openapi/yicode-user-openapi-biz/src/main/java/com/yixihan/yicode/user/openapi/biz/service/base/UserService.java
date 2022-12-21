@@ -81,4 +81,12 @@ public interface UserService {
      *
      */
     CommonVO<Boolean> cancellation();
+    
+    /**
+     * 校验用户 ID 是否存在
+     *
+     * @param userId 用户 ID
+     * @return 存在 : false | 不存在 : true
+     */
+    Boolean verifyUserId (Long userId);
 }

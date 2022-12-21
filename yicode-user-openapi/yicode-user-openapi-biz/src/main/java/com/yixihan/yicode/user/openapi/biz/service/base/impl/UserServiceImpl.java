@@ -255,7 +255,18 @@ public class UserServiceImpl implements UserService {
         CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userInfo.getUser ().getUserId ()).getResult ();
         return CommonVO.create (dtoResult);
     }
-
+    
+    @Override
+    public Boolean verifyUserId(Long userId) {
+        UserDetailInfoVO userInfo = getUserInfo (userId);
+        return userInfo.getUser () == null;
+    }
+    
+    /**
+     * 组装 {@link UserDetailInfoVO}
+     * @param dtoResult {@link UserDetailInfoDtoResult}
+     * @return {@link UserDetailInfoVO}
+     */
     private UserDetailInfoVO getUserDetailInfoVO(UserDetailInfoDtoResult dtoResult) {
         UserVO userVO = CopyUtils.copySingle (UserVO.class, dtoResult.getUser ());
         List<RoleVO> roleVOList = CopyUtils.copyMulti (RoleVO.class, dtoResult.getUserRoleList ());

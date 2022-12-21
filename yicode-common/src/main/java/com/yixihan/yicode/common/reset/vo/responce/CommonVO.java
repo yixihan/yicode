@@ -25,6 +25,10 @@ public class CommonVO<T> {
     @ApiModelProperty(value = "信息")
     private String message;
     
+    public CommonVO(T data) {
+        this.data = data;
+    }
+    
     public static <T> CommonVO<T> create (CommonDtoResult<T> dtoResult) {
         return new CommonVO<> (dtoResult.getData (), dtoResult.getMessage ());
     }
