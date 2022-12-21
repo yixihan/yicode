@@ -1,12 +1,8 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyCollectionReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 
@@ -51,7 +47,7 @@ public interface UserFavoriteService {
      *
      * @param req 请求参数
      */
-    PageVO<FavoriteVO> getFavorites(PageReq req);
+    PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req);
     
     /**
      * 收藏内容
