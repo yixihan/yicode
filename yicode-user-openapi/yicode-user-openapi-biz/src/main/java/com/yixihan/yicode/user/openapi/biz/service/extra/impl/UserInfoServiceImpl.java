@@ -1,10 +1,17 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
+import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserInfoFeignClient;
-import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserLanguageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserWebsiteFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import com.yixihan.yicode.user.openapi.biz.service.extra.UserInfoService;
@@ -12,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户资料 服务实现类
@@ -30,19 +39,58 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserWebsiteFeignClient websiteFeignClient;
     
     @Resource
-    private UserLanguageFeignClient languageFeignClient;
-    
-    @Resource
     private UserService userService;
-    
     
     @Override
     public CommonVO<Boolean> modifyInfo(ModifyUserInfoReq req) {
-        return null;
+        if (req == null) {
+            return new CommonVO<> ();
+        }
+        Boolean flag = Boolean.TRUE;
+    
+        // 如果网站列表不为空, 则修改网站列表
+        if (CollectionUtil.isNotEmpty (req.getUserWebsiteList ())) {
+            flag = modifyUserWebsite (
+                    userService.getUserInfo ().getUserInfo ().getUserId (),
+                    req.getUserWebsiteList ()
+            );
+        }
+    
+        ModifyUserInfoDtoReq dtoReq = CopyUtils.copySingle (ModifyUserInfoDtoReq.class, req);
+        CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
+        return dtoResult.getData () && flag ?
+                new CommonVO<> () :
+                new CommonVO<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
     }
     
     @Override
     public UserInfoVO getUserInfo(Long userId) {
-        return null;
+        UserInfoDtoResult dtoResult = infoFeignClient.getUserInfo (userId).getResult ();
+        return CopyUtils.copySingle (UserInfoVO.class, dtoResult);
+    }
+    
+    /**
+     * 修改用户网战列表
+     *
+     * @param userId 用户 ID
+     * @param websiteList 用户网站列表
+     * @return true : 修改成功 | false : 修改失败
+     */
+    private Boolean modifyUserWebsite (Long userId, List<String> websiteList) {
+        // 获取用户现有网站列表
+        List<String> oldWebSiteList = websiteFeignClient.getUserWebsite (userId).getResult ()
+                .stream ().map (UserWebsiteDtoResult::getUserWebsite).collect (Collectors.toList ());
+        
+        // 过滤已有网站列表
+        List<String> addWebSiteList = websiteList.stream ()
+                .filter ((o) -> !oldWebSiteList.contains (o)).collect(Collectors.toList());
+        List<String> delWebSiteList = oldWebSiteList.stream ()
+                .filter ((o) -> !websiteList.contains (o)).collect(Collectors.toList());
+    
+        CommonDtoResult<Boolean> addResult = websiteFeignClient
+                .addUserWebsite (new ModifyUserWebsiteDtoReq (userId, addWebSiteList)).getResult ();
+        CommonDtoResult<Boolean> delResult = websiteFeignClient
+                .delUserWebsite (new ModifyUserWebsiteDtoReq (userId, delWebSiteList)).getResult ();
+        return addResult.getData () && delResult.getData ();
     }
 }
