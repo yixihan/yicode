@@ -48,6 +48,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     public CommonDtoResult<Boolean> modifyFavorite(ModifyFavoriteDtoReq dtoReq) {
         UpdateWrapper<UserFavorite> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
+                .eq (UserFavorite.USER_ID, dtoReq.getUserId ())
                 .set (StrUtil.isNotBlank (dtoReq.getFavoriteName ()),UserFavorite.FAVORITE_NAME, dtoReq.getFavoriteName ())
                 .set (dtoReq.getFavoriteCount () != null, UserFavorite.FAVORITE_COUNT, dtoReq.getFavoriteCount ());
         int update = baseMapper.update (null, wrapper);
@@ -59,9 +60,10 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     }
 
     @Override
-    public CommonDtoResult<Boolean> delFavorite(Long favoriteId) {
+    public CommonDtoResult<Boolean> delFavorite(ModifyFavoriteDtoReq dtoReq) {
         QueryWrapper<UserFavorite> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserFavorite.FAVORITE_ID, favoriteId);
+        wrapper.eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
+                .eq (UserFavorite.USER_ID, dtoReq.getUserId ());
         int delete = baseMapper.delete (wrapper);
         if (delete == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

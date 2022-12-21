@@ -41,8 +41,8 @@ public class UserFavoriteController implements UserFavoriteApi {
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delFavorite(Long favoriteId) {
-        return ApiResult.create (userFavoriteService.delFavorite (favoriteId));
+    public ApiResult<CommonDtoResult<Boolean>> delFavorite(ModifyFavoriteDtoReq dtoReq) {
+        return ApiResult.create (userFavoriteService.delFavorite (dtoReq));
     }
 
     @Override

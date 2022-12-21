@@ -36,9 +36,9 @@ public interface UserFavoriteService extends IService<UserFavorite> {
     /**
      * 删除收藏夹
      *
-     * @param favoriteId 收藏夹 id
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> delFavorite(Long favoriteId);
+    CommonDtoResult<Boolean> delFavorite(ModifyFavoriteDtoReq dtoReq);
 
     /**
      * 获取收藏夹数量

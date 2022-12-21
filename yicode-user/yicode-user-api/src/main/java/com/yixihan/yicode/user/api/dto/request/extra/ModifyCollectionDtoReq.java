@@ -19,11 +19,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("修改收藏内容-dtoReq")
 public class ModifyCollectionDtoReq {
+    
+    @ApiModelProperty(value = "用户 ID")
+    private Long userId;
 
     @ApiModelProperty(value = "收藏夹 ID")
     private Long favoriteId;
-
-
+    
     @ApiModelProperty(value = "收藏内容 ID")
     private Long collectionId;
 }
