@@ -74,21 +74,21 @@ public class UserServiceImpl implements UserService {
         if (LoginTypeEnums.USERNAME_PASSWORD.getType ().equals (req.getType ())) {
             // 用户名+密码注册
             if (!ValidationUtils.validateUserName (req.getUserName ())) {
-                return new CommonVO<> (false, "用户名不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "用户名不符合规范！");
             }
             if (!ValidationUtils.validatePassword (req.getPassword ())) {
-                return new CommonVO<> (false, "密码不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "密码不符合规范！");
             }
             if (!userFeignClient.verifyUserName (req.getUserName ()).getResult ().getData ()) {
-                return new CommonVO<> (false, "用户名已被注册！");
+                return new CommonVO<> (Boolean.FALSE, "用户名已被注册！");
             }
         } else if (LoginTypeEnums.EMAIL_CODE.getType ().equals (req.getType ())) {
             // 邮箱+验证码注册
             if (!ValidationUtils.validateEmail (req.getEmail ())) {
-                return new CommonVO<> (false, "邮箱不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "邮箱不符合规范！");
             }
             if (!userFeignClient.verifyUserEmail (req.getEmail ()).getResult ().getData ()) {
-                return new CommonVO<> (false, "邮箱已被绑定!");
+                return new CommonVO<> (Boolean.FALSE, "邮箱已被绑定!");
             }
             // 校验验证码
             EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
@@ -96,15 +96,15 @@ public class UserServiceImpl implements UserService {
             emailDtoReq.setCode (req.getCode ());
             emailDtoReq.setEmailType (CodeTypeEnums.REGISTER.getType ());
             if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-                return new CommonVO<> (false, "验证码错误!");
+                return new CommonVO<> (Boolean.FALSE, "验证码错误!");
             }
         } else if (LoginTypeEnums.MOBILE_CODE.getType ().equals (req.getType ())) {
             // 手机号+验证码注册
             if (!ValidationUtils.validateMobile (req.getMobile ())) {
-                return new CommonVO<> (false, "手机号不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "手机号不符合规范！");
             }
             if (!userFeignClient.verifyUserMobile (req.getMobile ()).getResult ().getData ()) {
-                return new CommonVO<> (false, "手机号已被绑定!");
+                return new CommonVO<> (Boolean.FALSE, "手机号已被绑定!");
             }
             // 校验验证码
             SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
@@ -112,11 +112,11 @@ public class UserServiceImpl implements UserService {
             smsDtoReq.setCode (req.getCode ());
             smsDtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
             if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-                return new CommonVO<> (false, "验证码错误!");
+                return new CommonVO<> (Boolean.FALSE, "验证码错误!");
             }
         } else {
             log.error ("错误的注册方式!", new BizException (800001, "错误的注册方式!"));
-            return new CommonVO<> (false, "错误的注册方式!");
+            return new CommonVO<> (Boolean.FALSE, "错误的注册方式!");
         }
         RegisterUserDtoReq dtoReq = CopyUtils.copySingle (RegisterUserDtoReq.class, req);
         CommonDtoResult<Boolean> dtoResult = userFeignClient.register (dtoReq).getResult ();
@@ -127,33 +127,33 @@ public class UserServiceImpl implements UserService {
     public CommonVO<Boolean> resetPassword(ResetPasswordReq req) {
         if (VerificationCodeEnums.EMAIL.getMethod ().equals (req.getType ())) {
             if (!ValidationUtils.validateEmail (req.getEmail ())) {
-                return new CommonVO<> (false, "邮箱不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "邮箱不符合规范！");
             }
             EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
             emailDtoReq.setEmail (req.getEmail ());
             emailDtoReq.setCode (req.getCode ());
             emailDtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
             if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-                return new CommonVO<> (false, "验证码错误!");
+                return new CommonVO<> (Boolean.FALSE, "验证码错误!");
             }
         } else if (VerificationCodeEnums.SMS.getMethod ().equals (req.getType ())) {
             if (!ValidationUtils.validateMobile (req.getMobile ())) {
-                return new CommonVO<> (false, "手机号不符合规范！");
+                return new CommonVO<> (Boolean.FALSE, "手机号不符合规范！");
             }
             SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
             smsDtoReq.setMobile (req.getMobile ());
             smsDtoReq.setCode (req.getCode ());
             smsDtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
             if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-                return new CommonVO<> (false, "验证码错误!");
+                return new CommonVO<> (Boolean.FALSE, "验证码错误!");
             }
         } else {
             log.error ("错误的验证码方式!", new BizException (800001, "错误的验证码方式!"));
-            return new CommonVO<> (false, "错误的验证码方式!");
+            return new CommonVO<> (Boolean.FALSE, "错误的验证码方式!");
         }
 
         if (!ValidationUtils.validatePassword (req.getNewPassword ())) {
-            return new CommonVO<> (false, "密码不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "密码不符合规范！");
         }
 
         ResetPasswordDtoReq dtoReq = CopyUtils.copySingle (ResetPasswordDtoReq.class, req);
@@ -165,14 +165,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> bindEmail(EmailReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            return new CommonVO<> (false, "邮箱不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "邮箱不符合规范！");
         }
         EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
         emailDtoReq.setEmail (req.getEmail ());
         emailDtoReq.setCode (req.getCode ());
         emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
         if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-            return new CommonVO<> (false, "验证码错误!");
+            return new CommonVO<> (Boolean.FALSE, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         BindEmailDtoReq dtoReq = CopyUtils.copySingle (BindEmailDtoReq.class, req);
@@ -184,14 +184,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> unbindEmail(EmailReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            return new CommonVO<> (false, "邮箱不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "邮箱不符合规范！");
         }
         EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
         emailDtoReq.setEmail (req.getEmail ());
         emailDtoReq.setCode (req.getCode ());
         emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
         if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-            return new CommonVO<> (false, "验证码错误!");
+            return new CommonVO<> (Boolean.FALSE, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (userInfo.getUser ().getUserId ()).getResult ();
@@ -201,14 +201,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> bindMobile(MobileReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "手机号不符合规范！");
         }
         SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
         smsDtoReq.setMobile (req.getMobile ());
         smsDtoReq.setCode (req.getCode ());
         smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
         if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-            return new CommonVO<> (false, "验证码错误!");
+            return new CommonVO<> (Boolean.FALSE, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         BindMobileDtoReq dtoReq = CopyUtils.copySingle (BindMobileDtoReq.class, req);
@@ -220,14 +220,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> unbindMobile(MobileReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "手机号不符合规范！");
         }
         SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
         smsDtoReq.setMobile (req.getMobile ());
         smsDtoReq.setCode (req.getCode ());
         smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
         if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-            return new CommonVO<> (false, "验证码错误!");
+            return new CommonVO<> (Boolean.FALSE, "验证码错误!");
         }
         UserDetailInfoVO userInfo = getUserInfo ();
         CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (userInfo.getUser ().getUserId ()).getResult ();
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonVO<Boolean> resetUserName(ResetUserNameReq req) {
         if (!ValidationUtils.validateUserName (req.getUserName ())) {
-            return new CommonVO<> (false, "用户名不符合规范！");
+            return new CommonVO<> (Boolean.FALSE, "用户名不符合规范！");
         }
 
         ResetUserNameDtoReq dtoReq = CopyUtils.copySingle (ResetUserNameDtoReq.class, req);
