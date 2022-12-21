@@ -40,6 +40,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作！");
         }
+        // TODO 校验收藏内容与收藏夹类型是否匹配
         UserCollection collection = CopyUtils.copySingle (UserCollection.class, dtoReq);
         int insert = baseMapper.insert (collection);
         if (insert == 1) {
