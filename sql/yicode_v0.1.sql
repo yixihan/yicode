@@ -453,7 +453,7 @@ CREATE TABLE `user_favorite`
     `id`             bigint(20) UNSIGNED                             NOT NULL AUTO_INCREMENT COMMENT '主键 id',
     `favorite_id`    bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '收藏夹 id',
     `user_id`        bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `favorite_type`  varchar(10)                                     NOT NULL DEFAULT 0 COMMENT '收藏类型(QUESTION : 问题, NOTE : 题解)',
+    `favorite_type`  varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 0 COMMENT '收藏类型(QUESTION : 问题, NOTE : 题解)',
     `favorite_name`  varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '收藏夹名',
     `favorite_count` int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏数量',
     `create_time`    datetime                                        NOT NULL COMMENT '创建时间',
@@ -510,7 +510,7 @@ CREATE TABLE `user_info`
     `user_avatar`    varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户头像',
     `user_province`  char(6) CHARACTER SET utf8 COLLATE utf8_bin      NOT NULL DEFAULT '' COMMENT '用户省份',
     `user_city`      char(6) CHARACTER SET utf8 COLLATE utf8_bin      NOT NULL DEFAULT '' COMMENT '用户城市',
-    `user_sex`       int(11)                                          NOT NULL DEFAULT 0 COMMENT '用户性别(0:保密, 1:男, 2:女)',
+    `user_sex`       varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT 0 COMMENT '用户性别(SECRECY:保密, MAN:男, WOMAN:女)',
     `user_sign`      varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户签名',
     `user_school`    varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户学校',
     `user_birth`     datetime                                         NULL     DEFAULT NULL COMMENT '用户生日',
@@ -530,6 +530,32 @@ CREATE TABLE `user_info`
 
 -- ----------------------------
 -- Records of user_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for user_favorite
+-- ----------------------------
+DROP TABLE IF EXISTS `user_label`;
+CREATE TABLE `user_label`
+(
+    `id`          bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键 id',
+    `label_id`    bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '标签 id',
+    `user_id`     bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户 id',
+    `create_time` datetime            NOT NULL COMMENT '创建时间',
+    `update_time` datetime            NOT NULL COMMENT '修改时间',
+    `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
+    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `label_id` (`label_id`) USING BTREE,
+    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  CHARACTER SET = utf8
+  COLLATE = utf8_bin COMMENT = '用户标签表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user_favorite
 -- ----------------------------
 
 -- ----------------------------

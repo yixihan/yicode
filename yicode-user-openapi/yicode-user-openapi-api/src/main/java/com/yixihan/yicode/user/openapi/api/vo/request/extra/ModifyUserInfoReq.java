@@ -33,7 +33,7 @@ public class ModifyUserInfoReq {
     @ApiModelProperty(value = "用户城市")
     private String userCity;
     
-    @ApiModelProperty(value = "用户性别(0:保密, 1:男, 2:女)")
+    @ApiModelProperty(value = "用户性别(SECRECY:保密, MAN:男, WOMAN:女)")
     private Integer userSex;
     
     @ApiModelProperty(value = "用户签名")
@@ -53,7 +53,4 @@ public class ModifyUserInfoReq {
     
     @ApiModelProperty(value = "用户个人网址")
     private List<String> userWebsiteList;
-    
-    @ApiModelProperty(value = "用户语言")
-    private List<String> userLanguageList;
 }
