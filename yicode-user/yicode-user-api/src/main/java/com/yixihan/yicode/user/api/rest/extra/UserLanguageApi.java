@@ -33,7 +33,7 @@ public interface UserLanguageApi {
     ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage (@RequestBody ModifyUserLanguageDtoReq dtoReq);
 
     @ApiOperation("获取用户语言列表")
-    @PostMapping(value = "/get/{userId}", produces = "application/json")
+    @PostMapping(value = "/detail/{userId}", produces = "application/json")
     ApiResult<List<UserLanguageDtoResult>> getUserLanguage (@PathVariable("userId") Long userId);
 
 }

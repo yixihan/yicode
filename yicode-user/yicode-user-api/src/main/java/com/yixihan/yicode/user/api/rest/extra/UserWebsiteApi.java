@@ -33,7 +33,7 @@ public interface UserWebsiteApi {
     ApiResult<CommonDtoResult<Boolean>> delUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("获取用户个人网站列表")
-    @PostMapping(value = "/get/{userId}", produces = "application/json")
+    @PostMapping(value = "/detail/{userId}", produces = "application/json")
     ApiResult<List<UserWebsiteDtoResult>> getUserWebsite (@PathVariable("userId") Long userId);
 
 }

@@ -28,6 +28,6 @@ public interface UserLabelApi {
     ApiResult<CommonDtoResult<Boolean>> addUserLabel (@RequestBody ModifyUserLabelDtoReq dtoReq);
     
     @ApiOperation("获取用户标签列表")
-    @PostMapping(value = "/get/{userId}", produces = "application/json")
+    @PostMapping(value = "/detail/{userId}", produces = "application/json")
     ApiResult<List<UserLabelDtoResult>> getUserLabel (@PathVariable("userId") Long userId);
 }

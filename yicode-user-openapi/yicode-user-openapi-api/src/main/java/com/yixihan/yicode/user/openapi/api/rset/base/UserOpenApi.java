@@ -25,11 +25,11 @@ public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
     @RoleAccess(value = RoleEnums.ADMIN)
-    @PostMapping(value = "/userinfo/{userId}", produces = "application/json")
+    @PostMapping(value = "/{userId}", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo(@PathVariable Long userId);
 
     @ApiOperation ("获取当前登录用户详细信息")
-    @PostMapping(value = "/userinfo/now", produces = "application/json")
+    @PostMapping(value = "/now", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserInfo();
 
     @ApiOperation ("用户注册")

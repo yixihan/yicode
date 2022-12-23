@@ -26,17 +26,17 @@ public interface RoleApi {
     
     @ApiOperation("添加角色")
     @PostMapping(value = "/add/{roleName}", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addRole (@PathVariable String roleName);
+    ApiResult<CommonDtoResult<Boolean>> addRole (@PathVariable("roleName") String roleName);
     
     @ApiOperation ("删除角色")
     @PostMapping(value = "/del/{roleId}", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delRole (@PathVariable Long roleId);
+    ApiResult<CommonDtoResult<Boolean>> delRole (@PathVariable("roleId") Long roleId);
     
     @ApiOperation ("获取用户的角色信息-分页查询")
-    @PostMapping("/role/list")
+    @PostMapping("/list")
     ApiResult<PageDtoResult<RoleDtoResult>> getRolePage(@RequestBody PageDtoReq dtoReq);
     
     @ApiOperation ("获取用户的角色信息")
-    @PostMapping("/role/detail")
+    @PostMapping("/detail")
     ApiResult<List<RoleDtoResult>> getRoleList();
 }

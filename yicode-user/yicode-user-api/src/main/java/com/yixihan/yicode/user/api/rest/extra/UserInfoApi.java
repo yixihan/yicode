@@ -27,6 +27,6 @@ public interface UserInfoApi {
     ApiResult<CommonDtoResult<Boolean>> modifyInfo (@RequestBody ModifyUserInfoDtoReq dtoReq);
 
     @ApiOperation("获取用户资料")
-    @PostMapping(value = "/get/{userId}", produces = "application/json")
+    @PostMapping(value = "/detail/{userId}", produces = "application/json")
     ApiResult<UserInfoDtoResult> getUserInfo (@PathVariable("userId") Long userId);
 }

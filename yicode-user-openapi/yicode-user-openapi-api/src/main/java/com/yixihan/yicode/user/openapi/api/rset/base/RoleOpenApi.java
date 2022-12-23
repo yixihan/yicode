@@ -32,7 +32,7 @@ public interface RoleOpenApi {
     @ApiOperation ("删除角色")
     @RoleAccess(value = RoleEnums.ADMIN)
     @DeleteMapping(value = "/role/del/{roleId}", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delRole (@PathVariable Long roleId);
+    JsonResponse<CommonVO<Boolean>> delRole (@PathVariable("roleId") Long roleId);
     
     @ApiOperation ("用户添加角色")
     @RoleAccess(value = RoleEnums.ADMIN)
@@ -42,7 +42,7 @@ public interface RoleOpenApi {
     @ApiOperation ("用户删除角色")
     @RoleAccess(value = RoleEnums.ADMIN)
     @DeleteMapping(value = "/user/del/{roleId}", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delUserRole (@PathVariable Long roleId);
+    JsonResponse<CommonVO<Boolean>> delUserRole (@PathVariable("roleId") Long roleId);
     
     @ApiOperation ("获取角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)

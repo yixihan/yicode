@@ -34,11 +34,11 @@ public interface UserRoleApi {
     ApiResult<CommonDtoResult<Boolean>> delRole (@RequestBody ModifyUserRoleDtoReq dtoReq);
     
     @ApiOperation ("获取用户的角色信息")
-    @PostMapping("/roleList/{userId}")
+    @PostMapping("/list/{userId}")
     ApiResult<List<RoleDtoResult>> getUserRoleList(@PathVariable("userId") Long userId);
 
     @ApiOperation ("获取用户的角色信息-分页查询")
-    @PostMapping("/role/detail")
+    @PostMapping("/detail")
     ApiResult<PageDtoResult<RoleDtoResult>> getUserRolePage(@RequestBody UserRoleQueryDtoReq dtoReq);
 
 }
