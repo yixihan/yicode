@@ -8,10 +8,7 @@ import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户收藏 OpenApi
@@ -32,12 +29,12 @@ public interface UserFavoriteOpenApi {
     JsonResponse<CommonVO<Boolean>> modifyFavorite (@RequestBody ModifyFavoriteReq req);
     
     @ApiOperation("删除收藏夹")
-    @PostMapping(value = "/del/{favoriteId}", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delFavorite (@PathVariable("favoriteId") Long favoriteId);
+    @PostMapping(value = "/del", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delFavorite (@RequestParam("favoriteId") Long favoriteId);
     
     @ApiOperation("获取收藏夹数量")
-    @PostMapping(value = "/count/{userId}", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> getFavoriteCount (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/count", produces = "application/json")
+    JsonResponse<CommonVO<Integer>> getFavoriteCount (@RequestParam("userId") Long userId);
     
     @ApiOperation("获取所有收藏夹")
     @PostMapping(value = "/detail", produces = "application/json")

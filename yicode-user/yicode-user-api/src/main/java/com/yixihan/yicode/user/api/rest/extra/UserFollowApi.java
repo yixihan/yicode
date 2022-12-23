@@ -30,16 +30,16 @@ public interface UserFollowApi {
     ApiResult<CommonDtoResult<Boolean>> unfollowUser (@RequestBody ModifyFollowDtoReq dtoReq);
 
     @ApiOperation ("获取关注数量")
-    @PostMapping(value = "/count/follow/{userId}", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> getFollowCount (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/count/follow", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> getFollowCount (@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取关注列表")
     @GetMapping(value = "/list/follow", produces = "application/json")
     ApiResult<PageDtoResult<FollowDtoResult>> getFollowList (@RequestBody FollowQueryDtoReq dtoReq);
 
     @ApiOperation ("获取粉丝数量")
-    @PostMapping(value = "/count/fan/{userId}", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> getFanCount (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/count/fan", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> getFanCount (@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取粉丝列表")
     @PostMapping(value = "/list/fan", produces = "application/json")

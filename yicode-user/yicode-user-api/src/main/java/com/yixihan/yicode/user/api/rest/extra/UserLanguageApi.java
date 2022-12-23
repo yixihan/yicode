@@ -7,10 +7,7 @@ import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public interface UserLanguageApi {
     ApiResult<CommonDtoResult<Boolean>> modifyUserLanguage (@RequestBody ModifyUserLanguageDtoReq dtoReq);
 
     @ApiOperation("获取用户语言列表")
-    @PostMapping(value = "/detail/{userId}", produces = "application/json")
-    ApiResult<List<UserLanguageDtoResult>> getUserLanguage (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/detail", produces = "application/json")
+    ApiResult<List<UserLanguageDtoResult>> getUserLanguage (@RequestParam("userId") Long userId);
 
 }

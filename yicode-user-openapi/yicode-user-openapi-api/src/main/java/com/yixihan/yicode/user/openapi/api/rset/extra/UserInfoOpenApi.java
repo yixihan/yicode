@@ -6,10 +6,7 @@ import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户资料 OpenApi
@@ -26,6 +23,6 @@ public interface UserInfoOpenApi {
     JsonResponse<CommonVO<Boolean>> modifyInfo (@RequestBody ModifyUserInfoReq req);
     
     @ApiOperation("获取用户资料")
-    @PostMapping(value = "/detail/{userId}", produces = "application/json")
-    JsonResponse<UserInfoVO> getUserInfo (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/detail", produces = "application/json")
+    JsonResponse<UserInfoVO> getUserInfo (@RequestParam("userId") Long userId);
 }

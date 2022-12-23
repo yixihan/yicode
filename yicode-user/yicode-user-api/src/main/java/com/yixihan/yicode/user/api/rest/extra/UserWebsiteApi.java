@@ -7,10 +7,7 @@ import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public interface UserWebsiteApi {
     ApiResult<CommonDtoResult<Boolean>> delUserWebsite (@RequestBody ModifyUserWebsiteDtoReq dtoReq);
 
     @ApiOperation("获取用户个人网站列表")
-    @PostMapping(value = "/detail/{userId}", produces = "application/json")
-    ApiResult<List<UserWebsiteDtoResult>> getUserWebsite (@PathVariable("userId") Long userId);
+    @PostMapping(value = "/detail", produces = "application/json")
+    ApiResult<List<UserWebsiteDtoResult>> getUserWebsite (@RequestParam("userId") Long userId);
 
 }

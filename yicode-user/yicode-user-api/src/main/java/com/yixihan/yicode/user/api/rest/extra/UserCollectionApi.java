@@ -34,6 +34,6 @@ public interface UserCollectionApi {
     ApiResult<CommonDtoResult<Boolean>> delCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation("获取收藏夹内容")
-    @PostMapping(value = "/get", produces = "application/json")
+    @PostMapping(value = "/detail", produces = "application/json")
     ApiResult<PageDtoResult<CollectionDtoResult>> getCollections(@RequestBody CollectionQueryDtoReq dtoReq);
 }

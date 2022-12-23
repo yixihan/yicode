@@ -8,10 +8,7 @@ import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,8 +31,8 @@ public interface UserRoleApi {
     ApiResult<CommonDtoResult<Boolean>> delRole (@RequestBody ModifyUserRoleDtoReq dtoReq);
     
     @ApiOperation ("获取用户的角色信息")
-    @PostMapping("/list/{userId}")
-    ApiResult<List<RoleDtoResult>> getUserRoleList(@PathVariable("userId") Long userId);
+    @PostMapping("/list")
+    ApiResult<List<RoleDtoResult>> getUserRoleList(@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取用户的角色信息-分页查询")
     @PostMapping("/detail")
