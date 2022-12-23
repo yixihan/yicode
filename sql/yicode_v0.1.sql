@@ -510,7 +510,7 @@ CREATE TABLE `user_info`
     `user_avatar`    varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户头像',
     `user_province`  char(6) CHARACTER SET utf8 COLLATE utf8_bin      NOT NULL DEFAULT '' COMMENT '用户省份',
     `user_city`      char(6) CHARACTER SET utf8 COLLATE utf8_bin      NOT NULL DEFAULT '' COMMENT '用户城市',
-    `user_sex`       varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT 0 COMMENT '用户性别(SECRECY:保密, MAN:男, WOMAN:女)',
+    `user_sex`       varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT 'SECRECY' COMMENT '用户性别(SECRECY:保密, MAN:男, WOMAN:女)',
     `user_sign`      varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户签名',
     `user_school`    varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '用户学校',
     `user_birth`     datetime                                         NULL     DEFAULT NULL COMMENT '用户生日',

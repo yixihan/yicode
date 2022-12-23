@@ -47,19 +47,20 @@ public class UserInfoServiceImpl implements UserInfoService {
             return new CommonVO<> ();
         }
         Boolean flag = Boolean.TRUE;
+        Long userId = userService.getUserInfo ().getUserInfo ().getUserId ();
     
         // 如果网站列表不为空, 则修改网站列表
         if (CollectionUtil.isNotEmpty (req.getUserWebsiteList ())) {
-            flag = modifyUserWebsite (
-                    userService.getUserInfo ().getUserInfo ().getUserId (),
+            flag = modifyUserWebsite (userId,
                     req.getUserWebsiteList ()
             );
         }
     
         ModifyUserInfoDtoReq dtoReq = CopyUtils.copySingle (ModifyUserInfoDtoReq.class, req);
+        dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
         return dtoResult.getData () && flag ?
-                new CommonVO<> () :
+                new CommonVO<> (Boolean.TRUE) :
                 new CommonVO<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
     }
     

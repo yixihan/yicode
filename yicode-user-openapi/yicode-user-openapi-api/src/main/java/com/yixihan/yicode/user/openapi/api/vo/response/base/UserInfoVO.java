@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.openapi.api.vo.response.base;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class UserInfoVO {
     private String userCity;
 
     @ApiModelProperty(value = "用户性别(SECRECY:保密, MAN:男, WOMAN:女)")
-    private Integer userSex;
+    private String userSex;
 
     @ApiModelProperty(value = "用户签名")
     private String userSign;
@@ -45,6 +46,7 @@ public class UserInfoVO {
     private String userSchool;
 
     @ApiModelProperty(value = "用户生日")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date userBirth;
 
     @ApiModelProperty(value = "用户真实姓名")

@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -41,7 +42,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
             return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作！");
         }
         // TODO 校验收藏内容与收藏夹类型是否匹配
-        UserCollection collection = CopyUtils.copySingle (UserCollection.class, dtoReq);
+        UserCollection collection = BeanUtil.toBean (dtoReq, UserCollection.class);
         int insert = baseMapper.insert (collection);
         if (insert == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

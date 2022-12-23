@@ -8,10 +8,7 @@ import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户 OpenApi
@@ -25,8 +22,8 @@ public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
     @RoleAccess(value = RoleEnums.ADMIN)
-    @PostMapping(value = "/{userId}", produces = "application/json")
-    JsonResponse<UserDetailInfoVO> getUserInfo(@PathVariable Long userId);
+    @PostMapping(value = "/detail", produces = "application/json")
+    JsonResponse<UserDetailInfoVO> getUserInfo(@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取当前登录用户详细信息")
     @PostMapping(value = "/now", produces = "application/json")

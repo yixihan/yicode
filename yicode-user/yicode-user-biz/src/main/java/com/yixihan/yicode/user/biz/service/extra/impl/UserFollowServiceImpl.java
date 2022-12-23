@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,7 +33,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
     @Override
     public CommonDtoResult<Boolean> followUser(ModifyFollowDtoReq dtoReq) {
-        UserFollow follow = CopyUtils.copySingle (UserFollow.class, dtoReq);
+        UserFollow follow = BeanUtil.toBean (dtoReq, UserFollow.class);
         int modify = baseMapper.insert (follow);
         if (modify == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

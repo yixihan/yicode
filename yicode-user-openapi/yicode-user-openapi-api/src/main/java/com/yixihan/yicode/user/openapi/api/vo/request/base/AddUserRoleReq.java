@@ -20,4 +20,7 @@ public class AddUserRoleReq {
     
     @ApiModelProperty(value = "角色 ID")
     private Long roleId;
+    
+    @ApiModelProperty(value = "用户 ID")
+    private Long userId;
 }

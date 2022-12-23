@@ -74,8 +74,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         if (roleService.hasRole (dtoReq.getRoleId ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "无此角色！");
         }
+        if (baseMapper.selectCount (new QueryWrapper<UserRole> ()
+                .eq (UserRole.USER_ID, dtoReq.getUserId ())
+                .eq (UserRole.ROLE_ID, dtoReq.getRoleId ())) > 0) {
+            return new CommonDtoResult<> (Boolean.FALSE, "该用户已添加该角色");
+        }
         
-        UserRole userRole = CopyUtils.copySingle (UserRole.class, dtoReq);
+        UserRole userRole = new UserRole ();
+        userRole.setUserId (dtoReq.getUserId ());
+        userRole.setRoleId (dtoReq.getRoleId ());
         int modify = baseMapper.insert (userRole);
         if (modify == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

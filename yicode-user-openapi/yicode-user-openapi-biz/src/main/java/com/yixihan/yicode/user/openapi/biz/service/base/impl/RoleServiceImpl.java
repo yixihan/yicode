@@ -75,15 +75,8 @@ public class RoleServiceImpl implements RoleService {
     
     @Override
     public CommonVO<Boolean> addUserRole(AddUserRoleReq req) {
-        // 校验角色 ID 是否合规(需存在)
-        if (roleFeignClient.getRoleList ().getResult ()
-                .stream ().noneMatch ((o) -> o.getRoleId ().equals (req.getRoleId ()))) {
-            return new CommonVO<> (Boolean.FALSE, "该角色不存在！");
-        }
-        
         // 用户添加角色
         ModifyUserRoleDtoReq dtoReq = CopyUtils.copySingle (ModifyUserRoleDtoReq.class, req);
-        dtoReq.setUserId (userService.getUserInfo ().getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.addRole (dtoReq).getResult ();
         return CommonVO.create (dtoResult);
     }
@@ -91,11 +84,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public CommonVO<Boolean> delUserRole(Long roleId) {
         Long userId = userService.getUserInfo ().getUser ().getUserId ();
-        // 校验角色 ID 是否合规(需用户拥有该角色)
-        if (userRoleFeignClient.getUserRoleList (userId).getResult ()
-                .stream ().noneMatch ((o) -> o.getRoleId ().equals (roleId))) {
-            return new CommonVO<> (Boolean.FALSE, "该角色不存在！");
-        }
         
         // 删除用户角色
         ModifyUserRoleDtoReq dtoReq = new ModifyUserRoleDtoReq (userId, roleId);

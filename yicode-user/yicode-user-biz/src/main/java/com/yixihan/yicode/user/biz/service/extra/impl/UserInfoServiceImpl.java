@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -47,7 +48,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public CommonDtoResult<Boolean> modifyInfo(ModifyUserInfoDtoReq dtoReq) {
-        UserInfo info = CopyUtils.copySingle (UserInfo.class, dtoReq);
+        UserInfo info = BeanUtil.toBean (dtoReq, UserInfo.class);
         UpdateWrapper<UserInfo> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, info.getUserId ());
         int update = baseMapper.update (info, wrapper);
@@ -62,8 +63,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public UserInfoDtoResult getUserInfo(Long userId) {
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, userId);
-        UserInfo info = Optional.ofNullable (baseMapper.selectOne (wrapper))
-                .orElse (new UserInfo ());
+        UserInfo info = baseMapper.selectOne (wrapper);
+        info = Optional.ofNullable (info).orElse (new UserInfo ());
     
         UserInfoDtoResult userInfoDtoResult = CopyUtils.copySingle (UserInfoDtoResult.class, info);
         userInfoDtoResult.setUserWebsiteList (getUserWebSiteList (userId));

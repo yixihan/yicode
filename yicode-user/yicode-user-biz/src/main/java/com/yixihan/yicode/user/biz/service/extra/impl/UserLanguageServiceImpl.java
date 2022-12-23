@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,7 +31,7 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
     
     @Override
     public CommonDtoResult<Boolean> addUserLanguage(ModifyUserLanguageDtoReq dtoReq) {
-        UserLanguage language = CopyUtils.copySingle (UserLanguage.class, dtoReq);
+        UserLanguage language = BeanUtil.toBean (dtoReq, UserLanguage.class);
         
         int insert = baseMapper.insert (language);
         if (insert == 1) {

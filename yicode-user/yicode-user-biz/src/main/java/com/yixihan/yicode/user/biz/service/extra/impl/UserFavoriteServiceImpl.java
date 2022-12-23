@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -36,7 +37,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
 
     @Override
     public CommonDtoResult<Boolean> addFavorite(AddFavoriteDtoReq dtoReq) {
-        UserFavorite favorite = CopyUtils.copySingle (UserFavorite.class, dtoReq);
+        UserFavorite favorite = BeanUtil.toBean (dtoReq, UserFavorite.class);
         int insert = baseMapper.insert (favorite);
         if (insert == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

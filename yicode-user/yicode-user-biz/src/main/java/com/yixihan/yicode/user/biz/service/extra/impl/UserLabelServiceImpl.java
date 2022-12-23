@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -33,7 +34,7 @@ public class UserLabelServiceImpl extends ServiceImpl<UserLabelMapper, UserLabel
         // TODO 校验用户标签是否存在
         
         // 添加标签
-        UserLabel label = CopyUtils.copySingle (UserLabel.class, dtoReq);
+        UserLabel label = BeanUtil.toBean (dtoReq, UserLabel.class);
         int modify = baseMapper.insert (label);
         if (modify == 1) {
             return new CommonDtoResult<> (Boolean.TRUE);

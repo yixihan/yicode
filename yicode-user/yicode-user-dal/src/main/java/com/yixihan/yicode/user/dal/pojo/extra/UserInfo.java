@@ -45,7 +45,7 @@ public class UserInfo implements Serializable {
     private String userCity;
 
     @ApiModelProperty(value = "用户性别(SECRECY:保密, MAN:男, WOMAN:女)")
-    private Integer userSex;
+    private String userSex;
 
     @ApiModelProperty(value = "用户签名")
     private String userSign;

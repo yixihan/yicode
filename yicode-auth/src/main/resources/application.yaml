@@ -23,8 +23,8 @@ feign:
       name: yicode-thirdpart
     config:
       yicode-user:
-        connect-timeout: 5000
-        read-timeout: 5000
+        connect-timeout: 30000
+        read-timeout: 30000
 
 
 management:

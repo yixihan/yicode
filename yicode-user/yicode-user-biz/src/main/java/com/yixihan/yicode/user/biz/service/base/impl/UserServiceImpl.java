@@ -19,10 +19,12 @@ import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
 import com.yixihan.yicode.user.biz.service.base.UserService;
+import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
 import com.yixihan.yicode.user.dal.mapper.base.UserMapper;
 import com.yixihan.yicode.user.dal.pojo.base.User;
 import com.yixihan.yicode.user.dal.pojo.base.UserRole;
+import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,6 +53,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserInfoService userInfoService;
+    
+    @Resource
+    private UserFavoriteService userFavoriteService;
 
     @Resource
     private PasswordEncoder passwordEncoder;
@@ -169,6 +174,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!flag) {
             log.error ("用户注册-用户信息表插入失败!");
             throw new BizException ("用户注册-用户信息表插入失败!");
+        }
+    
+        UserFavorite favorite = new UserFavorite ();
+        favorite.setUserId (user.getUserId ());
+        favorite.setFavoriteName ("默认收藏夹");
+        favorite.setFavoriteCount (0);
+    
+        // 插入用户收藏夹表
+        flag = userFavoriteService.save (favorite);
+        if (!flag) {
+            log.error ("用户注册-用户收藏夹表插入失败!");
+            throw new BizException ("用户注册-用户收藏夹表插入失败!");
         }
 
         return new CommonDtoResult<> (true, "用户注册成功");
