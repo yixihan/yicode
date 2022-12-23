@@ -4,7 +4,7 @@ import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.exception.RRException;
 import com.yixihan.yicode.common.util.JsonResponse;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author yixihan
  * @date 2022-10-23-14:31
  */
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-
+    
+    
     /**
      * 通用业务异常捕获
      *
@@ -30,9 +31,10 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = BizException.class)
     public JsonResponse<Object> handleBizException (BizException e) {
+        log.error ("出现异常", e);
         return JsonResponse.error (e.getErrorCode (), e.getErrorMsg ());
     }
-
+    
     /**
      * 自定义异常捕获
      *
@@ -40,9 +42,10 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = RRException.class)
     public JsonResponse<Object> handleRRException (RRException e) {
+        log.error ("出现异常", e);
         return JsonResponse.error (e.getCode (), e.getMessage ());
     }
-
+    
     /**
      * 参数校验异常捕获
      * <br>
@@ -60,9 +63,10 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField()+fieldError.getDefaultMessage();
             }
         }
+        log.error ("出现异常", e);
         return JsonResponse.error (BizCodeEnum.PARAMS_VALID_ERR.getErrorCode (), message);
     }
-
+    
     /**
      * 参数校验异常捕获
      * <br>
@@ -80,26 +84,22 @@ public class GlobalExceptionHandler {
                 message = fieldError.getField()+fieldError.getDefaultMessage();
             }
         }
+        log.error ("出现异常", e);
         return JsonResponse.error (BizCodeEnum.PARAMS_VALID_ERR.getErrorCode (), message);
     }
-
-
+    
+    
     @ResponseBody
     @ExceptionHandler(value = NullPointerException.class)
     public JsonResponse<Object> handleNullPointerException (NullPointerException e) {
+        log.error ("出现异常", e);
         return JsonResponse.error (BizCodeEnum.NULL_ERR);
     }
-
-
-    @ResponseBody
-    @ExceptionHandler(value = InternalAuthenticationServiceException.class)
-    public JsonResponse<Object> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
-        return JsonResponse.error (e.getMessage ());
-    }
-
+    
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public JsonResponse<Object> handleException (Exception e) {
+        log.error ("出现异常", e);
         return JsonResponse.error (BizCodeEnum.FAILED_TYPE_INTERNAL, e.getMessage ());
     }
 }
