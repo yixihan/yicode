@@ -64,6 +64,9 @@ public class UserServiceImpl implements UserService {
         String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
                 .substring (AuthConstant.TOKEN_SUB_INDEX);
         UserDtoResult result = userFeignClient.getUserByToken (token).getResult ();
+        if (result.getUserId () == null) {
+            return new UserDetailInfoVO ();
+        }
         UserDetailInfoDtoResult dtoResult = userFeignClient.getUserInfo (result.getUserId ()).getResult ();
         return getUserDetailInfoVO (dtoResult);
     }

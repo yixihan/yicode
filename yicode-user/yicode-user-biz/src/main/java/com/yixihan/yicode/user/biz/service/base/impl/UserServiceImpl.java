@@ -17,13 +17,13 @@ import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
-import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
 import com.yixihan.yicode.user.biz.service.base.UserService;
+import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
 import com.yixihan.yicode.user.dal.mapper.base.UserMapper;
 import com.yixihan.yicode.user.dal.pojo.base.User;
-import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import com.yixihan.yicode.user.dal.pojo.base.UserRole;
+import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <p>
@@ -82,7 +82,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_ID, userId);
         User user = baseMapper.selectOne (wrapper);
-        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+        return CopyUtils.copySingle (
+                UserDtoResult.class,
+                Optional.ofNullable (user).orElse (new User ()));
     }
 
     @Override
@@ -90,7 +92,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_NAME, userName);
         User user = baseMapper.selectOne (wrapper);
-        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+        return CopyUtils.copySingle (
+                UserDtoResult.class,
+                Optional.ofNullable (user).orElse (new User ()));
     }
 
     @Override
@@ -98,7 +102,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_MOBILE, mobile);
         User user = baseMapper.selectOne (wrapper);
-        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+        return CopyUtils.copySingle (
+                UserDtoResult.class,
+                Optional.ofNullable (user).orElse (new User ()));
     }
 
     @Override
@@ -111,8 +117,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserDtoResult getUserByToken(String token) {
-        String str = Objects.requireNonNull (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token)).toString ();
-        return JSONUtil.toBean (str, UserDtoResult.class);
+        Object str = Optional.ofNullable (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token))
+                .orElse ("");
+        
+        if (StrUtil.isBlankIfStr (str)) {
+            return new UserDtoResult ();
+        }
+        return JSONUtil.toBean (str.toString (), UserDtoResult.class);
     }
 
     @Override
