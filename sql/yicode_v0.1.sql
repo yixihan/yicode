@@ -31,7 +31,7 @@ CREATE TABLE `collection`
     `version`       int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`      int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE,
+    INDEX `favorite_id` (`favorite_id`) USING BTREE,
     UNIQUE INDEX `collection_id` (`collection_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -63,9 +63,9 @@ CREATE TABLE `comment_reply`
     `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `reply_id` (`reply_id`) USING BTREE,
-    UNIQUE INDEX `root_id` (`root_id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `root_id` (`root_id`) USING BTREE,
+    INDEX `question_id` (`question_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -97,8 +97,8 @@ CREATE TABLE `comment_root`
     `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `root_id` (`root_id`) USING BTREE,
-    UNIQUE INDEX `answer_id` (`answer_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `answer_id` (`answer_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -124,8 +124,8 @@ CREATE TABLE `daily_question`
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `question_id` (`question_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -216,7 +216,7 @@ CREATE TABLE `note_label`
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `note_id` (`note_id`) USING BTREE,
-    UNIQUE INDEX `label_id` (`label_id`) USING BTREE
+    INDEX `label_id` (`label_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -265,6 +265,7 @@ CREATE TABLE `question_answer`
 (
     `id`                    bigint(20) UNSIGNED                              NOT NULL AUTO_INCREMENT COMMENT '主键 id',
     `question_id`           bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '问题 id',
+    `user_id`               bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '用户 id',
     `answer_type`           varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '代码语言类型',
     `answer_code`           text CHARACTER SET utf8 COLLATE utf8_bin         NULL COMMENT '代码',
     `answer_flag`           varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '代码运行结果(acm模式运行结果)',
@@ -276,7 +277,8 @@ CREATE TABLE `question_answer`
     `version`               int(10) UNSIGNED                                 NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`              int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE
+    INDEX `question_id` (`question_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -301,8 +303,8 @@ CREATE TABLE `question_label`
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
-    UNIQUE INDEX `label_id` (`label_id`) USING BTREE
+    INDEX `question_id` (`question_id`) USING BTREE,
+    INDEX `label_id` (`label_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -334,8 +336,8 @@ CREATE TABLE `question_note`
     `del_flag`         int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `note_id` (`note_id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `question_id` (`question_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -462,7 +464,7 @@ CREATE TABLE `user_favorite`
     `del_flag`       int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -472,6 +474,9 @@ CREATE TABLE `user_favorite`
 -- ----------------------------
 -- Records of user_favorite
 -- ----------------------------
+INSERT INTO `user_favorite`(favorite_id, user_id, favorite_type, favorite_name, favorite_count, create_time,
+                            update_time, version, del_flag)
+VALUES (1, 1, 'QUESTION', '默认收藏夹', 0, '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_follow
@@ -487,8 +492,8 @@ CREATE TABLE `user_follow`
     `version`        int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`       int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
-    UNIQUE INDEX `follow_user_id` (`follow_user_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE,
+    INDEX `follow_user_id` (`follow_user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -530,7 +535,8 @@ CREATE TABLE `user_info`
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-
+INSERT INTO `user_info`(user_id, create_time, update_time, version, del_flag)
+VALUES (1, '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 -- ----------------------------
 -- Table structure for user_favorite
 -- ----------------------------
@@ -545,8 +551,8 @@ CREATE TABLE `user_label`
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `label_id` (`label_id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `label_id` (`label_id`) USING BTREE,
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -572,7 +578,7 @@ CREATE TABLE `user_language`
     `version`     int(10) UNSIGNED                                NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`    int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -623,8 +629,8 @@ CREATE TABLE `user_question_record`
     `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE,
-    UNIQUE INDEX `question_id` (`question_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE,
+    INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
@@ -679,7 +685,7 @@ CREATE TABLE `user_website`
     `version`      int(10) UNSIGNED                                 NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`     int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `user_id` (`user_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8
