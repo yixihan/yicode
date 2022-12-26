@@ -70,7 +70,7 @@ public class UserController implements UserOpenApi {
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> cancellation() {
-        return JsonResponse.ok (userService.cancellation ());
+    public JsonResponse<CommonVO<Boolean>> cancellation(Long userId) {
+        return JsonResponse.ok (userService.cancellation (userId));
     }
 }

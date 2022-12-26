@@ -253,9 +253,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonVO<Boolean> cancellation() {
-        UserDetailInfoVO userInfo = getUserInfo ();
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userInfo.getUser ().getUserId ()).getResult ();
+    public CommonVO<Boolean> cancellation(Long userId) {
+        CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userId).getResult ();
         return CommonVO.create (dtoResult);
     }
     

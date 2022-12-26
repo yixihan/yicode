@@ -79,8 +79,9 @@ public interface UserService {
     /**
      * 用户注销
      *
+     * @param userId 用户 ID
      */
-    CommonVO<Boolean> cancellation();
+    CommonVO<Boolean> cancellation(Long userId);
     
     /**
      * 校验用户 ID 是否存在

@@ -58,6 +58,6 @@ public interface UserOpenApi {
     JsonResponse<CommonVO<Boolean>> resetUserName (@RequestBody ResetUserNameReq req);
 
     @ApiOperation ("用户注销")
-    @PostMapping(value = "/cancellation", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> cancellation ();
+    @DeleteMapping(value = "/cancellation", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> cancellation (@RequestParam("userId") Long userId);
 }
