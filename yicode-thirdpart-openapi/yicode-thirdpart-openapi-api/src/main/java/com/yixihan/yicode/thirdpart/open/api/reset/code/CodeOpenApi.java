@@ -21,7 +21,7 @@ import java.io.IOException;
 public interface CodeOpenApi {
 
     @ApiOperation("生成图形验证码")
-    @PostMapping("/create")
+    @GetMapping("/create")
     void createCode(HttpServletResponse response, @RequestParam("uuid") String uuid) throws IOException;
 
     @ApiOperation ("校验验证码")

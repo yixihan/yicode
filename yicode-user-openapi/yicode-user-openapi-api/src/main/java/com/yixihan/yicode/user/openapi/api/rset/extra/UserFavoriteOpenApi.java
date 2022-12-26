@@ -29,15 +29,15 @@ public interface UserFavoriteOpenApi {
     JsonResponse<CommonVO<Boolean>> modifyFavorite (@RequestBody ModifyFavoriteReq req);
     
     @ApiOperation("删除收藏夹")
-    @PostMapping(value = "/del", produces = "application/json")
+    @DeleteMapping(value = "/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delFavorite (@RequestParam("favoriteId") Long favoriteId);
     
     @ApiOperation("获取收藏夹数量")
-    @PostMapping(value = "/count", produces = "application/json")
+    @GetMapping(value = "/count", produces = "application/json")
     JsonResponse<CommonVO<Integer>> getFavoriteCount (@RequestParam("userId") Long userId);
     
     @ApiOperation("获取所有收藏夹")
-    @PostMapping(value = "/detail", produces = "application/json")
+    @GetMapping(value = "/detail", produces = "application/json")
     JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
     
     @ApiOperation ("收藏内容")
@@ -45,10 +45,10 @@ public interface UserFavoriteOpenApi {
     JsonResponse<CommonVO<Boolean>> addCollection (@RequestBody ModifyCollectionReq req);
     
     @ApiOperation ("取消收藏内容")
-    @PostMapping(value = "/collection/del", produces = "application/json")
+    @DeleteMapping(value = "/collection/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delCollection (@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("获取收藏夹内容")
-    @PostMapping(value = "/collection/detail", produces = "application/json")
+    @GetMapping(value = "/collection/detail", produces = "application/json")
     JsonResponse<PageVO<CollectionVO>> getCollections(@RequestBody CollectionQueryReq req);
 }

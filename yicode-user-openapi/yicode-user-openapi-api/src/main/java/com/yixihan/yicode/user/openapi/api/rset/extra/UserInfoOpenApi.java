@@ -23,6 +23,6 @@ public interface UserInfoOpenApi {
     JsonResponse<CommonVO<Boolean>> modifyInfo (@RequestBody ModifyUserInfoReq req);
     
     @ApiOperation("获取用户资料")
-    @PostMapping(value = "/detail", produces = "application/json")
+    @GetMapping(value = "/detail", produces = "application/json")
     JsonResponse<UserInfoVO> getUserInfo (@RequestParam("userId") Long userId);
 }
