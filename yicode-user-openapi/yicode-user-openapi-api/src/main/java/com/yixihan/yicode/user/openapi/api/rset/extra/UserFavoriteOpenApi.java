@@ -37,7 +37,7 @@ public interface UserFavoriteOpenApi {
     JsonResponse<CommonVO<Integer>> getFavoriteCount (@RequestParam("userId") Long userId);
     
     @ApiOperation("获取所有收藏夹")
-    @GetMapping(value = "/detail", produces = "application/json")
+    @PostMapping(value = "/detail", produces = "application/json")
     JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
     
     @ApiOperation ("收藏内容")
@@ -49,6 +49,6 @@ public interface UserFavoriteOpenApi {
     JsonResponse<CommonVO<Boolean>> delCollection (@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("获取收藏夹内容")
-    @GetMapping(value = "/collection/detail", produces = "application/json")
+    @PostMapping(value = "/collection/detail", produces = "application/json")
     JsonResponse<PageVO<CollectionVO>> getCollections(@RequestBody CollectionQueryReq req);
 }

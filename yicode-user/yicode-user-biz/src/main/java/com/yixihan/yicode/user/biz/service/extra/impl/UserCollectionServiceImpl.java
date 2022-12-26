@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -18,6 +19,7 @@ import com.yixihan.yicode.user.dal.mapper.extra.UserCollectionMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserCollection;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
@@ -37,18 +39,40 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     private UserFavoriteService favoriteService;
     
     @Override
+    @Transactional(rollbackFor = BizException.class)
     public CommonDtoResult<Boolean> addCollection(ModifyCollectionDtoReq dtoReq) {
+        // 校验收藏夹是否存在
         if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作！");
         }
         // TODO 校验收藏内容与收藏夹类型是否匹配
+        
+        // 校验是否重复收藏
+        if (baseMapper.selectCount (new QueryWrapper<UserCollection> ()
+                .eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
+                .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ())) > 0) {
+            return new CommonDtoResult<> (Boolean.FALSE, "请勿重复收藏内容");
+        }
+        
+        // 收藏内容
         UserCollection collection = BeanUtil.toBean (dtoReq, UserCollection.class);
         int insert = baseMapper.insert (collection);
-        if (insert == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (insert != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        
+        // 更新收藏夹
+        UserFavorite favorite = favoriteService.getOne (new QueryWrapper<UserFavorite> ()
+                .eq (UserFavorite.USER_ID, dtoReq.getUserId ())
+                .eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
+        );
+        favorite.setFavoriteCount (favorite.getFavoriteCount () + 1);
+        boolean modify = favoriteService.updateById (favorite);
+        if (!modify) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
+ 
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

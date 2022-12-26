@@ -13,6 +13,7 @@ import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.openapi.api.enums.FavoriteTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserCollectionFeignClient;
@@ -49,7 +50,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         if (StrUtil.isBlank (req.getFavoriteName ())) {
             return new CommonVO<> (Boolean.FALSE, "收藏夹不能为空!");
         }
-        if (FavoriteTypeEnums.contains (req.getFavoriteType ())) {
+        if (!FavoriteTypeEnums.contains (req.getFavoriteType ())) {
             return new CommonVO<> (Boolean.FALSE, "收藏夹类型错误!");
         }
         
@@ -70,7 +71,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         if (StrUtil.isBlank (req.getFavoriteName ())) {
             return new CommonVO<> (Boolean.FALSE, "收藏夹不能为空!");
         }
-        if (req.getFavoriteCount () == null || req.getFavoriteCount () <= NumConstant.NUM_0) {
+        if (req.getFavoriteCount () == null || req.getFavoriteCount () < NumConstant.NUM_0) {
             return new CommonVO<> (Boolean.FALSE, "收藏数量不能为空或小于零!");
         }
         
@@ -106,9 +107,11 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     @Override
     public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
         FavoriteQueryDtoReq dtoReq = CopyUtils.copySingle (FavoriteQueryDtoReq.class, req);
-        dtoReq.setUserId (userService.getUserInfo ().getUser ().getUserId ());
+        UserVO user = userService.getUserInfo ().getUser ();
+        dtoReq.setUserId (user.getUserId ());
 
         PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
+        dtoResult.getRecords ().forEach ((o) -> o.setUserName (user.getUserName ()));
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
                 (o) -> CopyUtils.copySingle (FavoriteVO.class, o)

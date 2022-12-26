@@ -18,10 +18,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for collection
+-- Table structure for user_collection
 -- ----------------------------
-DROP TABLE IF EXISTS `collection`;
-CREATE TABLE `collection`
+DROP TABLE IF EXISTS `user_collection`;
+CREATE TABLE `user_collection`
 (
     `id`            bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键 id',
     `favorite_id`   bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收藏夹 id',
@@ -32,7 +32,7 @@ CREATE TABLE `collection`
     `del_flag`      int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `favorite_id` (`favorite_id`) USING BTREE,
-    UNIQUE INDEX `collection_id` (`collection_id`) USING BTREE
+    INDEX `collection_id` (`collection_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8

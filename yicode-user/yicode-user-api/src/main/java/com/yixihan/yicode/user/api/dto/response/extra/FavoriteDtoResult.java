@@ -33,7 +33,7 @@ public class FavoriteDtoResult {
     private String userName;
 
     @ApiModelProperty(value = "收藏类型 (0:题, 1:题解)")
-    private Integer favoriteType;
+    private String favoriteType;
 
     @ApiModelProperty(value = "收藏夹名")
     private String favoriteName;
