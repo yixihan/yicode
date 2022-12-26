@@ -46,11 +46,11 @@ public interface RoleOpenApi {
     
     @ApiOperation ("获取角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)
-    @GetMapping(value = "/role/detail", produces = "application/json")
+    @PostMapping(value = "/role/detail", produces = "application/json")
     JsonResponse<PageVO<RoleVO>> getRolePage (@RequestBody PageReq req);
     
     @ApiOperation ("获取用户拥有角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)
-    @GetMapping(value = "/user/role/detail", produces = "application/json")
+    @PostMapping(value = "/user/role/detail", produces = "application/json")
     JsonResponse<PageVO<RoleVO>> getUserRolePage (@RequestBody UserRoleQueryReq req);
 }

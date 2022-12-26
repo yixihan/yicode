@@ -33,7 +33,7 @@ public interface UserFollowOpenApi {
     JsonResponse<CommonVO<Integer>> getFollowCount (@RequestParam("userId") Long userId);
     
     @ApiOperation ("获取关注列表")
-    @GetMapping(value = "/follow/detail", produces = "application/json")
+    @PostMapping(value = "/follow/detail", produces = "application/json")
     JsonResponse<PageVO<FollowVO>> getFollowList (@RequestBody FollowQueryReq req);
     
     @ApiOperation ("获取粉丝数量")
@@ -41,6 +41,6 @@ public interface UserFollowOpenApi {
     JsonResponse<CommonVO<Integer>> getFanCount (@RequestParam("userId") Long userId);
     
     @ApiOperation ("获取粉丝列表")
-    @GetMapping(value = "/fan/detail", produces = "application/json")
+    @PostMapping(value = "/fan/detail", produces = "application/json")
     JsonResponse<PageVO<FollowVO>> getFanList (@RequestBody FollowQueryReq req);
 }
