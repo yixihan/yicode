@@ -34,7 +34,7 @@ public interface UserFollowApi {
     ApiResult<CommonDtoResult<Integer>> getFollowCount (@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取关注列表")
-    @GetMapping(value = "/list/follow", produces = "application/json")
+    @PostMapping(value = "/list/follow", produces = "application/json")
     ApiResult<PageDtoResult<FollowDtoResult>> getFollowList (@RequestBody FollowQueryDtoReq dtoReq);
 
     @ApiOperation ("获取粉丝数量")

@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.user.dal.mapper.base.UserMapper">
 
+    <select id="getUserCommonInfo"
+            resultType="com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult">
+        select u.`user_id`, u.`user_name`, i.`user_avatar`
+        from `user` u
+        left join `user_info` i
+        on u.`user_id` = i.`user_id`
+        <where>
+            u.`del_flag` = 0
+            and i.`del_flag` = 0
+            <foreach collection="userIdList" item="item" open="and u.`user_id` in (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </where>
+    </select>
 </mapper>

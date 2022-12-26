@@ -3,9 +3,12 @@ package com.yixihan.yicode.user.biz.service.base;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.dal.pojo.base.User;
+
+import java.util.List;
 
 /**
  * <p>
@@ -141,4 +144,12 @@ public interface UserService extends IService<User> {
      * @param mobile 手机号
      */
     CommonDtoResult<Boolean> verifyUserMobile (String mobile);
+    
+    /**
+     * 获取用户常用信息
+     *
+     * @param userIdList 用户 ID 列表
+     * @return List {@link UserCommonDtoResult}
+     */
+    List<UserCommonDtoResult> getUserCommonInfo (List<Long> userIdList);
 }

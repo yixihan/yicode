@@ -12,13 +12,20 @@ import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFollowDtoReq;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult;
+import com.yixihan.yicode.user.biz.service.base.UserService;
 import com.yixihan.yicode.user.biz.service.extra.UserFollowService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserFollowMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFollow;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -31,6 +38,9 @@ import java.util.Optional;
 @Service
 public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFollow> implements UserFollowService {
 
+    @Resource
+    private UserService userService;
+    
     @Override
     public CommonDtoResult<Boolean> followUser(ModifyFollowDtoReq dtoReq) {
         UserFollow follow = BeanUtil.toBean (dtoReq, UserFollow.class);
@@ -69,18 +79,15 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     @Override
     public PageDtoResult<FollowDtoResult> getFollowList(FollowQueryDtoReq dtoReq) {
         QueryWrapper<UserFollow> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserFollow.FOLLOW_USER_ID, dtoReq.getUserId ());
+        wrapper.eq (UserFollow.USER_ID, dtoReq.getUserId ());
         Page<UserFollow> values = baseMapper.selectPage (
                 new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
                 wrapper
         );
     
-        return PageUtil.pageToPageDtoResult (
-                values,
-                (o) -> CopyUtils.copySingle (FollowDtoResult.class, o)
-        );
+        return setUserCommonInfo (values);
     }
-
+    
     @Override
     public CommonDtoResult<Integer> getFanCount(Long userId) {
         QueryWrapper<UserFollow> wrapper = new QueryWrapper<> ();
@@ -91,7 +98,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                         .orElse (NumConstant.NUM_0)
         );
     }
-
+    
     @Override
     public PageDtoResult<FollowDtoResult> getFanList(FollowQueryDtoReq dtoReq) {
         QueryWrapper<UserFollow> wrapper = new QueryWrapper<> ();
@@ -100,10 +107,45 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                 new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
                 wrapper
         );
+    
+        return setUserCommonInfo (values);
+    }
+    
+    /**
+     * 设置用户常用信息 (用户名+密码)
+     *
+     * @param values Page values
+     * @return PageDtoResult values
+     */
+    private PageDtoResult<FollowDtoResult> setUserCommonInfo(Page<UserFollow> values) {
+        // 获取用户关注着基础信息
+        Map<Long, UserCommonDtoResult> userCommonInfoMap = userService.getUserCommonInfo (
+                values.getRecords ()
+                        .stream ()
+                        .flatMap (item -> Stream.of (item.getUserId (), item.getFollowUserId ()))
+                        .distinct ().collect (Collectors.toList ())
+                ).stream ().collect (Collectors.toMap (
+                        UserCommonDtoResult::getUserId,
+                        Function.identity (),
+                        (key1, key2) -> key1)
+                );
         
-        return PageUtil.pageToPageDtoResult (
-                values,
+        // 转为 PageDtoResult 格式
+        PageDtoResult<FollowDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (values,
                 (o) -> CopyUtils.copySingle (FollowDtoResult.class, o)
         );
+        
+        // 设置用户名+用户头像
+        for (FollowDtoResult item : pageDtoResult.getRecords ()) {
+            UserCommonDtoResult followCommonInfo = userCommonInfoMap.getOrDefault (item.getFollowUserId (), new UserCommonDtoResult ());
+            UserCommonDtoResult userCommonInfo = userCommonInfoMap.getOrDefault (item.getUserId (), new UserCommonDtoResult ());
+            
+            item.setFollowUserName (followCommonInfo.getUserName ());
+            item.setFollowUserAvatar (followCommonInfo.getUserAvatar ());
+            item.setUserName (userCommonInfo.getUserName ());
+            item.setUserAvatar (userCommonInfo.getUserAvatar ());
+        }
+        
+        return pageDtoResult;
     }
 }

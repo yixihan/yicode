@@ -1,8 +1,12 @@
 package com.yixihan.yicode.user.dal.mapper.base;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.dal.pojo.base.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +18,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-
+    
+    /**
+     * 获取用户常用信息
+     *
+     * @param userIdList 用户 ID 列表
+     * @return List {@link UserCommonDtoResult}
+     */
+    List<UserCommonDtoResult> getUserCommonInfo(@Param ("userIdList") List<Long> userIdList);
+    
 }

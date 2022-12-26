@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -14,6 +15,7 @@ import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.api.enums.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
@@ -33,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -305,5 +308,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_MOBILE, mobile);
         return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+    }
+    
+    @Override
+    public List<UserCommonDtoResult> getUserCommonInfo(List<Long> userIdList) {
+        if (CollectionUtil.isEmpty (userIdList)) {
+            return Collections.emptyList ();
+        }
+        List<UserCommonDtoResult> dtoResultList = baseMapper.getUserCommonInfo (userIdList);
+        return CollectionUtil.isEmpty (dtoResultList) ?
+                Collections.emptyList () :
+                dtoResultList;
     }
 }
