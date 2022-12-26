@@ -2,7 +2,6 @@ package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -55,19 +54,6 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
-    @Override
-    public void createCode(String code, String uuid) {
-        String keyName = String.format (codeConstant.getCommonKey (), uuid);
-        // 存入 redis
-        addRedis (keyName, code);
-    }
-
-    @Override
-    public CommonDtoResult<Boolean> validateCode(CodeValidateDtoReq dtoReq) {
-        String keyName = String.format (codeConstant.getCommonKey (), dtoReq.getUuid ());
-        return validate (keyName, dtoReq.getCode ());
-    }
-
     /**
      * 获取随机验证码, 并存入 redis 中
      *
@@ -83,11 +69,9 @@ public class CodeServiceImpl implements CodeService {
 
         return sb.toString ();
     }
-
-    /**
-     * 将验证码存入 redis 中， 并设置有效时间
-     */
-    private void addRedis (String keyName, String code) {
+    
+    @Override
+    public void addRedis (String keyName, String code) {
         // 存入 redis
         stringRedisTemplate.opsForValue().set(keyName, code);
         // 设置过期时间

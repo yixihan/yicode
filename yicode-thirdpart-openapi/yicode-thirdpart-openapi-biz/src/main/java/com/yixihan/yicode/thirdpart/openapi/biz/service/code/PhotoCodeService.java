@@ -10,10 +10,10 @@ import java.io.IOException;
  * 图片验证码 服务类
  *
  * @author yixihan
- * @date 2022/11/23 14:53
+ * @date 2022/12/26 14:35
  */
-public interface CodeService {
-
+public interface PhotoCodeService {
+    
     /**
      * 生成图片验证码
      *
@@ -21,7 +21,7 @@ public interface CodeService {
      * @param uuid 随机 ID
      */
     void createCode(HttpServletResponse response, String uuid) throws IOException;
-
+    
     /**
      * 验证图片验证码
      *
@@ -29,4 +29,3 @@ public interface CodeService {
      */
     CommonVO<Boolean> validateCode(CodeValidateReq req);
 }
-

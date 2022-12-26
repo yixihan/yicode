@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Api(tags = "图形验证码模块 api")
 @RequestMapping("/code/")
-public interface CodeApi {
+public interface PhotoCodeApi {
 
     @ApiOperation("生成图形验证码")
     @PostMapping("/create")

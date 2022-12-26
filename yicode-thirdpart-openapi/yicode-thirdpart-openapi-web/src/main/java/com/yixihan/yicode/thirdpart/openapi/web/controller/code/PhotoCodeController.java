@@ -2,9 +2,9 @@ package com.yixihan.yicode.thirdpart.openapi.web.controller.code;
 
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.thirdpart.open.api.reset.code.CodeOpenApi;
+import com.yixihan.yicode.thirdpart.open.api.reset.code.PhotoCodeOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.code.CodeValidateReq;
-import com.yixihan.yicode.thirdpart.openapi.biz.service.code.CodeService;
+import com.yixihan.yicode.thirdpart.openapi.biz.service.code.PhotoCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,18 +20,18 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-public class CodeController implements CodeOpenApi {
+public class PhotoCodeController implements PhotoCodeOpenApi {
 
     @Resource
-    private CodeService codeService;
+    private PhotoCodeService service;
 
     @Override
     public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        codeService.createCode (response, uuid);
+        service.createCode (response, uuid);
     }
 
     @Override
     public JsonResponse<CommonVO<Boolean>> validateCode(CodeValidateReq req) {
-        return JsonResponse.ok (codeService.validateCode (req));
+        return JsonResponse.ok (service.validateCode (req));
     }
 }

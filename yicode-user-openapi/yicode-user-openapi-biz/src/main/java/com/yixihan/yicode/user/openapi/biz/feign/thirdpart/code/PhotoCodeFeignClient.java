@@ -1,6 +1,6 @@
-package com.yixihan.yicode.auth.feign.thirdpart.code;
+package com.yixihan.yicode.user.openapi.biz.feign.thirdpart.code;
 
-import com.yixihan.yicode.thirdpart.api.reset.code.CodeApi;
+import com.yixihan.yicode.thirdpart.api.reset.code.PhotoCodeApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
@@ -10,5 +10,5 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @date 2022/11/21 17:51
  */
 @FeignClient(value = "${feign.client.yicode-thirdpart.name}")
-public interface CodeFeignClient extends CodeApi {
+public interface PhotoCodeFeignClient extends PhotoCodeApi {
 }

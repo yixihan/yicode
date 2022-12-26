@@ -1,7 +1,6 @@
 package com.yixihan.yicode.thirdpart.biz.service.code;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 
 /**
  * 验证码服务类
@@ -26,19 +25,13 @@ public interface CodeService {
      * @param code 验证码
      */
     CommonDtoResult<Boolean> validate (String keyName, String code);
-
+    
     /**
-     * 生产图片验证码
+     * 将验证码存入 redis 中， 并设置有效时间
      *
+     * @param keyName redis key
      * @param code 验证码
-     * @param uuid 随机 ID
      */
-    void createCode(String code, String uuid);
-
-    /**
-     * 校验图片验证码
-     *
-     * @param dtoReq 请求参数
-     */
-    CommonDtoResult<Boolean> validateCode(CodeValidateDtoReq dtoReq);
+    void addRedis(String keyName, String code);
+    
 }

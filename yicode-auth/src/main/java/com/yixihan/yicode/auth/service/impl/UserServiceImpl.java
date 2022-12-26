@@ -1,6 +1,6 @@
 package com.yixihan.yicode.auth.service.impl;
 
-import com.yixihan.yicode.auth.feign.thirdpart.code.CodeFeignClient;
+import com.yixihan.yicode.auth.feign.thirdpart.code.PhotoCodeFeignClient;
 import com.yixihan.yicode.auth.feign.thirdpart.email.EmailFeignClient;
 import com.yixihan.yicode.auth.feign.thirdpart.sms.SMSFeignClient;
 import com.yixihan.yicode.auth.feign.user.user.UserFeignClient;
@@ -18,7 +18,6 @@ import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     private EmailFeignClient emailFeignClient;
 
     @Resource
-    private CodeFeignClient codeFeignClient;
+    private PhotoCodeFeignClient codeFeignClient;
 
     @Resource
     private UserRoleFeignClient userRoleFeignClient;
@@ -57,8 +56,6 @@ public class UserServiceImpl implements UserService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

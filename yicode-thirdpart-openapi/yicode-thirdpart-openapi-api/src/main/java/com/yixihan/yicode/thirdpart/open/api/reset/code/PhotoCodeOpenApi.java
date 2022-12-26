@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 @Api(tags = "图形验证码 openApi")
 @RequestMapping("/open/code/")
-public interface CodeOpenApi {
+public interface PhotoCodeOpenApi {
 
     @ApiOperation("生成图形验证码")
     @GetMapping("/create")
