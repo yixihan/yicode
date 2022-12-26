@@ -443,7 +443,7 @@ CREATE TABLE `user`
 -- Records of user
 -- ----------------------------
 INSERT INTO `user`
-VALUES (10000004, 1, 'yixihan', '$2a$10$P9BwEkOq4yL10r9eMHnrn2elJyqNaRHAawdb6feZnxrrCeW3PjOSBO', '17623850426',
+VALUES (10000004, 1, 'yixihan', '$2a$10$2MThiN5AWiGbq43aHLCF/.3eFd4utijouCZlgxMTDVIGykIQEU38a', '17623850426',
         '3113788997@qq.com', 'USERNAME_PASSWORD', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 
 -- ----------------------------
