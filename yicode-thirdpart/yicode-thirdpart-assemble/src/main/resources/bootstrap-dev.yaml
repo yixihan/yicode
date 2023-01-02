@@ -4,10 +4,10 @@ spring:
       username: yicode
       password: yicode
       discovery:
-        server-addr: 175.24.163.161:3333
+        server-addr: 43.136.182.175:23412
         namespace: dev
       config:
-        server-addr: 175.24.163.161:3333
+        server-addr: 43.136.182.175:23412
         namespace: dev
         file-extension: yaml
         extension-configs:
@@ -29,7 +29,7 @@ spring:
       datasource:
         flow:
           nacos:
-            server-addr: 175.24.163.161:3333 #nacos的访问地址，根据上面准备工作中启动的实例配置
+            server-addr: 43.136.182.175:23412 #nacos的访问地址，根据上面准备工作中启动的实例配置
             username: yicode
             password: yicode
             dataId: cloud-sentinel-flow-service #nacos中存储规则的dataId
@@ -39,7 +39,7 @@ spring:
             rule-type: flow #类型来自RuleType类-流控规则
         degrade:
           nacos:
-            server-addr: 175.24.163.161:3333 #nacos的访问地址，根据上面准备工作中启动的实例配置
+            server-addr: 43.136.182.175:23412 #nacos的访问地址，根据上面准备工作中启动的实例配置
             username: yicode
             password: yicode
             dataId: cloud-sentinel-degrade-service #nacos中存储规则的dataId
