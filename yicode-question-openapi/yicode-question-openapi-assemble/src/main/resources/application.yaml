@@ -1,0 +1,24 @@
+spring:
+
+  # redis 配置
+  redis:
+    host: ${yicode.redis.host}
+    port: ${yicode.redis.port}
+    database: ${yicode.redis.database}
+    password: ${yicode.redis.password}
+
+  main:
+    # 允许重载 bean
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 开放所有端点 默认值只打开 health 和 info 两个端点
+  endpoint:
+    # health 端点配置项
+    health:
+      enabled: true
+      show-details: always # 永远展示完整信息
+

@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>yicode</artifactId>
         <groupId>com.yixihan</groupId>
+        <artifactId>yicode</artifactId>
         <version>0.0.1</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>yicode-runcode</artifactId>
+    <artifactId>yicode-question</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>yicode-runcode-api</module>
-        <module>yicode-runcode-assemble</module>
-        <module>yicode-runcode-biz</module>
-        <module>yicode-runcode-web</module>
+        <module>yicode-question-api</module>
+        <module>yicode-question-assemble</module>
+        <module>yicode-question-biz</module>
+        <module>yicode-question-dal</module>
+        <module>yicode-question-web</module>
     </modules>
 
     <properties>
@@ -30,6 +31,17 @@
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-common</artifactId>
             <version>0.0.1</version>
+        </dependency>
+
+        <!-- sentinel -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+        <!-- sentinel 配置持久化在 nacos 上-->
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
 
         <!-- actuator -->

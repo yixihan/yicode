@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>yicode-runcode</artifactId>
         <groupId>com.yixihan</groupId>
+        <artifactId>yicode-question</artifactId>
         <version>0.0.1</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>yicode-runcode-biz</artifactId>
+    <artifactId>yicode-question-biz</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -25,11 +25,16 @@
         </dependency>
 
         <!-- 引入调用模块的 api 模块 -->
-
-        <!-- yicode-runcode-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-runcode-api</artifactId>
+            <artifactId>yicode-user-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!-- yicode-thirdpart-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-thirdpart-api</artifactId>
             <version>0.0.1</version>
         </dependency>
 
@@ -44,14 +49,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
             <groupId>com.fasterxml.jackson.core</groupId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-question-dal</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
         </dependency>
+
     </dependencies>
+
+
 </project>

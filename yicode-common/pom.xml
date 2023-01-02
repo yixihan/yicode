@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>yicode-common</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <description>系统公共模块</description>
 
     <properties>
@@ -115,15 +115,6 @@
             <version>${jwt.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 
 </project>
