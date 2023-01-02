@@ -18,10 +18,11 @@
         <module>yicode-user</module>
         <module>yicode-user-openapi</module>
         <module>yicode-runcode</module>
-        <module>yicode-runcode-openapi</module>
         <module>yicode-thirdpart</module>
         <module>yicode-message</module>
         <module>yicode-thirdpart-openapi</module>
+        <module>yicode-question</module>
+        <module>yicode-question-openapi</module>
     </modules>
 
     <properties>

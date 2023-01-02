@@ -1,8 +1,8 @@
 server:
-  port: 18100
+  port: 15100
 
 spring:
   application:
-    name: yicode-runcode
+    name: yicode-question
   profiles:
     active: dev

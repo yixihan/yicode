@@ -1,8 +1,0 @@
-server:
-  port: 15200
-
-spring:
-  application:
-    name: yicode-runcode-openapi
-  profiles:
-    active: dev
