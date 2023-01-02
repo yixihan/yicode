@@ -24,4 +24,27 @@
         </dependency>
     </dependencies>
 
+    <!--spring boot打包的话需要指定一个唯一的入口类-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>com.yixihan.yicode.message.consumer.BootStrap</mainClass>
+                    <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
+                    <finalName>${project.parent.artifactId}-${project.parent.version}.jar</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

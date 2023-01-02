@@ -131,6 +131,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.yixihan.yicode.auth.BootStrap</mainClass>
+                    <outputDirectory>${maven.multiModuleProjectDirectory}/../out/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
