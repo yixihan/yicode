@@ -37,6 +37,7 @@
                     <artifactId>druid-spring-boot-starter</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>compile</scope>
         </dependency>
 
         <!-- gateway -->
@@ -154,6 +155,7 @@
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-user-api</artifactId>
             <version>0.0.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- test -->
@@ -162,5 +164,26 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
+
+    <!--spring boot打包的话需要指定一个唯一的入口类-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>com.yixihan.yicode.gateway.BootStrap</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
