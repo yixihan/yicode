@@ -12,10 +12,8 @@
     <artifactId>yicode-runcode</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>yicode-runcode-api</module>
-        <module>yicode-runcode-assemble</module>
-        <module>yicode-runcode-biz</module>
-        <module>yicode-runcode-web</module>
+        <module>yicode-runcode-run</module>
+        <module>yicode-runcode-judge</module>
     </modules>
 
     <properties>
@@ -29,7 +27,22 @@
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>druid-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
             <version>0.0.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- actuator -->

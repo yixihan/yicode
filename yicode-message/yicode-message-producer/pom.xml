@@ -38,7 +38,7 @@
                 <configuration>
                     <mainClass>com.yixihan.yicode.message.producer.BootStrap</mainClass>
                     <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
-                    <finalName>${project.parent.artifactId}-${project.parent.version}.jar</finalName>
+                    <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
                 </configuration>
                 <executions>
                     <execution>

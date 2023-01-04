@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>yicode-thirdpart</artifactId>
         <groupId>com.yixihan</groupId>
+        <artifactId>yicode-runcode</artifactId>
         <version>0.0.1</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>yicode-thirdpart-assemble</artifactId>
+    <artifactId>yicode-runcode-judge</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,14 +18,36 @@
     </properties>
 
     <dependencies>
-        <!-- nacos -->
+        <!-- nacos config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- nacos discovery -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+
+        <!-- feign -->
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- 调用的 api -->
+
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- cache -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
         <!-- web -->
@@ -38,14 +60,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- yicode-thirdpart-openapi-web -->
-        <dependency>
-            <groupId>com.yixihan</groupId>
-            <artifactId>yicode-thirdpart-web</artifactId>
-            <version>0.0.1</version>
         </dependency>
     </dependencies>
 
@@ -57,9 +71,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.yixihan.yicode.thirdpart.BootStrap</mainClass>
-                    <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
-                    <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+                    <mainClass>com.yixihan.yicode.auth.BootStrap</mainClass>
+                    <outputDirectory>${maven.multiModuleProjectDirectory}/../out/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

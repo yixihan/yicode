@@ -1,8 +1,0 @@
-server:
-  port: 12100
-
-spring:
-  application:
-    name: yicode-openapi
-  profiles:
-    active: dev
