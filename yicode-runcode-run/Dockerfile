@@ -16,6 +16,6 @@ RUN mkdir -p /data
 RUN mkdir -p /$APLLLICATION
 RUN mkdir -p /data/log/$APLLLICATION
 WORKDIR /$APLLLICATION
-COPY target/*.jar /$APLLLICATION
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /$APLLLICATION/*.jar"]
+COPY target/$APLLLICATION.jar /$APLLLICATION
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /$APLLLICATION/$APLLLICATION.jar"]
 EXPOSE 18200

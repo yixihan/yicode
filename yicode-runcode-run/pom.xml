@@ -100,7 +100,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.yixihan.yicode.runcode.run.BootStrap</mainClass>
-                    <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
                     <finalName>${project.artifactId}</finalName>
                 </configuration>
                 <executions>
