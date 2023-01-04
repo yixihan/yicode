@@ -58,8 +58,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.yixihan.yicode.user.BootStrap</mainClass>
-                    <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
-                    <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+                    <finalName>${project.parent.artifactId}</finalName>
                 </configuration>
                 <executions>
                     <execution>
