@@ -1,7 +1,7 @@
 FROM java:8
-EXPOSE 14200
+EXPOSE 18100
 
-ARG APLLLICATION=yicode-user-openapi
+ARG APLLLICATION=yicode-runcode-judge
 
 VOLUME /tmp
 ADD target/$APLLLICATION.jar  /app.jar
