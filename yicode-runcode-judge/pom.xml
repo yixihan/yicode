@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.yixihan</groupId>
-        <artifactId>yicode-runcode</artifactId>
+        <artifactId>yicode</artifactId>
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>yicode-runcode-run</artifactId>
+    <artifactId>yicode-runcode-judge</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,6 +18,34 @@
     </properties>
 
     <dependencies>
+        <!-- yicode-common -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>druid-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- nacos config -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -71,9 +99,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.yixihan.yicode.runcode.run.BootStrap</mainClass>
-                    <outputDirectory>${maven.multiModuleProjectDirectory}/../../out/</outputDirectory>
-                    <finalName>${project.artifactId}</finalName>
+                    <mainClass>com.yixihan.yicode.auth.BootStrap</mainClass>
+                    <outputDirectory>${maven.multiModuleProjectDirectory}/../out/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
