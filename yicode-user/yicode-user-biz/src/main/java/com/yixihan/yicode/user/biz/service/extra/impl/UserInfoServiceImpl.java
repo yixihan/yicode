@@ -10,11 +10,9 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
-import com.yixihan.yicode.user.api.dto.response.extra.UserLabelDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
-import com.yixihan.yicode.user.biz.service.extra.UserLabelService;
 import com.yixihan.yicode.user.biz.service.extra.UserLanguageService;
 import com.yixihan.yicode.user.biz.service.extra.UserWebsiteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserInfoMapper;
@@ -43,8 +41,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private UserLanguageService languageService;
     
-    @Resource
-    private UserLabelService labelService;
+    // TODO 用户标签
+//    @Resource
+//    private UserLabelService labelService;
 
     @Override
     public CommonDtoResult<Boolean> modifyInfo(ModifyUserInfoDtoReq dtoReq) {
@@ -71,7 +70,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfoDtoResult userInfoDtoResult = CopyUtils.copySingle (UserInfoDtoResult.class, info);
         userInfoDtoResult.setUserWebsiteList (getUserWebSiteList (userId));
         userInfoDtoResult.setUserLanguageList (getUserLanguageList (userId));
-        userInfoDtoResult.setUserLanguageList (getUserLabelList (userId));
+        // TODO 用户标签
+//        userInfoDtoResult.setUserLanguageList (getUserLabelList (userId));
         return userInfoDtoResult;
     }
     
@@ -102,16 +102,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .collect (Collectors.toList ());
     }
     
-    /**
-     * 获取用户语言列表
-     *
-     * @param userId 用户 ID
-     * @return 用户语言列表
-     */
-    private List<String> getUserLabelList (Long userId) {
-        List<UserLabelDtoResult> dtoResultList = labelService.getUserLabel (userId);
-        
-        return dtoResultList.stream ().map (UserLabelDtoResult::getLabelName)
-                .collect (Collectors.toList ());
-    }
+    // TODO 用户标签
+//    /**
+//     * 获取用户语言列表
+//     *
+//     * @param userId 用户 ID
+//     * @return 用户语言列表
+//     */
+//    private List<String> getUserLabelList (Long userId) {
+//        List<UserLabelDtoResult> dtoResultList = labelService.getUserLabel (userId);
+//
+//        return dtoResultList.stream ().map (UserLabelDtoResult::getLabelName)
+//                .collect (Collectors.toList ());
+//    }
 }
