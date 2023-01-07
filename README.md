@@ -44,7 +44,7 @@
 总体目标 : 完善 项目架构, 完善 thirdpart & thirdpart-openapi 模块
 - [x] 全模块增加全局异常捕获
 - [x] thirdpart-openapi模块增加校验功能
-- [ ] thirdpart 模块增加服务降级功能
+- [x] thirdpart 模块增加服务降级功能
 - [x] 绑定手机号邮箱增加验证码验证功能
 
 > 2022-11-24
@@ -73,13 +73,6 @@
 
 > 2022-12-26
 
-准备开始 runcode 模块
-- [ ] 评论模块
-- [ ] 每日一题模块
-- [ ] 题解模块
-- [ ] 标签模块
-- [ ] 核心模块
-
 - [ ] 引入 comment_reply 表
 - [ ] 实现 comment_reply 相关接口
 - [ ] 引入 comment_root 表
@@ -98,3 +91,14 @@
 - [ ] 实现 question_label 相关接口
 - [ ] 引入 question_note 表
 - [ ] 实现 question_note 相关接口
+
+
+> 2023-01-07
+
+- [x] 搭建 Jenkins 自动部署
+- [x] 优化项目架构
+- [ ] 完成 runcode-run 模块
+- [ ] 完成代码评测算法
+- [ ] runcode-judge 对接 Docker API, 实现监控 Docker 容器功能
+- [ ] 完成消息服务 - 消息系统消息队列构建
+- [ ] 完成消息服务 - 评测代码任务队列构建
