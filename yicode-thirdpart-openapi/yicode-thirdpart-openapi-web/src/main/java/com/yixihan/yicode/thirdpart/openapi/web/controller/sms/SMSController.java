@@ -1,11 +1,13 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.sms;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.thirdpart.open.api.reset.sms.SMSOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.sms.SMSService;
+import com.yixihan.yicode.thirdpart.openapi.web.fallback.SMSBlockHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,10 @@ public class SMSController implements SMSOpenApi {
     private SMSService smsService;
     
     @Override
+    @SentinelResource(value = "sendSMS",
+            blockHandler = "blockHandlerSMS",
+            blockHandlerClass = SMSBlockHandler.class
+    )
     public JsonResponse<CommonVO<Boolean>> loginSend(SMSSendReq req) {
         return JsonResponse.ok (smsService.loginSend (req));
     }
@@ -35,6 +41,10 @@ public class SMSController implements SMSOpenApi {
     }
 
     @Override
+    @SentinelResource(value = "sendSMS",
+            blockHandler = "blockHandlerSMS",
+            blockHandlerClass = SMSBlockHandler.class
+    )
     public JsonResponse<CommonVO<Boolean>> registerSend(SMSSendReq req) {
         return JsonResponse.ok (smsService.registerSend (req));
     }
@@ -45,6 +55,10 @@ public class SMSController implements SMSOpenApi {
     }
 
     @Override
+    @SentinelResource(value = "sendSMS",
+            blockHandler = "blockHandlerSMS",
+            blockHandlerClass = SMSBlockHandler.class
+    )
     public JsonResponse<CommonVO<Boolean>> resetSend(SMSSendReq req) {
         return JsonResponse.ok (smsService.resetSend (req));
     }
@@ -55,6 +69,10 @@ public class SMSController implements SMSOpenApi {
     }
 
     @Override
+    @SentinelResource(value = "sendSMS",
+            blockHandler = "blockHandlerSMS",
+            blockHandlerClass = SMSBlockHandler.class
+    )
     public JsonResponse<CommonVO<Boolean>> commonSend(SMSSendReq req) {
         return JsonResponse.ok (smsService.commonSend (req));
     }

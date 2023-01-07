@@ -1,13 +1,11 @@
 package com.yixihan.yicode.thirdpart.web.controller.sms;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.reset.sms.SMSApi;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
-import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
-import com.yixihan.yicode.thirdpart.web.fallback.sms.SMSFallback;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +26,6 @@ public class SMSController implements SMSApi {
 
 
     @Override
-    @SentinelResource(value = "sendSMS", blockHandlerClass = SMSFallback.class, blockHandler = "emailBlockHandler")
     public ApiResult<CommonDtoResult<Boolean>> send(SMSSendDtoReq dtoReq) {
         return ApiResult.create (smsService.send (dtoReq));
     }
