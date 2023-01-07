@@ -5,11 +5,11 @@ import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
 import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
@@ -77,10 +77,10 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (uuid)) {
-            throw new BizException (BizCodeEnum.UUID_EMPTY_ERR);
+            throw new OAuth2Exception (BizCodeEnum.UUID_EMPTY_ERR.getMsg ());
         }
         if (StrUtil.isBlank (code)) {
-            throw new BizException (BizCodeEnum.CODE_EMPTY_ERR);
+            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getMsg ());
         }
 
         UserService userService = getUserService ();
@@ -88,7 +88,7 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         dtoReq.setUuid (uuid);
         dtoReq.setCode (code);
         if (!userService.validatePhotoCode (dtoReq)) {
-            throw new BizException (BizCodeEnum.CODE_VALIDATE_ERR);
+            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getMsg ());
         }
     }
 

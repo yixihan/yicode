@@ -6,11 +6,11 @@ import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
 import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
@@ -85,10 +85,10 @@ public class EmailTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (email)) {
-            throw new BizException (BizCodeEnum.EMAIL_EMPTY_ERR);
+            throw new OAuth2Exception (BizCodeEnum.EMAIL_EMPTY_ERR.getMsg ());
         }
         if (StrUtil.isBlank (code)) {
-            throw new BizException (BizCodeEnum.CODE_EMPTY_ERR);
+            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getMsg ());
         }
 
         UserService userService = getUserService ();
@@ -98,7 +98,7 @@ public class EmailTokenGranter extends AbstractTokenGranter {
         dtoReq.setCode (code);
         User user = userService.validateEmailCode (dtoReq);
         if (user == null) {
-            throw new BizException (BizCodeEnum.CODE_VALIDATE_ERR);
+            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getMsg ());
         }
 
         parameters.put ("username", user.getUsername () + "~~other");
