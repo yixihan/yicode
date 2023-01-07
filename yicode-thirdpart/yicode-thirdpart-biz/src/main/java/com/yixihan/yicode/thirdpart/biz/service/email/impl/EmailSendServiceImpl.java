@@ -68,11 +68,11 @@ public class EmailSendServiceImpl implements EmailSendService {
             // 发送
             mailSender.send(mailMessage);
         } catch (MessagingException e) {
-            log.error ("邮件发送失败 : {}", e.getMessage (), new BizException (BizCodeEnum.EMAIL_SEND_ERR));
-            return new CommonDtoResult<> (false, "邮箱发送失败");
+            log.error ("邮件发送失败 : {}", e.getMessage (), new BizException ());
+            throw new BizException (BizCodeEnum.EMAIL_SEND_ERR);
         }
 
-        return new CommonDtoResult<> (true, "邮件发送成功");
+        return new CommonDtoResult<> (Boolean.TRUE, "邮件发送成功");
     }
 
     @Override

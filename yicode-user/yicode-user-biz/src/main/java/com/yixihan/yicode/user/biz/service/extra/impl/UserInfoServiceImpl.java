@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
@@ -51,12 +52,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo info = BeanUtil.toBean (dtoReq, UserInfo.class);
         UpdateWrapper<UserInfo> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, info.getUserId ());
-        int update = baseMapper.update (info, wrapper);
-        if (update == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.update (info, wrapper);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

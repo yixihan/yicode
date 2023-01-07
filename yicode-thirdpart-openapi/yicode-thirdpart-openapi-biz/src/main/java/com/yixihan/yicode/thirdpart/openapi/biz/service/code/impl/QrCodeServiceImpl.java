@@ -4,6 +4,7 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.code.QrCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class QrCodeServiceImpl implements QrCodeService {
                     response.getOutputStream ()
             );
         } catch (IOException e) {
-            throw new RuntimeException (e);
+            throw new BizException (e);
         }
     }
 }

@@ -43,7 +43,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     public CommonDtoResult<Boolean> addCollection(ModifyCollectionDtoReq dtoReq) {
         // 校验收藏夹是否存在
         if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作！");
+            throw new BizException ("该收藏夹不存在或您无权进行操作!");
         }
         // TODO 校验收藏内容与收藏夹类型是否匹配
         
@@ -51,7 +51,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         if (baseMapper.selectCount (new QueryWrapper<UserCollection> ()
                 .eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
                 .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ())) > 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, "请勿重复收藏内容");
+            throw new BizException ("请勿重复收藏内容!");
         }
         
         // 收藏内容
@@ -78,17 +78,16 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     @Override
     public CommonDtoResult<Boolean> delCollection(ModifyCollectionDtoReq dtoReq) {
         if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作！");
+            throw new BizException ("该收藏夹不存在或您无权进行操作!");
         }
         QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
                 .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
         int delete = baseMapper.delete (wrapper);
-        if (delete == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (delete != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

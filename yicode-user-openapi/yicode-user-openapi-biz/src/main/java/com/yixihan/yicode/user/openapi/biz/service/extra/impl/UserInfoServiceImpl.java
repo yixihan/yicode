@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -59,9 +60,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         ModifyUserInfoDtoReq dtoReq = CopyUtils.copySingle (ModifyUserInfoDtoReq.class, req);
         dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
-        return dtoResult.getData () && flag ?
-                new CommonVO<> (Boolean.TRUE) :
-                new CommonVO<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (!dtoResult.getData () || !flag) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
+        return new CommonVO<> (Boolean.TRUE);
     }
     
     @Override

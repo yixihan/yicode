@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
@@ -33,12 +34,11 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
     public CommonDtoResult<Boolean> addUserLanguage(ModifyUserLanguageDtoReq dtoReq) {
         UserLanguage language = BeanUtil.toBean (dtoReq, UserLanguage.class);
         
-        int insert = baseMapper.insert (language);
-        if (insert == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.insert (language);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
@@ -46,12 +46,11 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
         UpdateWrapper<UserLanguage> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserLanguage.USER_ID, dtoReq.getUserId ()).eq (UserLanguage.LANGUAGE, dtoReq.getLanguage ()).set (UserLanguage.DEAL_COUNT, dtoReq.getDealCount ());
         
-        int update = baseMapper.update (null, wrapper);
-        if (update == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.update (null, wrapper);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override

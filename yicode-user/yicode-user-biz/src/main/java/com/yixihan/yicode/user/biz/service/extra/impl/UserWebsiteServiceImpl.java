@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
@@ -34,7 +35,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
+            throw new BizException ("个人网址信息为空!");
         }
         
         List<UserWebsite> websiteList = new ArrayList<> (dtoReq.getUserWebsite ().size ());
@@ -45,26 +46,28 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
             websiteList.add (website);
         }
         boolean modify = this.saveBatch (websiteList);
-        return new CommonDtoResult<> (modify);
+        if (!modify) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
     public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空");
+            throw new BizException ("个人网址信息为空!");
         }
     
         QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
                 .in (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
     
-        int delete = baseMapper.delete (wrapper);
-        if (delete == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.delete (wrapper);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

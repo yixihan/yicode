@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -38,12 +39,11 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     @Override
     public CommonDtoResult<Boolean> addFavorite(AddFavoriteDtoReq dtoReq) {
         UserFavorite favorite = BeanUtil.toBean (dtoReq, UserFavorite.class);
-        int insert = baseMapper.insert (favorite);
-        if (insert == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.insert (favorite);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
@@ -53,12 +53,11 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
                 .eq (UserFavorite.USER_ID, dtoReq.getUserId ())
                 .set (StrUtil.isNotBlank (dtoReq.getFavoriteName ()),UserFavorite.FAVORITE_NAME, dtoReq.getFavoriteName ())
                 .set (dtoReq.getFavoriteCount () != null, UserFavorite.FAVORITE_COUNT, dtoReq.getFavoriteCount ());
-        int update = baseMapper.update (null, wrapper);
-        if (update == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.update (null, wrapper);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
@@ -66,12 +65,11 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         QueryWrapper<UserFavorite> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
                 .eq (UserFavorite.USER_ID, dtoReq.getUserId ());
-        int delete = baseMapper.delete (wrapper);
-        if (delete == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        int modify = baseMapper.delete (wrapper);
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

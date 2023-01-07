@@ -92,7 +92,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectOne (wrapper);
         return CopyUtils.copySingle (
                 UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ()));
+                Optional.ofNullable (user).orElse (new User ())
+        );
     }
 
     @Override
@@ -102,7 +103,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectOne (wrapper);
         return CopyUtils.copySingle (
                 UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ()));
+                Optional.ofNullable (user).orElse (new User ())
+        );
     }
 
     @Override
@@ -112,20 +114,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectOne (wrapper);
         return CopyUtils.copySingle (
                 UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ()));
+                Optional.ofNullable (user).orElse (new User ())
+        );
     }
 
     @Override
     public UserDtoResult getUserByEmail(String email) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_EMAIL, email);
-        User user = baseMapper.selectOne (wrapper);
-        return user == null ? new UserDtoResult () : CopyUtils.copySingle (UserDtoResult.class, user);
+        User user =  Optional.ofNullable (baseMapper.selectOne (wrapper))
+                .orElse (new User ());
+        return CopyUtils.copySingle (UserDtoResult.class, user);
     }
 
     @Override
     public UserDtoResult getUserByToken(String token) {
-        Object str = Optional.ofNullable (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token))
+        Object str = Optional
+                .ofNullable (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token))
                 .orElse ("");
         
         if (StrUtil.isBlankIfStr (str)) {
@@ -191,7 +196,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BizException ("用户注册-用户收藏夹表插入失败!");
         }
 
-        return new CommonDtoResult<> (true, "用户注册成功");
+        return new CommonDtoResult<> (Boolean.TRUE, "用户注册成功");
     }
 
     @Override
@@ -204,14 +209,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             wrapper.eq (User.USER_MOBILE, dtoReq.getMobile ());
         }
         wrapper.set (User.USER_PASSWORD,passwordEncoder.encode (dtoReq.getNewPassword ()));
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "重置密码成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("密码重置失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "重置密码成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> bindEmail(BindEmailDtoReq dtoReq) {
         UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
         if (!StrUtil.isBlank (userDtoResult.getUserEmail ())) {
-            return new CommonDtoResult<> (false, "请先解绑邮箱");
+            throw new BizException ("请先解绑邮箱!");
         }
 
         User user = new User ();
@@ -219,7 +228,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, dtoReq.getUserId ())
                 .set (User.USER_EMAIL, dtoReq.getEmail ());
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定邮箱成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("绑定邮箱失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "绑定邮箱成功");
     }
 
     @Override
@@ -229,14 +242,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, userId)
                 .set (User.USER_EMAIL, null);
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "解绑邮箱成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("解绑邮箱失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "解绑邮箱成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> bindMobile(BindMobileDtoReq dtoReq) {
         UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
         if (!StrUtil.isBlank (userDtoResult.getUserMobile ())) {
-            return new CommonDtoResult<> (false, "请先解绑手机号");
+            throw new BizException ("请先解绑手机号!");
         }
 
         User user = new User ();
@@ -244,7 +261,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, dtoReq.getUserId ())
                 .set (User.USER_MOBILE, dtoReq.getMobile ());
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "绑定手机号成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("绑定手机号失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "绑定手机号成功");
     }
 
     @Override
@@ -254,7 +275,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, userId)
                 .set (User.USER_MOBILE, null);
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "解绑手机号成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("解绑手机号失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "解绑手机号成功");
     }
 
     @Override
@@ -264,7 +289,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, dtoReq.getUserId ())
                 .set (User.USER_NAME, dtoReq.getUserName ());
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "修改用户名成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("修改用户名失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "修改用户名成功");
     }
 
     @Override
@@ -274,40 +303,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> wrapper = new UpdateWrapper<> ();
         wrapper.eq (User.USER_ID, userId)
                 .set (User.DEL_FLAG, 1);
-        return new CommonDtoResult<> (baseMapper.update (user, wrapper) == 1, "注销成功");
+        int modify = baseMapper.update (user, wrapper);
+        if (modify != 1) {
+            throw new BizException ("注销失败!");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE, "注销成功");
     }
 
     @Override
     public CommonDtoResult<Boolean> verifyUserName(String userName) {
         if (StrUtil.isBlank (userName)) {
-            return new CommonDtoResult<> (false, "校验的用户名为空!");
+            throw new BizException ("校验的用户名为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_NAME, userName);
-        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+        boolean flag = baseMapper.selectCount (wrapper) == 0;
+        if (!flag) {
+            throw new BizException ("该用户名已被占用");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
     public CommonDtoResult<Boolean> verifyUserEmail(String email) {
         if (StrUtil.isBlank (email)) {
-            return new CommonDtoResult<> (false, "校验的用户名为空!");
+            throw new BizException ("校验的邮箱为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_EMAIL, email);
-        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+        boolean flag = baseMapper.selectCount (wrapper) == 0;
+        if (!flag) {
+            throw new BizException ("该邮箱已被绑定");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
     public CommonDtoResult<Boolean> verifyUserMobile(String mobile) {
         if (StrUtil.isBlank (mobile)) {
-            return new CommonDtoResult<> (false, "校验的用户名为空!");
+            throw new BizException ("校验的手机号为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_MOBILE, mobile);
-        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) == 0);
+        boolean flag = baseMapper.selectCount (wrapper) == 0;
+        if (!flag) {
+            throw new BizException ("该手机号已被绑定");
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override

@@ -81,14 +81,14 @@ public class SMSServiceImpl implements SMSService {
             log.info ("response : {}", SendSmsResponse.toJsonString(resp));
             SendStatus sendStatus = resp.getSendStatusSet ()[0];
             if ("Ok".equals (sendStatus.getCode ())) {
-                return new CommonDtoResult<> (true, "短信发送成功");
+                return new CommonDtoResult<> (Boolean.TRUE, "短信发送成功");
             } else {
-                log.error (sendStatus.getMessage(), new BizException (BizCodeEnum.SMS_SEND_ERR));
-                return new CommonDtoResult<> (false, "短信发送失败");
+                log.error (sendStatus.getMessage());
+                throw new BizException (BizCodeEnum.SMS_SEND_ERR);
             }
         } catch (TencentCloudSDKException e) {
-            log.error (e.getMessage (), new BizException (BizCodeEnum.SMS_SEND_ERR));
-            return new CommonDtoResult<> (false, "短信发送失败");
+            log.error (e.getMessage ());
+            throw new BizException (BizCodeEnum.SMS_SEND_ERR);
         }
     }
 

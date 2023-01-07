@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms.impl;
 
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -32,88 +33,88 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public CommonVO<Boolean> loginSend(SMSSendReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> loginValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> registerSend(SMSSendReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> registerValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> resetSend(SMSSendReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> resetValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> commonSend(SMSSendReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 
     @Override
     public CommonVO<Boolean> commonValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            return new CommonVO<> (false, "手机号不符合规范！");
+            throw new BizException ("手机号不符合规范!");
         }
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        return CopyUtils.copySingle (CommonVO.class, dtoResult);
+        return CommonVO.create (dtoResult);
     }
 }

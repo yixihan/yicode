@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -76,33 +77,31 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = new Role ();
         role.setRoleName (roleName);
         int modify = baseMapper.insert (role);
-        if (modify == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> delRole(Long roleId) {
         if (hasRole (roleId)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "无此角色！");
+            throw new BizException ("无此角色!");
         }
         
         if (userRoleService.count (new QueryWrapper<UserRole> ()
                 .eq (UserRole.ROLE_ID, roleId)) > 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该角色还有绑定用户,请先解绑再删除！");
+            throw new BizException ("该角色还有绑定用户,请先解绑再删除!");
         }
         
         QueryWrapper<Role> wrapper = new QueryWrapper<Role> ()
                 .eq (Role.ROLE_ID, roleId);
     
         int modify = baseMapper.delete (wrapper);
-        if (modify == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     public Boolean hasRole (Long roleId) {

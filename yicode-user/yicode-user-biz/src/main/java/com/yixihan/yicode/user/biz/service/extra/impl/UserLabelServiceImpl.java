@@ -3,6 +3,7 @@ package com.yixihan.yicode.user.biz.service.extra.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLabelDtoReq;
@@ -36,11 +37,10 @@ public class UserLabelServiceImpl extends ServiceImpl<UserLabelMapper, UserLabel
         // 添加标签
         UserLabel label = BeanUtil.toBean (dtoReq, UserLabel.class);
         int modify = baseMapper.insert (label);
-        if (modify == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override

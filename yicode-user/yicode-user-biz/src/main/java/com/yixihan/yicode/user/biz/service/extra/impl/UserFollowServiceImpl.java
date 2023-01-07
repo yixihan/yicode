@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -45,11 +46,10 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     public CommonDtoResult<Boolean> followUser(ModifyFollowDtoReq dtoReq) {
         UserFollow follow = BeanUtil.toBean (dtoReq, UserFollow.class);
         int modify = baseMapper.insert (follow);
-        if (modify == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override
@@ -58,11 +58,10 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         wrapper.eq (UserFollow.USER_ID, dtoReq.getUserId ())
                 .eq (UserFollow.FOLLOW_USER_ID, dtoReq.getFollowUserId ());
         int modify = baseMapper.delete (wrapper);
-        if (modify == 1) {
-            return new CommonDtoResult<> (Boolean.TRUE);
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getMsg ());
+        if (modify != 1) {
+            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
 
     @Override

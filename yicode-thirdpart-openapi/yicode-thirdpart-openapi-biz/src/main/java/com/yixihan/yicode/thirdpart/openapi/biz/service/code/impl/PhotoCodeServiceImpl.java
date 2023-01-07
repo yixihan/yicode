@@ -31,12 +31,12 @@ public class PhotoCodeServiceImpl implements PhotoCodeService {
     
     @Override
     public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 5, 20);
+        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha (200, 100, 5, 20);
         String code = captcha.getCode ();
         
         codeFeignClient.createCode (code, uuid);
         //图形验证码写出，可以写出到文件，也可以写出到流
-        captcha.write(response.getOutputStream());
+        captcha.write (response.getOutputStream ());
     }
     
     @Override

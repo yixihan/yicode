@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
@@ -43,14 +44,14 @@ public class CodeServiceImpl implements CodeService {
         Long expire = stringRedisTemplate.getExpire(keyName);
 
         if (expire == null || expire < 0L) {
-            return new CommonDtoResult<> (false, "验证码已过期");
+            throw new BizException ("验证码已过期!");
         }
 
         boolean flag = code.equals (stringRedisTemplate.opsForValue ().get (keyName));
         if (flag) {
-            return new CommonDtoResult<> (true, "验证码校验成功");
+            return new CommonDtoResult<> (Boolean.TRUE, "验证码校验成功");
         } else {
-            return new CommonDtoResult<> (false, "验证码错误");
+            throw new BizException ("验证码错误!");
         }
     }
 
