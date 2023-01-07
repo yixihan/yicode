@@ -58,7 +58,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.yixihan.yicode.thirdpart.BootStrap</mainClass>
-                    <finalName>${project.artifactId}</finalName>
+                    <finalName>${project.parent.artifactId}</finalName>
                 </configuration>
                 <executions>
                     <execution>
