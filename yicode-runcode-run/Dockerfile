@@ -1,4 +1,4 @@
-FROM java:8
+FROM oracle-jdk:8
 EXPOSE 18200
 
 ARG APLLLICATION=yicode-runcode-run

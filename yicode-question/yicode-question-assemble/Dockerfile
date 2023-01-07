@@ -1,4 +1,4 @@
-FROM java:8
+FROM oracle-jdk:8
 EXPOSE 15100
 
 ARG APLLLICATION=yicode-question

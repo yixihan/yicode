@@ -1,4 +1,4 @@
-FROM java:8
+FROM oracle-jdk:8
 EXPOSE 14200
 
 ARG APLLLICATION=yicode-user-openapi
