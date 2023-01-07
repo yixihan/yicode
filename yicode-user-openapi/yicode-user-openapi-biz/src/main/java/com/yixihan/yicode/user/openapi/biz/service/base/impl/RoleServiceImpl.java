@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -48,15 +49,18 @@ public class RoleServiceImpl implements RoleService {
     public CommonVO<Boolean> addRole(AddRoleReq req) {
         // 校验角色名是否合规(不为空&不重复)
         if (StrUtil.isBlank (req.getRoleName ())) {
-            return new CommonVO<> (Boolean.FALSE, "角色名不能为空！");
+            throw new BizException ("角色名不能为空!");
         }
         if (roleFeignClient.getRoleList ().getResult ()
                 .stream ().anyMatch ((o) -> o.getRoleName ().equals (req.getRoleName ()))) {
-            return new CommonVO<> (Boolean.FALSE, "已有该角色！");
+            throw new BizException ("已有该角色!");
         }
         
         // 添加角色
         CommonDtoResult<Boolean> dtoResult = roleFeignClient.addRole (req.getRoleName ()).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -65,11 +69,14 @@ public class RoleServiceImpl implements RoleService {
         // 校验角色 ID 是否合规(需存在)
         if (roleFeignClient.getRoleList ().getResult ()
                 .stream ().noneMatch ((o) -> o.getRoleId ().equals (roleId))) {
-            return new CommonVO<> (Boolean.FALSE, "该角色不存在！");
+            throw new BizException ("该角色不存在!");
         }
         
         // 删除角色
         CommonDtoResult<Boolean> dtoResult = roleFeignClient.delRole (roleId).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -78,6 +85,9 @@ public class RoleServiceImpl implements RoleService {
         // 用户添加角色
         ModifyUserRoleDtoReq dtoReq = CopyUtils.copySingle (ModifyUserRoleDtoReq.class, req);
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.addRole (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -88,6 +98,9 @@ public class RoleServiceImpl implements RoleService {
         // 删除用户角色
         ModifyUserRoleDtoReq dtoReq = new ModifyUserRoleDtoReq (userId, roleId);
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.delRole (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     

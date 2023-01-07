@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
@@ -36,7 +35,10 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
         
         int modify = baseMapper.insert (language);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -48,7 +50,10 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
         
         int modify = baseMapper.update (null, wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

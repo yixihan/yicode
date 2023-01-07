@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
@@ -35,7 +34,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            throw new BizException ("个人网址信息为空!");
+            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空!");
         }
         
         List<UserWebsite> websiteList = new ArrayList<> (dtoReq.getUserWebsite ().size ());
@@ -47,7 +46,10 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
         }
         boolean modify = this.saveBatch (websiteList);
         if (!modify) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -56,7 +58,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            throw new BizException ("个人网址信息为空!");
+            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空!");
         }
     
         QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
@@ -65,7 +67,10 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     
         int modify = baseMapper.delete (wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

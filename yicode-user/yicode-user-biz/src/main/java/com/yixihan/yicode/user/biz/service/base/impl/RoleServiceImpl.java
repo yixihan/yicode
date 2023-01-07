@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -78,7 +77,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setRoleName (roleName);
         int modify = baseMapper.insert (role);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -86,12 +85,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public CommonDtoResult<Boolean> delRole(Long roleId) {
         if (hasRole (roleId)) {
-            throw new BizException ("无此角色!");
+            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
         }
         
         if (userRoleService.count (new QueryWrapper<UserRole> ()
                 .eq (UserRole.ROLE_ID, roleId)) > 0) {
-            throw new BizException ("该角色还有绑定用户,请先解绑再删除!");
+            return new CommonDtoResult<> (Boolean.FALSE, "该角色还有绑定用户,请先解绑再删除!");
         }
         
         QueryWrapper<Role> wrapper = new QueryWrapper<Role> ()
@@ -99,7 +98,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
         int modify = baseMapper.delete (wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

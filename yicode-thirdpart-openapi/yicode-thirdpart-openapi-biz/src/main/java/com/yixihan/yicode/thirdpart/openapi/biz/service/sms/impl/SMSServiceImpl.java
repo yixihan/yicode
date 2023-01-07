@@ -38,6 +38,9 @@ public class SMSServiceImpl implements SMSService {
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -49,6 +52,9 @@ public class SMSServiceImpl implements SMSService {
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -60,6 +66,9 @@ public class SMSServiceImpl implements SMSService {
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -71,6 +80,9 @@ public class SMSServiceImpl implements SMSService {
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -82,6 +94,9 @@ public class SMSServiceImpl implements SMSService {
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -93,6 +108,9 @@ public class SMSServiceImpl implements SMSService {
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -104,6 +122,9 @@ public class SMSServiceImpl implements SMSService {
         SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 
@@ -115,6 +136,9 @@ public class SMSServiceImpl implements SMSService {
         SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
         dtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 }

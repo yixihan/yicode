@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -41,7 +40,10 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         UserFavorite favorite = BeanUtil.toBean (dtoReq, UserFavorite.class);
         int modify = baseMapper.insert (favorite);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -55,7 +57,10 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
                 .set (dtoReq.getFavoriteCount () != null, UserFavorite.FAVORITE_COUNT, dtoReq.getFavoriteCount ());
         int modify = baseMapper.update (null, wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -67,7 +72,10 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
                 .eq (UserFavorite.USER_ID, dtoReq.getUserId ());
         int modify = baseMapper.delete (wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

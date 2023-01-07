@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -73,12 +72,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Override
     public CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq) {
         if (roleService.hasRole (dtoReq.getRoleId ())) {
-            throw new BizException ("无此角色!");
+            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
         }
         if (baseMapper.selectCount (new QueryWrapper<UserRole> ()
                 .eq (UserRole.USER_ID, dtoReq.getUserId ())
                 .eq (UserRole.ROLE_ID, dtoReq.getRoleId ())) > 0) {
-            throw new BizException ("该用户已添加该角色!");
+            return new CommonDtoResult<> (Boolean.FALSE, "该用户已添加该角色!");
         }
         
         UserRole userRole = new UserRole ();
@@ -86,7 +85,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         userRole.setRoleId (dtoReq.getRoleId ());
         int modify = baseMapper.insert (userRole);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -94,19 +93,19 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Override
     public CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq) {
         if (roleService.hasRole (dtoReq.getRoleId ())) {
-            throw new BizException ("无此角色!");
+            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
         }
         QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole> ()
                 .eq (UserRole.USER_ID, dtoReq.getUserId ())
                 .eq (UserRole.ROLE_ID, dtoReq.getRoleId ());
         
         if (0 >= baseMapper.selectCount (wrapper)) {
-            throw new BizException ("该用户无此角色!");
+            return new CommonDtoResult<> (Boolean.FALSE, "该用户无此角色!");
         }
         
         int modify = baseMapper.delete (wrapper);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

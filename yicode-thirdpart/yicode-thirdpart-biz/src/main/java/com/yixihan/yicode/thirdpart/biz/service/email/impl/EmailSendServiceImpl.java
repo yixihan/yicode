@@ -1,15 +1,15 @@
 package com.yixihan.yicode.thirdpart.biz.service.email.impl;
 
-import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
-import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
 import com.yixihan.yicode.thirdpart.api.constant.email.EmailConstant;
-import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
+import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
 import com.yixihan.yicode.thirdpart.biz.service.EmailTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import com.yixihan.yicode.thirdpart.biz.service.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -68,8 +68,8 @@ public class EmailSendServiceImpl implements EmailSendService {
             // 发送
             mailSender.send(mailMessage);
         } catch (MessagingException e) {
-            log.error ("邮件发送失败 : {}", e.getMessage (), new BizException ());
-            throw new BizException (BizCodeEnum.EMAIL_SEND_ERR);
+            log.error ("邮件发送失败 : {}", e.getMessage ());
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.EMAIL_SEND_ERR.getErrorMsg ());
         }
 
         return new CommonDtoResult<> (Boolean.TRUE, "邮件发送成功");

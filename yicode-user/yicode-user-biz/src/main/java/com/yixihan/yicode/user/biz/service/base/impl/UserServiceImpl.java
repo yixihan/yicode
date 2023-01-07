@@ -211,7 +211,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.set (User.USER_PASSWORD,passwordEncoder.encode (dtoReq.getNewPassword ()));
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("密码重置失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "密码重置失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "重置密码成功");
     }
@@ -220,7 +220,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public CommonDtoResult<Boolean> bindEmail(BindEmailDtoReq dtoReq) {
         UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
         if (!StrUtil.isBlank (userDtoResult.getUserEmail ())) {
-            throw new BizException ("请先解绑邮箱!");
+            return new CommonDtoResult<> (Boolean.FALSE, "请先解绑邮箱!");
         }
 
         User user = new User ();
@@ -230,7 +230,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.USER_EMAIL, dtoReq.getEmail ());
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("绑定邮箱失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "绑定邮箱失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "绑定邮箱成功");
     }
@@ -244,7 +244,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.USER_EMAIL, null);
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("解绑邮箱失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "解绑邮箱失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "解绑邮箱成功");
     }
@@ -253,7 +253,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public CommonDtoResult<Boolean> bindMobile(BindMobileDtoReq dtoReq) {
         UserDtoResult userDtoResult = getUserById (dtoReq.getUserId ());
         if (!StrUtil.isBlank (userDtoResult.getUserMobile ())) {
-            throw new BizException ("请先解绑手机号!");
+            return new CommonDtoResult<> (Boolean.FALSE, "请先解绑手机号!");
         }
 
         User user = new User ();
@@ -263,7 +263,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.USER_MOBILE, dtoReq.getMobile ());
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("绑定手机号失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "绑定手机号失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "绑定手机号成功");
     }
@@ -277,7 +277,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.USER_MOBILE, null);
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("解绑手机号失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "解绑手机号失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "解绑手机号成功");
     }
@@ -291,7 +291,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.USER_NAME, dtoReq.getUserName ());
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("修改用户名失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "修改用户名失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "修改用户名成功");
     }
@@ -305,7 +305,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User.DEL_FLAG, 1);
         int modify = baseMapper.update (user, wrapper);
         if (modify != 1) {
-            throw new BizException ("注销失败!");
+            return new CommonDtoResult<> (Boolean.FALSE, "注销失败!");
         }
         return new CommonDtoResult<> (Boolean.TRUE, "注销成功");
     }
@@ -313,14 +313,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CommonDtoResult<Boolean> verifyUserName(String userName) {
         if (StrUtil.isBlank (userName)) {
-            throw new BizException ("校验的用户名为空!");
+            return new CommonDtoResult<> (Boolean.FALSE, "校验的用户名为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_NAME, userName);
         boolean flag = baseMapper.selectCount (wrapper) == 0;
         if (!flag) {
-            throw new BizException ("该用户名已被占用");
+            return new CommonDtoResult<> (Boolean.FALSE, "该用户名已被占用!");
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -328,14 +328,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CommonDtoResult<Boolean> verifyUserEmail(String email) {
         if (StrUtil.isBlank (email)) {
-            throw new BizException ("校验的邮箱为空!");
+            return new CommonDtoResult<> (Boolean.FALSE, "校验的邮箱为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_EMAIL, email);
         boolean flag = baseMapper.selectCount (wrapper) == 0;
         if (!flag) {
-            throw new BizException ("该邮箱已被绑定");
+            return new CommonDtoResult<> (Boolean.FALSE, "该邮箱已被绑定!");
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -343,14 +343,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public CommonDtoResult<Boolean> verifyUserMobile(String mobile) {
         if (StrUtil.isBlank (mobile)) {
-            throw new BizException ("校验的手机号为空!");
+            return new CommonDtoResult<> (Boolean.FALSE, "校验的手机号为空!");
         }
 
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_MOBILE, mobile);
         boolean flag = baseMapper.selectCount (wrapper) == 0;
         if (!flag) {
-            throw new BizException ("该手机号已被绑定");
+            return new CommonDtoResult<> (Boolean.FALSE, "该手机号已被绑定!");
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
@@ -41,7 +42,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     public CommonVO<Boolean> followUser(ModifyFollowReq req) {
         // 校验 userId
         if (userService.verifyUserId (req.getFollowUserId ())) {
-            return new CommonVO<> (Boolean.FALSE, "关注者不存在!");
+            throw new BizException ("关注者不存在!");
         }
     
         ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
@@ -50,6 +51,9 @@ public class UserFollowServiceImpl implements UserFollowService {
         );
     
         CommonDtoResult<Boolean> dtoResult = followFeignClient.followUser (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -57,7 +61,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     public CommonVO<Boolean> unfollowUser(ModifyFollowReq req) {
         // 校验 userId
         if (userService.verifyUserId (req.getFollowUserId ())) {
-            return new CommonVO<> (Boolean.FALSE, "关注者不存在!");
+            throw new BizException ("关注者不存在!");
         }
     
         ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
@@ -66,6 +70,9 @@ public class UserFollowServiceImpl implements UserFollowService {
         );
     
         CommonDtoResult<Boolean> dtoResult = followFeignClient.unfollowUser (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     

@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
@@ -48,16 +49,19 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     public CommonVO<Boolean> addFavorite(AddFavoriteReq req) {
         // 校验收藏夹名 (不为空) & 收藏夹类型
         if (StrUtil.isBlank (req.getFavoriteName ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不能为空!");
+            throw new BizException ("收藏夹不能为空!");
         }
         if (!FavoriteTypeEnums.contains (req.getFavoriteType ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹类型错误!");
+            throw new BizException ("收藏夹类型错误!");
         }
         
         // 新增收藏夹
         AddFavoriteDtoReq dtoReq = CopyUtils.copySingle (AddFavoriteDtoReq.class, req);
         dtoReq.setUserId (userService.getUserInfo ().getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -66,19 +70,22 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         Long userId = userService.getUserInfo ().getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
         if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不存在");
+            throw new BizException ("收藏夹不存在!");
         }
         if (StrUtil.isBlank (req.getFavoriteName ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不能为空!");
+            throw new BizException ("收藏夹不能为空!");
         }
         if (req.getFavoriteCount () == null || req.getFavoriteCount () < NumConstant.NUM_0) {
-            return new CommonVO<> (Boolean.FALSE, "收藏数量不能为空或小于零!");
+            throw new BizException ("收藏数量不能为空或小于零!");
         }
         
         // 修改收藏夹
         ModifyFavoriteDtoReq dtoReq = CopyUtils.copySingle (ModifyFavoriteDtoReq.class, req);
         dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -87,7 +94,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         Long userId = userService.getUserInfo ().getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
         if (verifyFavoriteId (userId, favoriteId)) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不存在");
+            throw new BizException ("收藏夹不存在!");
         }
         
         // 删除收藏夹
@@ -95,6 +102,9 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         dtoReq.setUserId (userId);
         dtoReq.setFavoriteId (favoriteId);
         CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.delFavorite (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -123,7 +133,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         Long userId = userService.getUserInfo ().getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏内容 ID
         if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不存在");
+            throw new BizException ("收藏夹不存在!");
         }
         // TODO 校验收藏内容 ID
         
@@ -131,6 +141,9 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
         dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = collectionFeignClient.addCollection (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     
@@ -139,7 +152,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         Long userId = userService.getUserInfo ().getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏内容 ID
         if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            return new CommonVO<> (Boolean.FALSE, "收藏夹不存在");
+            throw new BizException ("收藏夹不存在!");
         }
         // TODO 校验收藏内容 ID
         
@@ -147,6 +160,9 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
         dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
     

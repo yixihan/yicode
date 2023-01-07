@@ -2,16 +2,15 @@ package com.yixihan.yicode.user.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLabelDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLabelDtoResult;
-import com.yixihan.yicode.user.dal.pojo.extra.UserLabel;
-import com.yixihan.yicode.user.dal.mapper.extra.UserLabelMapper;
 import com.yixihan.yicode.user.biz.service.extra.UserLabelService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.user.dal.mapper.extra.UserLabelMapper;
+import com.yixihan.yicode.user.dal.pojo.extra.UserLabel;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -38,7 +37,10 @@ public class UserLabelServiceImpl extends ServiceImpl<UserLabelMapper, UserLabel
         UserLabel label = BeanUtil.toBean (dtoReq, UserLabel.class);
         int modify = baseMapper.insert (label);
         if (modify != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
+            return new CommonDtoResult<> (
+                    Boolean.FALSE,
+                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
+            );
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

@@ -2,6 +2,7 @@ package com.yixihan.yicode.thirdpart.openapi.biz.service.code.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.CopyUtils;
@@ -43,6 +44,9 @@ public class PhotoCodeServiceImpl implements PhotoCodeService {
     public CommonVO<Boolean> validateCode(CodeValidateReq req) {
         CodeValidateDtoReq dtoReq = CopyUtils.copySingle (CodeValidateDtoReq.class, req);
         CommonDtoResult<Boolean> dtoResult = codeFeignClient.validateCode (dtoReq).getResult ();
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
         return CommonVO.create (dtoResult);
     }
 }

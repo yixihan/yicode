@@ -77,10 +77,10 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (uuid)) {
-            throw new OAuth2Exception (BizCodeEnum.UUID_EMPTY_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.UUID_EMPTY_ERR.getErrorMsg ());
         }
         if (StrUtil.isBlank (code)) {
-            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getErrorMsg ());
         }
 
         UserService userService = getUserService ();
@@ -88,7 +88,7 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         dtoReq.setUuid (uuid);
         dtoReq.setCode (code);
         if (!userService.validatePhotoCode (dtoReq)) {
-            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getErrorMsg ());
         }
     }
 

@@ -85,10 +85,10 @@ public class SMSTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (mobile)) {
-            throw new OAuth2Exception (BizCodeEnum.MOBILE_EMPTY_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.MOBILE_EMPTY_ERR.getErrorMsg ());
         }
         if (StrUtil.isBlank (code)) {
-            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getErrorMsg ());
         }
 
         UserService userService = getUserService ();
@@ -98,7 +98,7 @@ public class SMSTokenGranter extends AbstractTokenGranter {
         dtoReq.setCode (code);
         User user = userService.validateMobileCode (dtoReq);
         if (user == null) {
-            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getMsg ());
+            throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getErrorMsg ());
         }
 
         parameters.put ("username", user.getUsername () + "~~other");

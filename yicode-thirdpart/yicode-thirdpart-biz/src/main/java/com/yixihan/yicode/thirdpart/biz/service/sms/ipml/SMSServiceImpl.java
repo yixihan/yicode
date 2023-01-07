@@ -84,11 +84,11 @@ public class SMSServiceImpl implements SMSService {
                 return new CommonDtoResult<> (Boolean.TRUE, "短信发送成功");
             } else {
                 log.error (sendStatus.getMessage());
-                throw new BizException (BizCodeEnum.SMS_SEND_ERR);
+                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.SMS_SEND_ERR.getErrorMsg ());
             }
         } catch (TencentCloudSDKException e) {
             log.error (e.getMessage ());
-            throw new BizException (BizCodeEnum.SMS_SEND_ERR);
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.SMS_SEND_ERR.getErrorMsg ());
         }
     }
 
