@@ -57,9 +57,8 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         }
         // 运行代码
         String fileName = file.getParent () + "/" + file.getName ().substring (0, file.getName ().length () - 2);
-        String[] command = new String[]{"/bin/bash", "-c", "." + fileName};
-        //        String command = "/bin/bash -c cd " + path + " && ./main";
-        log.info ("run command : {}", Arrays.toString (command));
+        String command = "." + fileName;
+        log.info ("run command : {}", command);
         List<String> ansList = new ArrayList<> ();
         
         long startTime = System.currentTimeMillis ();
