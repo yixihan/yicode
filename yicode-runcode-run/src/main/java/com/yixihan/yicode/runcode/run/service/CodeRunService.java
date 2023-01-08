@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -123,7 +122,7 @@ public class CodeRunService {
         StringBuilder sb;
         BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"));
         
         for (String param : params) {
             writer.write (param);
@@ -136,7 +135,7 @@ public class CodeRunService {
         sb = new StringBuilder ();
         
         while ((tmp = reader.readLine ()) != null) {
-            
+            log.info ("output : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
         
