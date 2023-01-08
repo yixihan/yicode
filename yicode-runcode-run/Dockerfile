@@ -1,4 +1,4 @@
-FROM oracle-jdk:8
+FROM myos
 EXPOSE 18200
 
 ARG APLLLICATION=yicode-runcode-run
