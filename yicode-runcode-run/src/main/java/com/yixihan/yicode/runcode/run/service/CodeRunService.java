@@ -135,11 +135,7 @@ public class CodeRunService {
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
-    
-            int modify = process.waitFor ();
-            if (modify != 0) {
-                return sb.append ("运行失败!").toString ();
-            }
+            
         } catch (Exception e) {
             e.printStackTrace ();
             return sb.append (e.getMessage ()).toString ();
