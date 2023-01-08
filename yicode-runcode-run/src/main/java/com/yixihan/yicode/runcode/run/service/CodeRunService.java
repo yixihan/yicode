@@ -1,66 +1,116 @@
 package com.yixihan.yicode.runcode.run.service;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import com.yixihan.yicode.runcode.run.constant.CodeRunConstant;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
- * 代码编译运行 服务类
+ * 代码运行 服务类
  *
  * @author yixihan
- * @date 2023/1/3 14:18
+ * @date 2023/1/8 11:27
  */
-public interface CodeRunService {
+@Slf4j
+@Service
+public class CodeRunService {
+    
+    @Resource
+    private CodeRunConstant constant;
+    
+    
+    @PostConstruct
+    public void init() {
+        // c
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_C, "CodeRunCService");
+        // c++
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_CPP, "CodeRunCppService");
+        // Java
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_JAVA, "CodeRunJavaService");
+        // JavaScript
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_JS, "CodeRunJsService");
+        // go
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_GO, "CodeRunGoService");
+        // python
+        CodeRunConfig.putServiceName (CodeRunConfig.CODE_TYPE_PY, "CodeRunPyService");
+    }
     
     /**
-     * 生成 Python 代码编译运行指令
-     *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
+     * 代码运行策略选择器
      */
-    Process getPyProcess(File file) throws IOException;
+    public List<String> fetchCodeRunItem(CodeRunDtoReq req) {
+        List<String> ansList = new ArrayList<> ();
+        try {
+            if (req == null) {
+                return Collections.emptyList ();
+            }
+    
+            // 提取服务
+            CodeRunExtractService service = SpringUtil.getBean (
+                    CodeRunConfig.getServiceName (req.getCodeType ()),
+                    CodeRunExtractService.class
+            );
+    
+            // 运行代码
+            ansList = service.run (req);
+        } catch (IOException e) {
+            log.error (e.getMessage ());
+            ansList.add (e.getMessage ());
+        }
+        return ansList;
+    }
     
     /**
-     * 生成 C 代码编译运行指令
+     * 解码代码
      *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
+     * @param code 解码前的代码
+     * @return 解码后的代码
      */
-    Process getCProcess(File file) throws IOException;
+    public String decodeCode (String code) {
+        return Base64.decodeStr (code);
+    }
     
     /**
-     * 生成 Java 代码编译运行指令
+     * 获取代码存放目录
      *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
+     * @return 代码存放目录
      */
-    Process getJavaProcess(File file) throws IOException;
+    public File getPath () {
+        return new File (constant.getFileDir () +
+                "/" + DateUtil.format (new Date (), "yyyy-MM-dd-HH"));
+    }
     
     /**
-     * 生成 C++ 代码编译运行指令
+     * 将代码写入文件
      *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
+     * @param code 代码
+     * @param file 要写入的文件
      */
-    Process getCppProcess(File file) throws IOException;
-    
-    /**
-     * 生成 JavaScript 代码编译运行指令
-     *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
-     */
-    Process getJsProcess(File file) throws IOException;
-    
-    /**
-     * 生成 Golang 代码编译运行指令
-     *
-     * @param file 代码文件
-     * @return {@link Process} 指令对象
-     */
-    Process getGoProcess(File file) throws IOException;
+    public void writeCode(String code, File file) {
+        // 解码代码
+        code = decodeCode (code);
+        // 代码写入文件
+        try (BufferedWriter bufferedWriter = new BufferedWriter (new FileWriter (file.getPath ()))) {
+            bufferedWriter.write (code);
+        } catch (IOException e) {
+            throw new RuntimeException (e);
+        }
+    }
     
     /**
      * 编译运行代码, 获取运行结果
@@ -69,13 +119,41 @@ public interface CodeRunService {
      * @param params 传参
      * @return {@link Process} 指令对象
      */
-    String runProcess(Process process, List<String> params) throws IOException;
+    public String runProcess(Process process, List<String> params) throws IOException {
+        StringBuilder sb;
+        BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
+        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
+        
+        for (String param : params) {
+            writer.write (param);
+            writer.newLine ();
+        }
+        
+        writer.close ();
+        
+        String tmp;
+        sb = new StringBuilder ();
+        
+        while ((tmp = reader.readLine ()) != null) {
+            
+            sb.append (new String (tmp.getBytes ())).append ("\n");
+        }
+        
+        reader.close ();
+        
+        return sb.toString ();
+    }
     
     /**
-     * 执行代码
-     *
-     * @param dtoReq 请求参数
-     * @return 执行结果
+     * 定时任务, 清理上一小时的代码文件夹
      */
-    String runCode(CodeRunDtoReq dtoReq);
+    @Scheduled(cron = "0 5 * * * ?")
+    public void cleanDir () {
+        DateTime lastHour = DateUtil.offsetHour (DateUtil.beginOfHour (new Date ()), -1);
+        File path = new File (constant.getFileDir () +
+                "/" + DateUtil.format (lastHour, "yyyy-MM-dd-HH"));
+        
+        FileUtil.del (path);
+    }
 }

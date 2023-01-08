@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 代码编译运行 服务实现类
@@ -24,7 +25,7 @@ public class CodeRunController {
     private CodeRunService service;
     
     @PostMapping("/code")
-    public ApiResult<String> runCode (@RequestBody CodeRunDtoReq dtoReq) {
-        return ApiResult.create (service.runCode (dtoReq));
+    public ApiResult<List<String>> runCode (@RequestBody CodeRunDtoReq dtoReq) {
+        return ApiResult.create (service.fetchCodeRunItem (dtoReq));
     }
 }
