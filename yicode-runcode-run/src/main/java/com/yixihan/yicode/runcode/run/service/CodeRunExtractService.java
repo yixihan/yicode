@@ -4,7 +4,6 @@ import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.enums.CodeTypeEnums;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -30,12 +29,12 @@ public interface CodeRunExtractService {
      * @param req 请求参数
      * @return 代码运行结果
      */
-    List<String> run (CodeRunDtoReq req) throws IOException, InterruptedException, Exception;
+    List<String> run (CodeRunDtoReq req) throws Exception;
     
     /**
      * 编译代码
      *
      * @param file 代码源文件
      */
-    void compile (File file) throws IOException, InterruptedException, Exception;
+    void compile (File file) throws Exception;
 }

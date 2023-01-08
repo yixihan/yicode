@@ -67,7 +67,7 @@ public class CodeRunService {
     
             // 运行代码
             ansList = service.run (req);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error (e.getMessage ());
             ansList.add (e.getMessage ());
         }
