@@ -7,6 +7,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.runcode.run.constant.CodeRunConstant;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
+import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,11 +51,11 @@ public class CodeRunService {
     /**
      * 代码运行策略选择器
      */
-    public List<String> fetchCodeRunItem(CodeRunDtoReq req) {
-        List<String> ansList = new ArrayList<> ();
+    public CodeRunDtoResult fetchCodeRunItem(CodeRunDtoReq req) {
+        CodeRunDtoResult dtoResult;
         try {
             if (req == null) {
-                return Collections.emptyList ();
+                return new CodeRunDtoResult ();
             }
     
             // 提取服务
@@ -66,12 +65,12 @@ public class CodeRunService {
             );
     
             // 运行代码
-            ansList = service.run (req);
+            dtoResult = service.run (req);
         } catch (Exception e) {
             log.error (e.getMessage ());
-            ansList.add (e.getMessage ());
+            return CodeRunDtoResult.error (e);
         }
-        return ansList;
+        return dtoResult;
     }
     
     /**
@@ -112,32 +111,60 @@ public class CodeRunService {
     }
     
     /**
-     * 编译运行代码, 获取运行结果
+     * 获取运行结果
      *
      * @param process 指令对象
      * @param params 传参
      * @return {@link Process} 指令对象
      */
-    public String runProcess(Process process, List<String> params) throws Exception {
+    public String runCode(Process process, List<String> params) throws Exception {
         BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
         BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
     
+        // 传入形参
         for (String param : params) {
             writer.write (param);
             writer.newLine ();
         }
-    
+        // 关闭输入流
         writer.close ();
     
+        // 获取运行结果
         String tmp;
         StringBuilder sb = new StringBuilder ();
+        while ((tmp = reader.readLine ()) != null) {
+            sb.append (new String (tmp.getBytes ())).append ("\n");
+        }
+        reader.close ();
+        
+        // 等待 process 运行完毕, 关闭
+        process.waitFor ();
+        process.destroy ();
+        return sb.toString ();
+    }
     
+    /**
+     * 获取编译结果
+     *
+     * @param process 指令对象
+     * @return {@link Process} 指令对象
+     */
+    public String compileCode(Process process) throws Exception {
+        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+    
+        // 获取编译结果
+        String tmp;
+        StringBuilder sb = new StringBuilder ();
         while ((tmp = reader.readLine ()) != null) {
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
     
         reader.close ();
+        // 等待 process 运行完毕, 关闭
+        process.waitFor ();
+        process.destroy ();
         return sb.toString ();
     }
     

@@ -1,10 +1,10 @@
 package com.yixihan.yicode.runcode.run.service;
 
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
+import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import com.yixihan.yicode.runcode.run.enums.CodeTypeEnums;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * 代码运行 策略服务类
@@ -29,7 +29,7 @@ public interface CodeRunExtractService {
      * @param req 请求参数
      * @return 代码运行结果
      */
-    List<String> run (CodeRunDtoReq req) throws Exception;
+    CodeRunDtoResult run (CodeRunDtoReq req) throws Exception;
     
     /**
      * 编译代码

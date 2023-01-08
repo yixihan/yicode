@@ -2,6 +2,7 @@ package com.yixihan.yicode.runcode.run.controller;
 
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
+import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import com.yixihan.yicode.runcode.run.service.CodeRunService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 代码编译运行 服务实现类
@@ -25,7 +25,7 @@ public class CodeRunController {
     private CodeRunService service;
     
     @PostMapping("/code")
-    public ApiResult<List<String>> runCode (@RequestBody CodeRunDtoReq dtoReq) {
+    public ApiResult<CodeRunDtoResult> runCode (@RequestBody CodeRunDtoReq dtoReq) {
         return ApiResult.create (service.fetchCodeRunItem (dtoReq));
     }
 }
