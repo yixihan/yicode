@@ -75,11 +75,12 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     @Override
     public String compile(File file) throws Exception {
         File path = FileUtil.getParent (file, 1);
-        String command = "/bin/bash -c cd " + path + " &&  gcc main.c -o main";
+        String command = "/bin/bash -c cd " + path + " && gcc main.c -o main";
         log.info ("compile command : {}", command);
         Process process = Runtime.getRuntime ().exec (command);
         
         int modify = process.waitFor ();
+        log.info (modify == 0 ? "compile success!" : "compile fail!");
         return modify == 0 ? "compile success!" : null;
     }
 }
