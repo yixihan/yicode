@@ -1,5 +1,6 @@
 package com.yixihan.yicode.runcode.run.service.strategy;
 
+import cn.hutool.core.io.FileUtil;
 import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.service.CodeRunConfig;
@@ -31,6 +32,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     public File createFile(String code, String type) {
         // 生成源代码目录
         File path = new File (codeRunService.getPath () + "/" + SnowFlake.nextId ());
+        FileUtil.mkdir (path);
         // 生成源代码文件
         File file = new File (path + "/main." + type);
         // 写入代码
