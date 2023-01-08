@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.runcode.run.constant.CodeRunConstant;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import lombok.extern.slf4j.Slf4j;
@@ -134,6 +135,11 @@ public class CodeRunService {
             log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
+        int modify = process.waitFor ();
+        if (modify != 0) {
+            throw new BizException ("代码运行错误");
+        }
+        process.destroy ();
         return sb.toString ();
     }
     
