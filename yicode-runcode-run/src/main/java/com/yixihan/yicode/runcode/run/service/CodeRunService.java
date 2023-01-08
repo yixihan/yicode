@@ -122,8 +122,8 @@ public class CodeRunService {
         StringBuilder sb = new StringBuilder ();
         BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"));
-        
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+        log.info ("params : {}", params);
         for (String param : params) {
             writer.write (param);
             writer.newLine ();
@@ -131,6 +131,7 @@ public class CodeRunService {
         
         String tmp;
         while ((tmp = reader.readLine ()) != null) {
+            log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
         return sb.toString ();
