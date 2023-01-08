@@ -123,6 +123,7 @@ public class CodeRunService {
         BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
         BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"));
+        
         for (String param : params) {
             writer.write (param);
             writer.newLine ();
