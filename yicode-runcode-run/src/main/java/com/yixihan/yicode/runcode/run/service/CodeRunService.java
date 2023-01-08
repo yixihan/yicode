@@ -118,27 +118,19 @@ public class CodeRunService {
      * @param params 传参
      * @return {@link Process} 指令对象
      */
-    public String runProcess(Process process, List<String> params) {
+    public String runProcess(Process process, List<String> params) throws Exception {
         StringBuilder sb = new StringBuilder ();
-        try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
-             SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-             BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"))
-        ) {
-            for (String param : params) {
-                writer.write (param);
-                writer.newLine ();
-            }
-            
-            String tmp;
-            while ((tmp = reader.readLine ()) != null) {
-                sb.append (new String (tmp.getBytes ())).append ("\n");
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace ();
-            return sb.append (e.getMessage ()).toString ();
-        } finally {
-            process.destroy ();
+        BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
+        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"));
+        for (String param : params) {
+            writer.write (param);
+            writer.newLine ();
+        }
+        
+        String tmp;
+        while ((tmp = reader.readLine ()) != null) {
+            sb.append (new String (tmp.getBytes ())).append ("\n");
         }
         return sb.toString ();
     }

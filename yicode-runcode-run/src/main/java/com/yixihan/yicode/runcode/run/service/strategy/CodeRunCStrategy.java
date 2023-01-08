@@ -3,6 +3,7 @@ package com.yixihan.yicode.runcode.run.service.strategy;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.service.CodeRunConfig;
@@ -65,6 +66,11 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         for (List<String> params : req.getParamList ()) {
             Process process = Runtime.getRuntime ().exec (command);
             ansList.add (codeRunService.runProcess (process, params));
+            int modify = process.waitFor ();
+            if (modify != 0) {
+                throw new BizException ("代码运行错误");
+            }
+            process.destroy ();
         }
         long endTime = System.currentTimeMillis ();
         log.info ("time used : {}", (endTime - startTime));
