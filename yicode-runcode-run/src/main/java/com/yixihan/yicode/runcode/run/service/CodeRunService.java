@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.runcode.run.constant.CodeRunConstant;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import lombok.extern.slf4j.Slf4j;
@@ -120,29 +119,26 @@ public class CodeRunService {
      * @return {@link Process} 指令对象
      */
     public String runProcess(Process process, List<String> params) throws Exception {
-        StringBuilder sb = new StringBuilder ();
         BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
         BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
-        log.info ("params : {}", params);
+    
         for (String param : params) {
             writer.write (param);
             writer.newLine ();
         }
+    
         writer.close ();
-        
+    
         String tmp;
+        StringBuilder sb = new StringBuilder ();
+    
         while ((tmp = reader.readLine ()) != null) {
             log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
+    
         reader.close ();
-        
-        int modify = process.waitFor ();
-        if (modify != 0) {
-            throw new BizException ("代码运行错误");
-        }
-        process.destroy ();
         return sb.toString ();
     }
     
