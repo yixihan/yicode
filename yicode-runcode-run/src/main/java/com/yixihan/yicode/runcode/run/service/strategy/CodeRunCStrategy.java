@@ -39,7 +39,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         File file = new File (path + "/main.c");
         // 写入代码
         codeRunService.writeCode (code, file);
-    
+        
         return file;
     }
     
@@ -56,9 +56,9 @@ public class CodeRunCStrategy implements CodeRunExtractService {
             }
         }
         // 运行代码
-        File path = FileUtil.getParent (file, 1);
-        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
-//        String command = "/bin/bash -c cd " + path + " && ./main";
+        String fileName = file.getParent () + "/" + file.getName ().substring (0, file.getName ().length () - 2);
+        String[] command = new String[]{"/bin/bash", "-c", "." + fileName};
+        //        String command = "/bin/bash -c cd " + path + " && ./main";
         log.info ("run command : {}", Arrays.toString (command));
         List<String> ansList = new ArrayList<> ();
         
@@ -75,7 +75,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     
     @Override
     public String compile(File file) throws Exception {
-        File path = FileUtil.getParent (file, 1);
+        String path = file.getPath ();
         String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && gcc main.c -o main"};
         log.info ("compile command : {}", Arrays.toString (command));
         Process process = Runtime.getRuntime ().exec (command);
