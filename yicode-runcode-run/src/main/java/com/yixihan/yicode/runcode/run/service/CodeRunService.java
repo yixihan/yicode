@@ -130,14 +130,13 @@ public class CodeRunService {
                 writer.newLine ();
             }
             
-            process.waitFor ();
-        
             String tmp;
             sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
-            
+    
+            process.waitFor ();
         } catch (Exception e) {
             e.printStackTrace ();
             sb.append (e.getMessage ());
