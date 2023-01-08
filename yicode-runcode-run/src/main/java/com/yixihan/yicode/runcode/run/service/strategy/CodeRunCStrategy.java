@@ -34,7 +34,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         File path = new File (codeRunService.getPath () + "/" + SnowFlake.nextId ());
         FileUtil.mkdir (path);
         // 生成源代码文件
-        File file = new File (path + "/main." + type);
+        File file = new File (path + "/main.c");
         // 写入代码
         codeRunService.writeCode (code, file);
     
@@ -53,7 +53,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         // 运行代码
         String outName = file.getAbsolutePath ().substring (0, file.getAbsolutePath ().length () - 2);
         String command = "/bin/bash /c ." + outName;
-        log.info ("运行命令 : {}", command);
+        log.info ("run command : {}", command);
         List<String> ansList = new ArrayList<> ();
         
         long startTime = System.currentTimeMillis ();
@@ -62,7 +62,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
             ansList.add (codeRunService.runProcess (process, params));
         }
         long endTime = System.currentTimeMillis ();
-        log.info ("消耗时间 : {}", (endTime - startTime));
+        log.info ("time used : {}", (endTime - startTime));
         
         return ansList;
     }
@@ -71,7 +71,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     public void compile(File file) throws IOException {
         String outName = file.getAbsolutePath ().substring (0, file.getAbsolutePath ().length () - 2);
         String command = "/bin/bash /c gcc " + file.getAbsolutePath () + " -o " + outName;
-        log.info ("编译命令 : {}", command);
+        log.info ("compile command : {}", command);
         Runtime.getRuntime ().exec (command);
     }
 }
