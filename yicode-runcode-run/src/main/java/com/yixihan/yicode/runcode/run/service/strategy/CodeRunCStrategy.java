@@ -60,6 +60,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         for (List<String> params : req.getParamList ()) {
             Process process = Runtime.getRuntime ().exec (command);
             ansList.add (codeRunService.runProcess (process, params));
+            process.destroy ();
         }
         long endTime = System.currentTimeMillis ();
         log.info ("time used : {}", (endTime - startTime));
