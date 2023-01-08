@@ -1,6 +1,8 @@
 package com.yixihan.yicode.runcode.run.service.strategy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.service.CodeRunConfig;
@@ -47,11 +49,14 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         File file = createFile (req.getCode (), req.getCodeType ());
         // 判断是否是需要编译的语言
         if (CodeRunConfig.judgeCodeCompile (req.getCodeType ())) {
-            compile (file);
+            String compile = compile (file);
+            if (StrUtil.isBlank (compile)) {
+                return CollUtil.newArrayList ("compile fail!");
+            }
         }
         // 运行代码
         File path = FileUtil.getParent (file, 1);
-        String command = "/bin/bash /c cd " + path + " && ./main";
+        String command = "/bin/bash -c cd " + path + " && ./main";
         log.info ("run command : {}", command);
         List<String> ansList = new ArrayList<> ();
         
@@ -68,17 +73,13 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     }
     
     @Override
-    public void compile(File file) throws Exception {
+    public String compile(File file) throws Exception {
         String outName = file.getAbsolutePath ().substring (0, file.getAbsolutePath ().length () - 2);
-        String command = "/bin/bash /c gcc " + file.getAbsolutePath () + " -o " + outName;
+        String command = "/bin/bash -c gcc " + file.getAbsolutePath () + " -o " + outName;
         log.info ("compile command : {}", command);
         Process process = Runtime.getRuntime ().exec (command);
         
         int modify = process.waitFor ();
-        if (modify == 0) {
-            log.info ("compile success!");
-        } else {
-            log.info ("compile fail!");
-        }
+        return modify == 0 ? "compile success!" : null;
     }
 }

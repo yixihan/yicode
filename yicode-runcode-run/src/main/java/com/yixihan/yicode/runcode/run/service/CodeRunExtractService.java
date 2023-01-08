@@ -35,6 +35,7 @@ public interface CodeRunExtractService {
      * 编译代码
      *
      * @param file 代码源文件
+     * @return
      */
-    void compile (File file) throws Exception;
+    String compile (File file) throws Exception;
 }
