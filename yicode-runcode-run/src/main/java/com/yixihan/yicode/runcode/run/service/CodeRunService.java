@@ -129,6 +129,7 @@ public class CodeRunService {
             writer.write (param);
             writer.newLine ();
         }
+        writer.close ();
     
         int modify = process.waitFor ();
         if (modify != 0) {
@@ -140,6 +141,7 @@ public class CodeRunService {
             log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
+        reader.close ();
         process.destroy ();
         return sb.toString ();
     }
