@@ -118,7 +118,7 @@ public class CodeRunService {
      * @param params 传参
      * @return {@link Process} 指令对象
      */
-    public String runProcess(Process process, List<String> params) throws IOException {
+    public String runProcess(Process process, List<String> params) {
         StringBuilder sb = new StringBuilder ();
         try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
              SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
@@ -141,7 +141,9 @@ public class CodeRunService {
             }
             log.info ("output get success!");
         } catch (IOException e) {
+            e.printStackTrace ();
             sb.append (e.getMessage ());
+            return sb.toString ();
         }
         return sb.toString ();
     }
