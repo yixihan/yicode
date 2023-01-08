@@ -57,15 +57,15 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         }
         // 运行代码
         File path = FileUtil.getParent (file, 1);
-        String command = "/bin/bash -c cd " + path + " && ./main";
-        log.info ("run command : {}", command);
+        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
+//        String command = "/bin/bash -c cd " + path + " && ./main";
+        log.info ("run command : {}", Arrays.toString (command));
         List<String> ansList = new ArrayList<> ();
         
         long startTime = System.currentTimeMillis ();
         for (List<String> params : req.getParamList ()) {
             Process process = Runtime.getRuntime ().exec (command);
             ansList.add (codeRunService.runProcess (process, params));
-            process.destroy ();
         }
         long endTime = System.currentTimeMillis ();
         log.info ("time used : {}", (endTime - startTime));
@@ -75,15 +75,12 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     
     @Override
     public String compile(File file) throws Exception {
-        String outName = FileUtil.getAbsolutePath (file).substring (0, FileUtil.getAbsolutePath (file).length () - 2);
         File path = FileUtil.getParent (file, 1);
-//        String command = "/bin/sh -c cd " + path + " && gcc main.c -o main";
         String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && gcc main.c -o main"};
         log.info ("compile command : {}", Arrays.toString (command));
         Process process = Runtime.getRuntime ().exec (command);
         
         int modify = process.waitFor ();
-        log.info (modify == 0 ? "compile success!" : "compile fail!");
         return modify == 0 ? "compile success!" : null;
     }
 }

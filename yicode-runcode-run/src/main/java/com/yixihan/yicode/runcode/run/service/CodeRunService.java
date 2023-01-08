@@ -136,11 +136,15 @@ public class CodeRunService {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
     
-            process.waitFor ();
+            int modify = process.waitFor ();
+            if (modify != 0) {
+                return sb.append ("运行失败!").toString ();
+            }
         } catch (Exception e) {
             e.printStackTrace ();
-            sb.append (e.getMessage ());
-            return sb.toString ();
+            return sb.append (e.getMessage ()).toString ();
+        } finally {
+            process.destroy ();
         }
         return sb.toString ();
     }
