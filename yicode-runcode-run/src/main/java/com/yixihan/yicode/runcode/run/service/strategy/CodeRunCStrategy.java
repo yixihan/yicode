@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,9 +75,11 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     
     @Override
     public String compile(File file) throws Exception {
+        String outName = FileUtil.getAbsolutePath (file).substring (0, FileUtil.getAbsolutePath (file).length () - 2);
         File path = FileUtil.getParent (file, 1);
-        String command = "/bin/bash /c cd " + path + " && gcc main.c -o main";
-        log.info ("compile command : {}", command);
+//        String command = "/bin/sh -c cd " + path + " && gcc main.c -o main";
+        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && gcc main.c -o main"};
+        log.info ("compile command : {}", Arrays.toString (command));
         Process process = Runtime.getRuntime ().exec (command);
         
         int modify = process.waitFor ();
