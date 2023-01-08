@@ -129,13 +129,19 @@ public class CodeRunService {
                 log.info ("param : {}", param);
                 writer.newLine ();
             }
+    
+            while (process.isAlive ()) {
+                Thread.sleep (10);
+                log.info ("等待程序执行...");
+            }
         
             String tmp;
             sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
-        } catch (IOException e) {
+            
+        } catch (Exception e) {
             e.printStackTrace ();
             sb.append (e.getMessage ());
             return sb.toString ();
