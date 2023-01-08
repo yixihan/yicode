@@ -30,12 +30,12 @@ public interface CodeRunExtractService {
      * @param req 请求参数
      * @return 代码运行结果
      */
-    List<String> run (CodeRunDtoReq req) throws IOException;
+    List<String> run (CodeRunDtoReq req) throws IOException, InterruptedException, Exception;
     
     /**
      * 编译代码
      *
      * @param file 代码源文件
      */
-    void compile (File file) throws IOException;
+    void compile (File file) throws IOException, InterruptedException, Exception;
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     
     
     @Override
-    public List<String> run(CodeRunDtoReq req) throws IOException {
+    public List<String> run(CodeRunDtoReq req) throws Exception {
         // 创建源代码文件
         File file = createFile (req.getCode (), req.getCodeType ());
         // 判断是否是需要编译的语言
@@ -60,6 +59,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         for (List<String> params : req.getParamList ()) {
             Process process = Runtime.getRuntime ().exec (command);
             ansList.add (codeRunService.runProcess (process, params));
+            process.waitFor ();
             process.destroy ();
         }
         long endTime = System.currentTimeMillis ();
@@ -69,11 +69,13 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     }
     
     @Override
-    public void compile(File file) throws IOException {
+    public void compile(File file) throws Exception {
         File path = FileUtil.getParent (file, 1);
         String fileName = FileUtil.getName (file);
         String command = "/bin/bash -c cd " + path + " && gcc " + fileName + " -o main";
         log.info ("compile command : {}", command);
-        Runtime.getRuntime ().exec (command);
+        Process process = Runtime.getRuntime ().exec (command);
+        process.waitFor ();
+        process.destroy ();
     }
 }
