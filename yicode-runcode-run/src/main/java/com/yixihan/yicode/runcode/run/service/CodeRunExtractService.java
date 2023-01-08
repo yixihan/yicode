@@ -2,7 +2,6 @@ package com.yixihan.yicode.runcode.run.service;
 
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
-import com.yixihan.yicode.runcode.run.enums.CodeTypeEnums;
 
 import java.io.File;
 
@@ -18,7 +17,7 @@ public interface CodeRunExtractService {
      * 生成代码源文件
      *
      * @param code 代码
-     * @param type 代码类型 {@link CodeTypeEnums}
+     * @param type 代码类型 (JAVA, JS, C, CPP, GO, PY)
      * @return 代码源文件
      */
     File createFile(String code, String type);
@@ -35,7 +34,7 @@ public interface CodeRunExtractService {
      * 编译代码
      *
      * @param file 代码源文件
-     * @return
+     * @return 编译输出 (为空则表示编译成功)
      */
     String compile (File file) throws Exception;
 }

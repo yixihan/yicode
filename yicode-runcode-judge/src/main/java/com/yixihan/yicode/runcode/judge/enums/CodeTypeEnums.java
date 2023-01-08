@@ -1,4 +1,4 @@
-package com.yixihan.yicode.runcode.run.enums;
+package com.yixihan.yicode.runcode.judge.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

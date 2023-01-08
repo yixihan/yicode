@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.yixihan.yicode.runcode.run.constant.CodeRunConstant;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
@@ -27,10 +25,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class CodeRunService {
-    
-    @Resource
-    private CodeRunConstant constant;
-    
     
     @PostConstruct
     public void init() {
@@ -89,8 +83,7 @@ public class CodeRunService {
      * @return 代码存放目录
      */
     public File getPath () {
-        return new File (constant.getFileDir () +
-                "/" + DateUtil.format (new Date (), "yyyy-MM-dd-HH"));
+        return new File ("/tmp/yicode" + DateUtil.format (new Date (), "yyyy-MM-dd-HH"));
     }
     
     /**
@@ -174,8 +167,7 @@ public class CodeRunService {
     @Scheduled(cron = "0 5 * * * ?")
     public void cleanDir () {
         DateTime lastHour = DateUtil.offsetHour (DateUtil.beginOfHour (new Date ()), -1);
-        File path = new File (constant.getFileDir () +
-                "/" + DateUtil.format (lastHour, "yyyy-MM-dd-HH"));
+        File path = new File ("/tmp/yicode/" + DateUtil.format (lastHour, "yyyy-MM-dd-HH"));
         
         FileUtil.del (path);
     }
