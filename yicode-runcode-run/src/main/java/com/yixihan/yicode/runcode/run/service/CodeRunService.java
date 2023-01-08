@@ -130,11 +130,6 @@ public class CodeRunService {
             writer.newLine ();
         }
         writer.close ();
-    
-        int modify = process.waitFor ();
-        if (modify != 0) {
-            throw new BizException ("代码运行错误");
-        }
         
         String tmp;
         while ((tmp = reader.readLine ()) != null) {
@@ -142,6 +137,11 @@ public class CodeRunService {
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
         reader.close ();
+        
+        int modify = process.waitFor ();
+        if (modify != 0) {
+            throw new BizException ("代码运行错误");
+        }
         process.destroy ();
         return sb.toString ();
     }
