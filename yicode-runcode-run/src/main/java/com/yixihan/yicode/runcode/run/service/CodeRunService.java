@@ -126,12 +126,10 @@ public class CodeRunService {
         ) {
             for (String param : params) {
                 writer.write (param);
-                log.info ("param : {}", param);
                 writer.newLine ();
             }
             
             String tmp;
-            sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
