@@ -134,7 +134,6 @@ public class CodeRunService {
         StringBuilder sb = new StringBuilder ();
     
         while ((tmp = reader.readLine ()) != null) {
-            log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
     
