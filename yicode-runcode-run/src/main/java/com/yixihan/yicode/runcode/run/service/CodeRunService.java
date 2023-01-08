@@ -129,11 +129,8 @@ public class CodeRunService {
                 log.info ("param : {}", param);
                 writer.newLine ();
             }
-    
-            while (process.isAlive ()) {
-                Thread.sleep (10);
-                log.info ("等待程序执行...");
-            }
+            
+            process.waitFor ();
         
             String tmp;
             sb = new StringBuilder ();
