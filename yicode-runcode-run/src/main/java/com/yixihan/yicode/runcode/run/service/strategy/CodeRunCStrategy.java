@@ -52,7 +52,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         }
         // 运行代码
         File path = FileUtil.getParent (file, 1);
-        String command = "/bin/bash /c cd " + path + "&& ./main";
+        String command = "/bin/bash /c cd " + path + " && ./main";
         log.info ("run command : {}", command);
         List<String> ansList = new ArrayList<> ();
         
@@ -69,8 +69,9 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     
     @Override
     public void compile(File file) throws IOException {
-        String outName = file.getAbsolutePath ().substring (0, file.getAbsolutePath ().length () - 2);
-        String command = "/bin/bash /c gcc " + file.getAbsolutePath () + " -o " + outName;
+        File path = FileUtil.getParent (file, 1);
+        String fileName = FileUtil.getName (file);
+        String command = "/bin/bash /c cd " + path + " && gcc " + fileName + " -o main";
         log.info ("compile command : {}", command);
         Runtime.getRuntime ().exec (command);
     }
