@@ -57,15 +57,10 @@ public class CodeRunCStrategy implements CodeRunExtractService {
             }
         }
         // 运行代码
-        String fileName = file.getParent () + "/" + file.getName ().substring (0, file.getName ().length () - 2);
-        String command;
-        if (FileUtil.isWindows ()) {
-            command = "cmd -c ." + fileName;
-        } else {
-            command = "/bin/bash -c ." + fileName;
-        }
+        String path = file.getParent ();
+        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
         
-        log.info ("run command : {}", command);
+        log.info ("run command : {}", Arrays.toString (command));
         List<String> ansList = new ArrayList<> ();
         
         long startTime = System.currentTimeMillis ();
@@ -88,12 +83,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
     @Override
     public String compile(File file) throws Exception {
         String path = file.getParent ();
-        String[] command;
-        if (FileUtil.isWindows ()) {
-            command = new String[]{"cmd", "/c", "cd " + path + " && gcc main.c -o main"};
-        } else {
-            command = new String[]{"/bin/bash", "-c", "cd " + path + " && gcc main.c -o main"};
-        }
+        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && gcc main.c -o main"};
         log.info ("compile command : {}", Arrays.toString (command));
         Process process = Runtime.getRuntime ().exec (command);
         
