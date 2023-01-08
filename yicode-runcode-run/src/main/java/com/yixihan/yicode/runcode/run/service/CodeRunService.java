@@ -136,9 +136,7 @@ public class CodeRunService {
             log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
-    
-        writer.close ();
-        reader.close ();
+        
         return sb.toString ();
     }
     
