@@ -124,22 +124,17 @@ public class CodeRunService {
              SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
              BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "gbk"))
         ) {
-            log.info ("start write input params...");
             for (String param : params) {
                 writer.write (param);
                 log.info ("param : {}", param);
                 writer.newLine ();
             }
-            log.info ("input param success!");
         
             String tmp;
             sb = new StringBuilder ();
-            log.info ("get output now...");
             while ((tmp = reader.readLine ()) != null) {
-                log.info ("output : {}", tmp);
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
-            log.info ("output get success!");
         } catch (IOException e) {
             e.printStackTrace ();
             sb.append (e.getMessage ());
