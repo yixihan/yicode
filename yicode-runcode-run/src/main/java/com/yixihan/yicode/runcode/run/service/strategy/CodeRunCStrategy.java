@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 代码运行 c语言
+ * 代码运行 c
  *
  * @author yixihan
  * @date 2023/1/8 11:43
