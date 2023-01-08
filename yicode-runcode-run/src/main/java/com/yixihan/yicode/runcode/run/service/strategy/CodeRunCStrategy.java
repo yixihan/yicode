@@ -59,7 +59,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         for (List<String> params : req.getParamList ()) {
             Process process = Runtime.getRuntime ().exec (command);
             ansList.add (codeRunService.runProcess (process, params));
-            process.waitFor ();
+            while (process.isAlive ());
             process.destroy ();
         }
         long endTime = System.currentTimeMillis ();
@@ -75,7 +75,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         String command = "/bin/bash -c cd " + path + " && gcc " + fileName + " -o main";
         log.info ("compile command : {}", command);
         Process process = Runtime.getRuntime ().exec (command);
-        process.waitFor ();
+        while (process.isAlive ());
         process.destroy ();
     }
 }
