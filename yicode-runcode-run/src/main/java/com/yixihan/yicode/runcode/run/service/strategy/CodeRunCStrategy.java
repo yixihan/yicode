@@ -78,10 +78,6 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         String command = "/bin/bash -c cd " + path + " && gcc " + fileName + " -o main";
         log.info ("compile command : {}", command);
         Process process = Runtime.getRuntime ().exec (command);
-        while (process.isAlive ()) {
-            Thread.sleep (10);
-            log.info ("等待程序执行...");
-        }
         process.destroy ();
     }
 }
