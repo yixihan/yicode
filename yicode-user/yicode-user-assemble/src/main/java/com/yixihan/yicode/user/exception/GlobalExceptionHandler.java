@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BizException.class)
     public JsonResponse<Object> handleBizException (BizException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     /**
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RRException.class)
     public JsonResponse<Object> handleRRException (RRException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     /**
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public JsonResponse<Object> handleValidException(MethodArgumentNotValidException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     /**
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BindException.class)
     public JsonResponse<Object> handleValidException(BindException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     
@@ -74,14 +74,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NullPointerException.class)
     public JsonResponse<Object> handleNullPointerException (NullPointerException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     @ResponseBody
     @ExceptionHandler(value = RuntimeException.class)
     public JsonResponse<Object> handleRuntimeException (RuntimeException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
     
     
@@ -89,6 +89,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public JsonResponse<Object> handleException (Exception e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e);
+        return JsonResponse.error (e.getMessage ());
     }
 }

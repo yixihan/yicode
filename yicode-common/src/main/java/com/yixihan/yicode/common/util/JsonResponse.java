@@ -100,14 +100,6 @@ public class JsonResponse<T> implements Serializable {
     public static <T> JsonResponse<T> error(int errorCode, String message) {
         return new JsonResponse<> (errorCode, message);
     }
-    
-    public static <T> JsonResponse<T> error (Throwable e) {
-        JsonResponse<T> response = new JsonResponse<> ();
-        response.setCode (BizCodeEnum.FAILED_TYPE_INTERNAL.getCode ());
-        response.setSuccess (Boolean.FALSE);
-        response.setMessage (e.getMessage ());
-        return response;
-    }
 
     public static <T> JsonResponse<T> badRequest(String message) {
         return new JsonResponse<> (BizCodeEnum.FAILED_TYPE_BAD_REQUEST.getCode (), message);
