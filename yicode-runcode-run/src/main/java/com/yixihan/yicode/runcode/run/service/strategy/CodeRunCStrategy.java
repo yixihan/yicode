@@ -59,7 +59,7 @@ public class CodeRunCStrategy implements CodeRunExtractService {
         String path = file.getParent ();
 //        String[] command = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
         //        log.info ("run command : {}", Arrays.toString (command));
-        String command = "bin/bash -c cd " + path + " && ./main";
+        String command = "/bin/bash -c cd " + path + " && ./main";
         log.info ("run command : {}", command);
         List<String> ansList = new ArrayList<> ();
         

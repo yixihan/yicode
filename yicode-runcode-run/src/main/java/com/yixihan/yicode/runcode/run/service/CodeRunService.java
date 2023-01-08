@@ -128,6 +128,7 @@ public class CodeRunService {
             writer.newLine ();
         }
     
+        writer.close ();
     
         String tmp;
         StringBuilder sb = new StringBuilder ();
@@ -136,7 +137,8 @@ public class CodeRunService {
             log.info ("tmp : {}", tmp);
             sb.append (new String (tmp.getBytes ())).append ("\n");
         }
-        
+    
+        reader.close ();
         return sb.toString ();
     }
     
