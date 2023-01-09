@@ -1,10 +1,12 @@
 package com.yixihan.yicode.runcode.run.service;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
@@ -195,6 +197,14 @@ public class CodeRunService {
             StringBuilder sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
+            }
+            
+            if (modify == NumConstant.NUM_1) {
+                // 运行出现异常
+                return new CodeRunDtoResult (
+                        CollUtil.newArrayList (sb.toString ()),
+                        Boolean.TRUE, Boolean.FALSE, useTime, 0D
+                );
             }
             
             process.destroy ();
