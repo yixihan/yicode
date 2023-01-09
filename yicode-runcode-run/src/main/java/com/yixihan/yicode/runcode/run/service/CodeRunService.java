@@ -1,18 +1,28 @@
 package com.yixihan.yicode.runcode.run.service;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotNull;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -51,13 +61,10 @@ public class CodeRunService {
             if (req == null) {
                 return new CodeRunDtoResult ();
             }
-    
+            
             // 提取服务
-            CodeRunExtractService service = SpringUtil.getBean (
-                    CodeRunConfig.getServiceName (req.getCodeType ()),
-                    CodeRunExtractService.class
-            );
-    
+            CodeRunExtractService service = SpringUtil.getBean (CodeRunConfig.getServiceName (req.getCodeType ()), CodeRunExtractService.class);
+            
             // 运行代码
             dtoResult = service.run (req);
         } catch (Exception e) {
@@ -73,7 +80,7 @@ public class CodeRunService {
      * @param code 解码前的代码
      * @return 解码后的代码
      */
-    public String decodeCode (String code) {
+    public String decodeCode(String code) {
         return Base64.decodeStr (code);
     }
     
@@ -82,7 +89,7 @@ public class CodeRunService {
      *
      * @return 代码存放目录
      */
-    public File getPath () {
+    public File getPath() {
         return new File ("/tmp/yicode" + DateUtil.format (new Date (), "yyyy-MM-dd-HH"));
     }
     
@@ -103,39 +110,6 @@ public class CodeRunService {
         }
     }
     
-    /**
-     * 获取运行结果
-     *
-     * @param process 指令对象
-     * @param params 传参
-     * @return {@link Process} 指令对象
-     */
-    public String runCode(Process process, List<String> params) throws Exception {
-        BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()));
-        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
-    
-        // 传入形参
-        for (String param : params) {
-            writer.write (param);
-            writer.newLine ();
-        }
-        // 关闭输入流
-        writer.close ();
-    
-        // 获取运行结果
-        String tmp;
-        StringBuilder sb = new StringBuilder ();
-        while ((tmp = reader.readLine ()) != null) {
-            sb.append (new String (tmp.getBytes ())).append ("\n");
-        }
-        reader.close ();
-        
-        // 等待 process 运行完毕, 关闭
-        process.waitFor ();
-        process.destroy ();
-        return sb.toString ();
-    }
     
     /**
      * 获取编译结果
@@ -144,28 +118,175 @@ public class CodeRunService {
      * @return {@link Process} 指令对象
      */
     public String compileCode(Process process) throws Exception {
-        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
-    
-        // 获取编译结果
-        String tmp;
-        StringBuilder sb = new StringBuilder ();
-        while ((tmp = reader.readLine ()) != null) {
-            sb.append (new String (tmp.getBytes ())).append ("\n");
-        }
-    
-        reader.close ();
-        // 等待 process 运行完毕, 关闭
+        // 等待编译完成
         process.waitFor ();
+        
+        // 获取编译结果
+        // 正常编译输出结果
+        StringBuffer normalOutput = new StringBuffer ();
+        StringBuffer errOutput = new StringBuffer ();
+        ThreadUtil.execute (() -> {
+            String tmp;
+            try (BufferedReader in = new BufferedReader (new InputStreamReader (process.getInputStream ()))) {
+                while ((tmp = in.readLine ()) != null) {
+                    normalOutput.append (tmp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace ();
+            }
+        });
+        // 异常编译结果
+        ThreadUtil.execute (() -> {
+            String tmp;
+            try (BufferedReader err = new BufferedReader (new InputStreamReader (process.getErrorStream ()))) {
+                while ((tmp = err.readLine ()) != null) {
+                    errOutput.append (tmp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace ();
+            }
+        });
+    
+        // 销毁进程
         process.destroy ();
-        return sb.toString ();
+    
+        // 如果异常输出流内有内容, 则程序编译失败
+        return StrUtil.isNotBlank (errOutput.toString ()) ? errOutput.toString () : normalOutput.toString ();
     }
+    
+    /**
+     * 公共方法, 创建代码源文件
+     *
+     * @param code     代码
+     * @param fileName 文件名
+     * @return 代码源文件
+     */
+    public File createFile(String code, String fileName) {
+        // 生成源代码目录
+        File path = new File (getPath () + "/" + SnowFlake.nextId ());
+        FileUtil.mkdir (path);
+        // 生成源代码文件
+        File file = new File (path + "/" + fileName);
+        // 写入代码
+        writeCode (code, file);
+        
+        return file;
+    }
+    
+    /**
+     * 公共方法, 编译、运行代码<br>
+     * 需提前创建代码源文件
+     *
+     * @param req            请求参数
+     * @param runCommand     运行命令
+     * @param compileCommand 编译命令 (若语言不需要编译,则可以传null)
+     * @return 代码运行结果 {@link CodeRunDtoResult}
+     */
+    public CodeRunDtoResult run(@NotNull CodeRunDtoReq req,
+                                @NotNull String[] runCommand,
+                                @Nullable String[] compileCommand) throws Exception {
+        // 判断是否需要编译代码
+        if (CodeRunConfig.judgeCodeCompile (req.getCodeType ())) {
+            if (ArrayUtil.isEmpty (compileCommand)) {
+                log.error ("没有编译命令!");
+                throw new BizException ("没有编译命令!");
+            }
+            // 编译代码
+            String compile = compile (compileCommand);
+            if (StrUtil.isNotBlank (compile)) {
+                CodeRunDtoResult dtoResult = new CodeRunDtoResult ();
+                dtoResult.setCompile (Boolean.FALSE);
+                dtoResult.setAnsList (CollUtil.newArrayList (compile));
+                return dtoResult;
+            }
+        }
+        
+        // 运行代码
+        log.info ("run command : {}", Arrays.toString (runCommand));
+        List<String> ansList = new ArrayList<> ();
+        
+        long useTime = 0;
+        for (List<String> params : req.getParamList ()) {
+            
+            Process process = Runtime.getRuntime ().exec (runCommand);
+            
+            // 传入形参
+            try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()))) {
+                
+                for (String param : params) {
+                    writer.write (param);
+                    writer.newLine ();
+                }
+            }
+            
+            // 获取开始时间
+            long startTime = System.currentTimeMillis ();
+            
+            // 等待 process 运行完毕
+            process.waitFor ();
+            
+            // 获取消耗时间
+            useTime += System.currentTimeMillis () - startTime;
+            
+            // 获取运行结果
+            // 正常运行输出结果
+            StringBuffer normalOutput = new StringBuffer ();
+            StringBuffer errOutput = new StringBuffer ();
+            ThreadUtil.execute (() -> {
+                String tmp;
+                try (BufferedReader in = new BufferedReader (new InputStreamReader (process.getInputStream ()))) {
+                    while ((tmp = in.readLine ()) != null) {
+                        normalOutput.append (tmp);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace ();
+                }
+            });
+            // 异常输出结果
+            ThreadUtil.execute (() -> {
+                String tmp;
+                try (BufferedReader err = new BufferedReader (new InputStreamReader (process.getErrorStream ()))) {
+                    while ((tmp = err.readLine ()) != null) {
+                        errOutput.append (tmp);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace ();
+                }
+            });
+            
+            // 如果异常输出流内有内容, 则程序运行失败
+            if (StrUtil.isNotBlank (errOutput.toString ())) {
+                return new CodeRunDtoResult (
+                        CollUtil.newArrayList (errOutput.toString ()),
+                        Boolean.TRUE, Boolean.FALSE, null, null
+                );
+            }
+            
+            process.destroy ();
+            ansList.add (normalOutput.toString ());
+        }
+        log.info ("time used : {}", useTime);
+        return new CodeRunDtoResult (ansList, Boolean.TRUE, Boolean.TRUE, useTime, 0D);
+    }
+    
+    /**
+     * 公共代码, 编译代码源文件
+     *
+     * @param compileCommand 编译命令
+     * @return 若编译失败, 则返回编译失败原因; 编译成功则返回一个空串
+     */
+    public String compile(String[] compileCommand) throws Exception {
+        log.info ("compile command : {}", Arrays.toString (compileCommand));
+        Process process = Runtime.getRuntime ().exec (compileCommand);
+        return compileCode (process);
+    }
+    
     
     /**
      * 定时任务, 清理上一小时的代码文件夹
      */
     @Scheduled(cron = "0 5 * * * ?")
-    public void cleanDir () {
+    public void cleanDir() {
         DateTime lastHour = DateUtil.offsetHour (DateUtil.beginOfHour (new Date ()), -1);
         File path = new File ("/tmp/yicode/" + DateUtil.format (lastHour, "yyyy-MM-dd-HH"));
         

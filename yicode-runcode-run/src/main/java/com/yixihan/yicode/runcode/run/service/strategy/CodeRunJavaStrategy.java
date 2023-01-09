@@ -24,17 +24,20 @@ public class CodeRunJavaStrategy implements CodeRunExtractService {
     private CodeRunService codeRunService;
     
     @Override
-    public File createFile(String code, String type) {
-        return null;
+    public File createFile(String code) {
+        return codeRunService.createFile (code, "Main.java");
     }
     
     @Override
     public CodeRunDtoResult run(CodeRunDtoReq req) throws Exception {
-        return null;
-    }
+        // 创建源代码文件
+        File file = createFile (req.getCode ());
     
-    @Override
-    public String compile(File file) throws Exception {
-        return null;
+        // 获取源代码目录
+        String path = file.getParent ();
+        String[] compileCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && javac -encoding utf-8 Main.java"};
+        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && java Main"};
+        
+        return codeRunService.run (req, runCommand, compileCommand);
     }
 }

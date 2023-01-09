@@ -24,17 +24,20 @@ public class CodeRunJsStrategy implements CodeRunExtractService {
     private CodeRunService codeRunService;
     
     @Override
-    public File createFile(String code, String type) {
-        return null;
+    public File createFile(String code) {
+        return codeRunService.createFile (code, "main.js");
     }
     
     @Override
     public CodeRunDtoResult run(CodeRunDtoReq req) throws Exception {
-        return null;
+        // 创建源代码文件
+        File file = createFile (req.getCode ());
+    
+        // 获取源代码目录
+        String path = file.getParent ();
+        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && node main.js"};
+    
+        return codeRunService.run (req, runCommand, null);
     }
     
-    @Override
-    public String compile(File file) throws Exception {
-        return null;
-    }
 }

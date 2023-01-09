@@ -27,6 +27,9 @@ public class CodeRunDtoResult {
     @ApiModelProperty(value = "是否编译成功")
     private Boolean compile;
     
+    @ApiModelProperty(value = "是否运行成功")
+    private Boolean run;
+    
     @ApiModelProperty(value = "时间消耗")
     private Long useTime;
     
