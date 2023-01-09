@@ -37,7 +37,7 @@ public class CodeRunPyStrategy implements CodeRunExtractService {
         String path = file.getParent ();
         
         // 运行
-        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && py main.py"};
+        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && python3 main.py"};
         return codeRunService.run (req, runCommand);
     }
     
