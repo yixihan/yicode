@@ -171,10 +171,11 @@ public class CodeRunService {
             }
             
             if (modify != NumConstant.NUM_0) {
+                log.info ("err info : {}", sb);
                 // 运行出现异常
                 return new CodeRunDtoResult (
                         CollUtil.newArrayList (sb.toString ()),
-                        Boolean.TRUE, Boolean.FALSE, useTime, 0D
+                        Boolean.TRUE, Boolean.FALSE, null, null
                 );
             }
             
