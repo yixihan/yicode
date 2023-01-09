@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,7 +121,7 @@ public class CodeRunService {
         // 正常编译输出结果
         // 正常运行输出结果
         SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
         String tmp;
         StringBuilder sb = new StringBuilder ();
         while ((tmp = reader.readLine ()) != null) {
@@ -191,7 +192,7 @@ public class CodeRunService {
             // 获取运行结果
             // 正常运行输出结果
             SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-            BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+            BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
             String tmp;
             StringBuilder sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
