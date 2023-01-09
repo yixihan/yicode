@@ -11,7 +11,7 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          jwk-set-uri: 'http://localhost:13100/rsa/publicKey'
+          jwk-set-uri: 'http://localhost:11000/api/yicode-auth/rsa/publicKey'
 
   # 运行对 bean 进行重写
   main:
