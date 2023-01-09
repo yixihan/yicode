@@ -223,7 +223,7 @@ public class CodeRunService {
             long startTime = System.currentTimeMillis ();
             
             // 等待 process 运行完毕
-            process.waitFor ();
+//            process.waitFor ();
             
             // 获取消耗时间
             useTime += System.currentTimeMillis () - startTime;
