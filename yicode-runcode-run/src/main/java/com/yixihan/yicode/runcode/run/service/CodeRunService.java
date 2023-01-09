@@ -169,9 +169,10 @@ public class CodeRunService {
             while ((tmp = reader.readLine ()) != null) {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
+            log.info ("output : {}", sb);
             
             if (modify != NumConstant.NUM_0) {
-                log.info ("err info : {}", sb);
+                log.info ("modify : {}, err info : {}", modify, sb);
                 // 运行出现异常
                 return new CodeRunDtoResult (
                         CollUtil.newArrayList (sb.toString ()),
