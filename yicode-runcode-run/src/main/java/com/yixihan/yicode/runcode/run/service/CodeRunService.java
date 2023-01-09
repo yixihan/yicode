@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -162,7 +161,6 @@ public class CodeRunService {
      */
     public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand) throws Exception {
         // 运行代码
-        log.info ("run command : {}", Arrays.toString (runCommand));
         List<String> ansList = new ArrayList<> ();
         
         long useTime = 0;
@@ -183,7 +181,8 @@ public class CodeRunService {
             long startTime = System.currentTimeMillis ();
             
             // 等待 process 运行完毕
-            process.waitFor ();
+            int modify = process.waitFor ();
+            log.info ("modify : {}",  modify);
             
             // 获取消耗时间
             useTime += System.currentTimeMillis () - startTime;
@@ -201,7 +200,6 @@ public class CodeRunService {
             process.destroy ();
             ansList.add (sb.toString ());
         }
-        log.info ("time used : {}", useTime);
         return new CodeRunDtoResult (ansList, Boolean.TRUE, Boolean.TRUE, useTime, 0D);
     }
     
@@ -212,7 +210,6 @@ public class CodeRunService {
      * @return 若编译失败, 则返回编译失败原因; 编译成功则返回一个空串
      */
     public String compile(String[] compileCommand) throws Exception {
-        log.info ("compile command : {}", Arrays.toString (compileCommand));
         Process process = Runtime.getRuntime ().exec (compileCommand);
         return compileCode (process);
     }
