@@ -1,14 +1,10 @@
 package com.yixihan.yicode.runcode.run.service;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.SnowFlake;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
@@ -16,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.*;
@@ -163,28 +158,9 @@ public class CodeRunService {
      *
      * @param req            请求参数
      * @param runCommand     运行命令
-     * @param compileCommand 编译命令 (若语言不需要编译,则可以传null)
      * @return 代码运行结果 {@link CodeRunDtoResult}
      */
-    public CodeRunDtoResult run(@NotNull CodeRunDtoReq req,
-                                @NotNull String[] runCommand,
-                                @Nullable String[] compileCommand) throws Exception {
-        // 判断是否需要编译代码
-        if (CodeRunConfig.judgeCodeCompile (req.getCodeType ())) {
-            if (ArrayUtil.isEmpty (compileCommand)) {
-                log.error ("没有编译命令!");
-                throw new BizException ("没有编译命令!");
-            }
-            // 编译代码
-            String compile = compile (compileCommand);
-            if (StrUtil.isNotBlank (compile)) {
-                CodeRunDtoResult dtoResult = new CodeRunDtoResult ();
-                dtoResult.setCompile (Boolean.FALSE);
-                dtoResult.setAnsList (CollUtil.newArrayList (compile));
-                return dtoResult;
-            }
-        }
-        
+    public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand) throws Exception {
         // 运行代码
         log.info ("run command : {}", Arrays.toString (runCommand));
         List<String> ansList = new ArrayList<> ();

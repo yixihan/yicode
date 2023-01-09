@@ -1,5 +1,7 @@
 package com.yixihan.yicode.runcode.run.service.strategy;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.runcode.run.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.runcode.run.dto.response.CodeRunDtoResult;
 import com.yixihan.yicode.runcode.run.service.CodeRunExtractService;
@@ -35,9 +37,20 @@ public class CodeRunCPPStrategy implements CodeRunExtractService {
     
         // 获取源代码目录
         String path = file.getParent ();
+        
+        // 编译
         String[] compileCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && g++ main.cpp -o main"};
-        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
+        String compileOutput = codeRunService.compile (compileCommand);
+        // 判断是否编译成功
+        if (StrUtil.isNotBlank (compileOutput)) {
+            CodeRunDtoResult dtoResult = new CodeRunDtoResult ();
+            dtoResult.setCompile (Boolean.FALSE);
+            dtoResult.setAnsList (CollUtil.newArrayList (compileOutput));
+            return dtoResult;
+        }
     
-        return codeRunService.run (req, runCommand, compileCommand);
+        // 运行
+        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && ./main"};
+        return codeRunService.run (req, runCommand);
     }
 }

@@ -35,9 +35,10 @@ public class CodeRunJsStrategy implements CodeRunExtractService {
     
         // 获取源代码目录
         String path = file.getParent ();
+        
+        // 运行
         String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && node main.js"};
-    
-        return codeRunService.run (req, runCommand, null);
+        return codeRunService.run (req, runCommand);
     }
     
 }

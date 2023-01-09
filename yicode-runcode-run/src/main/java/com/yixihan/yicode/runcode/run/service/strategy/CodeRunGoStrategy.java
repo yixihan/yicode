@@ -35,9 +35,10 @@ public class CodeRunGoStrategy implements CodeRunExtractService {
     
         // 获取源代码目录
         String path = file.getParent ();
-        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && go run main.go"};
         
-        return codeRunService.run (req, runCommand, null);
+        // 运行
+        String[] runCommand = new String[]{"/bin/bash", "-c", "cd " + path + " && go run main.go"};
+        return codeRunService.run (req, runCommand);
     }
     
 }
