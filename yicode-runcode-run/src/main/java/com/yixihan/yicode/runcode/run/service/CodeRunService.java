@@ -106,35 +106,6 @@ public class CodeRunService {
         }
     }
     
-    
-    /**
-     * 获取编译结果
-     *
-     * @param process 指令对象
-     * @return {@link Process} 指令对象
-     */
-    public String compileCode(Process process) throws Exception {
-        // 等待编译完成
-        process.waitFor ();
-        
-        // 获取编译结果
-        // 正常编译输出结果
-        // 正常运行输出结果
-        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
-        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
-        String tmp;
-        StringBuilder sb = new StringBuilder ();
-        while ((tmp = reader.readLine ()) != null) {
-            sb.append (new String (tmp.getBytes ())).append ("\n");
-        }
-    
-        // 销毁进程
-        process.destroy ();
-    
-        // 如果异常输出流内有内容, 则程序编译失败
-        return sb.toString ();
-    }
-    
     /**
      * 公共方法, 创建代码源文件
      *
@@ -199,7 +170,7 @@ public class CodeRunService {
                 sb.append (new String (tmp.getBytes ())).append ("\n");
             }
             
-            if (modify == NumConstant.NUM_1) {
+            if (modify != NumConstant.NUM_0) {
                 // 运行出现异常
                 return new CodeRunDtoResult (
                         CollUtil.newArrayList (sb.toString ()),
@@ -221,7 +192,24 @@ public class CodeRunService {
      */
     public String compile(String[] compileCommand) throws Exception {
         Process process = Runtime.getRuntime ().exec (compileCommand);
-        return compileCode (process);
+        // 等待编译完成
+        int modify = process.waitFor ();
+    
+        // 获取编译结果
+        // 正常编译输出结果
+        // 正常运行输出结果
+        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, StandardCharsets.UTF_8));
+        String tmp;
+        StringBuilder sb = new StringBuilder ();
+        while ((tmp = reader.readLine ()) != null) {
+            sb.append (new String (tmp.getBytes ())).append ("\n");
+        }
+    
+        // 销毁进程
+        process.destroy ();
+        // 如果异常输出流内有内容, 则程序编译失败
+        return modify != NumConstant.NUM_0 ? sb.toString () : null;
     }
     
     
