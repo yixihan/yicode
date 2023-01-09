@@ -184,7 +184,6 @@ public class CodeRunService {
             
             // 等待 process 运行完毕
             int modify = process.waitFor ();
-            log.info ("modify : {}",  modify);
             
             // 获取消耗时间
             useTime += System.currentTimeMillis () - startTime;
