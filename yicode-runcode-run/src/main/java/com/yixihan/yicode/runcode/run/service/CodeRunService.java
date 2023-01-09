@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -123,35 +122,20 @@ public class CodeRunService {
         
         // 获取编译结果
         // 正常编译输出结果
-        StringBuffer normalOutput = new StringBuffer ();
-        StringBuffer errOutput = new StringBuffer ();
-        ThreadUtil.execute (() -> {
-            String tmp;
-            try (BufferedReader in = new BufferedReader (new InputStreamReader (process.getInputStream ()))) {
-                while ((tmp = in.readLine ()) != null) {
-                    normalOutput.append (tmp);
-                }
-            } catch (IOException e) {
-                e.printStackTrace ();
-            }
-        });
-        // 异常编译结果
-        ThreadUtil.execute (() -> {
-            String tmp;
-            try (BufferedReader err = new BufferedReader (new InputStreamReader (process.getErrorStream ()))) {
-                while ((tmp = err.readLine ()) != null) {
-                    errOutput.append (tmp);
-                }
-            } catch (IOException e) {
-                e.printStackTrace ();
-            }
-        });
+        // 正常运行输出结果
+        SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+        BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+        String tmp;
+        StringBuilder sb = new StringBuilder ();
+        while ((tmp = reader.readLine ()) != null) {
+            sb.append (new String (tmp.getBytes ())).append ("\n");
+        }
     
         // 销毁进程
         process.destroy ();
     
         // 如果异常输出流内有内容, 则程序编译失败
-        return StrUtil.isNotBlank (errOutput.toString ()) ? errOutput.toString () : normalOutput.toString ();
+        return sb.toString ();
     }
     
     /**
@@ -223,47 +207,23 @@ public class CodeRunService {
             long startTime = System.currentTimeMillis ();
             
             // 等待 process 运行完毕
-//            process.waitFor ();
+            process.waitFor ();
             
             // 获取消耗时间
             useTime += System.currentTimeMillis () - startTime;
             
             // 获取运行结果
             // 正常运行输出结果
-            StringBuffer normalOutput = new StringBuffer ();
-            StringBuffer errOutput = new StringBuffer ();
-            ThreadUtil.execute (() -> {
-                String tmp;
-                try (BufferedReader in = new BufferedReader (new InputStreamReader (process.getInputStream ()))) {
-                    while ((tmp = in.readLine ()) != null) {
-                        normalOutput.append (tmp);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace ();
-                }
-            });
-            // 异常输出结果
-            ThreadUtil.execute (() -> {
-                String tmp;
-                try (BufferedReader err = new BufferedReader (new InputStreamReader (process.getErrorStream ()))) {
-                    while ((tmp = err.readLine ()) != null) {
-                        errOutput.append (tmp);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace ();
-                }
-            });
-            
-            // 如果异常输出流内有内容, 则程序运行失败
-            if (StrUtil.isNotBlank (errOutput.toString ())) {
-                return new CodeRunDtoResult (
-                        CollUtil.newArrayList (errOutput.toString ()),
-                        Boolean.TRUE, Boolean.FALSE, null, null
-                );
+            SequenceInputStream sis = new SequenceInputStream (process.getInputStream (), process.getErrorStream ());
+            BufferedReader reader = new BufferedReader (new InputStreamReader (sis, "GBK"));
+            String tmp;
+            StringBuilder sb = new StringBuilder ();
+            while ((tmp = reader.readLine ()) != null) {
+                sb.append (new String (tmp.getBytes ())).append ("\n");
             }
             
             process.destroy ();
-            ansList.add (normalOutput.toString ());
+            ansList.add (sb.toString ());
         }
         log.info ("time used : {}", useTime);
         return new CodeRunDtoResult (ansList, Boolean.TRUE, Boolean.TRUE, useTime, 0D);
