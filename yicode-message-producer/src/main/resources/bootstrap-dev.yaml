@@ -13,7 +13,7 @@ spring:
           - data-id: yicode-common-dev.yaml
             group: YICODE_DEV
             refresh: true
-          - data-id: yicode-message-producer.yaml
+          - data-id: yicode-message-producer-dev.yaml
             group: YICODE_DEV
             refresh: true
         file-extension: yaml

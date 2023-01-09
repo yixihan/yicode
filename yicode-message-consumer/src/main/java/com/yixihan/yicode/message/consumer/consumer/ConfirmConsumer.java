@@ -7,8 +7,6 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 /**
  * 发布确认-消费者
  *
@@ -19,12 +17,12 @@ import java.io.IOException;
 @Component
 public class ConfirmConsumer {
 
-    @RabbitListener(queues = ConfirmConfig.CONFIRM_QUEUE_NAME)
+    @RabbitListener(queues = ConfirmConfig.MESSAGE_QUEUE_NAME)
     public void receiveConfirmMessage (Message message, Channel channel) {
         try {
-            channel.basicQos (2);
             log.info ("接受到的队列 confirm.queue 消息 : {}", new String (message.getBody ()));
-        } catch (IOException e) {
+            channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
+        } catch (Exception e) {
             log.info ("出现异常 : {}", e.getMessage ());
             throw new RuntimeException (e);
         }

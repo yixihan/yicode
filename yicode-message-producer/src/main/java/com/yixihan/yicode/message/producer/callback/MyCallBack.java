@@ -1,4 +1,4 @@
-package com.yixihan.yicode.message.consumer.callback;
+package com.yixihan.yicode.message.producer.callback;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -48,7 +48,7 @@ public class MyCallBack implements RabbitTemplate.ConfirmCallback {
         if (ack) {
             log.info ("交换机已经收到了 ID 为 : {} 的消息", id);
         } else {
-            log.info ("交换机还未收到 ID 为 : {} 的消息, 失败的原因是 : {}", id, cause);
+            log.error ("交换机还未收到 ID 为 : {} 的消息, 失败的原因是 : {}", id, cause);
         }
     }
 }

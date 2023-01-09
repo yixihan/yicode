@@ -75,7 +75,7 @@ spring:
         #指定最大的消费者数量.
         max-concurrency: 10
         #开启ack
-        acknowledge-mode: auto
+        acknowledge-mode: manual
         # 最多一次消费多少条数据 -限流
         prefetch: 1
       #开启ack

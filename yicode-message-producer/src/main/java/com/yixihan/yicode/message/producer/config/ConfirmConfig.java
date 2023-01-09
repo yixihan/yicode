@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-
 /**
  * 配置类-发布确认
  *
@@ -15,124 +13,83 @@ import java.util.HashMap;
  */
 @Configuration
 public class ConfirmConfig {
-
-
+    
+    
     /**
-     * 交换机
+     * 消息系统 - 交换机
      */
-    public static final String CONFIRM_EXCHANGE_NAME = "confirm_exchange";
-
+    public static final String MESSAGE_EXCHANGE_NAME = "yicode_message_exchange";
+    
     /**
-     * 队列
+     * 消息系统 - 队列
      */
-    public static final String CONFIRM_QUEUE_NAME = "confirm_queue";
-
+    public static final String MESSAGE_QUEUE_NAME = "yicode_message_queue";
+    
     /**
-     * route key
+     * 消息系统 - route key
      */
-    public static final String CONFIRM_ROUTING_KEY = "key1";
-
+    public static final String MESSAGE_ROUTING_KEY = "yicode_message_key";
+    
     /**
-     * 备份交换机
+     * 测评系统 - 交换机
      */
-    public static final String BACKUP_EXCHANGE_NAME = "backup_exchange";
-
+    public static final String TASK_EXCHANGE_NAME = "yicode_task_exchange";
+    
     /**
-     * 备份队列
+     * 测评系统 - 队列
      */
-    public static final String BACKUP_QUEUE_NAME = "backup_queue";
-
+    public static final String TASK_QUEUE_NAME = "yicode_task_queue";
+    
     /**
-     * 报警队列
+     * 测评系统 - route key
      */
-    public static final String WARNING_QUEUE_NAME = "warning_queue";
-
-
+    public static final String TASK_ROUTING_KEY = "yicode_task_key";
+    
     /**
-     * 直连型交换机-确认发布
-     *
+     * 消息系统 - 直连型交换机
      */
-    @Bean("confirmExchange")
-    public DirectExchange confirmExchange () {
-
-        HashMap<String, Object> arguments = new HashMap<> (16);
-        arguments.put ("alternate-exchange", BACKUP_EXCHANGE_NAME);
-
-        return ExchangeBuilder.directExchange (CONFIRM_EXCHANGE_NAME)
-                .durable (true)
-                .withArguments (arguments)
-                .build ();
+    @Bean("messageExchange")
+    public DirectExchange messageExchange() {
+        return new DirectExchange (MESSAGE_EXCHANGE_NAME);
     }
-
+    
     /**
-     * 备份交换机
-     *
+     * 消息系统 - 队列
      */
-    @Bean("backupExchange")
-    public FanoutExchange backupExchange () {
-        return new FanoutExchange (BACKUP_EXCHANGE_NAME);
+    @Bean("messageQueue")
+    public Queue messageQueue() {
+        return QueueBuilder.durable (MESSAGE_QUEUE_NAME).build ();
     }
-
+    
     /**
-     * 备份队列
-     *
-     */
-    @Bean("backupQueue")
-    public Queue backupQueue () {
-        return QueueBuilder.durable (BACKUP_QUEUE_NAME).build ();
-    }
-
-    /**
-     * 报警队列
-     */
-    @Bean("warningQueue")
-    public Queue warningQueue () {
-        return QueueBuilder.durable (WARNING_QUEUE_NAME).build ();
-    }
-
-    /**
-     * 队列-发布确认
-     */
-    @Bean("confirmQueue")
-    public Queue confirmQueue () {
-        return QueueBuilder.durable (CONFIRM_QUEUE_NAME).build ();
-    }
-
-
-    /**
-     * 队列绑定交换机-发布确认队列
-     *
+     * 消息系统 - 队列绑定交换机-发布确认队列
      */
     @Bean
-    public Binding queueBindingExchange (
-            @Qualifier("confirmExchange") DirectExchange confirmExchange,
-            @Qualifier("confirmQueue") Queue confirmQueue
-    ) {
-        return BindingBuilder.bind (confirmQueue).to (confirmExchange).with (CONFIRM_ROUTING_KEY);
+    public Binding messageQueueBindingExchange(@Qualifier("messageExchange") DirectExchange messageExchange, @Qualifier("messageQueue") Queue messageQueue) {
+        return BindingBuilder.bind (messageQueue).to (messageExchange).with (MESSAGE_ROUTING_KEY);
     }
-
+    
     /**
-     * 队列绑定交换机-备份队列
-     *
+     * 测评系统 - 直连型交换机
+     */
+    @Bean("taskExchange")
+    public DirectExchange taskExchange() {
+        return new DirectExchange (TASK_EXCHANGE_NAME);
+    }
+    
+    /**
+     * 测评系统 - 队列
+     */
+    @Bean("taskQueue")
+    public Queue taskQueue() {
+        return QueueBuilder.durable (TASK_QUEUE_NAME).build ();
+    }
+    
+    /**
+     * 测评系统 - 队列绑定交换机-发布确认队列
      */
     @Bean
-    public Binding queueBackupBindingExchangeBackup (
-            @Qualifier("backupExchange") FanoutExchange confirmExchange,
-            @Qualifier("backupQueue") Queue backupQueue
-    ) {
-        return BindingBuilder.bind (backupQueue).to (confirmExchange);
+    public Binding taskQueueBindingExchange(@Qualifier("taskExchange") DirectExchange taskExchange, @Qualifier("taskQueue") Queue taskQueue) {
+        return BindingBuilder.bind (taskQueue).to (taskExchange).with (TASK_ROUTING_KEY);
     }
-
-    /**
-     * 队列绑定交换机-报警队列
-     *
-     */
-    @Bean
-    public Binding queueWarningBindingExchangeBackup (
-            @Qualifier("backupExchange") FanoutExchange confirmExchange,
-            @Qualifier("warningQueue") Queue warningQueue
-    ) {
-        return BindingBuilder.bind (warningQueue).to (confirmExchange);
-    }
-
 }
