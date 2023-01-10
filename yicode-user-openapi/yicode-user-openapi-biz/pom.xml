@@ -70,6 +70,14 @@
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- yicode-message-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-message-api</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

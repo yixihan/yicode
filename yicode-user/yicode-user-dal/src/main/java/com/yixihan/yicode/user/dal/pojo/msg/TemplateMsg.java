@@ -1,6 +1,9 @@
 package com.yixihan.yicode.user.dal.pojo.msg;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,18 +17,18 @@ import java.util.Date;
 
 /**
 *
-* 用户消息表
+* 消息模板表
 *
 * @author yixihan
-* @since 2022-11-25
+* @since 2023-01-10
 */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "UserMsg对象", description = "用户消息表")
-public class UserMsg implements Serializable {
+@ApiModel(value = "TemplateMsg对象", description = "短信模板表")
+public class TemplateMsg implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,27 +36,16 @@ public class UserMsg implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "发送者 id")
-    private Long sendUserId;
+    @ApiModelProperty(value = "模板 id")
+    private String templateId;
 
-    @ApiModelProperty(value = "发送者用户名")
-    private String sendUserName;
-
-    @ApiModelProperty(value = "接收者 id")
-    private Long receiveUseId;
-
-    @ApiModelProperty(value = "消息内容")
-    private String msg;
-    
-    @ApiModelProperty(value = "是否已读")
-    private Boolean finish;
+    @ApiModelProperty(value = "模板内容")
+    private String templateContent;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty(value = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     @ApiModelProperty(value = "乐观锁")
@@ -67,15 +59,9 @@ public class UserMsg implements Serializable {
 
     public static final String ID = "id";
 
-    public static final String SEND_USER_ID = "send_user_id";
+    public static final String TEMPLATE_ID = "template_id";
 
-    public static final String SEND_USER_NAME = "send_user_name";
-
-    public static final String RECEIVE_USE_ID = "receive_use_id";
-
-    public static final String MSG = "msg";
-    
-    public static final String FINISH = "finish";
+    public static final String TEMPLATE_CONTENT = "template_content";
 
     public static final String CREATE_TIME = "create_time";
 

@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonVO<Boolean> register(RegisterUserReq req) {
+    public synchronized CommonVO<Boolean> register(RegisterUserReq req) {
         // 合法性校验
         if (LoginTypeEnums.USERNAME_PASSWORD.getType ().equals (req.getType ())) {
             // 用户名+密码注册
