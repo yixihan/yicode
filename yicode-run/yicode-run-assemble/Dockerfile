@@ -1,7 +1,7 @@
 FROM myos
 EXPOSE 18200
 
-ARG APLLLICATION=yicode-runcode-run
+ARG APLLLICATION=yicode-run
 ENV LANG C.UTF-8
 VOLUME /tmp
 ADD target/$APLLLICATION.jar  /app.jar

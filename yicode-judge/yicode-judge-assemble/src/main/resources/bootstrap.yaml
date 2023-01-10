@@ -3,6 +3,6 @@ server:
 
 spring:
   application:
-    name: yicode-runcode-judge
+    name: yicode-judge
   profiles:
     active: dev

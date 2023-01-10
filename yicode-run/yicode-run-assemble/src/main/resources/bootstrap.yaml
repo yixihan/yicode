@@ -3,6 +3,6 @@ server:
 
 spring:
   application:
-    name: yicode-runcode-run
+    name: yicode-run
   profiles:
     active: dev

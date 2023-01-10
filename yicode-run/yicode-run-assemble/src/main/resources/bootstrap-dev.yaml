@@ -14,6 +14,6 @@ spring:
           - data-id: yicode-common-dev.yaml
             group: YICODE_DEV
             refresh: true
-          - data-id: yicode-runcode-run-dev.yaml
+          - data-id: yicode-run-dev.yaml
             group: YICODE_DEV
             refresh: true

@@ -1,7 +1,7 @@
 FROM oracle-jdk:8
 EXPOSE 18100
 
-ARG APLLLICATION=yicode-runcode-judge
+ARG APLLLICATION=yicode-judge
 ENV LANG C.UTF-8
 VOLUME /tmp
 ADD target/$APLLLICATION.jar  /app.jar
