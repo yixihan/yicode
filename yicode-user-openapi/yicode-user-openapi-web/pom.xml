@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!-- yicode-user-biz -->
+        <!-- yicode-user-openapi-biz -->
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-user-openapi-biz</artifactId>
@@ -36,6 +36,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
         </dependency>
     </dependencies>
 

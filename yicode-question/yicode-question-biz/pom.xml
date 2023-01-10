@@ -24,17 +24,17 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
-        <!-- 引入调用模块的 api 模块 -->
+        <!-- yicode-question-dal -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-user-api</artifactId>
+            <artifactId>yicode-question-dal</artifactId>
             <version>0.0.1</version>
         </dependency>
 
-        <!-- yicode-thirdpart-api -->
+        <!-- yicode-question-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-thirdpart-api</artifactId>
+            <artifactId>yicode-question-api</artifactId>
             <version>0.0.1</version>
         </dependency>
 
@@ -49,17 +49,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+
+        <!-- webmvc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
+
         <dependency>
             <artifactId>jackson-databind</artifactId>
             <groupId>com.fasterxml.jackson.core</groupId>
         </dependency>
+
+        <!-- 引入调用模块的 api 模块 -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-question-dal</artifactId>
+            <artifactId>yicode-user-api</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>

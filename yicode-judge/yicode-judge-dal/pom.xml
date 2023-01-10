@@ -18,10 +18,10 @@
     </properties>
 
     <dependencies>
-        <!-- yicode-user-api -->
+        <!-- yicode-judge-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-user-api</artifactId>
+            <artifactId>yicode-judge-api</artifactId>
             <version>0.0.1</version>
         </dependency>
     </dependencies>

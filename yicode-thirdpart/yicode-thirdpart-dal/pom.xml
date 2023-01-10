@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!-- yicode-user-api -->
+        <!-- yicode-thirdpart-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-thirdpart-api</artifactId>

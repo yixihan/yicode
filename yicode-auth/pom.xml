@@ -18,7 +18,7 @@
 
     <dependencies>
 
-        <!-- yicode-common 排除数据库相关依赖-->
+        <!-- yicode-common 排除数据库相关依赖 -->
         <dependency>
             <groupId>com.yixihan</groupId>
             <artifactId>yicode-common</artifactId>
@@ -52,7 +52,7 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!-- oauth-->
+        <!-- oauth2 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
@@ -62,13 +62,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <!-- jwt -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>8.16</version>
         </dependency>
 
         <!-- feign -->
@@ -110,6 +103,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

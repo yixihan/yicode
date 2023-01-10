@@ -17,10 +17,10 @@
         <module>yicode-user</module>
         <module>yicode-user-openapi</module>
         <module>yicode-thirdpart</module>
-        <module>yicode-message</module>
         <module>yicode-thirdpart-openapi</module>
         <module>yicode-question</module>
         <module>yicode-question-openapi</module>
+        <module>yicode-message</module>
         <module>yicode-judge</module>
         <module>yicode-run</module>
     </modules>
@@ -181,6 +181,7 @@
                 <version>${jwt.version}</version>
             </dependency>
 
+            <!-- servlet-api -->
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
