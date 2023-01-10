@@ -1,8 +1,0 @@
-server:
-  port: 17100
-
-spring:
-  application:
-    name: yicode-message-producer
-  profiles:
-    active: dev

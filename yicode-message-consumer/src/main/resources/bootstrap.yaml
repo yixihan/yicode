@@ -1,8 +1,0 @@
-server:
-  port: 17200
-
-spring:
-  application:
-    name: yicode-message-consumer
-  profiles:
-    active: dev

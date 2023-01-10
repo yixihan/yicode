@@ -1,0 +1,53 @@
+spring:
+  # redis 配置
+  redis:
+    host: ${yicode.redis.host}
+    port: ${yicode.redis.port}
+    database: ${yicode.redis.database}
+    password: ${yicode.redis.password}
+
+  # rabbitmq消息队列配置
+  rabbitmq:
+    host: ${yicode.rabbitmq.host}
+    port: ${yicode.rabbitmq.port}
+    username: ${yicode.rabbitmq.username}
+    password: ${yicode.rabbitmq.password}
+    #虚拟host 可以不设置,使用server默认host
+    #virtual-host: JCcccHost
+    #开启发送失败返回
+    publisher-returns: true
+    #配置确认回调
+    publisher-confirm-type: correlated
+    listener:
+      simple:
+        #指定最小的消费者数量.
+        concurrency: 5
+        #指定最大的消费者数量.
+        max-concurrency: 10
+        #开启ack
+        acknowledge-mode: manual
+        # 最多一次消费多少条数据 -限流
+        prefetch: 1
+      #开启ack
+      direct:
+        acknowledge-mode: auto
+    #支持消息的确认与返回
+    template:
+      mandatory: true
+
+  # 运行对 bean 进行重写
+  main:
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 开放所有端点 默认值只打开 health 和 info 两个端点
+  endpoint:
+    # health 端点配置项
+    health:
+      enabled: true
+      show-details: always # 永远展示完整信息
+
+
