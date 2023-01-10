@@ -23,7 +23,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="SmsTemplate对象", description="短信模板表")
-public class SmsTemplate implements Serializable {
+public class TemplateSms implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

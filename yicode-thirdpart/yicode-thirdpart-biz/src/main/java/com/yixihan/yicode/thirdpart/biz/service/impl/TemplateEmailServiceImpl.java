@@ -1,9 +1,9 @@
 package com.yixihan.yicode.thirdpart.biz.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.thirdpart.dal.mapper.EmailTemplateMapper;
-import com.yixihan.yicode.thirdpart.dal.pojo.EmailTemplate;
-import com.yixihan.yicode.thirdpart.biz.service.EmailTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;
+import com.yixihan.yicode.thirdpart.dal.mapper.TemplateEmailMapper;
+import com.yixihan.yicode.thirdpart.dal.pojo.TemplateEmail;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @since 2022-10-28
  */
 @Service
-public class EmailTemplateServiceImpl extends ServiceImpl<EmailTemplateMapper, EmailTemplate> implements EmailTemplateService {
+public class TemplateEmailServiceImpl extends ServiceImpl<TemplateEmailMapper, TemplateEmail> implements TemplateEmailService {
 
     @Override
     public String getEmailContent(Long id) {

@@ -1,9 +1,9 @@
 package com.yixihan.yicode.thirdpart.biz.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.thirdpart.dal.mapper.SmsTemplateMapper;
-import com.yixihan.yicode.thirdpart.dal.pojo.SmsTemplate;
-import com.yixihan.yicode.thirdpart.biz.service.SmsTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.TemplateSmsService;
+import com.yixihan.yicode.thirdpart.dal.mapper.TemplateSmsMapper;
+import com.yixihan.yicode.thirdpart.dal.pojo.TemplateSms;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @since 2022-10-28
  */
 @Service
-public class SmsTemplateServiceImpl extends ServiceImpl<SmsTemplateMapper, SmsTemplate> implements SmsTemplateService {
+public class TemplateSmsServiceImpl extends ServiceImpl<TemplateSmsMapper, TemplateSms> implements TemplateSmsService {
 
     @Override
     public String getSMSTemplateId(Long id) {

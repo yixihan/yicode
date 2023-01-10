@@ -8,7 +8,7 @@ import com.yixihan.yicode.thirdpart.api.constant.email.EmailConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
-import com.yixihan.yicode.thirdpart.biz.service.EmailTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import com.yixihan.yicode.thirdpart.biz.service.email.EmailSendService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class EmailSendServiceImpl implements EmailSendService {
     private CodeService codeService;
 
     @Resource
-    private EmailTemplateService emailTemplateService;
+    private TemplateEmailService templateEmailService;
 
     @Resource
     private CodeConstant codeConstant;
@@ -51,7 +51,7 @@ public class EmailSendServiceImpl implements EmailSendService {
 
         EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
-        String emailContent = emailTemplateService.getEmailContent (emailType.getId ());
+        String emailContent = templateEmailService.getEmailContent (emailType.getId ());
 
         try {
             String code = codeService.getCode(keyName);

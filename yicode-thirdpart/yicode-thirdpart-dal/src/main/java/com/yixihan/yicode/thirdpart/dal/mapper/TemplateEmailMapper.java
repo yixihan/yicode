@@ -1,7 +1,7 @@
 package com.yixihan.yicode.thirdpart.dal.mapper;
 
-import com.yixihan.yicode.thirdpart.dal.pojo.EmailTemplate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yixihan.yicode.thirdpart.dal.pojo.TemplateEmail;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-10-28
  */
 @Mapper
-public interface EmailTemplateMapper extends BaseMapper<EmailTemplate> {
+public interface TemplateEmailMapper extends BaseMapper<TemplateEmail> {
 
 }

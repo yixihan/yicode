@@ -20,8 +20,8 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="EmailTemplate对象", description="邮件模板表")
-public class EmailTemplate implements Serializable {
+@ApiModel(value="TemplateEmail对象", description="邮件模板表")
+public class TemplateEmail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -16,7 +16,7 @@ import com.yixihan.yicode.thirdpart.api.constant.sms.SMSConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
-import com.yixihan.yicode.thirdpart.biz.service.SmsTemplateService;
+import com.yixihan.yicode.thirdpart.biz.service.TemplateSmsService;
 import com.yixihan.yicode.thirdpart.biz.service.code.impl.CodeServiceImpl;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class SMSServiceImpl implements SMSService {
     private CodeServiceImpl codeService;
 
     @Resource
-    private SmsTemplateService smsTemplateService;
+    private TemplateSmsService templateSmsService;
 
 
     @Override
@@ -53,7 +53,7 @@ public class SMSServiceImpl implements SMSService {
         SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
         String code = codeService.getCode(keyName);
-        String templateId = smsTemplateService.getSMSTemplateId (smsType.getId ());
+        String templateId = templateSmsService.getSMSTemplateId (smsType.getId ());
 
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户 secretId，secretKey,此处还需注意密钥对的保密
