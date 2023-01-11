@@ -1,18 +1,18 @@
-package com.yixihan.yicode.thirdpart.api.constant.code;
+package com.yixihan.yicode.thirdpart.api.prop.code;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 验证码常量
+ * 验证码 配置参数
  *
  * @author yixihan
  * @date 2022-10-26-11:31
  */
 @Getter
 @Component
-public class CodeConstant {
+public class CodeProp {
 
     @Value ("${yicode.thirdpart.code.length}")
     private Integer codeLen;

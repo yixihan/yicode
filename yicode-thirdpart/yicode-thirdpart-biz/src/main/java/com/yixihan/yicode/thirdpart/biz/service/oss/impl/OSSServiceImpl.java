@@ -4,8 +4,8 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
-import com.yixihan.yicode.thirdpart.api.constant.oss.OssConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
+import com.yixihan.yicode.thirdpart.api.prop.oss.OssProp;
 import com.yixihan.yicode.thirdpart.biz.service.oss.OSSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,12 +30,12 @@ public class OSSServiceImpl implements OSSService {
     private OSS ossClient;
 
     @Resource
-    private OssConstant ossConstant;
+    private OssProp ossProp;
 
     @Override
     public Map<String, String> policy(OSSPolicyDtoReq dtoReq) {
         // host 的格式为 bucketName.endpoint
-        String host = "https://" + ossConstant.getBucketName () + "." + ossConstant.getEndpoint ();
+        String host = "https://" + ossProp.getBucketName () + "." + ossProp.getEndpoint ();
         String dir = dtoReq.getUserId () + "/" + dtoReq.getFileDir ();
         Map<String, String> respMap = null;
         try {
@@ -53,7 +53,7 @@ public class OSSServiceImpl implements OSSService {
             String postSignature = ossClient.calculatePostSignature (postPolicy);
 
             respMap = new LinkedHashMap<> ();
-            respMap.put ("accessid", ossConstant.getAccessKey ());
+            respMap.put ("accessid", ossProp.getAccessKey ());
             respMap.put ("policy", encodedPolicy);
             respMap.put ("signature", postSignature);
             respMap.put ("dir", dir);

@@ -1,18 +1,18 @@
-package com.yixihan.yicode.thirdpart.api.constant.sms;
+package com.yixihan.yicode.thirdpart.api.prop.sms;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * SMS常量
+ * SMS 配置参数
  *
  * @author yixihan
  * @date 2022-10-26-11:08
  */
 @Getter
 @Component
-public class SMSConstant {
+public class SMSProp {
 
     @Value ("${yicode.txcloud.phone.secretId}")
     private String secretId;

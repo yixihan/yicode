@@ -3,11 +3,11 @@ package com.yixihan.yicode.thirdpart.biz.service.email.impl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.constant.email.EmailConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
+import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
+import com.yixihan.yicode.thirdpart.api.prop.email.EmailProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import com.yixihan.yicode.thirdpart.biz.service.email.EmailSendService;
@@ -40,10 +40,10 @@ public class EmailSendServiceImpl implements EmailSendService {
     private TemplateEmailService templateEmailService;
 
     @Resource
-    private CodeConstant codeConstant;
+    private CodeProp codeProp;
 
     @Resource
-    private EmailConstant emailConstant;
+    private EmailProp emailProp;
 
 
     @Override
@@ -59,12 +59,12 @@ public class EmailSendServiceImpl implements EmailSendService {
             MimeMessage mailMessage = mailSender.createMimeMessage();
             // 组装邮件
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage,true,"utf-8");
-            helper.setSubject(emailConstant.getTitle ());
-            helper.setText(String.format (emailContent, code, codeConstant.getTimeOut ()),true);
+            helper.setSubject(emailProp.getTitle ());
+            helper.setText(String.format (emailContent, code, codeProp.getTimeOut ()),true);
             // 收件人
             helper.setTo(dtoReq.getEmail ());
             // 发件人
-            helper.setFrom(emailConstant.getSendEmail ());
+            helper.setFrom(emailProp.getSendEmail ());
             // 发送
             mailSender.send(mailMessage);
         } catch (MessagingException e) {
@@ -95,16 +95,16 @@ public class EmailSendServiceImpl implements EmailSendService {
         String key;
         switch (emailType) {
             case LOGIN:
-                key = String.format (emailConstant.getLoginKey (), email);
+                key = String.format (emailProp.getLoginKey (), email);
                 break;
             case REGISTER:
-                key = String.format (emailConstant.getRegisterKey (), email);
+                key = String.format (emailProp.getRegisterKey (), email);
                 break;
             case RESET_PASSWORD:
-                key = String.format (emailConstant.getUpdatePasswordKey (), email);
+                key = String.format (emailProp.getUpdatePasswordKey (), email);
                 break;
             case COMMON:
-                key = String.format (emailConstant.getCommonKey (), email);
+                key = String.format (emailProp.getCommonKey (), email);
                 break;
             default:
                 throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);

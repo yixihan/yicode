@@ -1,18 +1,18 @@
-package com.yixihan.yicode.thirdpart.api.constant.email;
+package com.yixihan.yicode.thirdpart.api.prop.email;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * 邮件常量
+ * 邮件 配置参数
  *
  * @author yixihan
  * @date 2022-10-26-11:11
  */
 @Getter
 @Component
-public class EmailConstant {
+public class EmailProp {
 
     @Value("${yicode.email.username}")
     private String sendEmail;

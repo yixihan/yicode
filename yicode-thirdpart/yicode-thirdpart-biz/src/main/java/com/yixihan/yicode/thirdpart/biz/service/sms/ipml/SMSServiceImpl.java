@@ -11,11 +11,11 @@ import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
-import com.yixihan.yicode.thirdpart.api.constant.sms.SMSConstant;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
+import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
+import com.yixihan.yicode.thirdpart.api.prop.sms.SMSProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateSmsService;
 import com.yixihan.yicode.thirdpart.biz.service.code.impl.CodeServiceImpl;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
@@ -35,10 +35,10 @@ import javax.annotation.Resource;
 public class SMSServiceImpl implements SMSService {
 
     @Resource
-    private SMSConstant smsConstant;
+    private SMSProp smsProp;
 
     @Resource
-    private CodeConstant codeConstant;
+    private CodeProp codeProp;
 
     @Resource
     private CodeServiceImpl codeService;
@@ -58,7 +58,7 @@ public class SMSServiceImpl implements SMSService {
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户 secretId，secretKey,此处还需注意密钥对的保密
             // 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
-            Credential cred = new Credential(smsConstant.getSecretId (), smsConstant.getSecretKey ());
+            Credential cred = new Credential(smsProp.getSecretId (), smsProp.getSecretKey ());
             // 实例化一个http选项，可选的，没有特殊需求可以跳过
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setEndpoint("sms.tencentcloudapi.com");
@@ -71,10 +71,10 @@ public class SMSServiceImpl implements SMSService {
             SendSmsRequest req = new SendSmsRequest();
             String[] phoneNumberSet1 = {dtoReq.getMobile ()};
             req.setPhoneNumberSet(phoneNumberSet1);
-            req.setSmsSdkAppId(smsConstant.getSmsSdkAppId ());
-            req.setSignName(smsConstant.getSignName ());
+            req.setSmsSdkAppId(smsProp.getSmsSdkAppId ());
+            req.setSignName(smsProp.getSignName ());
             req.setTemplateId(templateId);
-            String[] templateParamSet1 = {code, String.valueOf (codeConstant.getTimeOut ())};
+            String[] templateParamSet1 = {code, String.valueOf (codeProp.getTimeOut ())};
             req.setTemplateParamSet(templateParamSet1);
             // 返回的resp是一个SendSmsResponse的实例，与请求对象对应
             SendSmsResponse resp = client.SendSms(req);
@@ -111,16 +111,16 @@ public class SMSServiceImpl implements SMSService {
         String key;
         switch (smsType) {
             case LOGIN:
-                key = String.format (smsConstant.getLoginKey (), mobile);
+                key = String.format (smsProp.getLoginKey (), mobile);
                 break;
             case REGISTER:
-                key = String.format (smsConstant.getRegisterKey (), mobile);
+                key = String.format (smsProp.getRegisterKey (), mobile);
                 break;
             case RESET_PASSWORD:
-                key = String.format (smsConstant.getUpdatePasswordKey (), mobile);
+                key = String.format (smsProp.getUpdatePasswordKey (), mobile);
                 break;
             case COMMON:
-                key = String.format (smsConstant.getCommonKey (), mobile);
+                key = String.format (smsProp.getCommonKey (), mobile);
                 break;
             default:
                 throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);

@@ -1,7 +1,7 @@
 package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.constant.code.CodeConstant;
+import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class CodeServiceImpl implements CodeService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Resource
-    private CodeConstant codeConstant;
+    private CodeProp codeProp;
 
     private static final char[] RANDOM_Arr = "1234567890".toCharArray ();
 
@@ -60,7 +60,7 @@ public class CodeServiceImpl implements CodeService {
      * @return code
      */
     private synchronized String getRandomCode() {
-        int len = codeConstant.getCodeLen ();
+        int len = codeProp.getCodeLen ();
         Random random = new Random ();
         StringBuilder sb = new StringBuilder (len);
         for (int i = 0; i < len; i++) {
@@ -75,6 +75,6 @@ public class CodeServiceImpl implements CodeService {
         // 存入 redis
         stringRedisTemplate.opsForValue().set(keyName, code);
         // 设置过期时间
-        stringRedisTemplate.expire(keyName, codeConstant.getTimeOut (), TimeUnit.MINUTES);
+        stringRedisTemplate.expire(keyName, codeProp.getTimeOut (), TimeUnit.MINUTES);
     }
 }
