@@ -63,8 +63,8 @@
 - [x] 引入 user_favorite 表
 - [x] 实现 user_favorite 相关接口
 - [x] 引入 user_msg 表
-- [ ] 实现 user_msg 相关接口
-- [ ] user_msg 集成 message 模块
+- [x] 实现 user_msg 相关接口
+- [x] user_msg 集成 message 模块
 
 > 2022-11-25
 
@@ -97,8 +97,12 @@
 
 - [x] 搭建 Jenkins 自动部署
 - [x] 优化项目架构
-- [ ] 完成 runcode-run 模块
+- [x] 完成 runcode-run 模块
 - [ ] 完成代码评测算法
 - [ ] runcode-judge 对接 Docker API, 实现监控 Docker 容器功能
-- [ ] 完成消息服务 - 消息系统消息队列构建
-- [ ] 完成消息服务 - 评测代码任务队列构建
+- [x] 完成消息服务 - 消息系统消息队列构建
+- [x] 完成消息服务 - 评测代码任务队列构建
+
+> 2023-01-11
+
+- [ ] 实现后端主动给前端推数据 (消息模块, 测评模块)
