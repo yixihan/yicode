@@ -120,6 +120,10 @@ public class UserMsgServiceImpl implements UserMsgService {
         return CommonVO.create (dtoResult);
     }
     
+    /**
+     * 调用消息系统api, 发送消息<br>
+     * 异步任务
+     */
     @Async
     public void sendMessage(String message) {
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
@@ -132,9 +136,13 @@ public class UserMsgServiceImpl implements UserMsgService {
         }
     }
     
+    /**
+     * 消息消费者, 收到消息后, 主动推给前端
+     */
     @RabbitListener(queues = MessageConstant.MESSAGE_QUEUE_NAME)
     public void receiveConfirmMessage(Message message, Channel channel) {
         try {
+            // TODO 接收到消息，主动推给前端
             log.info ("接受到的队列 confirm.queue 消息 : {}", new String (message.getBody ()));
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
