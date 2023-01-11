@@ -1,7 +1,8 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.yixihan.yicode.question.api.reset.question.QuestionApi;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author yixihan
  * @since 2023-01-11
  */
+@Slf4j
 @RestController
-@RequestMapping("/question/question")
-public class QuestionController {
+public class QuestionController implements QuestionApi {
 
 }

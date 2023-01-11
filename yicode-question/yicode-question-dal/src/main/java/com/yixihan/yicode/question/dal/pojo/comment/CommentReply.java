@@ -42,9 +42,6 @@ public class CommentReply implements Serializable {
     @ApiModelProperty(value = "父评论 id")
     private Long rootId;
 
-    @ApiModelProperty(value = "问题 id")
-    private Long questionId;
-
     @ApiModelProperty(value = "评论者 id")
     private Long userId;
 
@@ -74,8 +71,6 @@ public class CommentReply implements Serializable {
     public static final String REPLY_ID = "reply_id";
 
     public static final String ROOT_ID = "root_id";
-
-    public static final String QUESTION_ID = "question_id";
 
     public static final String USER_ID = "user_id";
 
