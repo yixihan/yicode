@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2022/11/9 9:48
  */
 @Configuration
-@MapperScan("com.yixihan.yicode.user.dal.mapper")
+@MapperScan("com.yixihan.yicode.question.dal.mapper")
 @EnableTransactionManagement
 public class MybatisPlusConfig {
 
