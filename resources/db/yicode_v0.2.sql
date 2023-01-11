@@ -11,7 +11,7 @@
  Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 07/01/2023 19:42:22
+ Date: 11/01/2023 10:42:11
 */
 
 SET NAMES utf8mb4;
@@ -23,21 +23,21 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `comment_reply`;
 CREATE TABLE `comment_reply`
 (
-    `id`          bigint(20) UNSIGNED                      NOT NULL AUTO_INCREMENT COMMENT '主键 id',
-    `reply_id`    bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '子评论 id',
-    `root_id`     bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '父评论 id',
-    `question_id` bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '问题 id',
-    `user_id`     bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '评论者 id',
-    `content`     text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '评论内容',
-    `like_count`  int(10) UNSIGNED                         NOT NULL DEFAULT 0 COMMENT '点赞数',
-    `create_time` datetime                                 NOT NULL COMMENT '创建时间',
-    `update_time` datetime                                 NOT NULL COMMENT '修改时间',
-    `version`     int(10) UNSIGNED                         NOT NULL DEFAULT 1 COMMENT '乐观锁',
-    `del_flag`    int(11)                                  NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `id`            bigint(20) UNSIGNED                      NOT NULL AUTO_INCREMENT COMMENT '主键 id',
+    `reply_id`      bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '子评论 id',
+    `root_id`       bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '父评论 id',
+    `reply_user_id` bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '回复用户 id',
+    `user_id`       bigint(20) UNSIGNED                      NOT NULL DEFAULT 0 COMMENT '评论者 id',
+    `content`       text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '评论内容',
+    `like_count`    int(10) UNSIGNED                         NOT NULL DEFAULT 0 COMMENT '点赞数',
+    `create_time`   datetime                                 NOT NULL COMMENT '创建时间',
+    `update_time`   datetime                                 NOT NULL COMMENT '修改时间',
+    `version`       int(10) UNSIGNED                         NOT NULL DEFAULT 1 COMMENT '乐观锁',
+    `del_flag`      int(11)                                  NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `reply_id` (`reply_id`) USING BTREE,
     INDEX `root_id` (`root_id`) USING BTREE,
-    INDEX `common_idx` (`question_id`, `user_id`) USING BTREE
+    INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000000
   CHARACTER SET = utf8
@@ -71,7 +71,7 @@ CREATE TABLE `comment_root`
     INDEX `answer_id` (`answer_id`) USING BTREE,
     INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '父评论表'
   ROW_FORMAT = DYNAMIC;
@@ -97,7 +97,7 @@ CREATE TABLE `label`
     UNIQUE INDEX `label_id` (`label_id`) USING BTREE,
     INDEX `label_name` (`label_name`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '标签表'
   ROW_FORMAT = DYNAMIC;
@@ -122,7 +122,7 @@ CREATE TABLE `label_note`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`note_id`, `label_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '题解标签表'
   ROW_FORMAT = DYNAMIC;
@@ -147,7 +147,7 @@ CREATE TABLE `label_question`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`question_id`, `label_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题标签表'
   ROW_FORMAT = DYNAMIC;
@@ -172,7 +172,7 @@ CREATE TABLE `label_user`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`label_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户标签表'
   ROW_FORMAT = DYNAMIC;
@@ -204,7 +204,7 @@ CREATE TABLE `note`
     UNIQUE INDEX `note_id` (`note_id`) USING BTREE,
     INDEX `common_idx` (`question_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题题解表'
   ROW_FORMAT = DYNAMIC;
@@ -234,7 +234,7 @@ CREATE TABLE `question`
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题表'
   ROW_FORMAT = DYNAMIC;
@@ -265,7 +265,7 @@ CREATE TABLE `question_answer`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`question_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题答案表'
   ROW_FORMAT = DYNAMIC;
@@ -291,7 +291,7 @@ CREATE TABLE `question_case`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '问题测试用例表'
   ROW_FORMAT = DYNAMIC;
@@ -315,7 +315,7 @@ CREATE TABLE `question_daily`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '每日一题表'
   ROW_FORMAT = DYNAMIC;
@@ -340,7 +340,7 @@ CREATE TABLE `question_daily_user`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`question_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户每日一题表'
   ROW_FORMAT = DYNAMIC;
@@ -366,7 +366,7 @@ CREATE TABLE `question_user_record`
     INDEX `user_id` (`user_id`) USING BTREE,
     INDEX `question_id` (`question_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户题目通过记录表'
   ROW_FORMAT = DYNAMIC;
@@ -447,6 +447,38 @@ VALUES (10000003, '通用模板',
         '2022-10-28 13:47:09', '2022-10-28 13:47:09', 1, 0);
 
 -- ----------------------------
+-- Table structure for template_msg
+-- ----------------------------
+DROP TABLE IF EXISTS `template_msg`;
+CREATE TABLE `template_msg`
+(
+    `id`               bigint(20) UNSIGNED                             NOT NULL AUTO_INCREMENT COMMENT '主键 id',
+    `template_id`      varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '0' COMMENT '模板 id',
+    `template_content` text CHARACTER SET utf8 COLLATE utf8_bin        NULL COMMENT '模板内容',
+    `create_time`      datetime                                        NOT NULL COMMENT '创建时间',
+    `update_time`      datetime                                        NOT NULL COMMENT '修改时间',
+    `version`          int(10) UNSIGNED                                NOT NULL DEFAULT 1 COMMENT '乐观锁',
+    `del_flag`         int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 10000008
+  CHARACTER SET = utf8
+  COLLATE = utf8_bin COMMENT = '短信模板表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of template_msg
+-- ----------------------------
+INSERT INTO `template_msg`
+VALUES (10000004, 'REPLY', '{}回复了你!点击查看{}', '2023-01-10 14:12:54', '2023-01-10 14:12:54', 1, 0);
+INSERT INTO `template_msg`
+VALUES (10000005, 'LIKE', '{}给你点赞啦!点击查看{}', '2023-01-10 14:12:54', '2023-01-10 14:12:54', 1, 0);
+INSERT INTO `template_msg`
+VALUES (10000006, 'FOLLOW', '{}悄悄关注了你~', '2023-01-10 14:12:54', '2023-01-10 14:12:54', 1, 0);
+INSERT INTO `template_msg`
+VALUES (10000007, 'COLLECTION', '{}悄悄收藏了你的题解哟~', '2023-01-10 14:12:54', '2023-01-10 14:12:54', 1, 0);
+
+-- ----------------------------
 -- Table structure for template_sms
 -- ----------------------------
 DROP TABLE IF EXISTS `template_sms`;
@@ -501,7 +533,7 @@ CREATE TABLE `user`
     UNIQUE INDEX `user_email` (`user_email`) USING BTREE,
     INDEX `idx_user_name` (`user_name`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000005
+  AUTO_INCREMENT = 10000008
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户表'
   ROW_FORMAT = DYNAMIC;
@@ -512,7 +544,6 @@ CREATE TABLE `user`
 INSERT INTO `user`
 VALUES (10000004, 1, 'yixihan', '$2a$10$2MThiN5AWiGbq43aHLCF/.3eFd4utijouCZlgxMTDVIGykIQEU38a', '17623850426',
         '3113788997@qq.com', 'USERNAME_PASSWORD', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
-
 -- ----------------------------
 -- Table structure for user_collection
 -- ----------------------------
@@ -529,7 +560,7 @@ CREATE TABLE `user_collection`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `common_idx` (`favorite_id`, `collection_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户收藏表'
   ROW_FORMAT = DYNAMIC;
@@ -558,7 +589,7 @@ CREATE TABLE `user_favorite`
     UNIQUE INDEX `favorite_id` (`favorite_id`) USING BTREE,
     INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 5
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户收藏夹表'
   ROW_FORMAT = DYNAMIC;
@@ -586,7 +617,7 @@ CREATE TABLE `user_follow`
     INDEX `user_id` (`user_id`) USING BTREE,
     INDEX `follow_user_id` (`follow_user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户关注表'
   ROW_FORMAT = DYNAMIC;
@@ -618,7 +649,7 @@ CREATE TABLE `user_info`
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 5
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户信息表'
   ROW_FORMAT = DYNAMIC;
@@ -628,6 +659,15 @@ CREATE TABLE `user_info`
 -- ----------------------------
 INSERT INTO `user_info`
 VALUES (1, 1, '', '', '', 'SECRECY', '', '', NULL, '', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
+INSERT INTO `user_info`
+VALUES (2, 810239828390490114, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:24:54', '2023-01-10 17:24:54', 1,
+        0);
+INSERT INTO `user_info`
+VALUES (3, 810239828390490116, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:24:54', '2023-01-10 17:24:54', 1,
+        0);
+INSERT INTO `user_info`
+VALUES (4, 810240034091741185, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:25:43', '2023-01-10 17:25:43', 1,
+        0);
 
 -- ----------------------------
 -- Table structure for user_language
@@ -646,7 +686,7 @@ CREATE TABLE `user_language`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户语言表'
   ROW_FORMAT = DYNAMIC;
@@ -666,13 +706,14 @@ CREATE TABLE `user_msg`
     `send_user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '发送者用户名',
     `receive_use_id` bigint(20) UNSIGNED                              NOT NULL DEFAULT 0 COMMENT '接收者 id',
     `msg`            varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '消息内容',
+    `finish`         tinyint(1)                                       NOT NULL DEFAULT 0 COMMENT '是否已读',
     `create_time`    datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`    datetime                                         NOT NULL COMMENT '修改时间',
     `version`        int(10) UNSIGNED                                 NOT NULL DEFAULT 1 COMMENT '乐观锁',
     `del_flag`       int(11)                                          NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 10000004
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户消息表'
   ROW_FORMAT = DYNAMIC;
@@ -696,7 +737,7 @@ CREATE TABLE `user_role`
     `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000010
+  AUTO_INCREMENT = 10000013
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户角色对应表'
   ROW_FORMAT = DYNAMIC;
@@ -727,7 +768,7 @@ CREATE TABLE `user_website`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `user_id` (`user_id`) USING BTREE
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10000000
+  AUTO_INCREMENT = 1
   CHARACTER SET = utf8
   COLLATE = utf8_bin COMMENT = '用户个人网站表'
   ROW_FORMAT = DYNAMIC;
