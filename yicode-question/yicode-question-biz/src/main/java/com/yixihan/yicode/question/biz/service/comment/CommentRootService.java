@@ -62,4 +62,18 @@ public interface CommentRootService extends IService<CommentRoot> {
      * @param dtoReq 请求参数
      */
     PageDtoResult<SonCommentDetailDtoResult> sonCommentDetail(SonCommentDetailDtoReq dtoReq);
+    
+    /**
+     * 点赞父评论
+     *
+     * @param rootCommentId 父评论 ID
+     */
+    CommonDtoResult<Boolean> likeRootComment(Long rootCommentId);
+    
+    /**
+     * 点赞子评论
+     *
+     * @param sunCommentId 子评论 ID
+     */
+    CommonDtoResult<Boolean> likeSonComment(Long sunCommentId);
 }

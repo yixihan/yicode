@@ -12,4 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "题解 api")
 @RequestMapping("/note")
 public interface NoteApi {
+    
+//    ApiResult<CommonDtoResult<Boolean>>
 }

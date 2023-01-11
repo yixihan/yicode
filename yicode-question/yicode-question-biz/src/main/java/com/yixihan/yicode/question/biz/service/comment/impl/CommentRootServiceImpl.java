@@ -54,4 +54,14 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     public PageDtoResult<SonCommentDetailDtoResult> sonCommentDetail(SonCommentDetailDtoReq dtoReq) {
         return null;
     }
+    
+    @Override
+    public CommonDtoResult<Boolean> likeRootComment(Long rootCommentId) {
+        return null;
+    }
+    
+    @Override
+    public CommonDtoResult<Boolean> likeSonComment(Long sunCommentId) {
+        return null;
+    }
 }

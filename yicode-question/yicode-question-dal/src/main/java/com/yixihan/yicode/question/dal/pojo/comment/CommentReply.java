@@ -44,6 +44,9 @@ public class CommentReply implements Serializable {
 
     @ApiModelProperty(value = "评论者 id")
     private Long userId;
+    
+    @ApiModelProperty(value = "回复用户 id")
+    private Long replyUserId;
 
     @ApiModelProperty(value = "评论内容")
     private String content;
