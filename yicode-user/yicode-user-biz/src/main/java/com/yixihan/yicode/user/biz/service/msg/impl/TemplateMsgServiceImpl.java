@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.msg.impl;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,10 +26,9 @@ import java.util.List;
 @Service
 public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, TemplateMsg> implements TemplateMsgService {
     
+    private static final String MESSAGE_TEMPLATE_KEY = "template_key:message";
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    
-    private static final String MESSAGE_TEMPLATE_KEY = "message_template_key";
     
     /**
      * 将数据库种的所有模板提取到 Redis 中<br>
@@ -38,22 +38,25 @@ public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, Templ
      */
     @PostConstruct
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * ?")
-    public void initMessageTemplate () {
-        List<TemplateMsg> templateMsgList = baseMapper.selectList (null);
-        redisTemplate.opsForValue ().set (MESSAGE_TEMPLATE_KEY, JSONUtil.createArray ().addAll (templateMsgList));
+    public void initMessageTemplate() {
+        List<TemplateMsg> templateList = baseMapper.selectList (null);
+        JSONArray array = JSONUtil.createArray ();
+        array.addAll (templateList);
+        redisTemplate.opsForValue ().set (MESSAGE_TEMPLATE_KEY, array);
     }
     
     @Override
     public String getMessageTemplate(String templateId) {
         String template;
+        QueryWrapper<TemplateMsg> wrapper = new QueryWrapper<TemplateMsg> ()
+                .eq (TemplateMsg.TEMPLATE_ID, templateId);
         try {
             String jsonStr = JSONUtil.toJsonStr (redisTemplate.opsForValue ().get (MESSAGE_TEMPLATE_KEY));
-            template =  JSONUtil.parseArray (jsonStr).toList (TemplateMsg.class).stream ()
-                    .filter ((o) -> o.getTemplateId ().equals (templateId))
-                    .findFirst ().orElse (new TemplateMsg ()).getTemplateContent ();
+            template = JSONUtil.parseArray (jsonStr).toList (TemplateMsg.class).stream ()
+                    .filter ((o) -> o.getTemplateId ().equals (templateId)).findFirst ()
+                    .orElse (baseMapper.selectOne (wrapper)).getTemplateContent ();
         } catch (Exception e) {
-            template = baseMapper.selectOne (new QueryWrapper<TemplateMsg> ()
-                    .eq (TemplateMsg.TEMPLATE_ID, templateId)).getTemplateContent ();
+            template = baseMapper.selectOne (wrapper).getTemplateContent ();
         }
         return template;
     }
