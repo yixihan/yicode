@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "评论 api")
 @RequestMapping("/comment")
 public interface CommentApi {
+    
     @ApiOperation("添加父评论")
     @PostMapping(value = "/add/root", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> addRootComment(@RequestBody AddRootCommentDtoReq dtoReq);
