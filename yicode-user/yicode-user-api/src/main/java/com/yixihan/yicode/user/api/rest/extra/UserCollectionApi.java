@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2022-11-28
  */
 @Api(value = "用户收藏 api")
-@RequestMapping("/collection/")
+@RequestMapping("/collection")
 public interface UserCollectionApi {
 
     @ApiOperation ("收藏内容")

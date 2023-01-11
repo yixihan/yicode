@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-11-25
  */
 @Api (tags = "用户收藏夹 api")
-@RequestMapping("/favorite/")
+@RequestMapping("/favorite")
 public interface UserFavoriteApi {
 
     @ApiOperation("添加收藏夹")

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2022-10-22
  */
 @Api(tags = "用户资料 api")
-@RequestMapping("/info/")
+@RequestMapping("/info")
 public interface UserInfoApi {
 
     @ApiOperation("更新用户资料")

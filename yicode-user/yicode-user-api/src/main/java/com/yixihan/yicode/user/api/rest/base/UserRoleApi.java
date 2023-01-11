@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2022-10-22-15:32
  */
 @Api(tags = "用户权限 api")
-@RequestMapping("/user/role/")
+@RequestMapping("/user/role")
 public interface UserRoleApi {
 
     @ApiOperation ("添加用户角色")

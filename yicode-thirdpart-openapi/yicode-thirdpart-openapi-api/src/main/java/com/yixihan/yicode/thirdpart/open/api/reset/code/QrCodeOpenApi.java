@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2022/12/26 14:38
  */
 @Api(tags = "二维码 openapi")
-@RequestMapping("/open/qr/")
+@RequestMapping("/open/qr")
 public interface QrCodeOpenApi {
     
     @ApiOperation("生成二维码")

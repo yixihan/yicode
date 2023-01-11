@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2022/11/25 14:52
  */
 @Api(tags = "角色 api")
-@RequestMapping("/role/")
+@RequestMapping("/role")
 public interface RoleApi {
     
     @ApiOperation("添加角色")

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2022/11/23 14:11
  */
 @Api(tags = "邮件模块 openApi")
-@RequestMapping("/open/email/")
+@RequestMapping("/open/email")
 public interface EmailOpenApi {
 
     @ApiOperation("登录-发送邮件")

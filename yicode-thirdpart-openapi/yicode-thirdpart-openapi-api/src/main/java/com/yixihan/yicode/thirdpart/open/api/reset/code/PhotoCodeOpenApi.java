@@ -17,7 +17,7 @@ import java.io.IOException;
  * @date 2022/11/23 14:21
  */
 @Api(tags = "图形验证码 openApi")
-@RequestMapping("/open/code/")
+@RequestMapping("/open/code")
 public interface PhotoCodeOpenApi {
 
     @ApiOperation("生成图形验证码")

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2022/12/21 9:36
  */
 @Api(tags = "用户收藏 OpenApi")
-@RequestMapping("/open/user/favorite/")
+@RequestMapping("/open/user/favorite")
 public interface UserFavoriteOpenApi {
     
     @ApiOperation("添加收藏夹")

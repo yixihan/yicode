@@ -18,7 +18,7 @@ import java.util.List;
  * @since 2022-11-25
  */
 @Api(tags = "用户个人网站 api")
-@RequestMapping("/website/")
+@RequestMapping("/website")
 public interface UserWebsiteApi {
 
     @ApiOperation("添加用户个人网站")

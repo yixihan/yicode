@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2022-11-25
  */
 @Api(tags = "用户消息 api")
-@RequestMapping("/msg/")
+@RequestMapping("/msg")
 public interface UserMsgApi {
     
     @ApiOperation("添加一条消息")

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2022-10-22-17:33
  */
 @Api(tags = "用户 api")
-@RequestMapping("/user/")
+@RequestMapping("/user")
 public interface UserApi {
 
     @ApiOperation("获取用户详细信息")

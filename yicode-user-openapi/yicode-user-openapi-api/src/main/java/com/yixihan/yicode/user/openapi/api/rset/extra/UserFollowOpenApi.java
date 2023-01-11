@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2022/12/21 9:37
  */
 @Api(tags = "用户关注 OpenApi")
-@RequestMapping("/open/user/follow/")
+@RequestMapping("/open/user/follow")
 public interface UserFollowOpenApi {
     
     @ApiOperation("关注用户")

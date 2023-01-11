@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2022/11/23 13:52
  */
 @Api(tags = "oss模块 openApi")
-@RequestMapping("/open/oss/")
+@RequestMapping("/open/oss")
 public interface OSSOpenApi {
 
     @ApiOperation (value = "获取上传密钥")

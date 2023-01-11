@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2022/12/21 9:34
  */
 @Api(tags = "角色 OpenApi")
-@RequestMapping("/open/role/")
+@RequestMapping("/open/role")
 public interface RoleOpenApi {
     
     @ApiOperation ("添加角色")

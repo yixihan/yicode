@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2022/11/23 13:42
  */
 @Api(tags = "短信模块 openApi")
-@RequestMapping("/open/sms/")
+@RequestMapping("/open/sms")
 public interface SMSOpenApi {
 
     @ApiOperation("登录-发送短信")

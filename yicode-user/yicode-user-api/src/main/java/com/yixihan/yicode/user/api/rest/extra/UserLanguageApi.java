@@ -18,7 +18,7 @@ import java.util.List;
  * @since 2022-11-25
  */
 @Api(tags = "用户语言 api")
-@RequestMapping("/language/")
+@RequestMapping("/language")
 public interface UserLanguageApi {
 
     @ApiOperation("添加用户语言")

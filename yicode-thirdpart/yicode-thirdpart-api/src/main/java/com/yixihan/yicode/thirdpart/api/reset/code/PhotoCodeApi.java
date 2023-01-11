@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date 2022/11/21 16:45
  */
 @Api(tags = "图形验证码模块 api")
-@RequestMapping("/code/")
+@RequestMapping("/code")
 public interface PhotoCodeApi {
 
     @ApiOperation("生成图形验证码")
