@@ -3,10 +3,10 @@ package com.yixihan.yicode.question.biz.service.note;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
-import com.yixihan.yicode.question.api.reset.LikeDtoReq;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
 
 /**

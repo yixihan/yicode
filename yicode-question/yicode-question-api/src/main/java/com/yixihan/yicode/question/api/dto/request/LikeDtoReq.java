@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.api.reset;
+package com.yixihan.yicode.question.api.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
