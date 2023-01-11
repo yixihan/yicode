@@ -9,6 +9,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
+import com.yixihan.yicode.question.api.reset.LikeDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,9 +52,9 @@ public interface CommentApi {
     
     @ApiOperation("点赞父评论")
     @PostMapping(value = "/lke/root", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> likeRootComment(@RequestBody Long rootCommentId);
+    ApiResult<CommonDtoResult<Boolean>> likeRootComment(@RequestBody LikeDtoReq dtoReq);
     
     @ApiOperation("点赞子评论")
     @PostMapping(value = "/lke/son", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> likeSonComment(@RequestBody Long sunCommentId);
+    ApiResult<CommonDtoResult<Boolean>> likeSonComment(@RequestBody LikeDtoReq dtoReq);
 }

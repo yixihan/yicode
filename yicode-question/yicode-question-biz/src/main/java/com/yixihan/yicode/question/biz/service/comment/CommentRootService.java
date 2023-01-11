@@ -9,6 +9,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
+import com.yixihan.yicode.question.api.reset.LikeDtoReq;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentRoot;
 
 /**
@@ -66,14 +67,14 @@ public interface CommentRootService extends IService<CommentRoot> {
     /**
      * 点赞父评论
      *
-     * @param rootCommentId 父评论 ID
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> likeRootComment(Long rootCommentId);
+    CommonDtoResult<Boolean> likeRootComment(LikeDtoReq dtoReq);
     
     /**
      * 点赞子评论
      *
-     * @param sunCommentId 子评论 ID
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> likeSonComment(Long sunCommentId);
+    CommonDtoResult<Boolean> likeSonComment(LikeDtoReq dtoReq);
 }

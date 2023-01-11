@@ -9,6 +9,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
+import com.yixihan.yicode.question.api.reset.LikeDtoReq;
 import com.yixihan.yicode.question.api.reset.comment.CommentApi;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
 import lombok.extern.slf4j.Slf4j;
@@ -60,12 +61,12 @@ public class CommentController implements CommentApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeRootComment(Long rootCommentId) {
-        return ApiResult.create (service.likeRootComment (rootCommentId));
+    public ApiResult<CommonDtoResult<Boolean>> likeRootComment(LikeDtoReq dtoReq) {
+        return ApiResult.create (service.likeRootComment (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeSonComment(Long sunCommentId) {
-        return ApiResult.create (service.likeSonComment (sunCommentId));
+    public ApiResult<CommonDtoResult<Boolean>> likeSonComment(LikeDtoReq dtoReq) {
+        return ApiResult.create (service.likeSonComment (dtoReq));
     }
 }

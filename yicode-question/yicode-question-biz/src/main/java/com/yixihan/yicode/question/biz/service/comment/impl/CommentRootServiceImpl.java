@@ -9,6 +9,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
+import com.yixihan.yicode.question.api.reset.LikeDtoReq;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
 import com.yixihan.yicode.question.dal.mapper.comment.CommentRootMapper;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentRoot;
@@ -56,12 +57,12 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeRootComment(Long rootCommentId) {
+    public CommonDtoResult<Boolean> likeRootComment(LikeDtoReq dtoReq) {
         return null;
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeSonComment(Long sunCommentId) {
+    public CommonDtoResult<Boolean> likeSonComment(LikeDtoReq dtoReq) {
         return null;
     }
 }
