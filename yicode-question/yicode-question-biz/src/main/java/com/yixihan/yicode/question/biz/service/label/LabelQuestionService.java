@@ -34,7 +34,12 @@ public interface LabelQuestionService extends IService<LabelQuestion> {
     /**
      * 获取问题标签
      *
-     * @param questionLabelIdList 标签 ID
+     * @param questionId 标签 ID
      */
-    List<LabelDtoResult> questionLabelDetail(List<Long> questionLabelIdList);
+    List<LabelDtoResult> questionLabelDetail(Long questionId);
+    
+    /**
+     * 获取问题的所有标签
+     */
+    List<LabelDtoResult> allQuestionLabel();
 }

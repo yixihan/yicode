@@ -32,7 +32,7 @@ public class LabelUserServiceImpl extends ServiceImpl<LabelUserMapper, LabelUser
     }
     
     @Override
-    public List<LabelDtoResult> userLabelDetail(List<Long> userLabelIdList) {
+    public List<LabelDtoResult> userLabelDetail(Long userId) {
         return null;
     }
 }

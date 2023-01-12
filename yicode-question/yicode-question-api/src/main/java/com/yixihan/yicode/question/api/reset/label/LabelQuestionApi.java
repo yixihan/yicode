@@ -31,5 +31,9 @@ public interface LabelQuestionApi {
     
     @ApiOperation ("问题标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> questionLabelDetail (@RequestBody List<Long> questionLabelIdList);
+    ApiResult<List<LabelDtoResult>> questionLabelDetail (@RequestBody Long questionId);
+    
+    @ApiOperation ("获取所有问题的标签")
+    @PostMapping(value = "/all", produces = "application/json")
+    ApiResult<List<LabelDtoResult>> allQuestionLabel ();
 }

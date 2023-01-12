@@ -35,7 +35,12 @@ public interface LabelNoteService extends IService<LabelNote> {
     /**
      * 获取题解标签
      *
-     * @param noteLabelIdList 标签 ID
+     * @param noteId 标签 ID
      */
-    List<LabelDtoResult> noteLabelDetail(List<Long> noteLabelIdList);
+    List<LabelDtoResult> noteLabelDetail(Long noteId);
+    
+    /**
+     * 获取所有题解的标签
+     */
+    List<LabelDtoResult> allNoteLabel();
 }

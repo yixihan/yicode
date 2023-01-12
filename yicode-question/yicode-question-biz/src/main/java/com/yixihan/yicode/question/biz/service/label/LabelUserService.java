@@ -34,7 +34,7 @@ public interface LabelUserService extends IService<LabelUser> {
     /**
      * 获取用户标签
      *
-     * @param userLabelIdList 标签 ID
+     * @param userId 标签 ID
      */
-    List<LabelDtoResult> userLabelDetail(List<Long> userLabelIdList);
+    List<LabelDtoResult> userLabelDetail(Long userId);
 }

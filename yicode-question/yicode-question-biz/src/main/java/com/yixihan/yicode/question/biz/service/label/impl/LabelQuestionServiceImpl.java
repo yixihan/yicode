@@ -32,7 +32,12 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     }
     
     @Override
-    public List<LabelDtoResult> questionLabelDetail(List<Long> questionLabelIdList) {
+    public List<LabelDtoResult> questionLabelDetail(Long questionId) {
+        return null;
+    }
+    
+    @Override
+    public List<LabelDtoResult> allQuestionLabel() {
         return null;
     }
 }

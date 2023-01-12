@@ -38,7 +38,12 @@ public class LabelQuestionController implements LabelQuestionApi {
     }
     
     @Override
-    public ApiResult<List<LabelDtoResult>> questionLabelDetail(List<Long> questionLabelIdList) {
-        return ApiResult.create (service.questionLabelDetail (questionLabelIdList));
+    public ApiResult<List<LabelDtoResult>> questionLabelDetail(Long questionId) {
+        return ApiResult.create (service.questionLabelDetail (questionId));
+    }
+    
+    @Override
+    public ApiResult<List<LabelDtoResult>> allQuestionLabel() {
+        return ApiResult.create (service.allQuestionLabel ());
     }
 }

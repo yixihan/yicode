@@ -32,7 +32,12 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     }
     
     @Override
-    public List<LabelDtoResult> noteLabelDetail(List<Long> noteLabelIdList) {
+    public List<LabelDtoResult> noteLabelDetail(Long noteId) {
+        return null;
+    }
+    
+    @Override
+    public List<LabelDtoResult> allNoteLabel() {
         return null;
     }
 }

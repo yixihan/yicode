@@ -38,7 +38,7 @@ public class LabelUserController implements LabelUserApi {
     }
     
     @Override
-    public ApiResult<List<LabelDtoResult>> userLabelDetail(List<Long> userLabelIdList) {
-        return ApiResult.create (service.userLabelDetail (userLabelIdList));
+    public ApiResult<List<LabelDtoResult>> userLabelDetail(Long userId) {
+        return ApiResult.create (service.userLabelDetail (userId));
     }
 }

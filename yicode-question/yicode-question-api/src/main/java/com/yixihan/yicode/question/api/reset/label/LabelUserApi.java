@@ -31,5 +31,5 @@ public interface LabelUserApi {
     
     @ApiOperation ("用户标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> userLabelDetail (@RequestBody List<Long> userLabelIdList);
+    ApiResult<List<LabelDtoResult>> userLabelDetail (@RequestBody Long userId);
 }

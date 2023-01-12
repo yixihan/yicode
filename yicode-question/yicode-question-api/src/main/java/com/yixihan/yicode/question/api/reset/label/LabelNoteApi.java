@@ -31,5 +31,9 @@ public interface LabelNoteApi {
     
     @ApiOperation ("题解标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> noteLabelDetail (@RequestBody List<Long> noteLabelIdList);
+    ApiResult<List<LabelDtoResult>> noteLabelDetail (@RequestBody Long noteId);
+    
+    @ApiOperation ("获取所有题解的标签")
+    @PostMapping(value = "/all", produces = "application/json")
+    ApiResult<List<LabelDtoResult>> allNoteLabel ();
 }
