@@ -28,18 +28,13 @@ import java.util.Date;
 public class Note implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
+    
+    @ApiModelProperty(value = "题解 id")
+    @TableId(value = "note_id", type = IdType.ASSIGN_ID)
+    private Long noteId;
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
-
-    @ApiModelProperty(value = "题解 id")
-    @TableField(fill = FieldFill.INSERT)
-    private Long noteId;
-
+    
     @ApiModelProperty(value = "题解标题")
     private String noteName;
 

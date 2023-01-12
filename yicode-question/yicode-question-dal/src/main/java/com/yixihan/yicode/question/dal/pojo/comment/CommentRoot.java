@@ -28,13 +28,9 @@ import java.util.Date;
 public class CommentRoot implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
+    
     @ApiModelProperty(value = "父评论 id")
-    @TableField(fill = FieldFill.INSERT)
+    @TableId(value = "root_id", type = IdType.ASSIGN_ID)
     private Long rootId;
 
     @ApiModelProperty(value = "评论内容 id")

@@ -28,13 +28,9 @@ import java.util.Date;
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
+    
     @ApiModelProperty(value = "问题 id")
-    @TableField(fill = FieldFill.INSERT)
+    @TableId(value = "question_id", type = IdType.ASSIGN_ID)
     private Long questionId;
 
     @ApiModelProperty(value = "问题题目")

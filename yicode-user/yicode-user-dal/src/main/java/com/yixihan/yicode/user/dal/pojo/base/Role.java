@@ -27,13 +27,9 @@ import java.util.Date;
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
+    
     @ApiModelProperty(value = "角色 id")
-    @TableField(fill = FieldFill.INSERT)
+    @TableId(value = "role_id", type = IdType.ASSIGN_ID)
     private Long roleId;
 
     @ApiModelProperty(value = "角色名")

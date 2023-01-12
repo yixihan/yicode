@@ -28,13 +28,9 @@ import java.util.Date;
 public class CommentReply implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键 id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
+    
     @ApiModelProperty(value = "子评论 id")
-    @TableField(fill = FieldFill.INSERT)
+    @TableId(value = "reply_id", type = IdType.ASSIGN_ID)
     private Long replyId;
 
     @ApiModelProperty(value = "父评论 id")
