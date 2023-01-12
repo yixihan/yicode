@@ -12,6 +12,8 @@ import com.yixihan.yicode.question.dal.mapper.note.NoteMapper;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 问题题解表 服务实现类
@@ -34,7 +36,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     }
     
     @Override
-    public CommonDtoResult<Boolean> delNote(Long noteId) {
+    public CommonDtoResult<Boolean> delNote(List<Long> noteIdList) {
         return null;
     }
     

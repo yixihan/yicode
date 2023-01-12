@@ -9,6 +9,8 @@ import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
 
+import java.util.List;
+
 /**
  * <p>
  * 问题题解表 服务类
@@ -36,9 +38,9 @@ public interface NoteService extends IService<Note> {
     /**
      * 添加题解
      *
-     * @param noteId 题解 ID
+     * @param noteIdList 题解 ID
      */
-    CommonDtoResult<Boolean> delNote(Long noteId);
+    CommonDtoResult<Boolean> delNote(List<Long> noteIdList);
     
     /**
      * 点赞题解

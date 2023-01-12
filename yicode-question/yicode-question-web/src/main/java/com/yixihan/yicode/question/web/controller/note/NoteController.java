@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -41,8 +42,8 @@ public class NoteController implements NoteApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delNote(Long noteId) {
-        return ApiResult.create (service.delNote (noteId));
+    public ApiResult<CommonDtoResult<Boolean>> delNote(List<Long> noteIdList) {
+        return ApiResult.create (service.delNote (noteIdList));
     }
     
     @Override

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  * 题解 api
  *
@@ -33,7 +35,7 @@ public interface NoteApi {
     
     @ApiOperation("删除题解")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delNote (@RequestBody Long noteId);
+    ApiResult<CommonDtoResult<Boolean>> delNote (@RequestBody List<Long> noteIdList);
     
     @ApiOperation("点赞题解")
     @PostMapping(value = "/like", produces = "application/json")
