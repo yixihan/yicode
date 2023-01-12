@@ -1,9 +1,17 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.api.reset.question.QuestionCaseApi;
+import com.yixihan.yicode.question.biz.service.question.QuestionCaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +24,27 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 public class QuestionCaseController implements QuestionCaseApi {
-
+    
+    @Resource
+    private QuestionCaseService service;
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> addQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+        return ApiResult.create (service.addQuestionCase (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+        return ApiResult.create (service.modifyQuestionCase (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> delQuestionCase(Long questionCaseId) {
+        return ApiResult.create (service.delQuestionCase (questionCaseId));
+    }
+    
+    @Override
+    public ApiResult<List<QuestionCaseDtoResult>> allQuestionCase(Long questionId) {
+        return ApiResult.create (service.allQuestionCase (questionId));
+    }
 }

@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionDailyService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionDailyMapper;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionDaily;
@@ -16,5 +17,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, QuestionDaily> implements QuestionDailyService {
-
+    
+    @Override
+    public CommonDtoResult<Boolean> addDailyQuestion(Long questionId) {
+        return null;
+    }
 }
