@@ -46,7 +46,7 @@ public class UserMsg implements Serializable {
     private String msg;
     
     @ApiModelProperty(value = "是否已读")
-    private Boolean finish;
+    private Integer finish;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
