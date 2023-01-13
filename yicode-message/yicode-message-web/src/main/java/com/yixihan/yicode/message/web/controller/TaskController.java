@@ -3,7 +3,7 @@ package com.yixihan.yicode.message.web.controller;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
-import com.yixihan.yicode.message.api.reset.TaskApi;
+import com.yixihan.yicode.message.api.rest.TaskApi;
 import com.yixihan.yicode.message.biz.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

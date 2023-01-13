@@ -2,7 +2,7 @@ package com.yixihan.yicode.thirdpart.web.controller.oss;
 
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.oss.OSSPolicyDtoReq;
-import com.yixihan.yicode.thirdpart.api.reset.oss.OSSApi;
+import com.yixihan.yicode.thirdpart.api.rest.oss.OSSApi;
 import com.yixihan.yicode.thirdpart.biz.service.oss.OSSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

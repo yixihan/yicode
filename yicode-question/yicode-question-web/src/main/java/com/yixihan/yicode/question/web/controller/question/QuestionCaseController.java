@@ -5,7 +5,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
-import com.yixihan.yicode.question.api.reset.question.QuestionCaseApi;
+import com.yixihan.yicode.question.api.rest.question.QuestionCaseApi;
 import com.yixihan.yicode.question.biz.service.question.QuestionCaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

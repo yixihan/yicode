@@ -3,7 +3,7 @@ package com.yixihan.yicode.question.web.controller.question;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.question.api.reset.question.QuestionDailyApi;
+import com.yixihan.yicode.question.api.rest.question.QuestionDailyApi;
 import com.yixihan.yicode.question.biz.service.question.QuestionDailyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

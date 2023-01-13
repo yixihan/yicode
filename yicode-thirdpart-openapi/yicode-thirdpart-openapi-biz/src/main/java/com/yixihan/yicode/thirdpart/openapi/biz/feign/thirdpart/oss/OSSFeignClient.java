@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.oss;
 
-import com.yixihan.yicode.thirdpart.api.reset.oss.OSSApi;
+import com.yixihan.yicode.thirdpart.api.rest.oss.OSSApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**

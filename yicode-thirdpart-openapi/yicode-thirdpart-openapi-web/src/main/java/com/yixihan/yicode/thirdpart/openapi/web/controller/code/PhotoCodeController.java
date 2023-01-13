@@ -2,7 +2,7 @@ package com.yixihan.yicode.thirdpart.openapi.web.controller.code;
 
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.thirdpart.open.api.reset.code.PhotoCodeOpenApi;
+import com.yixihan.yicode.thirdpart.open.api.rest.code.PhotoCodeOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.code.CodeValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.code.PhotoCodeService;
 import lombok.extern.slf4j.Slf4j;

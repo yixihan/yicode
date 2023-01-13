@@ -3,7 +3,7 @@ package com.yixihan.yicode.thirdpart.openapi.web.controller.email;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.thirdpart.open.api.reset.email.EmailOpenApi;
+import com.yixihan.yicode.thirdpart.open.api.rest.email.EmailOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailService;

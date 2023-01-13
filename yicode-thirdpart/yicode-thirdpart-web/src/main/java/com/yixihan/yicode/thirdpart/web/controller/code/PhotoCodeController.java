@@ -3,7 +3,7 @@ package com.yixihan.yicode.thirdpart.web.controller.code;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.reset.code.PhotoCodeApi;
+import com.yixihan.yicode.thirdpart.api.rest.code.PhotoCodeApi;
 import com.yixihan.yicode.thirdpart.biz.service.code.PhotoCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

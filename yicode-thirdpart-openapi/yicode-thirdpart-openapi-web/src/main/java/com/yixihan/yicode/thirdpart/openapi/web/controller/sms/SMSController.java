@@ -3,7 +3,7 @@ package com.yixihan.yicode.thirdpart.openapi.web.controller.sms;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.thirdpart.open.api.reset.sms.SMSOpenApi;
+import com.yixihan.yicode.thirdpart.open.api.rest.sms.SMSOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.sms.SMSService;

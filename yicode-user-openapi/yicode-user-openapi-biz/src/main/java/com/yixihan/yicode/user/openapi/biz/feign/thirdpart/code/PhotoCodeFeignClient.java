@@ -1,6 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.feign.thirdpart.code;
 
-import com.yixihan.yicode.thirdpart.api.reset.code.PhotoCodeApi;
+import com.yixihan.yicode.thirdpart.api.rest.code.PhotoCodeApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**

@@ -4,7 +4,7 @@ package com.yixihan.yicode.question.web.controller.label;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
-import com.yixihan.yicode.question.api.reset.label.LabelNoteApi;
+import com.yixihan.yicode.question.api.rest.label.LabelNoteApi;
 import com.yixihan.yicode.question.biz.service.label.LabelNoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

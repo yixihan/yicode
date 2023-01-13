@@ -4,7 +4,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.reset.email.EmailApi;
+import com.yixihan.yicode.thirdpart.api.rest.email.EmailApi;
 import com.yixihan.yicode.thirdpart.biz.service.email.EmailSendService;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -8,7 +8,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
-import com.yixihan.yicode.question.api.reset.note.NoteApi;
+import com.yixihan.yicode.question.api.rest.note.NoteApi;
 import com.yixihan.yicode.question.biz.service.note.NoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

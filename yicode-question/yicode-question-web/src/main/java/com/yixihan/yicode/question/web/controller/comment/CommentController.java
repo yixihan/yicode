@@ -10,7 +10,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
-import com.yixihan.yicode.question.api.reset.comment.CommentApi;
+import com.yixihan.yicode.question.api.rest.comment.CommentApi;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.code;
 
-import com.yixihan.yicode.thirdpart.open.api.reset.code.QrCodeOpenApi;
+import com.yixihan.yicode.thirdpart.open.api.rest.code.QrCodeOpenApi;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.code.QrCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

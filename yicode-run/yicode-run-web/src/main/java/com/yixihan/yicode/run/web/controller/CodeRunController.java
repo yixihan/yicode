@@ -3,7 +3,7 @@ package com.yixihan.yicode.run.web.controller;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.run.api.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
-import com.yixihan.yicode.run.api.reset.CodeRunApi;
+import com.yixihan.yicode.run.api.rest.CodeRunApi;
 import com.yixihan.yicode.run.biz.service.CodeRunService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;

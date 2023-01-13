@@ -4,7 +4,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.reset.sms.SMSApi;
+import com.yixihan.yicode.thirdpart.api.rest.sms.SMSApi;
 import com.yixihan.yicode.thirdpart.biz.service.sms.SMSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
