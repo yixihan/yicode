@@ -11,6 +11,30 @@ spring:
     # 允许重载 bean
     allow-bean-definition-overriding: true
 
+feign:
+  client:
+    yicode-user:
+      name: yicode-user
+    yicode-question:
+      name: yicode-question
+    yicode-message:
+      name: yicode-message
+    yicode-run:
+      name: yicode-run
+    config:
+      yicode-user:
+        connect-timeout: 30000
+        read-timeout: 30000
+      yicode-question:
+        connect-timeout: 30000
+        read-timeout: 30000
+      yicode-message:
+        connect-timeout: 30000
+        read-timeout: 30000
+      yicode-run:
+        connect-timeout: 30000
+        read-timeout: 30000
+
 management:
   endpoints:
     web:

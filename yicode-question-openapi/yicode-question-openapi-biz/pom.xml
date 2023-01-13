@@ -64,10 +64,18 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- yicode-thirdpart-api -->
+        <!-- yicode-message-api -->
         <dependency>
             <groupId>com.yixihan</groupId>
-            <artifactId>yicode-thirdpart-api</artifactId>
+            <artifactId>yicode-message-api</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- yicode-run-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-run-api</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
