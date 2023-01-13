@@ -4,7 +4,6 @@ package com.yixihan.yicode.user.web.controller.base;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
-import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.rest.base.UserApi;
 import com.yixihan.yicode.user.biz.service.base.UserService;
@@ -27,11 +26,6 @@ public class UserController implements UserApi {
 
     @Resource
     private UserService userService;
-
-    @Override
-    public ApiResult<UserDetailInfoDtoResult> getUserInfo(Long userId) {
-        return ApiResult.create (userService.getUserInfo (userId));
-    }
 
     @Override
     public ApiResult<UserDtoResult> getUserByUserId(Long userId) {

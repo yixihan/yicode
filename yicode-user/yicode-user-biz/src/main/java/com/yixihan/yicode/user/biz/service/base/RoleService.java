@@ -60,8 +60,8 @@ public interface RoleService extends IService<Role> {
      * 判断有无此角色 ID
      *
      * @param roleId 角色 ID
-     * @return 有：false | 无：true
+     * @return 有：true | 无：false
      */
-    Boolean hasRole (Long roleId);
+    CommonDtoResult<Boolean> hasRole (Long roleId);
     
 }

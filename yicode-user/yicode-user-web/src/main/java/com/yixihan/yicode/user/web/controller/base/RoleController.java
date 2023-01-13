@@ -40,6 +40,11 @@ public class RoleController implements RoleApi {
     }
     
     @Override
+    public ApiResult<CommonDtoResult<Boolean>> hasRole(Long roleId) {
+        return ApiResult.create (service.hasRole (roleId));
+    }
+    
+    @Override
     public ApiResult<PageDtoResult<RoleDtoResult>> getRolePage(PageDtoReq dtoReq) {
         return ApiResult.create (service.getRolePage (dtoReq));
     }

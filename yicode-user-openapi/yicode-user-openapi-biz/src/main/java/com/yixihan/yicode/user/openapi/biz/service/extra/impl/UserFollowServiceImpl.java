@@ -41,14 +41,11 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public CommonVO<Boolean> followUser(ModifyFollowReq req) {
         // 校验 userId
-        if (userService.verifyUserId (req.getFollowUserId ())) {
+        if (!userService.verifyUserId (req.getFollowUserId ())) {
             throw new BizException ("关注者不存在!");
         }
     
-        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
-                userService.getUserInfo ().getUser ().getUserId (),
-                req.getFollowUserId ()
-        );
+        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (userService.getUser ().getUserId (), req.getFollowUserId ());
     
         CommonDtoResult<Boolean> dtoResult = followFeignClient.followUser (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -60,14 +57,11 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public CommonVO<Boolean> unfollowUser(ModifyFollowReq req) {
         // 校验 userId
-        if (userService.verifyUserId (req.getFollowUserId ())) {
+        if (!userService.verifyUserId (req.getFollowUserId ())) {
             throw new BizException ("关注者不存在!");
         }
     
-        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (
-                userService.getUserInfo ().getUser ().getUserId (),
-                req.getFollowUserId ()
-        );
+        ModifyFollowDtoReq dtoReq = new ModifyFollowDtoReq (userService.getUser ().getUserId (), req.getFollowUserId ());
     
         CommonDtoResult<Boolean> dtoResult = followFeignClient.unfollowUser (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -79,7 +73,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public CommonVO<Integer> getFollowCount(Long userId) {
         // 校验 userId
-        if (userService.verifyUserId (userId)) {
+        if (!userService.verifyUserId (userId)) {
             return new CommonVO<> (NumConstant.NUM_0);
         }
     
@@ -90,7 +84,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public PageVO<FollowVO> getFollowList(FollowQueryReq req) {
         // 校验 userId
-        if (userService.verifyUserId (req.getUserId ())) {
+        if (!userService.verifyUserId (req.getUserId ())) {
             return new PageVO<> ();
         }
     
@@ -106,7 +100,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public CommonVO<Integer> getFanCount(Long userId) {
         // 校验 userId
-        if (userService.verifyUserId (userId)) {
+        if (!userService.verifyUserId (userId)) {
             return new CommonVO<> (NumConstant.NUM_0);
         }
     
@@ -117,7 +111,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public PageVO<FollowVO> getFanList(FollowQueryReq req) {
         // 校验 userId
-        if (userService.verifyUserId (req.getUserId ())) {
+        if (!userService.verifyUserId (req.getUserId ())) {
             return new PageVO<> ();
         }
     

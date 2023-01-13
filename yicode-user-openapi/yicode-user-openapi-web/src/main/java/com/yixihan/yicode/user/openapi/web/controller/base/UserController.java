@@ -25,13 +25,13 @@ public class UserController implements UserOpenApi {
     private UserService userService;
 
     @Override
-    public JsonResponse<UserDetailInfoVO> getUserInfo(Long userId) {
-        return JsonResponse.ok (userService.getUserInfo (userId));
+    public JsonResponse<UserDetailInfoVO> getUserDetailInfo(Long userId) {
+        return JsonResponse.ok (userService.getUserDetailInfo (userId));
     }
 
     @Override
-    public JsonResponse<UserDetailInfoVO> getUserInfo() {
-        return JsonResponse.ok (userService.getUserInfo ());
+    public JsonResponse<UserDetailInfoVO> getUserDetailInfo() {
+        return JsonResponse.ok (userService.getUserDetailInfo ());
     }
 
     @Override

@@ -1,15 +1,15 @@
 package com.yixihan.yicode.user.api.rest.base;
 
-import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.api.dto.request.base.*;
-import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 用户 api
@@ -20,12 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "用户 api")
 @RequestMapping("/user")
 public interface UserApi {
-
-    @ApiOperation("获取用户详细信息")
-    @RoleAccess(value = RoleEnums.USER)
-    @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<UserDetailInfoDtoResult> getUserInfo(@RequestParam("userId") Long userId);
-
+    
     @ApiOperation("通过 userId 获取用户信息")
     @PostMapping(value = "/info/id", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserId(@RequestParam("userId") Long userId);

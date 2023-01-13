@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 用户新角色添加-req
+ * 用户角色修改-req
  *
  * @author yixihan
  * @date 2022/12/21 10:03
@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户新角色添加-req")
-public class AddUserRoleReq {
+@ApiModel("用户角色修改-req")
+public class ModifyUserRoleReq {
     
     @ApiModelProperty(value = "角色 ID")
     private Long roleId;

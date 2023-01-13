@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
-import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.dal.pojo.base.User;
 
@@ -19,14 +18,6 @@ import java.util.List;
  * @since 2022-10-22
  */
 public interface UserService extends IService<User> {
-
-    /**
-     * 获取用户详细信息
-     *
-     * @param userId 用户 id
-     * @return {@link UserDetailInfoDtoResult}
-     */
-    UserDetailInfoDtoResult getUserInfo(Long userId);
 
     /**
      * 通过 userId 获取用户信息

@@ -46,8 +46,9 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
     @Override
     public CommonDtoResult<Boolean> modifyUserLanguage(ModifyUserLanguageDtoReq dtoReq) {
         UpdateWrapper<UserLanguage> wrapper = new UpdateWrapper<> ();
-        wrapper.eq (UserLanguage.USER_ID, dtoReq.getUserId ()).eq (UserLanguage.LANGUAGE, dtoReq.getLanguage ()).set (UserLanguage.DEAL_COUNT, dtoReq.getDealCount ());
-        
+        wrapper.eq (UserLanguage.USER_ID, dtoReq.getUserId ())
+                .eq (UserLanguage.LANGUAGE, dtoReq.getLanguage ())
+                .set (UserLanguage.DEAL_COUNT, dtoReq.getDealCount ());
         int modify = baseMapper.update (null, wrapper);
         if (modify != 1) {
             return new CommonDtoResult<> (

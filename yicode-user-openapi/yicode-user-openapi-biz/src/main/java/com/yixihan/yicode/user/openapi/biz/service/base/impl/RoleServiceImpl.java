@@ -14,7 +14,7 @@ import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.ModifyUserRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.base.RoleFeignClient;
@@ -51,6 +51,7 @@ public class RoleServiceImpl implements RoleService {
         if (StrUtil.isBlank (req.getRoleName ())) {
             throw new BizException ("角色名不能为空!");
         }
+        // 校验是否已有该角色名
         if (roleFeignClient.getRoleList ().getResult ()
                 .stream ().anyMatch ((o) -> o.getRoleName ().equals (req.getRoleName ()))) {
             throw new BizException ("已有该角色!");
@@ -67,8 +68,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public CommonVO<Boolean> delRole(Long roleId) {
         // 校验角色 ID 是否合规(需存在)
-        if (roleFeignClient.getRoleList ().getResult ()
-                .stream ().noneMatch ((o) -> o.getRoleId ().equals (roleId))) {
+        if (!roleFeignClient.hasRole (roleId).getResult ().getData ()) {
             throw new BizException ("该角色不存在!");
         }
         
@@ -81,7 +81,16 @@ public class RoleServiceImpl implements RoleService {
     }
     
     @Override
-    public CommonVO<Boolean> addUserRole(AddUserRoleReq req) {
+    public CommonVO<Boolean> addUserRole(ModifyUserRoleReq req) {
+        // 校验角色 ID 是否合规(需存在)
+        if (!roleFeignClient.hasRole (req.getRoleId ()).getResult ().getData ()) {
+            throw new BizException ("该角色不存在!");
+        }
+        // 校验用户 ID 是否合规(需存在)
+        if (!userService.verifyUserId (req.getUserId ())) {
+            throw new BizException ("该用户不存在!");
+        }
+        
         // 用户添加角色
         ModifyUserRoleDtoReq dtoReq = CopyUtils.copySingle (ModifyUserRoleDtoReq.class, req);
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.addRole (dtoReq).getResult ();
@@ -92,11 +101,19 @@ public class RoleServiceImpl implements RoleService {
     }
     
     @Override
-    public CommonVO<Boolean> delUserRole(Long roleId) {
-        Long userId = userService.getUserInfo ().getUser ().getUserId ();
+    public CommonVO<Boolean> delUserRole(ModifyUserRoleReq req) {
+        // 校验角色 ID 是否合规(需存在)
+        if (!roleFeignClient.hasRole (req.getRoleId ()).getResult ().getData ()) {
+            throw new BizException ("该角色不存在!");
+        }
+        // 校验用户 ID 是否合规(需存在)
+        if (!userService.verifyUserId (req.getUserId ())) {
+            throw new BizException ("该用户不存在!");
+        }
         
         // 删除用户角色
-        ModifyUserRoleDtoReq dtoReq = new ModifyUserRoleDtoReq (userId, roleId);
+        ModifyUserRoleDtoReq dtoReq = new ModifyUserRoleDtoReq (req.getUserId (), req.getRoleId ());
+        
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.delRole (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());

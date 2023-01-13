@@ -7,7 +7,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.ModifyUserRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import io.swagger.annotations.Api;
@@ -37,12 +37,12 @@ public interface RoleOpenApi {
     @ApiOperation ("用户添加角色")
     @RoleAccess(value = RoleEnums.ADMIN)
     @PostMapping(value = "/user/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addUserRole (@RequestBody AddUserRoleReq req);
+    JsonResponse<CommonVO<Boolean>> addUserRole (@RequestBody ModifyUserRoleReq req);
     
     @ApiOperation ("用户删除角色")
     @RoleAccess(value = RoleEnums.ADMIN)
     @DeleteMapping(value = "/user/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delUserRole (@RequestParam("roleId") Long roleId);
+    JsonResponse<CommonVO<Boolean>> delUserRole (@RequestBody ModifyUserRoleReq req);
     
     @ApiOperation ("获取角色列表")
     @RoleAccess(value = RoleEnums.ADMIN)

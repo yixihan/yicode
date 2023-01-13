@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.biz.service.base;
 
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 
@@ -18,14 +19,29 @@ public interface UserService {
      * @param userId 用户 ID
      * @return {@link UserDetailInfoVO}
      */
-    UserDetailInfoVO getUserInfo(Long userId);
+    UserDetailInfoVO getUserDetailInfo(Long userId);
 
     /**
      * 获取当前登录用户详细信息
      *
      * @return {@link UserDetailInfoVO}
      */
-    UserDetailInfoVO getUserInfo();
+    UserDetailInfoVO getUserDetailInfo();
+    
+    /**
+     * 获取当前登录用户信息
+     *
+     * @return {@link UserDtoResult}
+     */
+    UserDtoResult getUser ();
+    
+    /**
+     * 获取指定 ID 用户信息
+     *
+     * @param userId 用户 ID
+     * @return {@link UserDtoResult}
+     */
+    UserDtoResult getUser (Long userId);
 
     /**
      * 用户注册
@@ -87,7 +103,7 @@ public interface UserService {
      * 校验用户 ID 是否存在
      *
      * @param userId 用户 ID
-     * @return 存在 : false | 不存在 : true
+     * @return 存在 : true | 不存在 : false
      */
     Boolean verifyUserId (Long userId);
 }

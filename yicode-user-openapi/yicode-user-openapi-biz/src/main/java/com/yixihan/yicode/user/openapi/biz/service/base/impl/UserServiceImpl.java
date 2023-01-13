@@ -11,7 +11,7 @@ import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.enums.code.CodeTypeEnums;
 import com.yixihan.yicode.thirdpart.api.enums.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.base.*;
-import com.yixihan.yicode.user.api.dto.response.base.UserDetailInfoDtoResult;
+import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.openapi.api.enums.LoginTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
@@ -22,7 +22,9 @@ import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 import com.yixihan.yicode.user.openapi.biz.feign.thirdpart.email.EmailFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.thirdpart.sms.SMSFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.base.UserFeignClient;
+import com.yixihan.yicode.user.openapi.biz.feign.user.base.UserRoleFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
+import com.yixihan.yicode.user.openapi.biz.service.extra.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,12 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserFeignClient userFeignClient;
+    
+    @Resource
+    private UserInfoService userInfoService;
+    
+    @Resource
+    private UserRoleFeignClient userRoleFeignClient;
 
     @Resource
     private EmailFeignClient emailFeignClient;
@@ -53,24 +61,37 @@ public class UserServiceImpl implements UserService {
     private HttpServletRequest request;
 
     @Override
-    public UserDetailInfoVO getUserInfo(Long userId) {
-        UserDetailInfoDtoResult dtoResult = userFeignClient.getUserInfo (userId).getResult ();
-        return getUserDetailInfoVO (dtoResult);
+    public UserDetailInfoVO getUserDetailInfo(Long userId) {
+        // 获取用户基础信息
+        UserDtoResult userDtoResult = userFeignClient.getUserByUserId (userId).getResult ();
+        // 获取用户资料
+        UserInfoVO userInfoVO = userInfoService.getUserInfo (userId);
+        // 获取用户角色
+        List<RoleDtoResult> userRoleDtoResult = userRoleFeignClient.getUserRoleList (userId).getResult ();
+        return getUserDetailInfoVO (userDtoResult, userInfoVO, userRoleDtoResult);
     }
-
+    
     @Override
-    public UserDetailInfoVO getUserInfo() {
-        // 获取请求头附带的 token
-        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
-                .substring (AuthConstant.TOKEN_SUB_INDEX);
-        UserDtoResult result = userFeignClient.getUserByToken (token).getResult ();
+    public UserDetailInfoVO getUserDetailInfo() {
+        UserDtoResult result = getUser ();
         if (result.getUserId () == null) {
             return new UserDetailInfoVO ();
         }
-        UserDetailInfoDtoResult dtoResult = userFeignClient.getUserInfo (result.getUserId ()).getResult ();
-        return getUserDetailInfoVO (dtoResult);
+        return getUserDetailInfo (result.getUserId ());
     }
-
+    
+    @Override
+    public UserDtoResult getUser() {
+        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
+                .substring (AuthConstant.TOKEN_SUB_INDEX);
+        return userFeignClient.getUserByToken (token).getResult ();
+    }
+    
+    @Override
+    public UserDtoResult getUser(Long userId) {
+        return userFeignClient.getUserByUserId (userId).getResult ();
+    }
+    
     @Override
     public synchronized CommonVO<Boolean> register(RegisterUserReq req) {
         // 合法性校验
@@ -90,8 +111,9 @@ public class UserServiceImpl implements UserService {
             if (!ValidationUtils.validateEmail (req.getEmail ())) {
                 throw new BizException ("邮箱不符合规范!");
             }
-            if (!userFeignClient.verifyUserEmail (req.getEmail ()).getResult ().getData ()) {
-                throw new BizException ("邮箱已被绑定!");
+            CommonDtoResult<Boolean> emailDtoResult = userFeignClient.verifyUserEmail (req.getEmail ()).getResult ();
+            if (!emailDtoResult.getData ()) {
+                throw new BizException (emailDtoResult.getMessage ());
             }
             // 校验验证码
             EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
@@ -106,8 +128,9 @@ public class UserServiceImpl implements UserService {
             if (!ValidationUtils.validateMobile (req.getMobile ())) {
                 throw new BizException ("手机号不符合规范!");
             }
-            if (!userFeignClient.verifyUserMobile (req.getMobile ()).getResult ().getData ()) {
-                throw new BizException ("手机号已被绑定!");
+            CommonDtoResult<Boolean> mobileDtoResult = userFeignClient.verifyUserMobile (req.getMobile ()).getResult ();
+            if (!mobileDtoResult.getData ()) {
+                throw new BizException (mobileDtoResult.getMessage ());
             }
             // 校验验证码
             SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
@@ -131,6 +154,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> resetPassword(ResetPasswordReq req) {
+        // 校验密码复杂度
+        if (!ValidationUtils.validatePassword (req.getNewPassword ())) {
+            throw new BizException ("密码不符合规范!");
+        }
+        
+        // 校验验证码
         if (VerificationCodeEnums.EMAIL.getMethod ().equals (req.getType ())) {
             if (!ValidationUtils.validateEmail (req.getEmail ())) {
                 throw new BizException ("邮箱不符合规范!");
@@ -158,10 +187,6 @@ public class UserServiceImpl implements UserService {
             throw new BizException ("错误的验证码方式!");
         }
 
-        if (!ValidationUtils.validatePassword (req.getNewPassword ())) {
-            throw new BizException ("密码不符合规范!");
-        }
-
         ResetPasswordDtoReq dtoReq = CopyUtils.copySingle (ResetPasswordDtoReq.class, req);
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetPassword (dtoReq).getResult ();
@@ -173,9 +198,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> bindEmail(EmailReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
+        // 校验邮箱
+        CommonDtoResult<Boolean> emailDtoResult = userFeignClient.verifyUserEmail (req.getEmail ()).getResult ();
+        if (!emailDtoResult.getData ()) {
+            throw new BizException (emailDtoResult.getMessage ());
         }
+        
+        // 校验验证码
         EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
         emailDtoReq.setEmail (req.getEmail ());
         emailDtoReq.setCode (req.getCode ());
@@ -183,9 +212,9 @@ public class UserServiceImpl implements UserService {
         if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
             throw new BizException ("验证码错误!");
         }
-        UserDetailInfoVO userInfo = getUserInfo ();
+        
         BindEmailDtoReq dtoReq = CopyUtils.copySingle (BindEmailDtoReq.class, req);
-        dtoReq.setUserId (userInfo.getUser ().getUserId ());
+        dtoReq.setUserId (getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
@@ -195,9 +224,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> unbindEmail(EmailReq req) {
+        // 校验邮箱
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
+        
+        // 校验验证码
         EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
         emailDtoReq.setEmail (req.getEmail ());
         emailDtoReq.setCode (req.getCode ());
@@ -205,8 +237,7 @@ public class UserServiceImpl implements UserService {
         if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
             throw new BizException ("验证码错误!");
         }
-        UserDetailInfoVO userInfo = getUserInfo ();
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (userInfo.getUser ().getUserId ()).getResult ();
+        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (getUser ().getUserId ()).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
         }
@@ -215,9 +246,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> bindMobile(MobileReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
+        // 校验手机号
+        CommonDtoResult<Boolean> mobileDtoResult = userFeignClient.verifyUserMobile (req.getMobile ()).getResult ();
+        if (!mobileDtoResult.getData ()) {
+            throw new BizException (mobileDtoResult.getMessage ());
         }
+        
+        // 校验验证码
         SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
         smsDtoReq.setMobile (req.getMobile ());
         smsDtoReq.setCode (req.getCode ());
@@ -225,9 +260,8 @@ public class UserServiceImpl implements UserService {
         if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
             throw new BizException ("验证码错误!");
         }
-        UserDetailInfoVO userInfo = getUserInfo ();
         BindMobileDtoReq dtoReq = CopyUtils.copySingle (BindMobileDtoReq.class, req);
-        dtoReq.setUserId (userInfo.getUser ().getUserId ());
+        dtoReq.setUserId (getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindMobile (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
@@ -237,9 +271,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> unbindMobile(MobileReq req) {
+        // 校验手机号
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
+        
         SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
         smsDtoReq.setMobile (req.getMobile ());
         smsDtoReq.setCode (req.getCode ());
@@ -247,8 +283,7 @@ public class UserServiceImpl implements UserService {
         if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
             throw new BizException ("验证码错误!");
         }
-        UserDetailInfoVO userInfo = getUserInfo ();
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (userInfo.getUser ().getUserId ()).getResult ();
+        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (getUser ().getUserId ()).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
         }
@@ -260,10 +295,13 @@ public class UserServiceImpl implements UserService {
         if (!ValidationUtils.validateUserName (req.getUserName ())) {
             throw new BizException ("用户名不符合规范!");
         }
+        
+        if (!userFeignClient.verifyUserName (req.getUserName ()).getResult ().getData ()) {
+            throw new BizException ("用户名已被占用!");
+        }
 
         ResetUserNameDtoReq dtoReq = CopyUtils.copySingle (ResetUserNameDtoReq.class, req);
-        UserDetailInfoVO userInfo = getUserInfo ();
-        dtoReq.setUserId (userInfo.getUser ().getUserId ());
+        dtoReq.setUserId (getUser ().getUserId ());
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetUserName (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -275,6 +313,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonVO<Boolean> cancellation(Long userId) {
+        if (!verifyUserId (userId)) {
+            throw new BizException ("该用户不存在!");
+        }
+        
         CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userId).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
@@ -284,19 +326,20 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public Boolean verifyUserId(Long userId) {
-        UserDetailInfoVO userInfo = getUserInfo (userId);
-        return userInfo.getUser () == null;
+        UserDtoResult user = getUser (userId);
+        return user.getUserId () != null;
     }
     
     /**
      * 组装 {@link UserDetailInfoVO}
-     * @param dtoResult {@link UserDetailInfoDtoResult}
+     * @param userDtoResult {@link UserDtoResult}
+     * @param userInfoVO {@link UserInfoVO}
+     * @param userRoleDtoResult {@link RoleDtoResult}
      * @return {@link UserDetailInfoVO}
      */
-    private UserDetailInfoVO getUserDetailInfoVO(UserDetailInfoDtoResult dtoResult) {
-        UserVO userVO = CopyUtils.copySingle (UserVO.class, dtoResult.getUser ());
-        List<RoleVO> roleVOList = CopyUtils.copyMulti (RoleVO.class, dtoResult.getUserRoleList ());
-        UserInfoVO userInfoVO = CopyUtils.copySingle (UserInfoVO.class, dtoResult.getUserInfo ());
-        return new UserDetailInfoVO (userVO, roleVOList, userInfoVO);
+    private UserDetailInfoVO getUserDetailInfoVO(UserDtoResult userDtoResult, UserInfoVO userInfoVO, List<RoleDtoResult> userRoleDtoResult) {
+        UserVO userVO = CopyUtils.copySingle (UserVO.class, userDtoResult);
+        List<RoleVO> userRoleList = CopyUtils.copyMulti (RoleVO.class, userRoleDtoResult);
+        return new UserDetailInfoVO (userVO, userRoleList, userInfoVO);
     }
 }

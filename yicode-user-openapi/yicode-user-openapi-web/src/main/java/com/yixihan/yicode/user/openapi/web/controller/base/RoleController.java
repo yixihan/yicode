@@ -6,7 +6,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.base.RoleOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.ModifyUserRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import com.yixihan.yicode.user.openapi.biz.service.base.RoleService;
@@ -39,13 +39,13 @@ public class RoleController implements RoleOpenApi {
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addUserRole(AddUserRoleReq req) {
+    public JsonResponse<CommonVO<Boolean>> addUserRole(ModifyUserRoleReq req) {
         return JsonResponse.ok (service.addUserRole (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delUserRole(Long roleId) {
-        return JsonResponse.ok (service.delUserRole (roleId));
+    public JsonResponse<CommonVO<Boolean>> delUserRole(ModifyUserRoleReq req) {
+        return JsonResponse.ok (service.delUserRole (req));
     }
     
     @Override

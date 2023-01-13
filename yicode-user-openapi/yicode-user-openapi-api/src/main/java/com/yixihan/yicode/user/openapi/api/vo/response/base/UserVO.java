@@ -31,5 +31,8 @@ public class UserVO {
 
     @ApiModelProperty(value = "用户邮箱")
     private String userEmail;
+    
+    @ApiModelProperty(value = "注册方式")
+    private String registerType;
 
 }

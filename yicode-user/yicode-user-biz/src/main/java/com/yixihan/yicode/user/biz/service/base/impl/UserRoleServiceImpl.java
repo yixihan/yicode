@@ -42,7 +42,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         wrapper.eq ("user_id", userId);
         List<UserRole> userRoleIdList = baseMapper.selectList (wrapper);
         // 提取用户 roleId 列表
-        List<Long> roleIdList = userRoleIdList.stream ().map (UserRole::getRoleId).collect(Collectors.toList());
+        List<Long> roleIdList = userRoleIdList.stream ()
+                .map (UserRole::getRoleId).collect(Collectors.toList());
         List<Role> userRoleList = roleService.getRoleList (roleIdList);
         return CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
     }
@@ -71,7 +72,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Override
     public CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq) {
-        if (roleService.hasRole (dtoReq.getRoleId ())) {
+        if (!roleService.hasRole (dtoReq.getRoleId ()).getData ()) {
             return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
         }
         if (baseMapper.selectCount (new QueryWrapper<UserRole> ()
@@ -92,9 +93,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
     @Override
     public CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq) {
-        if (roleService.hasRole (dtoReq.getRoleId ())) {
-            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
-        }
         QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole> ()
                 .eq (UserRole.USER_ID, dtoReq.getUserId ())
                 .eq (UserRole.ROLE_ID, dtoReq.getRoleId ());

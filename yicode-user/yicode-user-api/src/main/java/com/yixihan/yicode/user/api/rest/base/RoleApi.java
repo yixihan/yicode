@@ -7,10 +7,10 @@ import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -31,6 +31,10 @@ public interface RoleApi {
     @ApiOperation ("删除角色")
     @PostMapping(value = "/del", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delRole (@RequestParam("roleId") Long roleId);
+    
+    @ApiOperation ("判断有无该角色")
+    @PostMapping(value = "/has", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> hasRole (@RequestBody Long roleId);
     
     @ApiOperation ("获取用户的角色信息-分页查询")
     @PostMapping("/list")

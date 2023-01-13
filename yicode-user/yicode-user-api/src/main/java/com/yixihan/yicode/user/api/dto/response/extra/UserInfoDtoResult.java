@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户信息-dtoResult
@@ -52,12 +51,4 @@ public class UserInfoDtoResult {
     @ApiModelProperty(value = "用户真实姓名")
     private String userRealName;
     
-    @ApiModelProperty(value = "用户技能标签")
-    private List<String> userLabel;
-    
-    @ApiModelProperty(value = "用户个人网址")
-    private List<String> userWebsiteList;
-    
-    @ApiModelProperty(value = "用户语言")
-    private List<String> userLanguageList;
 }

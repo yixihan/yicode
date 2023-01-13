@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.api.vo.response.base;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yixihan.yicode.user.openapi.api.vo.response.extra.UserLanguageVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -59,5 +60,5 @@ public class UserInfoVO {
     private List<String> userWebsiteList;
     
     @ApiModelProperty(value = "用户语言")
-    private List<String> userLanguageList;
+    private List<UserLanguageVO> userLanguageList;
 }

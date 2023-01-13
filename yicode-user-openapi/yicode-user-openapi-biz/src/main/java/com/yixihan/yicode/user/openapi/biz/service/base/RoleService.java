@@ -4,7 +4,7 @@ import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.AddRoleReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.base.AddUserRoleReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.base.ModifyUserRoleReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.UserRoleQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 
@@ -35,14 +35,14 @@ public interface RoleService {
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> addUserRole(AddUserRoleReq req);
+    CommonVO<Boolean> addUserRole(ModifyUserRoleReq req);
     
     /**
      * 删除用户拥有角色
      *
-     * @param roleId 角色 ID
+     * @param req 请求参数
      */
-    CommonVO<Boolean> delUserRole(Long roleId);
+    CommonVO<Boolean> delUserRole(ModifyUserRoleReq req);
     
     /**
      * 获取角色列表

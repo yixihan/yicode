@@ -10,19 +10,12 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
-import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
-import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
-import com.yixihan.yicode.user.biz.service.extra.UserLanguageService;
-import com.yixihan.yicode.user.biz.service.extra.UserWebsiteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserInfoMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -34,22 +27,17 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
-
-    @Resource
-    private UserWebsiteService websiteService;
     
-    @Resource
-    private UserLanguageService languageService;
-    
-    // TODO 用户标签
-//    @Resource
-//    private UserLabelService labelService;
-
     @Override
     public CommonDtoResult<Boolean> modifyInfo(ModifyUserInfoDtoReq dtoReq) {
+        UserInfo oldInfo = baseMapper.selectOne (new QueryWrapper<UserInfo> ()
+                .eq (UserInfo.USER_ID, dtoReq.getUserId ()));
+        
         UserInfo info = BeanUtil.toBean (dtoReq, UserInfo.class);
         UpdateWrapper<UserInfo> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, info.getUserId ());
+        info.setVersion (oldInfo.getVersion ());
+        
         int modify = baseMapper.update (info, wrapper);
         if (modify != 1) {
             return new CommonDtoResult<> (
@@ -64,55 +52,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     public UserInfoDtoResult getUserInfo(Long userId) {
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, userId);
-        UserInfo info = baseMapper.selectOne (wrapper);
-        info = Optional.ofNullable (info).orElse (new UserInfo ());
+        UserInfo info = Optional.ofNullable (baseMapper.selectOne (wrapper)).orElse (new UserInfo ());
     
-        UserInfoDtoResult userInfoDtoResult = CopyUtils.copySingle (UserInfoDtoResult.class, info);
-        userInfoDtoResult.setUserWebsiteList (getUserWebSiteList (userId));
-        userInfoDtoResult.setUserLanguageList (getUserLanguageList (userId));
-        // TODO 用户标签
-//        userInfoDtoResult.setUserLanguageList (getUserLabelList (userId));
-        return userInfoDtoResult;
+        return CopyUtils.copySingle (UserInfoDtoResult.class, info);
     }
-    
-    
-    /**
-     * 获取用户网站列表
-     *
-     * @param userId 用户 ID
-     * @return 用户网站列表
-     */
-    private List<String> getUserWebSiteList (Long userId) {
-        List<UserWebsiteDtoResult> dtoResultList = websiteService.getUserWebsite (userId);
-        
-        return dtoResultList.stream ().map (UserWebsiteDtoResult::getUserWebsite)
-                .collect (Collectors.toList ());
-    }
-    
-    /**
-     * 获取用户语言列表
-     *
-     * @param userId 用户 ID
-     * @return 用户语言列表
-     */
-    private List<String> getUserLanguageList (Long userId) {
-        List<UserLanguageDtoResult> dtoResultList = languageService.getUserLanguage (userId);
-        
-        return dtoResultList.stream ().map (UserLanguageDtoResult::getLanguage)
-                .collect (Collectors.toList ());
-    }
-    
-    // TODO 用户标签
-//    /**
-//     * 获取用户语言列表
-//     *
-//     * @param userId 用户 ID
-//     * @return 用户语言列表
-//     */
-//    private List<String> getUserLabelList (Long userId) {
-//        List<UserLabelDtoResult> dtoResultList = labelService.getUserLabel (userId);
-//
-//        return dtoResultList.stream ().map (UserLabelDtoResult::getLabelName)
-//                .collect (Collectors.toList ());
-//    }
 }

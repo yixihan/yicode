@@ -40,6 +40,8 @@ public interface UserFavoriteOpenApi {
     @PostMapping(value = "/detail", produces = "application/json")
     JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
     
+    //======================== TODO 移动到具体服务类
+    
     @ApiOperation ("收藏内容")
     @PostMapping(value = "/collection/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addCollection (@RequestBody ModifyCollectionReq req);

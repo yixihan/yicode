@@ -46,10 +46,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
         }
         boolean modify = this.saveBatch (websiteList);
         if (!modify) {
-            return new CommonDtoResult<> (
-                    Boolean.FALSE,
-                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
-            );
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -67,10 +64,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
     
         int modify = baseMapper.delete (wrapper);
         if (modify != 1) {
-            return new CommonDtoResult<> (
-                    Boolean.FALSE,
-                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
-            );
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }

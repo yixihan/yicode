@@ -11,8 +11,10 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
+import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserCollectionService;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserCollectionMapper;
@@ -56,17 +58,18 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         
         // 收藏内容
         UserCollection collection = BeanUtil.toBean (dtoReq, UserCollection.class);
+        
         int insert = baseMapper.insert (collection);
         if (insert != 1) {
             throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
         }
         
         // 更新收藏夹
-        UserFavorite favorite = favoriteService.getOne (new QueryWrapper<UserFavorite> ()
-                .eq (UserFavorite.USER_ID, dtoReq.getUserId ())
-                .eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
-        );
+        FavoriteDtoResult favoriteDtoResult = favoriteService.getFavoriteDetail (
+                new FavoriteDetailQueryDtoReq (dtoReq.getUserId (), dtoReq.getFavoriteId ()));
+        UserFavorite favorite = BeanUtil.toBean (favoriteDtoResult, UserFavorite.class);
         favorite.setFavoriteCount (favorite.getFavoriteCount () + 1);
+        
         boolean modify = favoriteService.updateById (favorite);
         if (!modify) {
             throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
@@ -80,15 +83,14 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
             return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作!");
         }
+        
         QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
                 .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
+        
         int delete = baseMapper.delete (wrapper);
         if (delete != 1) {
-            return new CommonDtoResult<> (
-                    Boolean.FALSE,
-                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
-            );
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
@@ -98,11 +100,14 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         if (verifyFavorite (null, dtoReq.getFavoriteId ())) {
             return new PageDtoResult<> ();
         }
+        
         QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
+        
         Page<UserCollection> values = baseMapper.selectPage (
                 new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
-                wrapper);
+                wrapper
+        );
         
         return PageUtil.pageToPageDtoResult (
                 values,

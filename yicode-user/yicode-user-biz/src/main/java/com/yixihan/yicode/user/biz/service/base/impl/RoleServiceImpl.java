@@ -39,9 +39,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
     @Override
     public List<Role> getRoleList(List<Long> roleIdList) {
-        QueryWrapper<Role> wrapper = new QueryWrapper<> ();
-        wrapper.in (!CollectionUtil.isEmpty (roleIdList), "role_id", roleIdList);
-        List<Role> roleList = baseMapper.selectList (wrapper);
+        List<Role> roleList = baseMapper.selectBatchIds (roleIdList);
         return CollectionUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
     }
     
@@ -84,29 +82,23 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
     @Override
     public CommonDtoResult<Boolean> delRole(Long roleId) {
-        if (hasRole (roleId)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
-        }
-        
         if (userRoleService.count (new QueryWrapper<UserRole> ()
                 .eq (UserRole.ROLE_ID, roleId)) > 0) {
             return new CommonDtoResult<> (Boolean.FALSE, "该角色还有绑定用户,请先解绑再删除!");
         }
         
-        QueryWrapper<Role> wrapper = new QueryWrapper<Role> ()
-                .eq (Role.ROLE_ID, roleId);
-    
-        int modify = baseMapper.delete (wrapper);
+        int modify = baseMapper.deleteById (roleId);
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
-    public Boolean hasRole (Long roleId) {
+    @Override
+    public CommonDtoResult<Boolean> hasRole (Long roleId) {
         QueryWrapper<Role> wrapper = new QueryWrapper<> ();
         wrapper.eq (Role.ROLE_ID, roleId);
-        return baseMapper.selectCount (wrapper) <= 0;
+        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) > 0);
     }
     
 }

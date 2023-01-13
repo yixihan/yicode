@@ -9,10 +9,13 @@ import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
+import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.extra.UserLanguageVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserInfoFeignClient;
+import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserLanguageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserWebsiteFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import com.yixihan.yicode.user.openapi.biz.service.extra.UserInfoService;
@@ -40,6 +43,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserWebsiteFeignClient websiteFeignClient;
     
     @Resource
+    private UserLanguageFeignClient languageFeignClient;
+    
+    
+    @Resource
     private UserService userService;
     
     @Override
@@ -48,17 +55,16 @@ public class UserInfoServiceImpl implements UserInfoService {
             return new CommonVO<> ();
         }
         Boolean flag = Boolean.TRUE;
-        Long userId = userService.getUserInfo ().getUserInfo ().getUserId ();
+        Long userId = userService.getUser ().getUserId ();
     
         // 如果网站列表不为空, 则修改网站列表
         if (CollectionUtil.isNotEmpty (req.getUserWebsiteList ())) {
-            flag = modifyUserWebsite (userId,
-                    req.getUserWebsiteList ()
-            );
+            flag = modifyUserWebsite (userId, req.getUserWebsiteList ());
         }
     
         ModifyUserInfoDtoReq dtoReq = CopyUtils.copySingle (ModifyUserInfoDtoReq.class, req);
         dtoReq.setUserId (userId);
+        
         CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
         if (!dtoResult.getData () || !flag) {
             throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
@@ -68,8 +74,22 @@ public class UserInfoServiceImpl implements UserInfoService {
     
     @Override
     public UserInfoVO getUserInfo(Long userId) {
+        // 获取用户资料
         UserInfoDtoResult dtoResult = infoFeignClient.getUserInfo (userId).getResult ();
-        return CopyUtils.copySingle (UserInfoVO.class, dtoResult);
+        UserInfoVO userInfoVO = CopyUtils.copySingle (UserInfoVO.class, dtoResult);
+    
+        // 获取用户网战
+        userInfoVO.setUserWebsiteList (websiteFeignClient.getUserWebsite (userId).getResult ().
+                stream ().map (UserWebsiteDtoResult::getUserWebsite).collect(Collectors.toList()));
+    
+        // 获取用户语言
+        List<UserLanguageDtoResult> languageDtoResults = languageFeignClient.getUserLanguage (userId).getResult ();
+        userInfoVO.setUserLanguageList (CopyUtils.copyMulti (UserLanguageVO.class, languageDtoResults));
+        
+        // TODO 获取用户标签
+        
+        
+        return userInfoVO;
     }
     
     /**

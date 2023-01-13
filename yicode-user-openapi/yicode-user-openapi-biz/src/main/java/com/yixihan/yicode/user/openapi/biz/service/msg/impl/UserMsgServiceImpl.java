@@ -17,11 +17,11 @@ import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.MessageDetailDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.ReadMessageDtoReq;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.msg.MessageDetailDtoResult;
 import com.yixihan.yicode.user.openapi.api.enums.MsgTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.msg.AddMessageReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.msg.ReadMessageReq;
-import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
 import com.yixihan.yicode.user.openapi.biz.feign.message.MessageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.msg.UserMsgFiegnClient;
@@ -58,14 +58,14 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public CommonVO<Boolean> addMessage(AddMessageReq req) {
         // 参数校验
-        if (userService.verifyUserId (req.getReceiveUseId ())) {
+        if (!userService.verifyUserId (req.getReceiveUseId ())) {
             throw new BizException ("该用户不存在！");
         }
         if (Arrays.stream (MsgTypeEnums.values ()).noneMatch ((o) -> o.getType ().equals (req.getMessageType ()))) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         
-        UserVO user = userService.getUserInfo ().getUser ();
+        UserDtoResult user = userService.getUser ();
         
         String template = userMsgFiegnClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
         String message;
@@ -92,10 +92,8 @@ public class UserMsgServiceImpl implements UserMsgService {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         
-        UserVO user = userService.getUserInfo ().getUser ();
-        
         ReadMessageDtoReq dtoReq = CopyUtils.copySingle (ReadMessageDtoReq.class, req);
-        dtoReq.setUserId (user.getUserId ());
+        dtoReq.setUserId (userService.getUser ().getUserId ());
         
         CommonDtoResult<Boolean> dtoResult = userMsgFiegnClient.readMessages (dtoReq).getResult ();
         return CommonVO.create (dtoResult);
@@ -103,10 +101,8 @@ public class UserMsgServiceImpl implements UserMsgService {
     
     @Override
     public PageVO<MessageDetailVO> messageDetail(PageReq req) {
-        UserVO user = userService.getUserInfo ().getUser ();
-        
         MessageDetailDtoReq dtoReq = CopyUtils.copySingle (MessageDetailDtoReq.class, req);
-        dtoReq.setUserId (user.getUserId ());
+        dtoReq.setUserId (userService.getUser ().getUserId ());
         
         PageDtoResult<MessageDetailDtoResult> dtoResult = userMsgFiegnClient.messageDetail (dtoReq).getResult ();
         return PageVOUtil.pageDtoToPageVO (dtoResult, (o) -> CopyUtils.copySingle (MessageDetailVO.class, o));
@@ -114,9 +110,7 @@ public class UserMsgServiceImpl implements UserMsgService {
     
     @Override
     public CommonVO<Integer> unReadMessageCount() {
-        UserVO user = userService.getUserInfo ().getUser ();
-        
-        CommonDtoResult<Integer> dtoResult = userMsgFiegnClient.unReadMessageCount (user.getUserId ()).getResult ();
+        CommonDtoResult<Integer> dtoResult = userMsgFiegnClient.unReadMessageCount (userService.getUser ().getUserId ()).getResult ();
         return CommonVO.create (dtoResult);
     }
     
