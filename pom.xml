@@ -21,7 +21,6 @@
         <module>yicode-question</module>
         <module>yicode-question-openapi</module>
         <module>yicode-message</module>
-        <module>yicode-judge</module>
         <module>yicode-run</module>
     </modules>
 

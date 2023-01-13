@@ -1,8 +1,0 @@
-server:
-  port: 18100
-
-spring:
-  application:
-    name: yicode-judge
-  profiles:
-    active: dev
