@@ -39,70 +39,32 @@
 
 ## TODO
 
-> 2022-11-23
+> 总体情况
 
-总体目标 : 完善 项目架构, 完善 thirdpart & thirdpart-openapi 模块
-- [x] 全模块增加全局异常捕获
-- [x] thirdpart-openapi模块增加校验功能
-- [x] thirdpart 模块增加服务降级功能
-- [x] 绑定手机号邮箱增加验证码验证功能
+- [x] 完成 yicode-common 模块
+- [x] 完成 yicode-auth 模块
+- [x] 完成 yicode-gateway 模块
+- [x] 完成 yicode-user 模块
+- [x] 完成 yicode-user-openapi 模块
+- [x] 完成 yicode-thirdpart 模块
+- [x] 完成 yicode-thirdpart-openapi 模块
+- [ ] 完成 yicode-question 模块
+- [ ] 完成 yicode-question-openapi 模块
+- [x] 完成 yicode-message 模块
+- [x] 完成 yicode-run 模块
 
-> 2022-11-24
+> 未完善功能
 
-总体目标 : 完善 user & user-openapi 模块
-- [x] 引入 user_info 表
-- [x] 实现 user_info 相关接口
-- [x] 引入 user_language 表
-- [x] 实现 user_language 相关接口
-- [x] 引入 user_website 表
-- [x] 实现 user_website 相关接口
-- [x] 引入 user_label 表
-- [x] 实现 user_label 相关接口
-- [x] 引入 user_follow 表
-- [x] 实现 user_follow 相关接口
-- [x] 引入 user_favorite 表
-- [x] 实现 user_favorite 相关接口
-- [x] 引入 user_msg 表
-- [x] 实现 user_msg 相关接口
-- [x] user_msg 集成 message 模块
+- [ ] 收藏模块 - 收藏题解与问题
+- [ ] 个人资料模块 - 获取用户技能标签
 
-> 2022-11-25
+> 未开始功能
 
-- [x] thridpart 模块增加二维码生成功能
-- [ ] 完善 README 文件
-
-> 2022-12-26
-
-- [ ] 引入 comment_reply 表
-- [ ] 实现 comment_reply 相关接口
-- [ ] 引入 comment_root 表
-- [ ] 实现 comment_root 相关接口
-- [ ] 引入 question 表
-- [ ] 实现 question 相关接口
-- [ ] 引入 question_answer 表
-- [ ] 实现 question_answer 相关接口
-- [ ] 引入 daily_question 表
-- [ ] 实现 daily_question 相关接口
-- [ ] 引入 label 表
-- [ ] 实现 label 相关接口
-- [ ] 引入 note_label 表
-- [ ] 实现 note_label 相关接口
-- [ ] 引入 question_label 表
-- [ ] 实现 question_label 相关接口
-- [ ] 引入 question_note 表
-- [ ] 实现 question_note 相关接口
-
-
-> 2023-01-07
-
-- [x] 搭建 Jenkins 自动部署
-- [x] 优化项目架构
-- [x] 完成 runcode-run 模块
-- [ ] 完成代码评测算法
-- [ ] runcode-judge 对接 Docker API, 实现监控 Docker 容器功能
-- [x] 完成消息服务 - 消息系统消息队列构建
-- [x] 完成消息服务 - 评测代码任务队列构建
-
-> 2023-01-11
-
-- [ ] 实现后端主动给前端推数据 (消息模块, 测评模块)
+- [ ] question - 基础模块的设计与实现
+- [ ] question - 题解的设计与实现
+- [ ] question - 评论的设计与实现
+- [ ] question - 标签的设计与实现
+- [ ] question - docker API 的对接
+- [ ] question - 对 yicode-run 模块的监控
+- [ ] question - 测评代码的实现
+- [ ] message - 消费者主动像前端推送消息
