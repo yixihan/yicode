@@ -33,13 +33,13 @@ public class SonCommentDetailVO {
     private Long userId;
     
     @ApiModelProperty(value = "评论者 用户名")
-    private Long userName;
+    private String userName;
     
     @ApiModelProperty(value = "回复用户 id")
     private Long replyUserId;
     
     @ApiModelProperty(value = "回复用户 用户名")
-    private Long replyUserName;
+    private String replyUserName;
     
     @ApiModelProperty(value = "评论内容")
     private String content;

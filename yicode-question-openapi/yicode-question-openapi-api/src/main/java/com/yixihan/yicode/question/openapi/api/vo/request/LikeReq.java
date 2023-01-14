@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * description
+ * 点赞-req
  *
  * @author yixihan
  * @date 2023/1/13 17:00

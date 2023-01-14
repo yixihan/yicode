@@ -15,6 +15,7 @@ import com.yixihan.yicode.user.dal.mapper.extra.UserInfoMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -55,5 +56,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo info = Optional.ofNullable (baseMapper.selectOne (wrapper)).orElse (new UserInfo ());
     
         return CopyUtils.copySingle (UserInfoDtoResult.class, info);
+    }
+    
+    @Override
+    public List<UserInfoDtoResult> getUserInfoList(List<Long> userIdList) {
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<> ();
+        wrapper.in (UserInfo.USER_ID, userIdList);
+        List<UserInfo> infoList = baseMapper.selectList (wrapper);
+    
+        return CopyUtils.copyMulti (UserInfoDtoResult.class, infoList);
     }
 }

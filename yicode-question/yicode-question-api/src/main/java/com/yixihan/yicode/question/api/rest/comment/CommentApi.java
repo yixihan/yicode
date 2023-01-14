@@ -43,11 +43,11 @@ public interface CommentApi {
     ApiResult<CommonDtoResult<Boolean>> delSonComment(@RequestBody Long sunCommentId);
     
     @ApiOperation("获取所有评论")
-    @PostMapping(value = "/detail/root", produces = "application/json")
+    @PostMapping(value = "/all/root", produces = "application/json")
     ApiResult<PageDtoResult<RootCommentDetailDtoResult>> rootCommentDetail(@RequestBody RootCommentDetailDtoReq dtoReq);
     
     @ApiOperation("获取父评论的所有子评论")
-    @PostMapping(value = "/detail/son", produces = "application/json")
+    @PostMapping(value = "/all/son", produces = "application/json")
     ApiResult<PageDtoResult<SonCommentDetailDtoResult>> sonCommentDetail(@RequestBody SonCommentDetailDtoReq dtoReq);
     
     @ApiOperation("点赞父评论")
@@ -57,4 +57,21 @@ public interface CommentApi {
     @ApiOperation("点赞子评论")
     @PostMapping(value = "/lke/son", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> likeSonComment(@RequestBody LikeDtoReq dtoReq);
+    
+    
+    
+    
+    @ApiOperation("校验父评论是否存在")
+    @PostMapping(value = "/verify/root", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyRootComment(@RequestBody Long rootCommentId);
+    
+    @ApiOperation("校验子评论是否存在")
+    @PostMapping(value = "/verify/son", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifySonComment(@RequestBody Long sonCommentId);
+    
+    @ApiOperation("获取父评论")
+    @PostMapping(value = "/detail/root", produces = "application/json")
+    ApiResult<RootCommentDetailDtoResult> getRootComment(@RequestBody Long rootCommentId);
+    
+    
 }

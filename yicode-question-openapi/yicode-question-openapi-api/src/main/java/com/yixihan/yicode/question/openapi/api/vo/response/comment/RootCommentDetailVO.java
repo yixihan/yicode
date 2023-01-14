@@ -37,10 +37,10 @@ public class RootCommentDetailVO {
     private Long userId;
     
     @ApiModelProperty(value = "评论者 用户名")
-    private Long userName;
+    private String userName;
     
     @ApiModelProperty(value = "评论者 头像")
-    private Long userAvatar;
+    private String userAvatar;
     
     @ApiModelProperty(value = "评论内容")
     private String content;

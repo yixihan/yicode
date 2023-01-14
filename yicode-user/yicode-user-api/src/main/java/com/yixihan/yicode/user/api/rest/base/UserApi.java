@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * 用户 api
  *
@@ -24,6 +26,10 @@ public interface UserApi {
     @ApiOperation("通过 userId 获取用户信息")
     @PostMapping(value = "/info/id", produces = "application/json")
     ApiResult<UserDtoResult> getUserByUserId(@RequestParam("userId") Long userId);
+    
+    @ApiOperation("通过 userId 获取用户信息")
+    @PostMapping(value = "/list/info/id", produces = "application/json")
+    ApiResult<List<UserDtoResult>> getUserListByUserId(@RequestBody List<Long> userIdList);
 
     @ApiOperation("通过 userId 获取用户信息")
     @PostMapping(value = "/info/name", produces = "application/json")

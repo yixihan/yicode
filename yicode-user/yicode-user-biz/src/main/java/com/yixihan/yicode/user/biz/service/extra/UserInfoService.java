@@ -6,6 +6,8 @@ import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户信息表 服务类
@@ -29,5 +31,11 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param userId 用户 ID
      */
     UserInfoDtoResult getUserInfo(Long userId);
-
+    
+    /**
+     * 获取用户个人资料
+     *
+     * @param userIdList 用户 ID
+     */
+    List<UserInfoDtoResult> getUserInfoList(List<Long> userIdList);
 }

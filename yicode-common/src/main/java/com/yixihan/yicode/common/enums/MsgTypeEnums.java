@@ -1,10 +1,10 @@
-package com.yixihan.yicode.user.openapi.api.enums;
+package com.yixihan.yicode.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 小凹型类型枚举类
+ * 消息类型枚举类
  *
  * @author yixihan
  * @date 2023/1/10 14:52

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -35,5 +36,10 @@ public class UserInfoController implements UserInfoApi {
     @Override
     public ApiResult<UserInfoDtoResult> getUserInfo(Long userId) {
         return ApiResult.create (userInfoService.getUserInfo (userId));
+    }
+    
+    @Override
+    public ApiResult<List<UserInfoDtoResult>> getUserInfoList(List<Long> userIdList) {
+        return ApiResult.create (userInfoService.getUserInfoList (userIdList));
     }
 }

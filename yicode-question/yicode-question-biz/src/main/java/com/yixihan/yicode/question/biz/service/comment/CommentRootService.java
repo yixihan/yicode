@@ -77,4 +77,27 @@ public interface CommentRootService extends IService<CommentRoot> {
      * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> likeSonComment(LikeDtoReq dtoReq);
+    
+    /**
+     * 校验父评论是否存在
+     *
+     * @param rootCommentId 父评论 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifyRootComment(Long rootCommentId);
+    
+    /**
+     * 校验子评论是否存在
+     *
+     * @param sonCommentId 子评论 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifySonComment(Long sonCommentId);
+    
+    /**
+     * 获取父评论
+     *
+     * @param rootCommentId 父评论 ID
+     */
+    RootCommentDetailDtoResult getRootComment(Long rootCommentId);
 }

@@ -69,4 +69,19 @@ public class CommentController implements CommentApi {
     public ApiResult<CommonDtoResult<Boolean>> likeSonComment(LikeDtoReq dtoReq) {
         return ApiResult.create (service.likeSonComment (dtoReq));
     }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyRootComment(Long rootCommentId) {
+        return ApiResult.create (service.verifyRootComment (rootCommentId));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifySonComment(Long sonCommentId) {
+        return ApiResult.create (service.verifySonComment (sonCommentId));
+    }
+    
+    @Override
+    public ApiResult<RootCommentDetailDtoResult> getRootComment(Long rootCommentId) {
+        return ApiResult.create (service.getRootComment (rootCommentId));
+    }
 }

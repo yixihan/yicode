@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 用户 服务实现类
@@ -45,10 +50,30 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UserCommonDtoResult getUserCommonInfo(Long userId) {
-        UserDtoResult userDtoResult = userFeignClient.getUserByUserId (userId).getResult ();
-        UserInfoDtoResult infoDtoResult = infoFeignClient.getUserInfo (userId).getResult ();
+    public List<UserCommonDtoResult> getUserCommonInfo(List<Long> userIdList) {
+        List<UserDtoResult> userDtoResult = userFeignClient.getUserListByUserId (userIdList).getResult ();
+        Map<Long, UserInfoDtoResult> infoDtoResult = infoFeignClient.getUserInfoList (userIdList).getResult ().stream ()
+                .collect (Collectors.toMap (
+                        UserInfoDtoResult::getUserId,
+                        Function.identity (),
+                        (key1, key2) -> key1
+                ));
     
-        return new UserCommonDtoResult (userId, userDtoResult.getUserName (), infoDtoResult.getUserAvatar ());
+        List<UserCommonDtoResult> commonInfoList = new ArrayList<> (userDtoResult.size ());
+        for (UserDtoResult dtoResult : userDtoResult) {
+            commonInfoList.add (new UserCommonDtoResult (
+                    dtoResult.getUserId (),
+                    dtoResult.getUserName (),
+                    infoDtoResult.get (dtoResult.getUserId ()).getUserAvatar ())
+            );
+        }
+        
+        return commonInfoList;
+    }
+    
+    @Override
+    public Boolean verifyUserId(Long userId) {
+        UserDtoResult user = getUser (userId);
+        return user.getUserId () != null;
     }
 }

@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +74,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 Optional.ofNullable (user).orElse (new User ())
         );
     }
-
+    
+    @Override
+    public List<UserDtoResult> getUserListByUserId(List<Long> userIdList) {
+        List<User> userList = baseMapper.selectBatchIds (userIdList);
+        if (CollectionUtil.isEmpty (userList)) {
+            return new ArrayList<> ();
+        }
+        return CopyUtils.copyMulti (UserDtoResult.class, userList);
+    }
+    
     @Override
     public UserDtoResult getUserByUserName(String userName) {
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
