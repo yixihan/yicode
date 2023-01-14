@@ -37,7 +37,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * description
+ * 消息模块 服务实现类
  *
  * @author yixihan
  * @date 2023/1/10 16:53

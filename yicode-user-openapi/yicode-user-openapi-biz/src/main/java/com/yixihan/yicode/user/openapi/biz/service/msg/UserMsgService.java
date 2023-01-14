@@ -8,7 +8,7 @@ import com.yixihan.yicode.user.openapi.api.vo.request.msg.ReadMessageReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
 
 /**
- * description
+ * 消息模块 服务类
  *
  * @author yixihan
  * @date 2023/1/10 16:51
