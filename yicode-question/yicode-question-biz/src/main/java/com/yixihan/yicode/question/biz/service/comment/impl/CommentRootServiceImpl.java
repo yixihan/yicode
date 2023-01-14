@@ -133,12 +133,36 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     
     @Override
     public CommonDtoResult<Boolean> likeRootComment(LikeDtoReq dtoReq) {
-        return null;
+        CommentRoot commentRoot = baseMapper.selectById (dtoReq.getSourceId ());
+        if (dtoReq.getLike ()) {
+            commentRoot.setLikeCount (commentRoot.getLikeCount () + 1);
+        } else {
+            commentRoot.setLikeCount (commentRoot.getLikeCount () - 1);
+        }
+    
+        int modify = baseMapper.updateById (commentRoot);
+        
+        if (modify != 1) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> likeSonComment(LikeDtoReq dtoReq) {
-        return null;
+        CommentReply commentReply = commentReplyMapper.selectById (dtoReq.getSourceId ());
+        if (dtoReq.getLike ()) {
+            commentReply.setLikeCount (commentReply.getLikeCount () + 1);
+        } else {
+            commentReply.setLikeCount (commentReply.getLikeCount () - 1);
+        }
+    
+        int modify = commentReplyMapper.updateById (commentReply);
+    
+        if (modify != 1) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override

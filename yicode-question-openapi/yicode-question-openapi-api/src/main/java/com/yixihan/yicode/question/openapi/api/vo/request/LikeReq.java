@@ -20,4 +20,7 @@ public class LikeReq {
     
     @ApiModelProperty(value = "点赞内容 ID")
     private Long sourceId;
+    
+    @ApiModelProperty(value = "是否点赞")
+    private Boolean like;
 }

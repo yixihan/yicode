@@ -10,6 +10,7 @@ import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
+import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.AddSonCommentDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoReq;
@@ -26,6 +27,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.comment.SonCommentDeta
 import com.yixihan.yicode.question.openapi.api.vo.response.comment.RootCommentDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.comment.SonCommentDetailVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.comment.CommentFeignClient;
+import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.comment.CommentService;
 import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
@@ -58,6 +60,13 @@ public class CommentServiceImpl implements CommentService {
     
     @Resource
     private UserMsgService msgService;
+    
+    @Resource
+    private LikeService likeService;
+    
+    private static final String ROOT_COMMENT_LIKE_KEY = "like:root_comment:%s";
+    
+    private static final String SON_COMMENT_LIKE_KEY = "like:son_comment:%s";
     
     @Override
     public CommonVO<Boolean> addRootComment(AddRootCommentReq req) {
@@ -164,12 +173,107 @@ public class CommentServiceImpl implements CommentService {
     
     @Override
     public CommonVO<Boolean> likeRootComment(LikeReq req) {
-        return null;
+        Long userId = userService.getUser ().getUserId ();
+        // 获取点赞情况
+        String likeKey = String.format (ROOT_COMMENT_LIKE_KEY, req.getSourceId ());
+        Boolean isLike = likeService.getBit (likeKey, userId);
+        
+        if (!req.getLike ()) {
+            // 取消点赞
+            // 本身未点赞
+            if (isLike == null || !isLike) {
+                throw new BizException ("您已经取消点赞了");
+            }
+            // 更新 redis
+            likeService.setBit (likeKey, userId, Boolean.FALSE);
+            // 更新数据库
+            LikeDtoReq dtoReq = new LikeDtoReq ();
+            dtoReq.setUserId (userId);
+            dtoReq.setSourceId (req.getSourceId ());
+            dtoReq.setLike (req.getLike ());
+            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeRootComment (dtoReq).getResult ();
+            if (!dtoResult.getData ()) {
+                throw new BizException (dtoResult.getMessage ());
+            }
+            return CommonVO.create (dtoResult);
+        } else {
+            // 点赞
+            // 本身已点赞
+            if (isLike) {
+                throw new BizException ("您已经点赞了");
+            }
+            // 更新 redis
+            likeService.setBit (likeKey, userId, Boolean.TRUE);
+            // 更新数据库
+            LikeDtoReq dtoReq = new LikeDtoReq ();
+            dtoReq.setUserId (userId);
+            dtoReq.setSourceId (req.getSourceId ());
+            dtoReq.setLike (req.getLike ());
+            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeRootComment (dtoReq).getResult ();
+            if (!dtoResult.getData ()) {
+                throw new BizException (dtoResult.getMessage ());
+            }
+            // 点赞成功, 发送消息
+            AddMessageReq messageReq = new AddMessageReq ();
+            messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
+            messageReq.setSourceId (req.getSourceId ());
+            // TODO 获取接收者用户 ID
+            messageReq.setReceiveUseId (null);
+            msgService.addMessage (messageReq);
+            return CommonVO.create (dtoResult);
+        }
     }
     
     @Override
     public CommonVO<Boolean> likeSonComment(LikeReq req) {
-        return null;
+        Long userId = userService.getUser ().getUserId ();
+        // 获取点赞情况
+        String likeKey = String.format (SON_COMMENT_LIKE_KEY, req.getSourceId ());
+        Boolean isLike = likeService.getBit (likeKey, userId);
+    
+        if (!req.getLike ()) {
+            // 取消点赞
+            // 本身未点赞
+            if (isLike == null || !isLike) {
+                throw new BizException ("您已经取消点赞了");
+            }
+            // 更新 redis
+            likeService.setBit (likeKey, userId, Boolean.FALSE);
+            // 更新数据库
+            LikeDtoReq dtoReq = new LikeDtoReq ();
+            dtoReq.setUserId (userId);
+            dtoReq.setSourceId (req.getSourceId ());
+            dtoReq.setLike (req.getLike ());
+            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeSonComment (dtoReq).getResult ();
+            if (!dtoResult.getData ()) {
+                throw new BizException (dtoResult.getMessage ());
+            }
+            return CommonVO.create (dtoResult);
+        } else {
+            // 点赞
+            // 本身已点赞
+            if (isLike) {
+                throw new BizException ("您已经点赞了");
+            }
+            // 更新 redis
+            likeService.setBit (likeKey, userId, Boolean.TRUE);
+            // 更新数据库
+            LikeDtoReq dtoReq = new LikeDtoReq ();
+            dtoReq.setUserId (userId);
+            dtoReq.setSourceId (req.getSourceId ());
+            dtoReq.setLike (req.getLike ());
+            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeSonComment (dtoReq).getResult ();
+            if (!dtoResult.getData ()) {
+                throw new BizException (dtoResult.getMessage ());
+            }
+            // 点赞成功, 发送消息
+            AddMessageReq messageReq = new AddMessageReq ();
+            messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
+            messageReq.setSourceId (req.getSourceId ());
+            messageReq.setReceiveUseId (commentFeignClient.getRootComment (req.getSourceId ()).getResult ().getUserId ());
+            msgService.addMessage (messageReq);
+            return CommonVO.create (dtoResult);
+        }
     }
     
     @Override
