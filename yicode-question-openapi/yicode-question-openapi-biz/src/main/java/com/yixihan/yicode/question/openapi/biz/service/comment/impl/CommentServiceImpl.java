@@ -279,7 +279,7 @@ public class CommentServiceImpl implements CommentService {
     
     @Override
     public PageVO<RootCommentDetailVO> rootCommentDetail(RootCommentDetailReq req) {
-        // TODO 参数校验
+        // TODO 评论内容参数校验
         
         // 构建请求 body
         RootCommentDetailDtoReq dtoReq = CopyUtils.copySingle (RootCommentDetailDtoReq.class, req);
