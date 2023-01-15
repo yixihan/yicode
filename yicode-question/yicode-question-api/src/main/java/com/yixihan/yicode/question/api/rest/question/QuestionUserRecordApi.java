@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2023/1/11 10:18
  */
 @Api(tags = "问题-用户题目通过记录 api")
-@RequestMapping("/question/daily/user")
+@RequestMapping("/question/record/user")
 public interface QuestionUserRecordApi {
     
     @ApiOperation("添加用户题目通过记录")

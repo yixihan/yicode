@@ -51,11 +51,11 @@ public interface CommentApi {
     ApiResult<PageDtoResult<SonCommentDetailDtoResult>> sonCommentDetail(@RequestBody SonCommentDetailDtoReq dtoReq);
     
     @ApiOperation("点赞父评论")
-    @PostMapping(value = "/lke/root", produces = "application/json")
+    @PostMapping(value = "/like/root", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> likeRootComment(@RequestBody LikeDtoReq dtoReq);
     
     @ApiOperation("点赞子评论")
-    @PostMapping(value = "/lke/son", produces = "application/json")
+    @PostMapping(value = "/like/son", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> likeSonComment(@RequestBody LikeDtoReq dtoReq);
     
     
@@ -73,5 +73,7 @@ public interface CommentApi {
     @PostMapping(value = "/detail/root", produces = "application/json")
     ApiResult<RootCommentDetailDtoResult> getRootComment(@RequestBody Long rootCommentId);
     
-    
+    @ApiOperation("获取子评论")
+    @PostMapping(value = "/detail/son", produces = "application/json")
+    ApiResult<SonCommentDetailDtoResult> getSonComment(@RequestBody Long sonCommentId);
 }

@@ -12,9 +12,7 @@ import com.yixihan.yicode.question.openapi.api.vo.response.comment.RootCommentDe
 import com.yixihan.yicode.question.openapi.api.vo.response.comment.SonCommentDetailVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 评论 OpenApi
@@ -35,19 +33,19 @@ public interface CommentOpenApi {
     JsonResponse<CommonVO<Boolean>> addSonComment(@RequestBody AddSonCommentReq req);
     
     @ApiOperation("删除父评论")
-    @PostMapping(value = "/del/root", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delRootComment(@RequestBody Long rootCommentId);
+    @DeleteMapping(value = "/del/root", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delRootComment(@RequestParam Long rootCommentId);
     
     @ApiOperation("删除子评论")
-    @PostMapping(value = "/del/son", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delSonComment(@RequestBody Long sunCommentId);
+    @DeleteMapping(value = "/del/son", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delSonComment(@RequestParam Long sunCommentId);
     
     @ApiOperation("点赞父评论")
-    @PostMapping(value = "/lke/root", produces = "application/json")
+    @PostMapping(value = "/like/root", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> likeRootComment(@RequestBody LikeReq req);
     
     @ApiOperation("点赞子评论")
-    @PostMapping(value = "/lke/son", produces = "application/json")
+    @PostMapping(value = "/like/son", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> likeSonComment(@RequestBody LikeReq req);
     
     @ApiOperation("获取所有评论")

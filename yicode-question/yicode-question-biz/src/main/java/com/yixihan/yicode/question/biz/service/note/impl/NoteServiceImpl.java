@@ -68,12 +68,8 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     @Override
     public CommonDtoResult<Boolean> likeNote(LikeDtoReq dtoReq) {
         Note note = baseMapper.selectById (dtoReq.getSourceId ());
+        note.setLikeCount (dtoReq.getLikeCount ());
         
-        if (dtoReq.getLike ()) {
-            note.setLikeCount (note.getLikeCount () + 1);
-        } else {
-            note.setLikeCount (note.getLikeCount () - 1);
-        }
     
         int modify = baseMapper.updateById (note);
     

@@ -3,6 +3,6 @@ server:
 
 spring:
   application:
-    name: yicode-question-openpai
+    name: yicode-question-openapi
   profiles:
     active: dev

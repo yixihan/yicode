@@ -74,6 +74,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean verifyUserId(Long userId) {
         UserDtoResult user = getUser (userId);
-        return user.getUserId () != null;
+        return user != null && user.getUserId () != null;
     }
 }

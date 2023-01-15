@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2023/1/11 10:15
  */
 @Api(tags = "每日一题 OpenApi")
-@RequestMapping("/open/label")
+@RequestMapping("/open/question/daily")
 public interface QuestionDailyOpenApi {
 
 }

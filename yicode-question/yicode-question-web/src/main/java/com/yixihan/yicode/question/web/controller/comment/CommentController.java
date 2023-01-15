@@ -84,4 +84,9 @@ public class CommentController implements CommentApi {
     public ApiResult<RootCommentDetailDtoResult> getRootComment(Long rootCommentId) {
         return ApiResult.create (service.getRootComment (rootCommentId));
     }
+    
+    @Override
+    public ApiResult<SonCommentDetailDtoResult> getSonComment(Long sonCommentId) {
+        return ApiResult.create (service.getSonComment (sonCommentId));
+    }
 }

@@ -100,4 +100,11 @@ public interface CommentRootService extends IService<CommentRoot> {
      * @param rootCommentId 父评论 ID
      */
     RootCommentDetailDtoResult getRootComment(Long rootCommentId);
+    
+    /**
+     * 获取子评论
+     *
+     * @param sonCommentId 子评论 ID
+     */
+    SonCommentDetailDtoResult getSonComment(Long sonCommentId);
 }

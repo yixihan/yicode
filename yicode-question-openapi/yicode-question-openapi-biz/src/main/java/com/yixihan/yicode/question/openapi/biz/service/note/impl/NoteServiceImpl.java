@@ -53,7 +53,7 @@ public class NoteServiceImpl implements NoteService {
     @Resource
     private LikeService likeService;
     
-    private static final String NOTE_LIKE_KEY = "like:note:%s";
+    private static final String NOTE_LIKE_KEY = "like:note";
     
     @Override
     public CommonVO<Boolean> addNote(ModifyNoteReq req) {
@@ -127,10 +127,14 @@ public class NoteServiceImpl implements NoteService {
     
     @Override
     public CommonVO<Boolean> likeNote(LikeReq req) {
+        // 参数校验 (id)
+        if (!noteFeignClient.verifyNote (req.getSourceId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        // 获取点赞人用户 ID
         Long userId = userService.getUser ().getUserId ();
         // 获取点赞情况
-        String likeKey = String.format (NOTE_LIKE_KEY, req.getSourceId ());
-        Boolean isLike = likeService.getBit (likeKey, userId);
+        Boolean isLike = likeService.isLike (NOTE_LIKE_KEY,req.getSourceId (), userId);
     
         if (!req.getLike ()) {
             // 取消点赞
@@ -139,13 +143,12 @@ public class NoteServiceImpl implements NoteService {
                 throw new BizException ("您已经取消点赞了");
             }
             // 更新 redis
-            likeService.setBit (likeKey, userId, Boolean.FALSE);
+            Integer likeCount = likeService.unLike (NOTE_LIKE_KEY, req.getSourceId (), userId);
+            
             // 更新数据库
-            LikeDtoReq dtoReq = new LikeDtoReq ();
-            dtoReq.setUserId (userId);
-            dtoReq.setSourceId (req.getSourceId ());
-            dtoReq.setLike (req.getLike ());
+            LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
             CommonDtoResult<Boolean> dtoResult = noteFeignClient.likeNote (dtoReq).getResult ();
+            
             if (!dtoResult.getData ()) {
                 throw new BizException (dtoResult.getMessage ());
             }
@@ -157,16 +160,15 @@ public class NoteServiceImpl implements NoteService {
                 throw new BizException ("您已经点赞了");
             }
             // 更新 redis
-            likeService.setBit (likeKey, userId, Boolean.TRUE);
+            Integer likeCount = likeService.like (NOTE_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
-            LikeDtoReq dtoReq = new LikeDtoReq ();
-            dtoReq.setUserId (userId);
-            dtoReq.setSourceId (req.getSourceId ());
-            dtoReq.setLike (req.getLike ());
+            LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
             CommonDtoResult<Boolean> dtoResult = noteFeignClient.likeNote (dtoReq).getResult ();
+            
             if (!dtoResult.getData ()) {
                 throw new BizException (dtoResult.getMessage ());
             }
+            
             // 点赞成功, 发送消息
             AddMessageReq messageReq = new AddMessageReq ();
             messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());

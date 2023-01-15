@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2023/1/11 10:15
  */
 @Api(tags = "题解 OpenApi")
-@RequestMapping("/open/label")
+@RequestMapping("/open/note")
 public interface NoteOpenApi {
     
     @ApiOperation("添加题解")
