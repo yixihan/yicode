@@ -60,4 +60,9 @@ public class NoteController implements NoteApi {
     public ApiResult<PageDtoResult<NoteDtoResult>> queryNote(QueryNoteDtoReq dtoReq) {
         return ApiResult.create (service.queryNote (dtoReq));
     }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyNote(Long noteId) {
+        return ApiResult.create (service.verifyNote (noteId));
+    }
 }

@@ -1,8 +1,14 @@
 package com.yixihan.yicode.question.biz.service.note.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
@@ -27,31 +33,83 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     
     @Override
     public CommonDtoResult<Boolean> addNote(ModifyNoteDtoReq dtoReq) {
-        return null;
+        Note note = BeanUtil.toBean (dtoReq, Note.class);
+    
+        int modify = baseMapper.insert (note);
+        
+        if (modify != 1) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> modifyNote(ModifyNoteDtoReq dtoReq) {
-        return null;
+        Note note = BeanUtil.toBean (dtoReq, Note.class);
+    
+        int modify = baseMapper.updateById (note);
+    
+        if (modify != 1) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> delNote(List<Long> noteIdList) {
-        return null;
+        int modify = baseMapper.deleteBatchIds (noteIdList);
+        
+        if (modify < 0) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> likeNote(LikeDtoReq dtoReq) {
-        return null;
+        Note note = baseMapper.selectById (dtoReq.getSourceId ());
+        
+        if (dtoReq.getLike ()) {
+            note.setLikeCount (note.getLikeCount () + 1);
+        } else {
+            note.setLikeCount (note.getLikeCount () - 1);
+        }
+    
+        int modify = baseMapper.updateById (note);
+    
+        if (modify != 1) {
+            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public NoteDtoResult noteDetail(Long noteId) {
-        return null;
+        Note note = baseMapper.selectById (noteId);
+        
+        if (note != null) {
+            note.setReadCount (note.getReadCount () + 1);
+            baseMapper.updateById (note);
+            return CopyUtils.copySingle (NoteDtoResult.class, note);
+        }
+        
+        return new NoteDtoResult ();
     }
     
     @Override
     public PageDtoResult<NoteDtoResult> queryNote(QueryNoteDtoReq dtoReq) {
-        return null;
+        Page<NoteDtoResult> dtoResultPage = baseMapper.queryNote (dtoReq,
+                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()));
+    
+        return PageUtil.pageToPageDtoResult (
+                dtoResultPage,
+                (o) -> CopyUtils.copySingle (NoteDtoResult.class, o)
+        );
+    }
+    
+    @Override
+    public CommonDtoResult<Boolean> verifyNote(Long noteId) {
+        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Note> ()
+                .eq (Note.NOTE_ID, noteId)) > 0);
     }
 }

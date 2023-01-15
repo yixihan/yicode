@@ -48,4 +48,9 @@ public interface NoteApi {
     @ApiOperation("搜索题解")
     @PostMapping(value = "/query", produces = "application/json")
     ApiResult<PageDtoResult<NoteDtoResult>> queryNote (@RequestBody QueryNoteDtoReq dtoReq);
+    
+    
+    @ApiOperation("校验题解 ID 是否存在")
+    @PostMapping(value = "/verify", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyNote (@RequestBody Long noteId);
 }

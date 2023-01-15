@@ -1,6 +1,6 @@
-package com.yixihan.yicode.question.api.dto.request.note;
+package com.yixihan.yicode.question.openapi.api.vo.request.note;
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 搜索题解-dtoReq
+ * 搜索题解-req
  *
  * @author yixihan
  * @date 2023/1/11 17:08
@@ -20,8 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("搜索题解-dtoReq")
-public class QueryNoteDtoReq extends PageDtoReq {
+@ApiModel("搜索题解-req")
+public class QueryNoteReq extends PageReq {
     
     @ApiModelProperty(value = "题解标题")
     private String noteName;

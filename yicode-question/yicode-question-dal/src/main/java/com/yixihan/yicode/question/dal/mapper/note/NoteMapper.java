@@ -1,8 +1,12 @@
 package com.yixihan.yicode.question.dal.mapper.note;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
+import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,5 +18,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface NoteMapper extends BaseMapper<Note> {
+    
+    /**
+     * 搜索题解
+     */
+    Page<NoteDtoResult> queryNote(@Param ("params") QueryNoteDtoReq dtoReq,
+                                  @Param ("page") Page<NoteDtoResult> page);
 
 }

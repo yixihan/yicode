@@ -2,4 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.note.NoteMapper">
 
+    <select id="queryNote" resultType="com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult">
+        select
+        n.`question_id`,
+        n.`note_id`,
+        n.`note_name`,
+        n.`note_content`,
+        n.`user_id`,
+        n.`like_count`,
+        n.`collection_count`,
+        n.`read_count`,
+        n.`create_time`,
+        n.`update_time`
+        from `note` as n
+        <if test="params.labelIdList != null and params.labelIdList.size () > 0">
+            left join label_note as ln on n.note_id = ln.note_id
+        </if>
+        <where>
+            <if test="params.noteName != null and params.noteName != ''">
+                and n.`note_name` like #{params.noteName}
+            </if>
+            <if test="params.labelIdList != null and params.labelIdList.size () > 0">
+                <foreach collection="params.labelIdList" item="item"
+                         open="and ln.`label_id` in (" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by
+            <choose>
+                <when test="params.likeCount != null and params.likeCount">
+                    n.`like_count` desc,
+                </when>
+                <when test="params.createDesc != null and params.createDesc">
+                    n.`create_time` desc,
+                </when>
+                <when test="params.createAsc != null and params.createAsc">
+                    n.`create_time`,
+                </when>
+                <otherwise>
+                    n.`read_count` desc,
+                </otherwise>
+            </choose>
+            n.`collection_count` desc
+    </select>
 </mapper>

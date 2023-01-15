@@ -62,4 +62,12 @@ public interface NoteService extends IService<Note> {
      * @param dtoReq 请求参数
      */
     PageDtoResult<NoteDtoResult> queryNote(QueryNoteDtoReq dtoReq);
+    
+    /**
+     * 校验题解 ID 是否存在
+     *
+     * @param noteId 题解 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifyNote(Long noteId);
 }
