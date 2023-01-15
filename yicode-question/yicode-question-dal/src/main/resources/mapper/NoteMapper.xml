@@ -3,6 +3,7 @@
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.note.NoteMapper">
 
     <select id="queryNote" resultType="com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult">
+        <bind name="noteName" value="'%' + params.getNoteName () + '%'" />
         select
         n.`question_id`,
         n.`note_id`,
@@ -20,7 +21,7 @@
         </if>
         <where>
             <if test="params.noteName != null and params.noteName != ''">
-                and n.`note_name` like #{params.noteName}
+                and n.`note_name` like #{noteName}
             </if>
             <if test="params.labelIdList != null and params.labelIdList.size () > 0">
                 <foreach collection="params.labelIdList" item="item"

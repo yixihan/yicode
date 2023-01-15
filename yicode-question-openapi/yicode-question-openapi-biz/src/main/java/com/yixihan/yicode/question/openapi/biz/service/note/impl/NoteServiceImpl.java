@@ -81,14 +81,13 @@ public class NoteServiceImpl implements NoteService {
     
     @Override
     public CommonVO<Boolean> modifyNote(ModifyNoteReq req) {
-        // 校验参数 (问题 ID, 题解 ID, 题解标题)
+        // 校验参数 (题解 ID, 题解标题)
         if (StrUtil.isBlank (req.getNoteName ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         if (req.getNoteId () == null || !noteFeignClient.verifyNote (req.getNoteId ()).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
-        // TODO 校验问题 ID 是否存在
     
         // 构建请求 body
         ModifyNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyNoteDtoReq.class, req);

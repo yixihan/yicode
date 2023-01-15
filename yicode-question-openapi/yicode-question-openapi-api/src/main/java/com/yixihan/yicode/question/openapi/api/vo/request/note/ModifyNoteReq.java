@@ -29,13 +29,4 @@ public class ModifyNoteReq {
     
     @ApiModelProperty(value = "题解内容")
     private String noteContent;
-    
-    @ApiModelProperty(value = "点赞数量")
-    private Integer likeCount;
-    
-    @ApiModelProperty(value = "收藏数量")
-    private Integer collectionCount;
-    
-    @ApiModelProperty(value = "阅读数量")
-    private Integer readCount;
 }
