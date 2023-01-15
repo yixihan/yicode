@@ -4,10 +4,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddSonCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
+import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.rest.comment.CommentApi;
@@ -48,6 +45,11 @@ public class CommentController implements CommentApi {
     @Override
     public ApiResult<CommonDtoResult<Boolean>> delSonComment(Long sunCommentId) {
         return ApiResult.create (service.delSonComment (sunCommentId));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Integer>> questionCommentCount(QuestionCommentCountDtoReq dtoReq) {
+        return ApiResult.create (service.questionCommentCount (dtoReq));
     }
     
     @Override

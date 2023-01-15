@@ -5,16 +5,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddSonCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
+import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
@@ -53,7 +51,6 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
-        // TODO 更新对应内容的评论数量
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -65,7 +62,6 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
-        // TODO 更新对应内容的回复数量
         // 更新父评论回复数量
         modifyRootCommentReply (commentReply.getRootId ());
         return new CommonDtoResult<> (Boolean.TRUE);
@@ -78,7 +74,6 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
-        // TODO 更新对应内容的回复数量
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -90,10 +85,26 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
-        // TODO 更新对应内容的回复数量
         // 更新父评论回复数量
         modifyRootCommentReply (commentReply.getRootId ());
         return new CommonDtoResult<> (Boolean.TRUE);
+    }
+    
+    @Override
+    public CommonDtoResult<Integer> questionCommentCount(QuestionCommentCountDtoReq dtoReq) {
+        List<CommentRoot> commentRootList = baseMapper.selectList (new QueryWrapper<CommentRoot> ()
+                .eq (CommentRoot.ANSWER_ID, dtoReq.getAnswerId ())
+                .eq (CommentRoot.ANSWER_TYPE, dtoReq.getAnswerType ()));
+    
+        if (CollectionUtil.isEmpty (commentRootList)) {
+            return new CommonDtoResult<> (NumConstant.NUM_0);
+        }
+    
+        Integer count = commentReplyMapper.selectCount (new QueryWrapper<CommentReply> ()
+                .in (CommentReply.ROOT_ID, commentRootList.stream ()
+                        .map (CommentRoot::getRootId).collect(Collectors.toList())));
+    
+        return new CommonDtoResult<> (commentRootList.size () + count);
     }
     
     @Override

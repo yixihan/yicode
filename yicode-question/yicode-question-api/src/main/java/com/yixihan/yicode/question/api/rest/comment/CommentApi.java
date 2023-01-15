@@ -4,10 +4,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddSonCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
+import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
 import io.swagger.annotations.Api;
@@ -41,6 +38,10 @@ public interface CommentApi {
     @ApiOperation("删除子评论")
     @PostMapping(value = "/del/son", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> delSonComment(@RequestBody Long sunCommentId);
+    
+    @ApiOperation("获取评论数量")
+    @PostMapping(value = "/all/count", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> questionCommentCount (@RequestBody QuestionCommentCountDtoReq dtoReq);
     
     @ApiOperation("获取所有评论")
     @PostMapping(value = "/all/root", produces = "application/json")

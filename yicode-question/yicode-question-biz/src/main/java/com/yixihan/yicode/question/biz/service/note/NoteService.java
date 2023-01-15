@@ -36,7 +36,7 @@ public interface NoteService extends IService<Note> {
     CommonDtoResult<Boolean> modifyNote(ModifyNoteDtoReq dtoReq);
     
     /**
-     * 添加题解
+     * 删除题解
      *
      * @param noteIdList 题解 ID
      */
@@ -48,6 +48,14 @@ public interface NoteService extends IService<Note> {
      * @param dtoReq 请求参数
      */
     CommonDtoResult<Boolean> likeNote(LikeDtoReq dtoReq);
+    
+    /**
+     * 获取问题题解数量
+     *
+     * @param questionId 问题 ID
+     * @return 题解数量
+     */
+    CommonDtoResult<Integer> questionNoteCount (Long questionId);
     
     /**
      * 查看题解

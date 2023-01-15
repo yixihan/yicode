@@ -41,6 +41,10 @@ public interface NoteApi {
     @PostMapping(value = "/like", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> likeNote (@RequestBody LikeDtoReq dtoReq);
     
+    @ApiOperation("获取问题题解总数")
+    @PostMapping(value = "/count", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> questionNoteCount(Long questionId);
+    
     @ApiOperation("查看题解")
     @PostMapping(value = "/detail", produces = "application/json")
     ApiResult<NoteDtoResult> noteDetail (@RequestBody Long noteId);

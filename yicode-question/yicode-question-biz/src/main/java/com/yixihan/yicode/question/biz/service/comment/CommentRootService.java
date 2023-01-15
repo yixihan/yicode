@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.AddSonCommentDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
+import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentRoot;
@@ -49,6 +46,14 @@ public interface CommentRootService extends IService<CommentRoot> {
      * @param sunCommentId 请求参数
      */
     CommonDtoResult<Boolean> delSonComment(Long sunCommentId);
+    
+    /**
+     * 获取问题评论数量
+     *
+     * @param dtoReq 请求参数
+     * @return 评论数量
+     */
+    CommonDtoResult<Integer> questionCommentCount (QuestionCommentCountDtoReq dtoReq);
     
     /**
      * 获取所有评论

@@ -52,6 +52,11 @@ public class NoteController implements NoteApi {
     }
     
     @Override
+    public ApiResult<CommonDtoResult<Integer>> questionNoteCount(Long questionId) {
+        return ApiResult.create (service.questionNoteCount (questionId));
+    }
+    
+    @Override
     public ApiResult<NoteDtoResult> noteDetail(Long noteId) {
         return ApiResult.create (service.noteDetail (noteId));
     }

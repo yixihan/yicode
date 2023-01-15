@@ -80,6 +80,12 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     }
     
     @Override
+    public CommonDtoResult<Integer> questionNoteCount(Long questionId) {
+        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Note> ()
+                .eq (Note.QUESTION_ID, questionId)));
+    }
+    
+    @Override
     public NoteDtoResult noteDetail(Long noteId) {
         Note note = baseMapper.selectById (noteId);
         
