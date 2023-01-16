@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.api.dto.response.question;
+package com.yixihan.yicode.question.openapi.api.vo.request.question;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,20 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加每日一题用户做题情况-dtoReq
+ * 添加用户题目通过记录-dtoReq
  *
  * @author yixihan
- * @date 2023/1/12 15:05
+ * @date 2023/1/12 10:54
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加每日一题用户做题情况-dtoReq")
-public class AddUserDailyQuestionDtoReq {
-    
-    @ApiModelProperty(value = "问题 id")
-    private Long questionId;
+@ApiModel("添加用户题目通过记录-dtoReq")
+public class AddQuestionUserRecordReq {
     
     @ApiModelProperty(value = "用户 id")
     private Long userId;
+    
+    @ApiModelProperty(value = "题目 id")
+    private Long questionId;
 }

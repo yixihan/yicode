@@ -2,8 +2,8 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.MonthUserDailyQuestionDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.response.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.UserDailyQuestionDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionDailyUserService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionDailyUserMapper;

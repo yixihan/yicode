@@ -2,8 +2,8 @@ package com.yixihan.yicode.question.api.rest.question;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.MonthUserDailyQuestionDetailDtoReq;
-import com.yixihan.yicode.question.api.dto.response.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.UserDailyQuestionDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.api.dto.request.question;
+package com.yixihan.yicode.question.openapi.api.vo.request.question;
 
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import io.swagger.annotations.ApiModel;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("搜索用户题目通过记录-dtoReq")
-public class QueryUserRecordDtoReq extends PageDtoReq {
+public class QueryUserRecordReq extends PageDtoReq {
     
     @ApiModelProperty(value = "用户 id")
     private Long userId;
