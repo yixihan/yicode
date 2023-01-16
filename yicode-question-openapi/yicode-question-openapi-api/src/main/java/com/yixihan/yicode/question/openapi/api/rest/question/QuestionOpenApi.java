@@ -52,15 +52,15 @@ public interface QuestionOpenApi {
     JsonResponse<CommonVO<Boolean>> collectionQuestion(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("取消收藏问题")
-    @PostMapping(value = "/collection/cancel", produces = "application/json")
+    @DeleteMapping(value = "/collection/cancel", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("添加问题标签")
     @PostMapping(value = "/label/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     
-    @ApiOperation("获取问题标签")
-    @PostMapping(value = "/label/del", produces = "application/json")
+    @ApiOperation("删除问题标签")
+    @DeleteMapping(value = "/label/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     
     @ApiOperation("问题明细")

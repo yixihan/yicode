@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.openapi.api.vo.request;
+package com.yixihan.yicode.user.api.dto.request.extra;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,20 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 修改收藏内容-req
+ * 校验收藏夹类型-dtoReq
  *
  * @author yixihan
- * @date 2022/12/21 10:51
+ * @date 2023/1/16 17:47
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("修改收藏内容-req")
-public class ModifyCollectionReq {
+@ApiModel("校验收藏夹类型-dtoReq")
+public class VerifyFavoriteTypeDtoReq {
     
     @ApiModelProperty(value = "收藏夹 ID")
     private Long favoriteId;
     
-    @ApiModelProperty(value = "收藏内容 ID")
-    private Long collectionId;
+    @ApiModelProperty(value = "收藏夹 类型")
+    private String favoriteType;
 }

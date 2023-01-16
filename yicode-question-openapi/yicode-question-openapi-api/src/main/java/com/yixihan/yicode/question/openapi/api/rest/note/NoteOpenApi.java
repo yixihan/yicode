@@ -46,15 +46,15 @@ public interface NoteOpenApi {
     JsonResponse<CommonVO<Boolean>> collectionNote(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("取消收藏问题")
-    @PostMapping(value = "/collection/cancel", produces = "application/json")
+    @DeleteMapping(value = "/collection/cancel", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> cancelCollectionNote(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("添加题解标签")
     @PostMapping(value = "/label/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addNoteLabel(@RequestBody ModifyLabelNoteReq req);
     
-    @ApiOperation("获取题解标签")
-    @PostMapping(value = "/label/del", produces = "application/json")
+    @ApiOperation("删除题解标签")
+    @DeleteMapping(value = "/label/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delNoteLabel(@RequestBody ModifyLabelNoteReq req);
     
     @ApiOperation("查看题解")

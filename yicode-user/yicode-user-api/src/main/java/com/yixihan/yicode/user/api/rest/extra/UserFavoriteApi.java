@@ -4,10 +4,7 @@ package com.yixihan.yicode.user.api.rest.extra;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +49,11 @@ public interface UserFavoriteApi {
     
     
     @ApiOperation("校验收藏夹是否存在")
-    @PostMapping(value = "/verify", produces = "application/json")
+    @PostMapping(value = "/verify/id", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> verifyFavorite (@RequestBody Long favoriteId);
+    
+    @ApiOperation("校验收藏夹类型")
+    @PostMapping(value = "/verify/type", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyFavoriteType (@RequestBody VerifyFavoriteTypeDtoReq dtoReq);
     
 }

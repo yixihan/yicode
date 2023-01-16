@@ -12,15 +12,15 @@
         n.`user_id`,
         n.`like_count`,
         n.`comment_count`,
-        n.`collection_count`,
         n.`read_count`,
         n.`create_time`,
         n.`update_time`
         from `note` as n
         <if test="params.labelIdList != null and params.labelIdList.size () > 0">
-            left join label_note as ln on n.note_id = ln.note_id
+            left join label_note as ln on ln.`del_flag` = 0 and  n.note_id = ln.note_id
         </if>
         <where>
+            and n.`del_flag` = 0
             <if test="params.noteName != null and params.noteName != ''">
                 and n.`note_name` like #{noteName}
             </if>
@@ -46,6 +46,6 @@
                     n.`read_count` desc,
                 </otherwise>
             </choose>
-            n.`collection_count` desc
+            n.`update_time` desc
     </select>
 </mapper>

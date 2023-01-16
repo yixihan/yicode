@@ -3,10 +3,7 @@ package com.yixihan.yicode.user.biz.service.extra;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 
@@ -69,4 +66,12 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * @return 存在 : true | 不存在 : false
      */
     CommonDtoResult<Boolean> verifyFavorite(Long favoriteId);
+    
+    /**
+     * 校验收藏夹类型
+     *
+     * @param dtoReq 请求参数
+     * @return 正确 : true | 错误 : false
+     */
+    CommonDtoResult<Boolean> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq);
 }

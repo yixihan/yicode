@@ -16,6 +16,7 @@ import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
+import com.yixihan.yicode.question.openapi.api.enums.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
@@ -34,6 +35,7 @@ import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.note.NoteService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.VerifyFavoriteTypeDtoReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -213,8 +215,12 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public CommonVO<Boolean> collectionNote(ModifyCollectionReq req) {
         Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID
-        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+        // 校验收藏夹类型
+        VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
+                req.getFavoriteId (),
+                AnswerTypeEnums.NOTE.getType ()
+        );
+        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         // 校验收藏内容 ID
@@ -239,8 +245,12 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public CommonVO<Boolean> cancelCollectionNote(ModifyCollectionReq req) {
         Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID
-        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+        // 校验收藏夹类型
+        VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
+                req.getFavoriteId (),
+                AnswerTypeEnums.NOTE.getType ()
+        );
+        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         // 校验收藏内容 ID

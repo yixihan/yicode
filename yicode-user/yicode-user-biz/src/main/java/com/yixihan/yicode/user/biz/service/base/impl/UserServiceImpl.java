@@ -176,6 +176,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserFavorite favorite = new UserFavorite ();
         favorite.setUserId (user.getUserId ());
         favorite.setFavoriteName ("默认收藏夹");
+        favorite.setFavoriteType ("QUESTION");
         favorite.setFavoriteCount (0);
     
         flag = userFavoriteService.save (favorite);

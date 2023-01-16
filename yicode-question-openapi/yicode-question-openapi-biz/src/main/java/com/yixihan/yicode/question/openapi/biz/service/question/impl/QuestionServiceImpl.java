@@ -16,6 +16,7 @@ import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
+import com.yixihan.yicode.question.openapi.api.enums.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.enums.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
@@ -33,6 +34,7 @@ import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.VerifyFavoriteTypeDtoReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -187,8 +189,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public CommonVO<Boolean> collectionQuestion(ModifyCollectionReq req) {
         Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID
-        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+        // 校验收藏夹类型
+        VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
+                req.getFavoriteId (),
+                AnswerTypeEnums.QUESTION.getType ()
+        );
+        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         // 校验收藏内容 ID
@@ -213,8 +219,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public CommonVO<Boolean> cancelCollectionQuestion(ModifyCollectionReq req) {
         Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID
-        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+        // 校验收藏夹类型
+        VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
+                req.getFavoriteId (),
+                AnswerTypeEnums.QUESTION.getType ()
+        );
+        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         // 校验收藏内容 ID

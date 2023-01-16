@@ -4,10 +4,7 @@ package com.yixihan.yicode.user.web.controller.extra;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.api.rest.extra.UserFavoriteApi;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
@@ -64,5 +61,10 @@ public class UserFavoriteController implements UserFavoriteApi {
     @Override
     public ApiResult<CommonDtoResult<Boolean>> verifyFavorite(Long favoriteId) {
         return ApiResult.create (userFavoriteService.verifyFavorite (favoriteId));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq) {
+        return ApiResult.create (userFavoriteService.verifyFavoriteType (dtoReq));
     }
 }

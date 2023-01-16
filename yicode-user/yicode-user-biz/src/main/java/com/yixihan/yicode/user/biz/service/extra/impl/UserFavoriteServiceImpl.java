@@ -11,10 +11,7 @@ import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.PageUtil;
-import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserFavoriteMapper;
@@ -115,5 +112,12 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     public CommonDtoResult<Boolean> verifyFavorite(Long favoriteId) {
         return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<UserFavorite> ()
                 .eq (UserFavorite.FAVORITE_ID, favoriteId)) > 0);
+    }
+    
+    @Override
+    public CommonDtoResult<Boolean> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq) {
+        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<UserFavorite> ()
+                .eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
+                .eq (UserFavorite.FAVORITE_TYPE, dtoReq.getFavoriteType ())) > 0);
     }
 }
