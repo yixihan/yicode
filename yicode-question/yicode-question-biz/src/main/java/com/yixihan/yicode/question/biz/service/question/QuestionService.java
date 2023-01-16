@@ -22,20 +22,53 @@ import java.util.List;
  */
 public interface QuestionService extends IService<Question> {
     
+    /**
+     * 添加问题
+     *
+     * @param dtoReq 请求参数
+     */
     CommonDtoResult<Boolean> addQuestion(ModifyQuestionDtoReq dtoReq);
     
-    
+    /**
+     * 修改问题
+     *
+     * @param dtoReq 请求参数
+     */
     CommonDtoResult<Boolean> modifyQuestion(ModifyQuestionDtoReq dtoReq);
     
-    
+    /**
+     * 删除问题
+     *
+     * @param questionIdList 问题 ID
+     */
     CommonDtoResult<Boolean> delQuestion(List<Long> questionIdList);
     
-    
+    /**
+     * 点赞问题
+     *
+     * @param dtoReq 请求参数
+     */
     CommonDtoResult<Boolean> likeQuestion(LikeDtoReq dtoReq);
     
-    
+    /**
+     * 问题明细
+     *
+     * @param questionId 问题 ID
+     */
     QuestionDetailDtoResult questionDetail(Long questionId);
     
-    
+    /**
+     * 搜索问题
+     *
+     * @param dtoReq 请求参数
+     */
     PageDtoResult<QuestionDtoResult> queryQuestion(QueryQuestionDtoReq dtoReq);
+    
+    /**
+     * 校验问题是否存在
+     *
+     * @param questionId 问题 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifyQuestion(Long questionId);
 }

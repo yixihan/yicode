@@ -61,4 +61,9 @@ public class QuestionController implements QuestionApi {
     public ApiResult<PageDtoResult<QuestionDtoResult>> queryQuestion(QueryQuestionDtoReq dtoReq) {
         return ApiResult.create (service.queryQuestion (dtoReq));
     }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyQuestion(Long questionId) {
+        return ApiResult.create (service.verifyQuestion (questionId));
+    }
 }

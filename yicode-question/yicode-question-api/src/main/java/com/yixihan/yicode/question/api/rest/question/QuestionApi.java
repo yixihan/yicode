@@ -49,4 +49,9 @@ public interface QuestionApi {
     @ApiOperation("搜索问题")
     @PostMapping(value = "/query", produces = "application/json")
     ApiResult<PageDtoResult<QuestionDtoResult>> queryQuestion(@RequestBody QueryQuestionDtoReq dtoReq);
+    
+    
+    @ApiOperation("校验问题是否存在")
+    @PostMapping(value = "/verify", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyQuestion(@RequestBody Long questionId);
 }

@@ -10,7 +10,7 @@ import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.biz.feign.message.MessageFeignClient;
-import com.yixihan.yicode.question.openapi.biz.feign.user.msg.UserMsgFiegnClient;
+import com.yixihan.yicode.question.openapi.biz.feign.user.msg.UserMsgFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
@@ -36,7 +36,7 @@ public class UserMsgServiceImpl implements UserMsgService {
     private UserService userService;
     
     @Resource
-    private UserMsgFiegnClient userMsgFiegnClient;
+    private UserMsgFeignClient userMsgFeignClient;
     
     @Resource
     private MessageFeignClient messageFeignClient;
@@ -55,7 +55,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         UserDtoResult user = userService.getUser ();
         AddMessageDtoReq dtoReq = CopyUtils.copySingle (AddMessageDtoReq.class, req);
     
-        String template = userMsgFiegnClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
+        String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
         String message;
         if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) || MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
             message = StrUtil.format (template, user.getUserName (), req.getSourceId ());
@@ -69,7 +69,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setSendUserName (user.getUserName ());
         
         // 保存消息
-        CommonDtoResult<Boolean> dtoResult = userMsgFiegnClient.addMessage (dtoReq).getResult ();
+        CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
         
         // 如果保存成功, 则发送消息给用户
         if (dtoResult.getData ()) {

@@ -53,6 +53,9 @@ public class NoteServiceImpl implements NoteService {
     @Resource
     private LikeService likeService;
     
+    /**
+     * redis key : 点赞题解
+     */
     private static final String NOTE_LIKE_KEY = "like:note";
     
     @Override

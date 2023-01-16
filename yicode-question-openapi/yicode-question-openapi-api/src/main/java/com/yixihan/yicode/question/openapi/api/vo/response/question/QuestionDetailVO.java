@@ -22,7 +22,4 @@ public class QuestionDetailVO extends QuestionVO {
     
     @ApiModelProperty(value = "问题描述")
     private String questionDesc;
-    
-    @ApiModelProperty(value = "评论数")
-    private String commentCount;
 }

@@ -29,13 +29,4 @@ public class ModifyQuestionDtoReq {
     
     @ApiModelProperty(value = "问题难度")
     private String questionDifficulty;
-    
-    @ApiModelProperty(value = "问题点赞数")
-    private Integer likeCount;
-    
-    @ApiModelProperty(value = "问题提交数")
-    private Integer commitCount;
-    
-    @ApiModelProperty(value = "问题通过数")
-    private Integer successCount;
 }

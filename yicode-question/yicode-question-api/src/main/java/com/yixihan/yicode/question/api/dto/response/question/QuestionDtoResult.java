@@ -33,6 +33,12 @@ public class QuestionDtoResult {
     @ApiModelProperty(value = "问题点赞数")
     private Integer likeCount;
     
+    @ApiModelProperty(value = "评论数")
+    private Integer commentCount;
+    
+    @ApiModelProperty(value = "题解数")
+    private Integer noteCount;
+    
     @ApiModelProperty(value = "问题提交数")
     private Integer commitCount;
     
@@ -41,9 +47,6 @@ public class QuestionDtoResult {
     
     @ApiModelProperty(value = "通过率")
     private BigDecimal passRate;
-    
-    @ApiModelProperty(value = "题解数")
-    private Integer noteCount;
     
     @ApiModelProperty(value = "创建时间")
     private Date createTime;

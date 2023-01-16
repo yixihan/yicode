@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.question.QuestionMapper">
 
+    <select id="queryQuestion"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult">
+    <bind name="questionName" value="'%' + params.getQuestionName () + '%'" />
+    select
+        q.`question_id`,
+        q.`question_name`,
+        q.`question_difficulty`,
+        q.`like_count`,
+        q.`commit_count`,
+        q.`success_count`,
+        q.`create_time`
+    from
+        `question` q
+    <if test="params.label != null and params.label.size () > 0">
+        left join `label_question` lq
+            on q.`question_id` = lq.`question_id`
+    </if>
+    <where>
+        <if test="params.questionName != null and params.questionName != ''">
+            and q.`question_name` like #{questionName}
+        </if>
+        <if test="params.label != null and params.label.size () > 0">
+            <foreach collection="params.label" item="item"
+                     open="and lq.`label_id` in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="params.difficulty != null and params.difficulty != ''">
+            and q.`question_difficulty` = #{params.difficulty}
+        </if>
+    </where>
+    </select>
 </mapper>

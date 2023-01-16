@@ -62,7 +62,7 @@ public interface UserService extends IService<User> {
     
     /**
      * 通过缓存 （token） 获取用户信息
-     * @param token tokne
+     * @param token token
      * @return {@link UserDtoResult}
      */
     UserDtoResult getUserByToken(String token);

@@ -66,8 +66,14 @@ public class CommentServiceImpl implements CommentService {
     @Resource
     private LikeService likeService;
     
+    /**
+     * redis key : 点赞父评论
+     */
     private static final String ROOT_COMMENT_LIKE_KEY = "like:root_comment";
     
+    /**
+     * redis key : 点赞子评论
+     */
     private static final String SON_COMMENT_LIKE_KEY = "like:son_comment";
     
     @Override
