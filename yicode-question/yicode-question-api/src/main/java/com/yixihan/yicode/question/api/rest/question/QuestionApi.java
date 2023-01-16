@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 问题 api
@@ -54,4 +55,8 @@ public interface QuestionApi {
     @ApiOperation("校验问题是否存在")
     @PostMapping(value = "/verify", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> verifyQuestion(@RequestBody Long questionId);
+    
+    @ApiOperation ("获取问题名字")
+    @PostMapping(value = "/detail/name", produces = "application/json")
+    ApiResult<Map<Long, String>> questionName(@RequestBody List<Long> questionIdList);
 }

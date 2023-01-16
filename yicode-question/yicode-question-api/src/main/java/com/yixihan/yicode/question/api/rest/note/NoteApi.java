@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 题解 api
@@ -57,4 +58,8 @@ public interface NoteApi {
     @ApiOperation("校验题解 ID 是否存在")
     @PostMapping(value = "/verify", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> verifyNote (@RequestBody Long noteId);
+    
+    @ApiOperation ("获取题解名字")
+    @PostMapping(value = "/detail/name", produces = "application/json")
+    ApiResult<Map<Long, String>> noteName(@RequestBody List<Long> noteIdList);
 }

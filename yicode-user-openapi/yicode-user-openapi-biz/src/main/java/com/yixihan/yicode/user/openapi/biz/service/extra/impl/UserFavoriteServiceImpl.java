@@ -18,6 +18,8 @@ import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
+import com.yixihan.yicode.user.openapi.biz.feign.question.note.NoteFeignClient;
+import com.yixihan.yicode.user.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserCollectionFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserFavoriteFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
@@ -26,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户收藏 服务实现类
@@ -42,6 +47,12 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     
     @Resource
     private UserCollectionFeignClient collectionFeignClient;
+    
+    @Resource
+    private NoteFeignClient noteFeignClient;
+    
+    @Resource
+    private QuestionFeignClient questionFeignClient;
     
     @Resource
     private UserService userService;
@@ -127,10 +138,26 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     
     @Override
     public PageVO<CollectionVO> getCollections(CollectionQueryReq req) {
+        Long userId = userService.getUser ().getUserId ();
         CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userId);
     
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.getCollections (dtoReq).getResult ();
+        FavoriteDetailQueryDtoReq favoriteDetailQueryDtoReq = new FavoriteDetailQueryDtoReq (userId, req.getFavoriteId ());
+        FavoriteDtoResult favoriteDtoResult = favoriteFeignClient.getFavoriteDetail (favoriteDetailQueryDtoReq).getResult ();
+    
+        final Map<Long, String> nameMap;
+        List<Long> collectionList = dtoResult.getRecords ().stream ().map (CollectionDtoResult::getCollectionId)
+                .collect(Collectors.toList());
+        
+        if (FavoriteTypeEnums.QUESTION.getType ().equals (favoriteDtoResult.getFavoriteType ())) {
+            nameMap = questionFeignClient.questionName (collectionList).getResult ();
+        } else {
+            nameMap = noteFeignClient.noteName (collectionList).getResult ();
+        }
+        
+        dtoResult.getRecords ().forEach ((o) -> o.setCollectionName (nameMap.get (o.getCollectionId ())));
+    
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
                 (o) -> BeanUtil.toBean (o, CollectionVO.class)

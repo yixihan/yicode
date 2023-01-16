@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -65,5 +66,10 @@ public class QuestionController implements QuestionApi {
     @Override
     public ApiResult<CommonDtoResult<Boolean>> verifyQuestion(Long questionId) {
         return ApiResult.create (service.verifyQuestion (questionId));
+    }
+    
+    @Override
+    public ApiResult<Map<Long, String>> questionName(List<Long> questionIdList) {
+        return ApiResult.create (service.questionName (questionIdList));
     }
 }

@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -132,6 +134,16 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         note.setCommentCount (commentCount);
         
         baseMapper.updateById (note);
+    }
+    
+    @Override
+    public Map<Long, String> noteName(List<Long> noteIdList) {
+        return baseMapper.selectBatchIds (noteIdList).stream ()
+                .collect (Collectors.toMap (
+                        Note::getNoteId,
+                        Note::getNoteName,
+                        (k1, k2) -> k1
+                ));
     }
     
     @Async

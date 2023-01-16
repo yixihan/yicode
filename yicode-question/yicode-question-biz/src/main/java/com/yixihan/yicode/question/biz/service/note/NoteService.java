@@ -10,6 +10,7 @@ import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -86,4 +87,12 @@ public interface NoteService extends IService<Note> {
      * @param commentCount 评论数量
      */
     void modifyNoteCommentCount(Long noteId, Integer commentCount);
+    
+    /**
+     * 获取题解名字
+     *
+     * @param noteIdList 问题 ID
+     * @return 问题名字
+     */
+    Map<Long, String> noteName(List<Long> noteIdList);
 }

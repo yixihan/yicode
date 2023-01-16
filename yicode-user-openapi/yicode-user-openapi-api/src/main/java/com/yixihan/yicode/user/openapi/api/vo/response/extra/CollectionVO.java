@@ -27,6 +27,9 @@ public class CollectionVO {
     @ApiModelProperty(value = "用户收藏内容 id")
     private Long collectionId;
     
+    @ApiModelProperty(value = "用户收藏内容 名字")
+    private String collectionName;
+    
     @ApiModelProperty(value = "收藏时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;

@@ -19,7 +19,9 @@ import com.yixihan.yicode.question.dal.pojo.question.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -134,5 +136,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         Question question = baseMapper.selectById (questionId);
         question.setSuccessCount (successCount);
         baseMapper.updateById (question);
+    }
+    
+    @Override
+    public Map<Long, String> questionName(List<Long> questionIdList) {
+        return baseMapper.selectBatchIds (questionIdList).stream ()
+                .collect (Collectors.toMap (
+                        Question::getQuestionId,
+                        Question::getQuestionName,
+                        (k1, k2) -> k1
+                ));
     }
 }

@@ -11,6 +11,7 @@ import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.Question;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -103,4 +104,12 @@ public interface QuestionService extends IService<Question> {
      * @param successCount 通过数量
      */
     void modifyQuestionSuccessCount (Long questionId, Integer successCount);
+    
+    /**
+     * 获取问题名字
+     *
+     * @param questionIdList 问题 ID
+     * @return 问题名字
+     */
+    Map<Long, String> questionName(List<Long> questionIdList);
 }

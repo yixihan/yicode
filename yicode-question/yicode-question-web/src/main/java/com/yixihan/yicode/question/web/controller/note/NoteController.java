@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -69,5 +70,10 @@ public class NoteController implements NoteApi {
     @Override
     public ApiResult<CommonDtoResult<Boolean>> verifyNote(Long noteId) {
         return ApiResult.create (service.verifyNote (noteId));
+    }
+    
+    @Override
+    public ApiResult<Map<Long, String>> noteName(List<Long> noteIdList) {
+        return ApiResult.create (service.noteName (noteIdList));
     }
 }
