@@ -43,12 +43,17 @@ feign:
   client:
     yicode-user:
       name: yicode-user
+    yicode-question:
+      name: yicode-question
     yicode-thirdpart:
       name: yicode-thirdpart
     yicode-message:
       name: yicode-message
     config:
       yicode-user:
+        connect-timeout: 30000
+        read-timeout: 30000
+      yicode-question:
         connect-timeout: 30000
         read-timeout: 30000
       yicode-thirdpart:

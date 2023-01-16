@@ -78,6 +78,14 @@
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- yicode-question-api -->
+        <dependency>
+            <groupId>com.yixihan</groupId>
+            <artifactId>yicode-question-api</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

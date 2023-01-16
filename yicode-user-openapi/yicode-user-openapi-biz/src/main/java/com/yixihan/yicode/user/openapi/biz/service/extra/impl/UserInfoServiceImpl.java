@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.CopyUtils;
+import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
@@ -14,6 +15,7 @@ import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.UserLanguageVO;
+import com.yixihan.yicode.user.openapi.biz.feign.question.label.LabelUserFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserInfoFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserLanguageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserWebsiteFeignClient;
@@ -45,6 +47,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Resource
     private UserLanguageFeignClient languageFeignClient;
     
+    @Resource
+    private LabelUserFeignClient labelUserFeignClient;
     
     @Resource
     private UserService userService;
@@ -86,9 +90,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<UserLanguageDtoResult> languageDtoResults = languageFeignClient.getUserLanguage (userId).getResult ();
         userInfoVO.setUserLanguageList (CopyUtils.copyMulti (UserLanguageVO.class, languageDtoResults));
         
-        // TODO 获取用户标签
+        // 获取用户标签
+        List<LabelDtoResult> labelDtoResult = labelUserFeignClient.userLabelDetail (userId).getResult ();
         
-        
+        userInfoVO.setUserLabel (labelDtoResult.stream ()
+                .map (LabelDtoResult::getLabelName).collect(Collectors.toList()));
+    
         return userInfoVO;
     }
     
