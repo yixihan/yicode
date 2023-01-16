@@ -46,6 +46,9 @@ public class Note implements Serializable {
 
     @ApiModelProperty(value = "点赞数量")
     private Integer likeCount;
+    
+    @ApiModelProperty(value = "评论数量")
+    private Integer commentCount;
 
     @ApiModelProperty(value = "收藏数量")
     private Integer collectionCount;

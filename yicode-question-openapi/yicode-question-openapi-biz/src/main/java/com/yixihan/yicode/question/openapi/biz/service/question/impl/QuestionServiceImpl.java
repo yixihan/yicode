@@ -2,9 +2,7 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
-import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -13,20 +11,16 @@ import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
-import com.yixihan.yicode.question.api.dto.request.comment.QuestionCommentCountDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
-import com.yixihan.yicode.question.openapi.api.enums.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.enums.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
-import com.yixihan.yicode.question.openapi.biz.feign.question.comment.CommentFeignClient;
-import com.yixihan.yicode.question.openapi.biz.feign.question.note.NoteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionService;
@@ -35,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -53,12 +46,6 @@ public class QuestionServiceImpl implements QuestionService {
     
     @Resource
     private LikeService likeService;
-    
-    @Resource
-    private CommentFeignClient commentFeignClient;
-    
-    @Resource
-    private NoteFeignClient noteFeignClient;
     
     @Resource
     private QuestionFeignClient questionFeignClient;
@@ -186,7 +173,6 @@ public class QuestionServiceImpl implements QuestionService {
         
         // 获取问题明细
         QuestionDetailDtoResult dtoResult = questionFeignClient.questionDetail (questionId).getResult ();
-        setQuestionExtraInfo (dtoResult);
     
         return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
     }
@@ -195,39 +181,14 @@ public class QuestionServiceImpl implements QuestionService {
     public PageVO<QuestionVO> queryQuestion(QueryQuestionReq req) {
         // 构建请求 body
         QueryQuestionDtoReq dtoReq = BeanUtil.toBean (req, QueryQuestionDtoReq.class);
+        dtoReq.setUserId (userService.getUser ().getUserId ());
         
         // 搜索问题
         PageDtoResult<QuestionDtoResult> dtoResult = questionFeignClient.queryQuestion (dtoReq).getResult ();
-    
-        for (QuestionDtoResult item : dtoResult.getRecords ()) {
-            ThreadUtil.execute (() -> setQuestionExtraInfo (item));
-        }
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
                 (o) -> BeanUtil.toBean (o, QuestionVO.class)
         );
-    }
-    
-    /**
-     * 获取问题的额外信息<br>
-     * 包括评论数, 题解数, 题目通过率
-     *
-     * @param dtoResult 问题
-     */
-    private void setQuestionExtraInfo(QuestionDtoResult dtoResult) {
-        // 获取评论数和题解数
-        QuestionCommentCountDtoReq dtoReq = new QuestionCommentCountDtoReq ();
-        dtoReq.setAnswerId (dtoResult.getQuestionId ());
-        dtoReq.setAnswerType (AnswerTypeEnums.QUESTION.getType ());
-        dtoResult.setCommentCount (commentFeignClient.questionCommentCount (dtoReq).getResult ().getData ());
-        
-        // 获取题解数
-        dtoResult.setNoteCount (noteFeignClient.questionNoteCount (dtoResult.getQuestionId ()).getResult ().getData ());
-        
-        // 计算通过率
-        if (!dtoResult.getSuccessCount ().equals (NumConstant.NUM_0)) {
-            dtoResult.setPassRate (BigDecimal.valueOf (dtoResult.getSuccessCount () / dtoResult.getCommentCount ()));
-        }
     }
 }

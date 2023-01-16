@@ -11,6 +11,7 @@
         n.`note_content`,
         n.`user_id`,
         n.`like_count`,
+        n.`comment_count`,
         n.`collection_count`,
         n.`read_count`,
         n.`create_time`,

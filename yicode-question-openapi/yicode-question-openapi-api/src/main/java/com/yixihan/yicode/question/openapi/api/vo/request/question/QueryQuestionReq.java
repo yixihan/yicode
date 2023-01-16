@@ -1,6 +1,6 @@
 package com.yixihan.yicode.question.openapi.api.vo.request.question;
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("搜索问题-dtoReq")
-public class QueryQuestionReq extends PageDtoReq {
+public class QueryQuestionReq extends PageReq {
     
     @ApiModelProperty(value = "问题名")
     private String questionName;
