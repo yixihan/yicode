@@ -29,6 +29,8 @@ import com.yixihan.yicode.question.openapi.api.vo.request.comment.SonCommentDeta
 import com.yixihan.yicode.question.openapi.api.vo.response.comment.RootCommentDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.comment.SonCommentDetailVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.comment.CommentFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.note.NoteFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.comment.CommentService;
 import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
@@ -61,6 +63,12 @@ public class CommentServiceImpl implements CommentService {
     private CommentFeignClient commentFeignClient;
     
     @Resource
+    private QuestionFeignClient questionFeignClient;
+    
+    @Resource
+    private NoteFeignClient noteFeignClient;
+    
+    @Resource
     private UserMsgService msgService;
     
     @Resource
@@ -78,8 +86,16 @@ public class CommentServiceImpl implements CommentService {
     
     @Override
     public CommonVO<Boolean> addRootComment(AddRootCommentReq req) {
-        // 参数校验 (评论内容不能为空)
+        // 参数校验 (评论, 评论内容 ID)
         if (StrUtil.isBlank (req.getContent ())) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
+        !noteFeignClient.verifyNote (req.getAnswerId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
+        !questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ().getData ()) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         
@@ -101,8 +117,8 @@ public class CommentServiceImpl implements CommentService {
             AddMessageReq messageReq = new AddMessageReq ();
             messageReq.setMessageType (MsgTypeEnums.REPLY.getType ());
             messageReq.setSourceId (req.getAnswerId ());
-            // TODO 获取接收者用户 ID
-            messageReq.setReceiveUseId (1L);
+            messageReq.setReceiveUseId (noteFeignClient.noteDetail (req.getAnswerId ())
+                    .getResult ().getUserId ());
             msgService.addMessage (messageReq);
         }
         return CommonVO.create (dtoResult);
@@ -222,12 +238,16 @@ public class CommentServiceImpl implements CommentService {
                 throw new BizException (dtoResult.getMessage ());
             }
             // 点赞成功, 发送消息
-            AddMessageReq messageReq = new AddMessageReq ();
-            messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
-            messageReq.setSourceId (req.getSourceId ());
-            // TODO 获取接收者用户 ID
-            messageReq.setReceiveUseId (1L);
-            msgService.addMessage (messageReq);
+            RootCommentDetailDtoResult rootComment = commentFeignClient
+                    .getRootComment (req.getSourceId ()).getResult ();
+            if (AnswerTypeEnums.NOTE.getType ().equals (rootComment.getAnswerType ())) {
+                AddMessageReq messageReq = new AddMessageReq ();
+                messageReq.setReceiveUseId (noteFeignClient.noteDetail (rootComment.getAnswerId ())
+                        .getResult ().getUserId ());
+                messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
+                messageReq.setSourceId (req.getSourceId ());
+                msgService.addMessage (messageReq);
+            }
             return CommonVO.create (dtoResult);
         }
     }
@@ -285,7 +305,15 @@ public class CommentServiceImpl implements CommentService {
     
     @Override
     public PageVO<RootCommentDetailVO> rootCommentDetail(RootCommentDetailReq req) {
-        // TODO 评论内容参数校验
+        // 评论内容参数校验
+        if (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
+                !noteFeignClient.verifyNote (req.getAnswerId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
+                !questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
         
         // 构建请求 body
         RootCommentDetailDtoReq dtoReq = CopyUtils.copySingle (RootCommentDetailDtoReq.class, req);

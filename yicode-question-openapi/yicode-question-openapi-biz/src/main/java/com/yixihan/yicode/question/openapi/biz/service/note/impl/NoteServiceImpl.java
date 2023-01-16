@@ -21,6 +21,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.note.NoteFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.note.NoteService;
@@ -51,6 +52,9 @@ public class NoteServiceImpl implements NoteService {
     private NoteFeignClient noteFeignClient;
     
     @Resource
+    private QuestionFeignClient questionFeignClient;
+    
+    @Resource
     private LikeService likeService;
     
     /**
@@ -64,7 +68,10 @@ public class NoteServiceImpl implements NoteService {
         if (StrUtil.isBlank (req.getNoteName ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
-        // TODO 校验问题 ID 是否存在
+        // 校验问题 ID 是否存在
+        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
         
         // 构建请求 body
         ModifyNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyNoteDtoReq.class, req);
