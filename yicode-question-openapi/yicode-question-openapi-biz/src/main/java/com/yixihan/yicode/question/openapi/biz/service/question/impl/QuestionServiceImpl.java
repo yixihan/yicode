@@ -9,9 +9,9 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
@@ -19,10 +19,13 @@ import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.openapi.api.enums.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelQuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserFavoriteFeignClient;
@@ -60,6 +63,12 @@ public class QuestionServiceImpl implements QuestionService {
     
     @Resource
     private UserFavoriteFeignClient favoriteFeignClient;
+    
+    @Resource
+    private LabelFeignClient labelFeignClient;
+    
+    @Resource
+    private LabelQuestionFeignClient labelQuestionFeignClient;
     
     /**
      * redis key : 点赞问题
@@ -188,7 +197,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
     
         // 构造请求 body
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
         dtoReq.setUserId (userId);
         
         // 收藏内容
@@ -214,11 +223,57 @@ public class QuestionServiceImpl implements QuestionService {
         }
         
         // 构造请求 body
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
         dtoReq.setUserId (userId);
         
         // 取消收藏内容
         CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
+    
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
+    }
+    
+    @Override
+    public CommonVO<Boolean> addQuestionLabel(ModifyLabelQuestionReq req) {
+        // 校验参数
+        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        // 构造请求 body
+        ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
+    
+        // 添加题解标签
+        CommonDtoResult<Boolean> dtoResult = labelQuestionFeignClient.addQuestionLabel (dtoReq).getResult ();
+    
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
+    }
+    
+    @Override
+    public CommonVO<Boolean> delQuestionLabel(ModifyLabelQuestionReq req) {
+        // 校验参数
+        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        // 构造请求 body
+        ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
+    
+        // 添加题解标签
+        CommonDtoResult<Boolean> dtoResult = labelQuestionFeignClient.delQuestionLabel (dtoReq).getResult ();
     
         // 如果操作失败, 排除异常原因
         if (!dtoResult.getData ()) {

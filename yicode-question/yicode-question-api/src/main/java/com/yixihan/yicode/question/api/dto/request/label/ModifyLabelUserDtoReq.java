@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ModifyLabelUserDtoReq {
     
     @ApiModelProperty(value = "标签 ID")
-    private String labelId;
+    private Long labelId;
     
     @ApiModelProperty(value = "用户 ID")
     private Long userId;

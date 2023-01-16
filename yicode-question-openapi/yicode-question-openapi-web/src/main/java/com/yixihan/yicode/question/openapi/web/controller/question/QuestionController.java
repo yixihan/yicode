@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
@@ -58,6 +59,16 @@ public class QuestionController implements QuestionOpenApi {
     @Override
     public JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(ModifyCollectionReq req) {
         return JsonResponse.ok (service.cancelCollectionQuestion (req));
+    }
+    
+    @Override
+    public JsonResponse<CommonVO<Boolean>> addQuestionLabel(ModifyLabelQuestionReq req) {
+        return JsonResponse.ok (service.addQuestionLabel (req));
+    }
+    
+    @Override
+    public JsonResponse<CommonVO<Boolean>> delQuestionLabel(ModifyLabelQuestionReq req) {
+        return JsonResponse.ok (service.delQuestionLabel (req));
     }
     
     @Override
