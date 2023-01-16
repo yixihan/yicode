@@ -2,6 +2,7 @@ package com.yixihan.yicode.question.biz.service.label;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.dal.pojo.label.LabelNote;
 
@@ -21,16 +22,16 @@ public interface LabelNoteService extends IService<LabelNote> {
     /**
      * 添加题解标签
      *
-     * @param noteLabelName 标签名
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> addNoteLabel(String noteLabelName);
+    CommonDtoResult<Boolean> addNoteLabel(ModifyLabelNoteDtoReq dtoReq);
     
     /**
      * 删除题解标签
      *
-     * @param noteLabelId 标签 ID
+     * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> delNoteLabel(Long noteLabelId);
+    CommonDtoResult<Boolean> delNoteLabel(ModifyLabelNoteDtoReq dtoReq);
     
     /**
      * 获取题解标签
