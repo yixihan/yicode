@@ -46,7 +46,7 @@ public enum QuestionDifficultyTypeEnums {
      * @return 是 : true | 否 : false
      */
     public static Boolean contains (String type) {
-        for (AnswerTypeEnums enums : AnswerTypeEnums.values ()) {
+        for (QuestionDifficultyTypeEnums enums : QuestionDifficultyTypeEnums.values ()) {
             if (enums.getType ().equals (type)) {
                 return Boolean.TRUE;
             }
