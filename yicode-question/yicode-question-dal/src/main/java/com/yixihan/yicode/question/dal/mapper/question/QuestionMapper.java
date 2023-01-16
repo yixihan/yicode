@@ -3,6 +3,7 @@ package com.yixihan.yicode.question.dal.mapper.question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.Question;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,6 +19,8 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface QuestionMapper extends BaseMapper<Question> {
+    
+    QuestionDetailDtoResult questionDetail (@Param ("questionId") Long questionId);
     
     /**
      * 搜索问题

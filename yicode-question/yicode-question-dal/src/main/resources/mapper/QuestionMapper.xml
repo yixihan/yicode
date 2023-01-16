@@ -101,4 +101,26 @@
     </choose>
         q.`create_time`
     </select>
+
+    <select id="questionDetail"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult">
+        select
+            q.`question_id`,
+            q.`question_name`,
+            q.`question_difficulty`,
+            q.`like_count`,
+            q.`comment_count`,
+            q.`note_count`,
+            q.`commit_count`,
+            q.`success_count`,
+            q.`question_desc`,
+            if(q.`success_count` = 0, 0, q.`success_count` / q.`commit_count` * 100) as passRate,
+            q.`create_time`
+        from
+            `question` q
+        <where>
+            and del_flag = 0
+            and question_id = #{questionId}
+        </where>
+    </select>
 </mapper>

@@ -82,8 +82,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     
     @Override
     public QuestionDetailDtoResult questionDetail(Long questionId) {
-        Question question = Optional.ofNullable (baseMapper.selectById (questionId))
-                .orElse (new Question ());
+        QuestionDetailDtoResult question = Optional.ofNullable (baseMapper.questionDetail (questionId))
+                .orElse (new QuestionDetailDtoResult ());
         
         return BeanUtil.toBean (question, QuestionDetailDtoResult.class);
     }
