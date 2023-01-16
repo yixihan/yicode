@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -51,5 +52,11 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
         List<Label> labelList = baseMapper.selectBatchIds (labelIdList);
         
         return BeanUtil.copyToList (labelList, LabelDtoResult.class);
+    }
+    
+    @Override
+    public CommonDtoResult<Boolean> verifyLabel(Long labelId) {
+        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Label> ()
+                .eq (Label.LABEL_ID, labelId)) > 0);
     }
 }

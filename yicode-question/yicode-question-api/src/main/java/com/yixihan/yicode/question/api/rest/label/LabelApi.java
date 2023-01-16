@@ -33,4 +33,10 @@ public interface LabelApi {
     @ApiOperation ("标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
     ApiResult<List<LabelDtoResult>> labelDetail (@RequestBody List<Long> labelIdList);
+    
+    
+    
+    @ApiOperation ("校验标签")
+    @PostMapping(value = "/verify", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyLabel (@RequestBody Long labelId);
 }

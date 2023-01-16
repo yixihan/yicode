@@ -12,15 +12,19 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelNoteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.note.NoteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
@@ -63,6 +67,12 @@ public class NoteServiceImpl implements NoteService {
     
     @Resource
     private UserFavoriteFeignClient favoriteFeignClient;
+    
+    @Resource
+    private LabelNoteFeignClient labelNoteFeignClient;
+    
+    @Resource
+    private LabelFeignClient labelFeignClient;
     
     @Resource
     private LikeService likeService;
@@ -245,6 +255,52 @@ public class NoteServiceImpl implements NoteService {
         // 取消收藏内容
         CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
         
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
+    }
+    
+    @Override
+    public CommonVO<Boolean> addNoteLabel(ModifyLabelNoteReq req) {
+        // 校验参数
+        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (!noteFeignClient.verifyNote (req.getNoteId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        // 构造请求 body
+        ModifyLabelNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyLabelNoteDtoReq.class, req);
+        
+        // 添加题解标签
+        CommonDtoResult<Boolean> dtoResult = labelNoteFeignClient.addNoteLabel (dtoReq).getResult ();
+    
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
+    }
+    
+    @Override
+    public CommonVO<Boolean> delNoteLabel(ModifyLabelNoteReq req) {
+        // 校验参数
+        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        if (!noteFeignClient.verifyNote (req.getNoteId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        // 构造请求 body
+        ModifyLabelNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyLabelNoteDtoReq.class, req);
+    
+        // 添加题解标签
+        CommonDtoResult<Boolean> dtoResult = labelNoteFeignClient.delNoteLabel (dtoReq).getResult ();
+    
         // 如果操作失败, 排除异常原因
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());

@@ -38,4 +38,12 @@ public interface LabelService extends IService<Label> {
      * @param labelIdList 标签 ID
      */
     List<LabelDtoResult> labelDetail(List<Long> labelIdList);
+    
+    /**
+     * 校验标签
+     *
+     * @param labelId 标签 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifyLabel(Long labelId);
 }

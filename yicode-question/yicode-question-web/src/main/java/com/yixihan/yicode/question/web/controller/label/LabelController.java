@@ -42,4 +42,9 @@ public class LabelController implements LabelApi {
     public ApiResult<List<LabelDtoResult>> labelDetail(List<Long> labelIdList) {
         return ApiResult.create (service.labelDetail (labelIdList));
     }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyLabel(Long labelId) {
+        return ApiResult.create (service.verifyLabel (labelId));
+    }
 }

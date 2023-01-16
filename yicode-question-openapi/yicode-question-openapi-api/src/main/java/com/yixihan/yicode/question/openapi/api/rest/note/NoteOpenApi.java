@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
@@ -47,6 +48,14 @@ public interface NoteOpenApi {
     @ApiOperation("取消收藏问题")
     @PostMapping(value = "/collection/cancel", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> cancelCollectionNote(@RequestBody ModifyCollectionReq req);
+    
+    @ApiOperation("添加题解标签")
+    @PostMapping(value = "/label/add", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> addNoteLabel(@RequestBody ModifyLabelNoteReq req);
+    
+    @ApiOperation("获取题解标签")
+    @PostMapping(value = "/label/del", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> delNoteLabel(@RequestBody ModifyLabelNoteReq req);
     
     @ApiOperation("查看题解")
     @GetMapping(value = "/detail", produces = "application/json")
