@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.note.NoteOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
@@ -46,6 +47,16 @@ public class NoteController implements NoteOpenApi {
     @Override
     public JsonResponse<CommonVO<Boolean>> likeNote(LikeReq req) {
         return JsonResponse.ok (service.likeNote (req));
+    }
+    
+    @Override
+    public JsonResponse<CommonVO<Boolean>> collectionNote(ModifyCollectionReq req) {
+        return JsonResponse.ok (service.collectionNote (req));
+    }
+    
+    @Override
+    public JsonResponse<CommonVO<Boolean>> cancelCollectionNote(ModifyCollectionReq req) {
+        return JsonResponse.ok (service.cancelCollectionNote (req));
     }
     
     @Override

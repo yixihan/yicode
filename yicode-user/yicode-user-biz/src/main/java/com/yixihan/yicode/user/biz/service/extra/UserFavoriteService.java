@@ -61,4 +61,12 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * @param dtoReq 请求参数
      */
     FavoriteDtoResult getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq);
+    
+    /**
+     * 校验收藏夹是否存在
+     *
+     * @param favoriteId 收藏夹 ID
+     * @return 存在 : true | 不存在 : false
+     */
+    CommonDtoResult<Boolean> verifyFavorite(Long favoriteId);
 }

@@ -3,6 +3,7 @@ package com.yixihan.yicode.question.openapi.biz.service.note;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
@@ -44,6 +45,19 @@ public interface NoteService {
      * @param req 请求参数
      */
     CommonVO<Boolean> likeNote(LikeReq req);
+    /**
+     * 收藏题解
+     *
+     * @param req 请求参数
+     */
+    CommonVO<Boolean> collectionNote(ModifyCollectionReq req);
+    
+    /**
+     * 取消收藏题解
+     *
+     * @param req 请求参数
+     */
+    CommonVO<Boolean> cancelCollectionNote(ModifyCollectionReq req);
     
     /**
      * 题解明细

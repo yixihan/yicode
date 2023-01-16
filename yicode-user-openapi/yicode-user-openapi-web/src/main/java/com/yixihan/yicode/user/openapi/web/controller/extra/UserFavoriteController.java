@@ -4,7 +4,10 @@ import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.extra.UserFavoriteOpenApi;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import com.yixihan.yicode.user.openapi.biz.service.extra.UserFavoriteService;
@@ -49,16 +52,6 @@ public class UserFavoriteController implements UserFavoriteOpenApi {
     @Override
     public JsonResponse<PageVO<FavoriteVO>> getFavorites(FavoriteQueryReq req) {
         return JsonResponse.ok (service.getFavorites (req));
-    }
-    
-    @Override
-    public JsonResponse<CommonVO<Boolean>> addCollection(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.addCollection (req));
-    }
-    
-    @Override
-    public JsonResponse<CommonVO<Boolean>> delCollection(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.delCollection (req));
     }
     
     @Override

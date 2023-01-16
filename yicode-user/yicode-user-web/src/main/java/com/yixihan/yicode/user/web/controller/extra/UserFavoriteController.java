@@ -60,4 +60,9 @@ public class UserFavoriteController implements UserFavoriteApi {
     public ApiResult<FavoriteDtoResult> getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq) {
         return ApiResult.create (userFavoriteService.getFavoriteDetail (dtoReq));
     }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyFavorite(Long favoriteId) {
+        return ApiResult.create (userFavoriteService.verifyFavorite (favoriteId));
+    }
 }

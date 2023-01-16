@@ -43,12 +43,6 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     @Override
     @Transactional(rollbackFor = BizException.class)
     public CommonDtoResult<Boolean> addCollection(ModifyCollectionDtoReq dtoReq) {
-        // 校验收藏夹是否存在
-        if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作!");
-        }
-        // TODO 校验收藏内容与收藏夹类型是否匹配
-        
         // 校验是否重复收藏
         if (baseMapper.selectCount (new QueryWrapper<UserCollection> ()
                 .eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())

@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
@@ -44,6 +45,14 @@ public interface QuestionOpenApi {
     @ApiOperation("点赞问题")
     @PostMapping(value = "/like", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> likeQuestion(@RequestBody LikeReq req);
+    
+    @ApiOperation("收藏问题")
+    @PostMapping(value = "/collection", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> collectionQuestion(@RequestBody ModifyCollectionReq req);
+    
+    @ApiOperation("取消收藏问题")
+    @PostMapping(value = "/collection/cancel", produces = "application/json")
+    JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("问题明细")
     @GetMapping(value = "/detail", produces = "application/json")

@@ -3,7 +3,10 @@ package com.yixihan.yicode.user.openapi.api.rset.extra;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import io.swagger.annotations.Api;
@@ -39,16 +42,6 @@ public interface UserFavoriteOpenApi {
     @ApiOperation("获取所有收藏夹")
     @PostMapping(value = "/detail", produces = "application/json")
     JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
-    
-    //======================== TODO 移动到具体服务类
-    
-    @ApiOperation ("收藏内容")
-    @PostMapping(value = "/collection/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addCollection (@RequestBody ModifyCollectionReq req);
-    
-    @ApiOperation ("取消收藏内容")
-    @DeleteMapping(value = "/collection/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delCollection (@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("获取收藏夹内容")
     @PostMapping(value = "/collection/detail", produces = "application/json")

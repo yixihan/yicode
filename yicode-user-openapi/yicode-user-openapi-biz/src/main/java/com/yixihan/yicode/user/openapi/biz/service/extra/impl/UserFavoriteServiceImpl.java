@@ -12,7 +12,10 @@ import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.openapi.api.enums.FavoriteTypeEnums;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserCollectionFeignClient;
@@ -120,44 +123,6 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
                 dtoResult,
                 (o) -> CopyUtils.copySingle (FavoriteVO.class, o)
         );
-    }
-    
-    @Override
-    public CommonVO<Boolean> addCollection(ModifyCollectionReq req) {
-        Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID & 收藏内容 ID
-        if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            throw new BizException ("收藏夹不存在!");
-        }
-        // TODO 校验收藏内容 ID
-        
-        // 收藏内容
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
-        dtoReq.setUserId (userId);
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.addCollection (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-    
-    @Override
-    public CommonVO<Boolean> delCollection(ModifyCollectionReq req) {
-        Long userId = userService.getUser ().getUserId ();
-        // 校验收藏夹 ID & 收藏内容 ID
-        if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            throw new BizException ("收藏夹不存在!");
-        }
-        // TODO 校验收藏内容 ID
-        
-        // 取消收藏
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
-        dtoReq.setUserId (userId);
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
     }
     
     @Override

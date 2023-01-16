@@ -9,6 +9,7 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
@@ -17,14 +18,18 @@ import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoRe
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.openapi.api.enums.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserFavoriteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.LikeService;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +54,12 @@ public class QuestionServiceImpl implements QuestionService {
     
     @Resource
     private QuestionFeignClient questionFeignClient;
+    
+    @Resource
+    private UserCollectionFeignClient collectionFeignClient;
+    
+    @Resource
+    private UserFavoriteFeignClient favoriteFeignClient;
     
     /**
      * redis key : 点赞问题
@@ -162,6 +173,58 @@ public class QuestionServiceImpl implements QuestionService {
             }
             return CommonVO.create (dtoResult);
         }
+    }
+    
+    @Override
+    public CommonVO<Boolean> collectionQuestion(ModifyCollectionReq req) {
+        Long userId = userService.getUser ().getUserId ();
+        // 校验收藏夹 ID
+        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        // 校验收藏内容 ID
+        if (!questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        // 构造请求 body
+        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        dtoReq.setUserId (userId);
+        
+        // 收藏内容
+        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.addCollection (dtoReq).getResult ();
+    
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
+    }
+    
+    @Override
+    public CommonVO<Boolean> cancelCollectionQuestion(ModifyCollectionReq req) {
+        Long userId = userService.getUser ().getUserId ();
+        // 校验收藏夹 ID
+        if (!favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        // 校验收藏内容 ID
+        if (!questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+        
+        // 构造请求 body
+        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        dtoReq.setUserId (userId);
+        
+        // 取消收藏内容
+        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
+    
+        // 如果操作失败, 排除异常原因
+        if (!dtoResult.getData ()) {
+            throw new BizException (dtoResult.getMessage ());
+        }
+        return CommonVO.create (dtoResult);
     }
     
     @Override

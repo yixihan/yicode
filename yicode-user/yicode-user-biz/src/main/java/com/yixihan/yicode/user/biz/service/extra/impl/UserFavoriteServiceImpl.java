@@ -111,4 +111,10 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         
         return CopyUtils.copySingle (FavoriteDtoResult.class, favorite);
     }
+    
+    @Override
+    public CommonDtoResult<Boolean> verifyFavorite(Long favoriteId) {
+        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<UserFavorite> ()
+                .eq (UserFavorite.FAVORITE_ID, favoriteId)) > 0);
+    }
 }
