@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
@@ -104,7 +103,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         if (note != null) {
             note.setReadCount (note.getReadCount () + 1);
             baseMapper.updateById (note);
-            return CopyUtils.copySingle (NoteDtoResult.class, note);
+            return BeanUtil.toBean (note, NoteDtoResult.class);
         }
         
         return new NoteDtoResult ();
@@ -117,7 +116,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     
         return PageUtil.pageToPageDtoResult (
                 dtoResultPage,
-                (o) -> CopyUtils.copySingle (NoteDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, NoteDtoResult.class)
         );
     }
     

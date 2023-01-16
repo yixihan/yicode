@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
@@ -55,7 +54,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         wrapper.eq (UserInfo.USER_ID, userId);
         UserInfo info = Optional.ofNullable (baseMapper.selectOne (wrapper)).orElse (new UserInfo ());
     
-        return CopyUtils.copySingle (UserInfoDtoResult.class, info);
+        return BeanUtil.toBean (info, UserInfoDtoResult.class);
     }
     
     @Override
@@ -64,6 +63,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         wrapper.in (UserInfo.USER_ID, userIdList);
         List<UserInfo> infoList = baseMapper.selectList (wrapper);
     
-        return CopyUtils.copyMulti (UserInfoDtoResult.class, infoList);
+        return BeanUtil.copyToList (infoList, UserInfoDtoResult.class);
     }
 }

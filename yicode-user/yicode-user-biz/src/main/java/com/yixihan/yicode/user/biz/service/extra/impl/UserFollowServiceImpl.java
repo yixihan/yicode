@@ -8,7 +8,6 @@ import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFollowDtoReq;
@@ -126,7 +125,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         
         // 转为 PageDtoResult 格式
         PageDtoResult<FollowDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (values,
-                (o) -> CopyUtils.copySingle (FollowDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, FollowDtoResult.class)
         );
         
         // 设置用户名+用户头像

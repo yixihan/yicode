@@ -1,12 +1,12 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
@@ -57,7 +57,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         }
         
         // 新增收藏夹
-        AddFavoriteDtoReq dtoReq = CopyUtils.copySingle (AddFavoriteDtoReq.class, req);
+        AddFavoriteDtoReq dtoReq = BeanUtil.toBean (req, AddFavoriteDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -78,7 +78,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         }
         
         // 修改收藏夹
-        ModifyFavoriteDtoReq dtoReq = CopyUtils.copySingle (ModifyFavoriteDtoReq.class, req);
+        ModifyFavoriteDtoReq dtoReq = BeanUtil.toBean (req, ModifyFavoriteDtoReq.class);
         dtoReq.setUserId (userId);
         CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -114,26 +114,26 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     
     @Override
     public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
-        FavoriteQueryDtoReq dtoReq = CopyUtils.copySingle (FavoriteQueryDtoReq.class, req);
+        FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
 
         PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
         dtoResult.getRecords ().forEach ((o) -> o.setUserName (userService.getUser ().getUserName ()));
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (FavoriteVO.class, o)
+                (o) -> BeanUtil.toBean (o, FavoriteVO.class)
         );
     }
     
     @Override
     public PageVO<CollectionVO> getCollections(CollectionQueryReq req) {
-        CollectionQueryDtoReq dtoReq = CopyUtils.copySingle (CollectionQueryDtoReq.class, req);
+        CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
     
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.getCollections (dtoReq).getResult ();
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (CollectionVO.class, o)
+                (o) -> BeanUtil.toBean (o, CollectionVO.class)
         );
     }
     

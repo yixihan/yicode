@@ -1,12 +1,12 @@
 package com.yixihan.yicode.question.openapi.biz.service.message.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.biz.feign.message.MessageFeignClient;
@@ -53,7 +53,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         
         // 构建消息内容
         UserDtoResult user = userService.getUser ();
-        AddMessageDtoReq dtoReq = CopyUtils.copySingle (AddMessageDtoReq.class, req);
+        AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
     
         String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
         String message;

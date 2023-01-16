@@ -2,10 +2,10 @@ package com.yixihan.yicode.thirdpart.openapi.biz.service.code.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.code.CodeValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.code.PhotoCodeFeignClient;
@@ -42,7 +42,7 @@ public class PhotoCodeServiceImpl implements PhotoCodeService {
     
     @Override
     public CommonVO<Boolean> validateCode(CodeValidateReq req) {
-        CodeValidateDtoReq dtoReq = CopyUtils.copySingle (CodeValidateDtoReq.class, req);
+        CodeValidateDtoReq dtoReq = BeanUtil.toBean (req, CodeValidateDtoReq.class);
         CommonDtoResult<Boolean> dtoResult = codeFeignClient.validateCode (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());

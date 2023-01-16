@@ -1,11 +1,11 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
@@ -66,7 +66,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             flag = modifyUserWebsite (userId, req.getUserWebsiteList ());
         }
     
-        ModifyUserInfoDtoReq dtoReq = CopyUtils.copySingle (ModifyUserInfoDtoReq.class, req);
+        ModifyUserInfoDtoReq dtoReq = BeanUtil.toBean (req, ModifyUserInfoDtoReq.class);
         dtoReq.setUserId (userId);
         
         CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
@@ -80,7 +80,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfoVO getUserInfo(Long userId) {
         // 获取用户资料
         UserInfoDtoResult dtoResult = infoFeignClient.getUserInfo (userId).getResult ();
-        UserInfoVO userInfoVO = CopyUtils.copySingle (UserInfoVO.class, dtoResult);
+        UserInfoVO userInfoVO = BeanUtil.toBean (dtoResult, UserInfoVO.class);
     
         // 获取用户网战
         userInfoVO.setUserWebsiteList (websiteFeignClient.getUserWebsite (userId).getResult ().
@@ -88,7 +88,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     
         // 获取用户语言
         List<UserLanguageDtoResult> languageDtoResults = languageFeignClient.getUserLanguage (userId).getResult ();
-        userInfoVO.setUserLanguageList (CopyUtils.copyMulti (UserLanguageVO.class, languageDtoResults));
+        userInfoVO.setUserLanguageList (BeanUtil.copyToList (languageDtoResults, UserLanguageVO.class));
         
         // 获取用户标签
         List<LabelDtoResult> labelDtoResult = labelUserFeignClient.userLabelDetail (userId).getResult ();

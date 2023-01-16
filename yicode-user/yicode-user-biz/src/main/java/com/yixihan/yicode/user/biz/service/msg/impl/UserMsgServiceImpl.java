@@ -10,7 +10,6 @@ import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.MessageDetailDtoReq;
@@ -75,7 +74,7 @@ public class UserMsgServiceImpl extends ServiceImpl<UserMsgMapper, UserMsg> impl
         
         return PageUtil.pageToPageDtoResult (
                 pages,
-                o -> CopyUtils.copySingle (MessageDetailDtoResult.class, o)
+                o -> BeanUtil.toBean (o, MessageDetailDtoResult.class)
         );
     }
     

@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
@@ -8,7 +9,6 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
@@ -92,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
         }
         
         // 用户添加角色
-        ModifyUserRoleDtoReq dtoReq = CopyUtils.copySingle (ModifyUserRoleDtoReq.class, req);
+        ModifyUserRoleDtoReq dtoReq = BeanUtil.toBean (req, ModifyUserRoleDtoReq.class);
         CommonDtoResult<Boolean> dtoResult = userRoleFeignClient.addRole (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
@@ -123,23 +123,23 @@ public class RoleServiceImpl implements RoleService {
     
     @Override
     public PageVO<RoleVO> getRolePage(PageReq req) {
-        PageDtoReq dtoReq = CopyUtils.copySingle (PageDtoReq.class, req);
+        PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
         PageDtoResult<RoleDtoResult> dtoResult = roleFeignClient.getRolePage (dtoReq).getResult ();
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (RoleVO.class, o)
+                (o) -> BeanUtil.toBean (o, RoleVO.class)
         );
     }
     
     @Override
     public PageVO<RoleVO> getUserRolePage(UserRoleQueryReq req) {
-        UserRoleQueryDtoReq dtoReq = CopyUtils.copySingle (UserRoleQueryDtoReq.class, req);
+        UserRoleQueryDtoReq dtoReq = BeanUtil.toBean (req, UserRoleQueryDtoReq.class);
         PageDtoResult<RoleDtoResult> dtoResult = userRoleFeignClient.getUserRolePage (dtoReq).getResult ();
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (RoleVO.class, o)
+                (o) -> BeanUtil.toBean (o, RoleVO.class)
         );
     }
 }

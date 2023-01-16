@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.openapi.biz.service.note.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
@@ -9,7 +10,6 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
@@ -94,7 +94,7 @@ public class NoteServiceImpl implements NoteService {
         }
         
         // 构建请求 body
-        ModifyNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyNoteDtoReq.class, req);
+        ModifyNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyNoteDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
 
         // 添加题解
@@ -120,7 +120,7 @@ public class NoteServiceImpl implements NoteService {
         }
     
         // 构建请求 body
-        ModifyNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyNoteDtoReq.class, req);
+        ModifyNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyNoteDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
     
         // 修改题解
@@ -223,7 +223,7 @@ public class NoteServiceImpl implements NoteService {
         }
     
         // 构造请求 body
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
         dtoReq.setUserId (userId);
         
         // 收藏内容
@@ -249,7 +249,7 @@ public class NoteServiceImpl implements NoteService {
         }
         
         // 构造请求 body
-        ModifyCollectionDtoReq dtoReq = CopyUtils.copySingle (ModifyCollectionDtoReq.class, req);
+        ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
         dtoReq.setUserId (userId);
     
         // 取消收藏内容
@@ -273,7 +273,7 @@ public class NoteServiceImpl implements NoteService {
         }
     
         // 构造请求 body
-        ModifyLabelNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyLabelNoteDtoReq.class, req);
+        ModifyLabelNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelNoteDtoReq.class);
         
         // 添加题解标签
         CommonDtoResult<Boolean> dtoResult = labelNoteFeignClient.addNoteLabel (dtoReq).getResult ();
@@ -296,7 +296,7 @@ public class NoteServiceImpl implements NoteService {
         }
     
         // 构造请求 body
-        ModifyLabelNoteDtoReq dtoReq = CopyUtils.copySingle (ModifyLabelNoteDtoReq.class, req);
+        ModifyLabelNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelNoteDtoReq.class);
     
         // 添加题解标签
         CommonDtoResult<Boolean> dtoResult = labelNoteFeignClient.delNoteLabel (dtoReq).getResult ();
@@ -318,20 +318,20 @@ public class NoteServiceImpl implements NoteService {
         // 获取题解明细
         NoteDtoResult dtoResult = noteFeignClient.noteDetail (noteId).getResult ();
         
-        return CopyUtils.copySingle (NoteVO.class, dtoResult);
+        return BeanUtil.toBean (dtoResult, NoteVO.class);
     }
     
     @Override
     public PageVO<NoteVO> queryNote(QueryNoteReq req) {
         // 构建请求 body
-        QueryNoteDtoReq dtoReq = CopyUtils.copySingle (QueryNoteDtoReq.class, req);
+        QueryNoteDtoReq dtoReq = BeanUtil.toBean (req, QueryNoteDtoReq.class);
         
         // 搜索题解
         PageDtoResult<NoteDtoResult> dtoResult = noteFeignClient.queryNote (dtoReq).getResult ();
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (NoteVO.class, o)
+                (o) -> BeanUtil.toBean (o, NoteVO.class)
         );
     }
 }

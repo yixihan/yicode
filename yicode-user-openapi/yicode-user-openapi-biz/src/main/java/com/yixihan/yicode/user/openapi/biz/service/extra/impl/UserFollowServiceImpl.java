@@ -1,12 +1,12 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyFollowDtoReq;
@@ -93,7 +93,7 @@ public class UserFollowServiceImpl implements UserFollowService {
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (FollowVO.class, o)
+                (o) -> BeanUtil.toBean (o, FollowVO.class)
         );
     }
     
@@ -120,7 +120,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> CopyUtils.copySingle (FollowVO.class, o)
+                (o) -> BeanUtil.toBean (o, FollowVO.class)
         );
     }
 }

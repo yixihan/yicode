@@ -10,7 +10,6 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
@@ -100,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
         }
         
         // 构建请求 body
-        AddRootCommentDtoReq dtoReq = CopyUtils.copySingle (AddRootCommentDtoReq.class, req);
+        AddRootCommentDtoReq dtoReq = BeanUtil.toBean (req, AddRootCommentDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
         
         // 添加父评论
@@ -135,7 +134,7 @@ public class CommentServiceImpl implements CommentService {
         }
     
         // 构建请求 body
-        AddSonCommentDtoReq dtoReq = CopyUtils.copySingle (AddSonCommentDtoReq.class, req);
+        AddSonCommentDtoReq dtoReq = BeanUtil.toBean (req, AddSonCommentDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
         
         // 添加子评论
@@ -316,7 +315,7 @@ public class CommentServiceImpl implements CommentService {
         }
         
         // 构建请求 body
-        RootCommentDetailDtoReq dtoReq = CopyUtils.copySingle (RootCommentDetailDtoReq.class, req);
+        RootCommentDetailDtoReq dtoReq = BeanUtil.toBean (req, RootCommentDetailDtoReq.class);
         
         // 获取所有评论
         PageDtoResult<RootCommentDetailDtoResult> dtoResult = commentFeignClient.rootCommentDetail (dtoReq).getResult ();
@@ -371,7 +370,7 @@ public class CommentServiceImpl implements CommentService {
         }
         
         // 构建请求 body
-        SonCommentDetailDtoReq dtoReq = CopyUtils.copySingle (SonCommentDetailDtoReq.class, req);
+        SonCommentDetailDtoReq dtoReq = BeanUtil.toBean (req, SonCommentDetailDtoReq.class);
     
         // 获取所有评论
         PageDtoResult<SonCommentDetailDtoResult> dtoResult = commentFeignClient.sonCommentDetail (dtoReq).getResult ();

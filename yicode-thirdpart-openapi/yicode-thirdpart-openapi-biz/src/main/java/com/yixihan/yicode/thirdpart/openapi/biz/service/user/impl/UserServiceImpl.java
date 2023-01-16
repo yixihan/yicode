@@ -1,8 +1,8 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.user.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.pojo.User;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user.UserFeignClient;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
@@ -32,6 +32,6 @@ public class UserServiceImpl implements UserService {
     public User getUserInfo() {
         String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER).substring (AuthConstant.TOKEN_SUB_INDEX);
         UserDtoResult result = userFeignClient.getUserByToken (token).getResult ();
-        return CopyUtils.copySingle (User.class, result);
+        return BeanUtil.toBean (result, User.class);
     }
 }

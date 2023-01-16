@@ -1,9 +1,9 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
@@ -35,7 +35,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
+        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -49,7 +49,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
+        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -63,7 +63,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
+        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -77,7 +77,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
+        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -91,7 +91,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
+        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -105,7 +105,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
+        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -119,7 +119,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSSendDtoReq dtoReq = CopyUtils.copySingle (SMSSendDtoReq.class, req);
+        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -133,7 +133,7 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
-        SMSValidateDtoReq dtoReq = CopyUtils.copySingle (SMSValidateDtoReq.class, req);
+        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {

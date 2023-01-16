@@ -10,7 +10,6 @@ import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
@@ -98,7 +97,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         
         return PageUtil.pageToPageDtoResult (
                 values,
-                (o) -> CopyUtils.copySingle (FavoriteDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, FavoriteDtoResult.class)
         );
     }
     
@@ -109,7 +108,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
                 .eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ());
         UserFavorite favorite = baseMapper.selectOne (wrapper);
         
-        return CopyUtils.copySingle (FavoriteDtoResult.class, favorite);
+        return BeanUtil.toBean (favorite, FavoriteDtoResult.class);
     }
     
     @Override

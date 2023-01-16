@@ -9,7 +9,6 @@ import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.*;
@@ -143,7 +142,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         // 转换为 RootCommentDetailDtoResult 格式
         PageDtoResult<RootCommentDetailDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (
                 pages,
-                (o) -> CopyUtils.copySingle (RootCommentDetailDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, RootCommentDetailDtoResult.class)
         );
         
         // 如果父评论不为空
@@ -171,7 +170,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         
         return PageUtil.pageToPageDtoResult (
                 pages,
-                (o) -> CopyUtils.copySingle (SonCommentDetailDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class)
         );
     }
     
@@ -264,7 +263,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         }
         return commentReplyMapper.selectList (new QueryWrapper<CommentReply> ()
                 .in (CommentReply.ROOT_ID, rootCommentIdList)).stream ()
-                .map ((o) -> CopyUtils.copySingle (SonCommentDetailDtoResult.class, o))
+                .map ((o) -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class))
                 .collect (Collectors.groupingBy (
                         SonCommentDetailDtoResult::getRootId,
                         HashMap::new,

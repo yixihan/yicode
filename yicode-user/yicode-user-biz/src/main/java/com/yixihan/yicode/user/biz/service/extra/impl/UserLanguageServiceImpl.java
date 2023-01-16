@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserLanguageService;
@@ -64,6 +63,6 @@ public class UserLanguageServiceImpl extends ServiceImpl<UserLanguageMapper, Use
         QueryWrapper<UserLanguage> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserLanguage.USER_ID, userId);
         List<UserLanguage> values = Optional.ofNullable (baseMapper.selectList (wrapper)).orElse (Collections.emptyList ());
-        return CopyUtils.copyMulti (UserLanguageDtoResult.class, values);
+        return BeanUtil.copyToList (values, UserLanguageDtoResult.class);
     }
 }

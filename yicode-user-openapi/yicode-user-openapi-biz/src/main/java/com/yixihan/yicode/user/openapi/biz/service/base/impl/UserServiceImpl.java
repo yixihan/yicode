@@ -1,10 +1,10 @@
 package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
             log.error ("错误的注册方式!", new BizException (800001, "错误的注册方式!"));
             throw new BizException ("错误的注册方式!");
         }
-        RegisterUserDtoReq dtoReq = CopyUtils.copySingle (RegisterUserDtoReq.class, req);
+        RegisterUserDtoReq dtoReq = BeanUtil.toBean (req, RegisterUserDtoReq.class);
         CommonDtoResult<Boolean> dtoResult = userFeignClient.register (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException ("错误的验证码方式!");
         }
 
-        ResetPasswordDtoReq dtoReq = CopyUtils.copySingle (ResetPasswordDtoReq.class, req);
+        ResetPasswordDtoReq dtoReq = BeanUtil.toBean (req, ResetPasswordDtoReq.class);
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetPassword (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -213,7 +213,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException ("验证码错误!");
         }
         
-        BindEmailDtoReq dtoReq = CopyUtils.copySingle (BindEmailDtoReq.class, req);
+        BindEmailDtoReq dtoReq = BeanUtil.toBean (req, BindEmailDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -260,7 +260,7 @@ public class UserServiceImpl implements UserService {
         if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
             throw new BizException ("验证码错误!");
         }
-        BindMobileDtoReq dtoReq = CopyUtils.copySingle (BindMobileDtoReq.class, req);
+        BindMobileDtoReq dtoReq = BeanUtil.toBean (req, BindMobileDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
         CommonDtoResult<Boolean> dtoResult = userFeignClient.bindMobile (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -300,7 +300,7 @@ public class UserServiceImpl implements UserService {
             throw new BizException ("用户名已被占用!");
         }
 
-        ResetUserNameDtoReq dtoReq = CopyUtils.copySingle (ResetUserNameDtoReq.class, req);
+        ResetUserNameDtoReq dtoReq = BeanUtil.toBean (req, ResetUserNameDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
 
         CommonDtoResult<Boolean> dtoResult = userFeignClient.resetUserName (dtoReq).getResult ();
@@ -338,8 +338,8 @@ public class UserServiceImpl implements UserService {
      * @return {@link UserDetailInfoVO}
      */
     private UserDetailInfoVO getUserDetailInfoVO(UserDtoResult userDtoResult, UserInfoVO userInfoVO, List<RoleDtoResult> userRoleDtoResult) {
-        UserVO userVO = CopyUtils.copySingle (UserVO.class, userDtoResult);
-        List<RoleVO> userRoleList = CopyUtils.copyMulti (RoleVO.class, userRoleDtoResult);
+        UserVO userVO = BeanUtil.toBean (userDtoResult, UserVO.class);
+        List<RoleVO> userRoleList = BeanUtil.copyToList (userRoleDtoResult, RoleVO.class);
         return new UserDetailInfoVO (userVO, userRoleList, userInfoVO);
     }
 }

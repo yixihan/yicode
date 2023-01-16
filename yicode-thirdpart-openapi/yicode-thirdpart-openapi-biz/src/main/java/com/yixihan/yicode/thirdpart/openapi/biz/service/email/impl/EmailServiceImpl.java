@@ -1,9 +1,9 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
+        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
+        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.LOGIN.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -63,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
+        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -77,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
+        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.REGISTER.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -91,7 +91,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
+        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -105,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
+        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -119,7 +119,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailSendDtoReq dtoReq = CopyUtils.copySingle (EmailSendDtoReq.class, req);
+        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
         if (!dtoResult.getData ()) {
@@ -133,7 +133,7 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
-        EmailValidateDtoReq dtoReq = CopyUtils.copySingle (EmailValidateDtoReq.class, req);
+        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
         if (!dtoResult.getData ()) {

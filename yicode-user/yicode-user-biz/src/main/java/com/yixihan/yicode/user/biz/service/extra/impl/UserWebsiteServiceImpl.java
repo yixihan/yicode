@@ -1,12 +1,12 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserWebsiteService;
@@ -77,6 +77,6 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
         List<UserWebsite> values = Optional.ofNullable (baseMapper.selectList (wrapper))
                 .orElse (Collections.emptyList ());
         
-        return CopyUtils.copyMulti (UserWebsiteDtoResult.class, values);
+        return BeanUtil.copyToList (values, UserWebsiteDtoResult.class);
     }
 }

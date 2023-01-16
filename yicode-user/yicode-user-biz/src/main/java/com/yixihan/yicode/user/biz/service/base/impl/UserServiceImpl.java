@@ -13,7 +13,6 @@ import com.yixihan.yicode.common.enums.RoleEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.api.enums.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
@@ -69,9 +68,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDtoResult getUserById(Long userId) {
         User user = baseMapper.selectById (userId);
-        return CopyUtils.copySingle (
-                UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ())
+        return BeanUtil.toBean (
+                Optional.ofNullable (user).orElse (new User ()),
+                UserDtoResult.class
         );
     }
     
@@ -81,7 +80,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (CollectionUtil.isEmpty (userList)) {
             return new ArrayList<> ();
         }
-        return CopyUtils.copyMulti (UserDtoResult.class, userList);
+        return BeanUtil.copyToList (userList, UserDtoResult.class);
     }
     
     @Override
@@ -89,9 +88,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_NAME, userName);
         User user = baseMapper.selectOne (wrapper);
-        return CopyUtils.copySingle (
-                UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ())
+        return BeanUtil.toBean (
+                Optional.ofNullable (user).orElse (new User ()),
+                UserDtoResult.class
         );
     }
 
@@ -100,9 +99,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<> ();
         wrapper.eq (User.USER_MOBILE, mobile);
         User user = baseMapper.selectOne (wrapper);
-        return CopyUtils.copySingle (
-                UserDtoResult.class,
-                Optional.ofNullable (user).orElse (new User ())
+        return BeanUtil.toBean (
+                Optional.ofNullable (user).orElse (new User ()),
+                UserDtoResult.class
         );
     }
 
@@ -112,7 +111,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.eq (User.USER_EMAIL, email);
         User user =  Optional.ofNullable (baseMapper.selectOne (wrapper))
                 .orElse (new User ());
-        return CopyUtils.copySingle (UserDtoResult.class, user);
+        return BeanUtil.toBean (user, UserDtoResult.class);
     }
 
     @Override

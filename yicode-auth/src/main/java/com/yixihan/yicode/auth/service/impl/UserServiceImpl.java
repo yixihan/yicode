@@ -1,5 +1,6 @@
 package com.yixihan.yicode.auth.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.auth.feign.thirdpart.code.PhotoCodeFeignClient;
 import com.yixihan.yicode.auth.feign.thirdpart.email.EmailFeignClient;
 import com.yixihan.yicode.auth.feign.thirdpart.sms.SMSFeignClient;
@@ -10,7 +11,6 @@ import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
@@ -130,8 +130,8 @@ public class UserServiceImpl implements UserService {
 
     private User getUser (UserDtoResult userDtoResult) {
         List<RoleDtoResult> roleDtoResults = userRoleFeignClient.getUserRoleList (userDtoResult.getUserId ()).getResult ();
-        User user = CopyUtils.copySingle (User.class, userDtoResult);
-        List<Role> userRoleList = CopyUtils.copyMulti (Role.class, roleDtoResults);
+        User user = BeanUtil.toBean (userDtoResult, User.class);
+        List<Role> userRoleList = BeanUtil.copyToList (roleDtoResults, Role.class);
         user.setAuthorities (userRoleList);
         return user;
     }

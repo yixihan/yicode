@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.service.msg.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.rabbitmq.client.Channel;
@@ -11,7 +12,6 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.message.api.constant.MessageConstant;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
@@ -74,7 +74,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         } else {
             message = StrUtil.format (template, user.getUserName ());
         }
-        AddMessageDtoReq dtoReq = CopyUtils.copySingle (AddMessageDtoReq.class, req);
+        AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
         dtoReq.setMsg (message);
         dtoReq.setSendUserId (user.getUserId ());
         dtoReq.setSendUserName (user.getUserName ());
@@ -92,7 +92,7 @@ public class UserMsgServiceImpl implements UserMsgService {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         
-        ReadMessageDtoReq dtoReq = CopyUtils.copySingle (ReadMessageDtoReq.class, req);
+        ReadMessageDtoReq dtoReq = BeanUtil.toBean (req, ReadMessageDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
         
         CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.readMessages (dtoReq).getResult ();
@@ -101,11 +101,11 @@ public class UserMsgServiceImpl implements UserMsgService {
     
     @Override
     public PageVO<MessageDetailVO> messageDetail(PageReq req) {
-        MessageDetailDtoReq dtoReq = CopyUtils.copySingle (MessageDetailDtoReq.class, req);
+        MessageDetailDtoReq dtoReq = BeanUtil.toBean (req, MessageDetailDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
         
         PageDtoResult<MessageDetailDtoResult> dtoResult = userMsgFeignClient.messageDetail (dtoReq).getResult ();
-        return PageVOUtil.pageDtoToPageVO (dtoResult, (o) -> CopyUtils.copySingle (MessageDetailVO.class, o));
+        return PageVOUtil.pageDtoToPageVO (dtoResult, (o) -> BeanUtil.toBean (o, MessageDetailVO.class));
     }
     
     @Override

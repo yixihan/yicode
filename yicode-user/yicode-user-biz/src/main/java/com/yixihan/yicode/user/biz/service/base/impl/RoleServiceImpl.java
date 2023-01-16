@@ -1,5 +1,6 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,7 +9,6 @@ import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
@@ -57,7 +57,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 null);
         return PageUtil.pageToPageDtoResult (
                 Optional.ofNullable (rolePage).orElse (new Page<> ()),
-                (o) -> CopyUtils.copySingle (RoleDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, RoleDtoResult.class)
         );
     }
     
@@ -66,7 +66,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         List<Role> roleList = Optional.ofNullable (baseMapper.selectList (null))
                 .orElse (Collections.emptyList ());
         
-        return CopyUtils.copyMulti (RoleDtoResult.class, roleList);
+        return BeanUtil.copyToList (roleList, RoleDtoResult.class);
     }
     
     @Override

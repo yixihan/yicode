@@ -1,12 +1,12 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.CopyUtils;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
@@ -45,7 +45,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         List<Long> roleIdList = userRoleIdList.stream ()
                 .map (UserRole::getRoleId).collect(Collectors.toList());
         List<Role> userRoleList = roleService.getRoleList (roleIdList);
-        return CopyUtils.copyMulti (RoleDtoResult.class, userRoleList);
+        return BeanUtil.copyToList (userRoleList, RoleDtoResult.class);
     }
     
     @Override
@@ -66,7 +66,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     
         return PageUtil.pageToPageDtoResult (
                 rolePage,
-                (o) -> CopyUtils.copySingle (RoleDtoResult.class, o)
+                (o) -> BeanUtil.toBean (o, RoleDtoResult.class)
         );
     }
 
