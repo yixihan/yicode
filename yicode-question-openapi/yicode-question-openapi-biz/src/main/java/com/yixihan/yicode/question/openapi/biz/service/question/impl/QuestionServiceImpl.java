@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -225,6 +226,8 @@ public class QuestionServiceImpl implements QuestionService {
         dtoResult.setNoteCount (noteFeignClient.questionNoteCount (dtoResult.getQuestionId ()).getResult ().getData ());
         
         // 计算通过率
-        dtoResult.setPassRate (BigDecimal.valueOf (dtoResult.getSuccessCount () / dtoResult.getCommentCount ()));
+        if (!dtoResult.getSuccessCount ().equals (NumConstant.NUM_0)) {
+            dtoResult.setPassRate (BigDecimal.valueOf (dtoResult.getSuccessCount () / dtoResult.getCommentCount ()));
+        }
     }
 }
