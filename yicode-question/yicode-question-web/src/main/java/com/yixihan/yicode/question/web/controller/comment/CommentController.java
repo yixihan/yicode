@@ -48,8 +48,8 @@ public class CommentController implements CommentApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Integer>> questionCommentCount(QuestionCommentCountDtoReq dtoReq) {
-        return ApiResult.create (service.questionCommentCount (dtoReq));
+    public ApiResult<CommonDtoResult<Integer>> commentCount(QuestionCommentCountDtoReq dtoReq) {
+        return ApiResult.create (service.commentCount (dtoReq));
     }
     
     @Override

@@ -41,7 +41,7 @@ public interface CommentApi {
     
     @ApiOperation("获取评论数量")
     @PostMapping(value = "/all/count", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> questionCommentCount (@RequestBody QuestionCommentCountDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Integer>> commentCount(@RequestBody QuestionCommentCountDtoReq dtoReq);
     
     @ApiOperation("获取所有评论")
     @PostMapping(value = "/all/root", produces = "application/json")

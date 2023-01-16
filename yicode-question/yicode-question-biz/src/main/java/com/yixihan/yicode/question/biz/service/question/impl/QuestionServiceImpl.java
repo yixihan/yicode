@@ -47,7 +47,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public CommonDtoResult<Boolean> modifyQuestion(ModifyQuestionDtoReq dtoReq) {
         Question question = BeanUtil.toBean (dtoReq, Question.class);
-    
+        question.setVersion (baseMapper.selectById (dtoReq.getQuestionId ()).getVersion ());
+        
         int modify = baseMapper.updateById (question);
     
         if (modify != 1) {
@@ -105,5 +106,33 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public CommonDtoResult<Boolean> verifyQuestion(Long questionId) {
         return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Question> ()
                 .eq (Question.QUESTION_ID, questionId)) > 0);
+    }
+    
+    @Override
+    public void modifyQuestionCommentCount(Long questionId, Integer commentCount) {
+        Question question = baseMapper.selectById (questionId);
+        question.setCommentCount (commentCount);
+        baseMapper.updateById (question);
+    }
+    
+    @Override
+    public void modifyQuestionNoteCount(Long questionId, Integer noteCount) {
+        Question question = baseMapper.selectById (questionId);
+        question.setNoteCount (noteCount);
+        baseMapper.updateById (question);
+    }
+    
+    @Override
+    public void modifyQuestionCommitCount(Long questionId, Integer commitCount) {
+        Question question = baseMapper.selectById (questionId);
+        question.setCommitCount (commitCount);
+        baseMapper.updateById (question);
+    }
+    
+    @Override
+    public void modifyQuestionSuccessCount(Long questionId, Integer successCount) {
+        Question question = baseMapper.selectById (questionId);
+        question.setSuccessCount (successCount);
+        baseMapper.updateById (question);
     }
 }

@@ -71,4 +71,36 @@ public interface QuestionService extends IService<Question> {
      * @return 存在 : true | 不存在 : false
      */
     CommonDtoResult<Boolean> verifyQuestion(Long questionId);
+    
+    /**
+     * 更新问题评论数
+     *
+     * @param questionId 问题 ID
+     * @param commentCount 评论数量
+     */
+    void modifyQuestionCommentCount (Long questionId, Integer commentCount);
+    
+    /**
+     * 更新问题题解数
+     *
+     * @param questionId 问题 ID
+     * @param noteCount 题解数量
+     */
+    void modifyQuestionNoteCount (Long questionId, Integer noteCount);
+    
+    /**
+     * 更新问题提交数
+     *
+     * @param questionId 问题 ID
+     * @param commitCount 提交数量
+     */
+    void modifyQuestionCommitCount (Long questionId, Integer commitCount);
+    
+    /**
+     * 更新问题通过数
+     *
+     * @param questionId 问题 ID
+     * @param successCount 通过数量
+     */
+    void modifyQuestionSuccessCount (Long questionId, Integer successCount);
 }

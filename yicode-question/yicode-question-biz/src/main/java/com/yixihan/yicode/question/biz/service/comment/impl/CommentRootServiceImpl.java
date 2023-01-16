@@ -16,6 +16,8 @@ import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
+import com.yixihan.yicode.question.biz.service.note.NoteService;
+import com.yixihan.yicode.question.biz.service.question.QuestionService;
 import com.yixihan.yicode.question.dal.mapper.comment.CommentReplyMapper;
 import com.yixihan.yicode.question.dal.mapper.comment.CommentRootMapper;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentReply;
@@ -43,6 +45,12 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     @Resource
     private CommentReplyMapper commentReplyMapper;
     
+    @Resource
+    private QuestionService questionService;
+    
+    @Resource
+    private NoteService noteService;
+    
     @Override
     public CommonDtoResult<Boolean> addRootComment(AddRootCommentDtoReq dtoReq) {
         CommentRoot commentRoot = BeanUtil.toBean (dtoReq, CommentRoot.class);
@@ -51,6 +59,9 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
+        
+        // 异步更新评论内容评论数
+        modifyAnswerCommentCount (dtoReq.getAnswerId (), dtoReq.getAnswerType ());
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -63,17 +74,25 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         // 更新父评论回复数量
-        modifyRootCommentReply (commentReply.getRootId ());
+        Long rootId = commentReply.getRootId ();
+        modifyRootCommentReply (rootId);
+        // 异步更新评论内容评论数
+        CommentRoot commentRoot = baseMapper.selectById (rootId);
+        modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
     public CommonDtoResult<Boolean> delRootComment(Long rootCommentId) {
+        // 异步更新评论内容评论数
+        CommentRoot commentRoot = baseMapper.selectById (rootCommentId);
         int modify = baseMapper.deleteById (rootCommentId);
     
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
+        // 异步更新评论内容评论数
+        modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -86,12 +105,16 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         // 更新父评论回复数量
-        modifyRootCommentReply (commentReply.getRootId ());
+        Long rootId = commentReply.getRootId ();
+        modifyRootCommentReply (rootId);
+        // 异步更新评论内容评论数
+        CommentRoot commentRoot = baseMapper.selectById (rootId);
+        modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
-    public CommonDtoResult<Integer> questionCommentCount(QuestionCommentCountDtoReq dtoReq) {
+    public CommonDtoResult<Integer> commentCount(QuestionCommentCountDtoReq dtoReq) {
         List<CommentRoot> commentRootList = baseMapper.selectList (new QueryWrapper<CommentRoot> ()
                 .eq (CommentRoot.ANSWER_ID, dtoReq.getAnswerId ())
                 .eq (CommentRoot.ANSWER_TYPE, dtoReq.getAnswerType ()));
@@ -217,6 +240,16 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
                 .eq (CommentReply.ROOT_ID, rootCommentId));
         commentRoot.setReplyCount (replyCount);
         baseMapper.updateById (commentRoot);
+    }
+    
+    @Async
+    public void modifyAnswerCommentCount (Long answerId, String answerType) {
+        Integer count = commentCount (new QuestionCommentCountDtoReq (answerId, answerType)).getData ();
+        if ("QUESTION".equals (answerType)) {
+            questionService.modifyQuestionCommentCount (answerId, count);
+        } else if ("NOTE".equals (answerType)) {
+            noteService.modifyNoteCommentCount (answerId, count);
+        }
     }
     
     /**

@@ -53,7 +53,7 @@ public interface CommentRootService extends IService<CommentRoot> {
      * @param dtoReq 请求参数
      * @return 评论数量
      */
-    CommonDtoResult<Integer> questionCommentCount (QuestionCommentCountDtoReq dtoReq);
+    CommonDtoResult<Integer> commentCount(QuestionCommentCountDtoReq dtoReq);
     
     /**
      * 获取所有评论

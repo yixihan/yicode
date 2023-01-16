@@ -78,4 +78,12 @@ public interface NoteService extends IService<Note> {
      * @return 存在 : true | 不存在 : false
      */
     CommonDtoResult<Boolean> verifyNote(Long noteId);
+    
+    /**
+     * 更新题解评论数
+     *
+     * @param noteId 题解 ID
+     * @param commentCount 评论数量
+     */
+    void modifyNoteCommentCount(Long noteId, Integer commentCount);
 }

@@ -14,10 +14,13 @@ import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
 import com.yixihan.yicode.question.biz.service.note.NoteService;
+import com.yixihan.yicode.question.biz.service.question.QuestionService;
 import com.yixihan.yicode.question.dal.mapper.note.NoteMapper;
 import com.yixihan.yicode.question.dal.pojo.note.Note;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -31,6 +34,9 @@ import java.util.List;
 @Service
 public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements NoteService {
     
+    @Resource
+    private QuestionService questionService;
+    
     @Override
     public CommonDtoResult<Boolean> addNote(ModifyNoteDtoReq dtoReq) {
         Note note = BeanUtil.toBean (dtoReq, Note.class);
@@ -40,6 +46,8 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
+        // 异步更新问题题解数
+        modifyQuestionNoteCount(dtoReq.getQuestionId ());
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -57,11 +65,15 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     
     @Override
     public CommonDtoResult<Boolean> delNote(List<Long> noteIdList) {
+        List<Note> noteList = baseMapper.selectBatchIds (noteIdList);
         int modify = baseMapper.deleteBatchIds (noteIdList);
         
         if (modify < 0) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
+        
+        // 异步更新问题题解数
+        noteList.forEach ((item) -> modifyQuestionNoteCount(item.getQuestionId ()));
         return new CommonDtoResult<> (Boolean.TRUE);
     }
     
@@ -113,5 +125,20 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     public CommonDtoResult<Boolean> verifyNote(Long noteId) {
         return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Note> ()
                 .eq (Note.NOTE_ID, noteId)) > 0);
+    }
+    
+    @Override
+    public void modifyNoteCommentCount(Long noteId, Integer commentCount) {
+        Note note = baseMapper.selectById (noteId);
+        note.setCommentCount (commentCount);
+        
+        baseMapper.updateById (note);
+    }
+    
+    @Async
+    public void modifyQuestionNoteCount (Long questionId) {
+        Integer count = questionNoteCount(questionId).getData ();
+        
+        questionService.modifyQuestionNoteCount (questionId, count);
     }
 }
