@@ -2,6 +2,7 @@ package com.yixihan.yicode.question.api.rest.label;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,11 +24,11 @@ public interface LabelQuestionApi {
     
     @ApiOperation("添加问题标签")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addQuestionLabel (@RequestBody String questionLabelName);
+    ApiResult<CommonDtoResult<Boolean>> addQuestionLabel (@RequestBody ModifyLabelQuestionDtoReq dtoReq);
     
     @ApiOperation ("删除问题标签")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delQuestionLabel (@RequestBody Long questionLabelId);
+    ApiResult<CommonDtoResult<Boolean>> delQuestionLabel (@RequestBody ModifyLabelQuestionDtoReq dtoReq);
     
     @ApiOperation ("问题标签明细")
     @PostMapping(value = "/detail", produces = "application/json")

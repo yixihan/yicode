@@ -3,6 +3,7 @@ package com.yixihan.yicode.question.web.controller.label;
 
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.api.rest.label.LabelQuestionApi;
 import com.yixihan.yicode.question.biz.service.label.LabelQuestionService;
@@ -28,13 +29,13 @@ public class LabelQuestionController implements LabelQuestionApi {
     private LabelQuestionService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addQuestionLabel(String questionLabelName) {
-        return ApiResult.create (service.addQuestionLabel (questionLabelName));
+    public ApiResult<CommonDtoResult<Boolean>> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+        return ApiResult.create (service.addQuestionLabel (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delQuestionLabel(Long questionLabelId) {
-        return ApiResult.create (service.delQuestionLabel (questionLabelId));
+    public ApiResult<CommonDtoResult<Boolean>> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+        return ApiResult.create (service.delQuestionLabel (dtoReq));
     }
     
     @Override
