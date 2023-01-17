@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("查询用户每月每日一题情况-dtoReq")
-public class MonthUserDailyQuestionDetailReq {
+@ApiModel("查询用户每日一题情况-dtoReq")
+public class UserDailyQuestionDetailReq {
     
-    @ApiModelProperty(value = "月份 [yyyy-MM]")
-    private String month;
+    @ApiModelProperty(value = "起始月份 [yyyy-MM]")
+    private String startMonth;
     
-    @ApiModelProperty(value = "用户 id")
-    private Long userId;
+    @ApiModelProperty(value = "终止月份 [yyyy-MM]")
+    private String endMonth;
 }

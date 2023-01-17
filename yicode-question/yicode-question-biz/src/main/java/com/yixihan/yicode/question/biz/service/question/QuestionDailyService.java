@@ -1,8 +1,11 @@
 package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionDaily;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -15,9 +18,9 @@ import com.yixihan.yicode.question.dal.pojo.question.QuestionDaily;
 public interface QuestionDailyService extends IService<QuestionDaily> {
     
     /**
-     * 生成每日一题
+     * 获取指定月每日一题
      *
-     * @param questionId 问题 ID
+     * @param month 月份
      */
-    CommonDtoResult<Boolean> addDailyQuestion(Long questionId);
+    List<QuestionDailyDtoResult> dailyQuestionDetail(Date month);
 }

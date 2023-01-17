@@ -4,7 +4,7 @@ package com.yixihan.yicode.question.web.controller.question;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.MonthUserDailyQuestionDetailDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.UserDailyQuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.UserDailyQuestionDtoResult;
 import com.yixihan.yicode.question.api.rest.question.QuestionDailyUserApi;
 import com.yixihan.yicode.question.biz.service.question.QuestionDailyUserService;
@@ -35,7 +35,12 @@ public class QuestionDailyUserController implements QuestionDailyUserApi {
     }
     
     @Override
-    public ApiResult<List<UserDailyQuestionDtoResult>> monthUserDailyQuestionDetail(MonthUserDailyQuestionDetailDtoReq dtoReq) {
+    public ApiResult<CommonDtoResult<Integer>> dailyQuestionCount(Long userId) {
+        return ApiResult.create (service.dailyQuestionCount (userId));
+    }
+    
+    @Override
+    public ApiResult<List<UserDailyQuestionDtoResult>> userDailyQuestionDetail(UserDailyQuestionDetailDtoReq dtoReq) {
         return ApiResult.create (service.monthUserDailyQuestionDetail (dtoReq));
     }
 }

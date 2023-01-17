@@ -1,14 +1,16 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
 import com.yixihan.yicode.question.api.rest.question.QuestionDailyApi;
 import com.yixihan.yicode.question.biz.service.question.QuestionDailyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -26,7 +28,7 @@ public class QuestionDailyController implements QuestionDailyApi {
     private QuestionDailyService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addDailyQuestion(Long questionId) {
-        return ApiResult.create (service.addDailyQuestion (questionId));
+    public ApiResult<List<QuestionDailyDtoResult>> dailyQuestionDetail(Date month) {
+        return ApiResult.create (service.dailyQuestionDetail (month));
     }
 }
