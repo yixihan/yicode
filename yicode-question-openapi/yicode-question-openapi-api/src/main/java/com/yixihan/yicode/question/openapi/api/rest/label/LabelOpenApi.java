@@ -33,19 +33,19 @@ public interface LabelOpenApi {
     JsonResponse<List<LabelVO>> labelDetail(@RequestBody List<Long> labelIdList);
     
     @ApiOperation("题解标签明细")
-    @PostMapping(value = "/detail/note", produces = "application/json")
+    @GetMapping(value = "/detail/note", produces = "application/json")
     JsonResponse<List<LabelVO>> noteLabelDetail(@RequestParam Long noteId);
     
     @ApiOperation("问题标签明细")
-    @PostMapping(value = "/detail/question", produces = "application/json")
+    @GetMapping(value = "/detail/question", produces = "application/json")
     JsonResponse<List<LabelVO>> questionLabelDetail(@RequestParam Long questionId);
     
     @ApiOperation("全部题解标签")
-    @PostMapping(value = "/all/note", produces = "application/json")
+    @GetMapping(value = "/all/note", produces = "application/json")
     JsonResponse<List<LabelVO>> AllNoteLabel();
     
     @ApiOperation("全部问题标签")
-    @PostMapping(value = "/all/question", produces = "application/json")
+    @GetMapping(value = "/all/question", produces = "application/json")
     JsonResponse<List<LabelVO>> AllQuestionLabel();
     
 }
