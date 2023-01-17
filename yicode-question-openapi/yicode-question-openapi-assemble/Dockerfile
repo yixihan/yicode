@@ -1,4 +1,4 @@
-FROM oracle-jdk:8
+FROM oracle-jdk:8.1
 EXPOSE 15200
 
 ARG APLLLICATION=yicode-question-openapi

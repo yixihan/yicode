@@ -1,4 +1,4 @@
-FROM oracle-jdk:8
+FROM oracle-jdk:8.1
 EXPOSE 13100
 
 ARG APLLLICATION=yicode-auth

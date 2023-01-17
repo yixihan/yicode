@@ -1,4 +1,4 @@
-FROM myos
+FROM oracle-jdk:8.1
 EXPOSE 17100
 
 ARG APLLLICATION=yicode-message
