@@ -18,10 +18,13 @@ import lombok.NoArgsConstructor;
 @ApiModel("修改测试用例-dtoReq")
 public class ModifyQuestionCaseReq {
     
+    @ApiModelProperty(value = "测试用例 id")
+    private Long id;
+    
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
     
-    @ApiModelProperty(value = "是否启用")
+    @ApiModelProperty(value = "是否启用(0:不启用, 1:启用)")
     private Integer enable;
     
     @ApiModelProperty(value = "测试用例参数")

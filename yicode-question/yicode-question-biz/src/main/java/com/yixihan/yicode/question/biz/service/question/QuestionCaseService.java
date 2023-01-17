@@ -35,9 +35,9 @@ public interface QuestionCaseService extends IService<QuestionCase> {
     /**
      * 删除测试用例
      *
-     * @param questionCaseId 测试用例 ID
+     * @param id 测试用例 ID
      */
-    CommonDtoResult<Boolean> delQuestionCase(Long questionCaseId);
+    CommonDtoResult<Boolean> delQuestionCase(Long id);
     
     /**
      * 获取测试用例
@@ -46,4 +46,10 @@ public interface QuestionCaseService extends IService<QuestionCase> {
      */
     List<QuestionCaseDtoResult> allQuestionCase(Long questionId);
     
+    /**
+     * 校验测试用例
+     *
+     * @param id 测试用例 ID
+     */
+    CommonDtoResult<Boolean> verifyQuestionCase(Long id);
 }

@@ -65,6 +65,8 @@ public class QuestionCase implements Serializable {
     public static final String ID = "id";
 
     public static final String QUESTION_ID = "question_id";
+    
+    public static final String ENABLE = "enable";
 
     public static final String CASE_PARAMS = "case_params";
 

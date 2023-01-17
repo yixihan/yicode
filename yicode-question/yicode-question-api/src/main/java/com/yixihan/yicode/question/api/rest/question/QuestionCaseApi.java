@@ -32,9 +32,14 @@ public interface QuestionCaseApi {
     
     @ApiOperation("删除测试用例")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delQuestionCase (@RequestBody Long questionCaseId);
+    ApiResult<CommonDtoResult<Boolean>> delQuestionCase (@RequestBody Long id);
     
     @ApiOperation("获取测试用例")
     @PostMapping(value = "/detail", produces = "application/json")
     ApiResult<List<QuestionCaseDtoResult>> allQuestionCase (@RequestBody Long questionId);
+    
+    
+    @ApiOperation("校验测试用例")
+    @PostMapping(value = "/verify", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> verifyQuestionCase (@RequestBody Long id);
 }

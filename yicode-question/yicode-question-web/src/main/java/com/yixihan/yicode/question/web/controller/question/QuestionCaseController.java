@@ -39,12 +39,17 @@ public class QuestionCaseController implements QuestionCaseApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delQuestionCase(Long questionCaseId) {
-        return ApiResult.create (service.delQuestionCase (questionCaseId));
+    public ApiResult<CommonDtoResult<Boolean>> delQuestionCase(Long id) {
+        return ApiResult.create (service.delQuestionCase (id));
     }
     
     @Override
     public ApiResult<List<QuestionCaseDtoResult>> allQuestionCase(Long questionId) {
         return ApiResult.create (service.allQuestionCase (questionId));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> verifyQuestionCase(Long id) {
+        return ApiResult.create (service.verifyQuestionCase (id));
     }
 }
