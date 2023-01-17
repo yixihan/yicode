@@ -12,6 +12,10 @@ import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelNoteFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelQuestionFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.note.NoteFeignClient;
+import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.label.LabelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,18 @@ public class LabelServiceImpl implements LabelService {
     
     @Resource
     private LabelFeignClient labelFeignClient;
+    
+    @Resource
+    private LabelNoteFeignClient labelNoteFeignClient;
+    
+    @Resource
+    private LabelQuestionFeignClient labelQuestionFeignClient;
+    
+    @Resource
+    private NoteFeignClient noteFeignClient;
+    
+    @Resource
+    private QuestionFeignClient questionFeignClient;
     
     
     @Override
@@ -79,5 +95,41 @@ public class LabelServiceImpl implements LabelService {
         List<LabelDtoResult> dtoResult = labelFeignClient.labelDetail (labelIdList).getResult ();
         
         return BeanUtil.copyToList (dtoResult, LabelVO.class);
+    }
+    
+    @Override
+    public List<LabelVO> noteLabelDetail(Long noteId) {
+        if (!noteFeignClient.verifyNote (noteId).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        List<LabelDtoResult> dtoResultList = labelNoteFeignClient.noteLabelDetail (noteId).getResult ();
+    
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
+    }
+    
+    @Override
+    public List<LabelVO> questionLabelDetail(Long questionId) {
+        if (!questionFeignClient.verifyQuestion (questionId).getResult ().getData ()) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
+    
+        List<LabelDtoResult> dtoResultList = labelQuestionFeignClient.questionLabelDetail (questionId).getResult ();
+    
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
+    }
+    
+    @Override
+    public List<LabelVO> AllNoteLabel() {
+        List<LabelDtoResult> dtoResultList = labelNoteFeignClient.allNoteLabel ().getResult ();
+    
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
+    }
+    
+    @Override
+    public List<LabelVO> AllQuestionLabel() {
+        List<LabelDtoResult> dtoResultList = labelQuestionFeignClient.allQuestionLabel ().getResult ();
+    
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
     }
 }

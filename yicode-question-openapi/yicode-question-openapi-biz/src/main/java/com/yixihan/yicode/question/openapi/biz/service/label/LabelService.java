@@ -35,4 +35,27 @@ public interface LabelService {
      */
     List<LabelVO> labelDetail(List<Long> labelIdList);
     
+    /**
+     * 获取题解所有标签
+     *
+     * @param noteId 题解 ID
+     */
+    List<LabelVO> noteLabelDetail(Long noteId);
+    
+    /**
+     * 获取问题所有标签
+     *
+     * @param questionId 问题 ID
+     */
+    List<LabelVO> questionLabelDetail(Long questionId);
+    
+    /**
+     * 获取所有题解标签
+     */
+    List<LabelVO> AllNoteLabel();
+    
+    /**
+     * 获取所有问题标签
+     */
+    List<LabelVO> AllQuestionLabel();
 }
