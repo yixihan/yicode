@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +62,9 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
         // 获取当月每日一题生成情况
         String jsonStr = Optional.ofNullable (redisTemplate.opsForHash ().get (DAILY_QUESTION_KEY, yearMonth))
                 .orElse ("").toString ();
-        List<QuestionDaily> array = JSONUtil.parseArray (jsonStr).toList (QuestionDaily.class);
+        List<QuestionDaily> array = StrUtil.isBlank (jsonStr) ?
+                new ArrayList<> () :
+                JSONUtil.parseArray (jsonStr).toList (QuestionDaily.class);
         
         // 如果当天的每日一题已被创建, 则直接返回
         if (array.stream ().map (QuestionDaily::getCreateTime).anyMatch ((o) ->
