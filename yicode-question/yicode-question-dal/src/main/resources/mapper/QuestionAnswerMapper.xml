@@ -2,4 +2,90 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.question.QuestionAnswerMapper">
 
+    <select id="queryUserQuestionAnswer"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult">
+        select
+            qa.id,
+            q.question_id,
+            q.question_name,
+            q.question_difficulty,
+            qa.user_id,
+            qa.answer_type,
+            qa.answer_code,
+            qa.answer_flag,
+            qa.answer_time_consume,
+            qa.answer_memory_consume,
+            qa.answer_note,
+            qa.create_time
+        from
+            question_answer as qa
+        left join question as q on q.question_id = qa.question_id
+        <where>
+            and q.del_flag = 0
+            and qa.del_flag = 0
+            and qa.user_id = #{params.userId}
+            <if test="params.accepted">
+                and qa.answer_flag = 'AC'
+            </if>
+            <if test="!params.accepted">
+                and qa.answer_flag != 'AC'
+            </if>
+            <if test="params.questionName != null and params.questionName != ''">
+                and q.question_name like concat ('%', #{params.questionName}, '%')
+            </if>
+            <if test="params.questionDifficulty != null and params.questionDifficulty != ''">
+                and q.question_difficulty = #{params.questionDifficulty}
+            </if>
+        </where>
+        order by
+        <if test="params.commitDateSort != null">
+            <if test="params.commitDateSort">
+                qa.create_time desc,
+            </if>
+            qa.create_time,
+        </if>
+        <if test="params.questionNameSort">
+            <if test="params.questionNameSort">
+                q.question_name desc,
+            </if>
+            q.question_name,
+        </if>
+            qa.create_time desc
+    </select>
+
+
+    <select id="codeCommitCount"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult">
+        select
+        concat(year(create_time), '-',
+        if(month(create_time) &lt; 10, concat('0', month(create_time)), month(create_time)), '-',
+        if(day(create_time) &lt; 10, concat('0', day(create_time)), day(create_time))) as date,
+        count(*) as count
+        from
+        question_answer
+        <where>
+            and del_flag = 0
+            and user_id = #{params.userId}
+            and create_time &lt; #{params.endDate}
+        </where>
+        group by
+        year(create_time), month(create_time), day(create_time)
+    </select>
+
+
+    <select id="codeRate" resultType="com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult">
+        select
+            sum(if(qa.answer_flag = 'AC', 1, 0)) as acceptedQuestion,
+            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'HARD', 1, 0)) as acceptedHardQuestion,
+            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'MEDIUM', 1, 0)) as acceptedHardQuestion,
+            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'EASY', 1, 0)) as acceptedHardQuestion,
+            sum(if(qa.answer_flag != 'AC', 1, 0)) as unAcceptedQuestion,
+        from
+            question_answer as qa
+            left join question as q on q.del_flag = 0 and  qa.question_id = q.question_id
+        <where>
+            and qa.del_flag = 0
+            and qa.user_id = #{userId}
+        </where>
+    </select>
 </mapper>

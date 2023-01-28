@@ -5,9 +5,11 @@ import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRateVO;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CommitRecordVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提交答案 服务类
@@ -51,7 +53,7 @@ public interface QuestionCommitService {
      *
      * @param year 年
      */
-    List<List<Integer>> codeCommitCount(String year);
+    Map<String, List<CommitRecordVO>> codeCommitCount(String year);
     
     /**
      * 获取用户做题进度

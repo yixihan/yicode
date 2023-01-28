@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("获取问题答案-dtoReq")
-public class QueryQuestionAnswerDtoReq extends PageDtoReq {
+public class QuestionAnswerDtoReq extends PageDtoReq {
     
     @ApiModelProperty(value = "问题 id")
     private Long questionId;

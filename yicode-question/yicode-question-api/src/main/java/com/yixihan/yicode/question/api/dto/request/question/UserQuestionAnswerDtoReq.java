@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.openapi.api.vo.request.question;
+package com.yixihan.yicode.question.api.dto.request.question;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import io.swagger.annotations.ApiModel;
@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 获取用户提交记录-req
+ * 获取用户提交记录-dtoReq
  *
  * @author yixihan
  * @date 2023/1/12 10:02
@@ -18,8 +18,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("获取用户提交记录-req")
-public class UserQuestionAnswerReq extends PageReq {
+@ApiModel("获取用户提交记录-dtoReq")
+public class UserQuestionAnswerDtoReq extends PageReq {
+    
+    @ApiModelProperty(value = "用户 ID")
+    private Long userId;
     
     @ApiModelProperty(value = "是否通过")
     private Boolean accepted;

@@ -7,12 +7,14 @@ import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRateVO;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CommitRecordVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提交答案 OpenApi
@@ -42,7 +44,7 @@ public interface QuestionCommitOpenApi {
     
     @ApiOperation("获取用户提交代码次数记录")
     @GetMapping(value = "/result/count", produces = "application/json")
-    JsonResponse<List<List<Integer>>> codeCommitCount(@RequestParam("year") String year);
+    JsonResponse<Map<String, List<CommitRecordVO>>> codeCommitCount(@RequestParam("year") String year);
     
     @ApiOperation("获取用户做题进度")
     @GetMapping(value = "/rate", produces = "application/json")

@@ -27,6 +27,12 @@ public class QuestionAnswerDtoResult {
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
     
+    @ApiModelProperty(value = "问题名称")
+    private Long questionName;
+    
+    @ApiModelProperty(value = "问题难度")
+    private String questionDifficulty;
+    
     @ApiModelProperty(value = "用户 id")
     private Long userId;
     

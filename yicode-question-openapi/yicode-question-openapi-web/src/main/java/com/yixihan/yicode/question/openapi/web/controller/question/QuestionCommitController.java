@@ -7,6 +7,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRateVO;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CommitRecordVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionCommitService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提交答案 前端控制器
@@ -49,7 +51,7 @@ public class QuestionCommitController implements QuestionCommitOpenApi {
     }
     
     @Override
-    public JsonResponse<List<List<Integer>>> codeCommitCount(String year) {
+    public JsonResponse<Map<String, List<CommitRecordVO>>> codeCommitCount(String year) {
         return JsonResponse.ok (service.codeCommitCount (year));
     }
     
