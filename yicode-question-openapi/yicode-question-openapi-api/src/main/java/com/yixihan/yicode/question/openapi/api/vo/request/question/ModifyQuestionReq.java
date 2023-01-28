@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 修改问题-dtoReq
+ * 修改问题-req
  *
  * @author yixihan
  * @date 2023/1/12 9:07
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("修改问题-dtoReq")
+@ApiModel("修改问题-req")
 public class ModifyQuestionReq {
     
     @ApiModelProperty(value = "问题 id")

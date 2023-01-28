@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加用户题目通过记录-dtoReq
+ * 添加用户题目通过记录-req
  *
  * @author yixihan
  * @date 2023/1/12 10:54
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加用户题目通过记录-dtoReq")
+@ApiModel("添加用户题目通过记录-req")
 public class AddQuestionUserRecordReq {
     
     @ApiModelProperty(value = "用户 id")

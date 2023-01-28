@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 用户题目通过记录-dtoResult
+ * 用户题目通过记录-vo
  *
  * @author yixihan
  * @date 2023/1/12 10:58
@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户题目通过记录-dtoResult")
+@ApiModel("用户题目通过记录-vo")
 public class UserRecordVO {
     
     @ApiModelProperty(value = "主键 ID")

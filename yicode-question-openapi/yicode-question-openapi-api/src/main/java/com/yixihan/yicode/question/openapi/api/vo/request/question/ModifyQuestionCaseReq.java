@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 修改测试用例-dtoReq
+ * 修改测试用例-req
  *
  * @author yixihan
  * @date 2023/1/12 10:30
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("修改测试用例-dtoReq")
+@ApiModel("修改测试用例-req")
 public class ModifyQuestionCaseReq {
     
     @ApiModelProperty(value = "测试用例 id")

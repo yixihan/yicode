@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 测试用例-dtoResult
+ * 测试用例-vo
  *
  * @author yixihan
  * @date 2023/1/12 10:29
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("测试用例-dtoResult")
+@ApiModel("测试用例-vo")
 public class QuestionCaseVO {
     
     @ApiModelProperty(value = "主键 ID")

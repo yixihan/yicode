@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 搜索用户题目通过记录-dtoReq
+ * 搜索用户题目通过记录-req
  *
  * @author yixihan
  * @date 2023/1/12 10:57
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("搜索用户题目通过记录-dtoReq")
+@ApiModel("搜索用户题目通过记录-req")
 public class QueryUserRecordReq extends PageDtoReq {
     
     @ApiModelProperty(value = "用户 id")

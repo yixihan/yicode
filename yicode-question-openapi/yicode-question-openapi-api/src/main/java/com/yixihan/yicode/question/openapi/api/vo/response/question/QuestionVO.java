@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 问题-dtoResult
+ * 问题-vo
  *
  * @author yixihan
  * @date 2023/1/12 9:08
@@ -19,7 +19,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("问题-dtoResult")
+@ApiModel("问题-vo")
 public class QuestionVO {
     
     @ApiModelProperty(value = "问题 id")

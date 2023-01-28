@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加问题答案-dtoReq
+ * 添加问题答案-req
  *
  * @author yixihan
  * @date 2023/1/12 10:00
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加问题答案-dtoReq")
+@ApiModel("添加问题答案-req")
 public class AddQuestionAnswerReq {
     
     @ApiModelProperty(value = "问题 id")

@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加每日一题用户做题情况-dtoReq
+ * 添加每日一题用户做题情况-req
  *
  * @author yixihan
  * @date 2023/1/12 15:05
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加每日一题用户做题情况-dtoReq")
+@ApiModel("添加每日一题用户做题情况-req")
 public class AddUserDailyQuestionReq {
     
     @ApiModelProperty(value = "问题 id")

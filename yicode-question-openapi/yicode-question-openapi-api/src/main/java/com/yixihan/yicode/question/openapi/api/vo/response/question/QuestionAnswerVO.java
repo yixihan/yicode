@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 获取问题答案-dtoResult
+ * 获取问题答案-vo
  *
  * @author yixihan
  * @date 2023/1/12 10:03
@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("获取问题答案-dtoResult")
+@ApiModel("获取问题答案-vo")
 public class QuestionAnswerVO {
     
     @ApiModelProperty(value = "主键 ID")

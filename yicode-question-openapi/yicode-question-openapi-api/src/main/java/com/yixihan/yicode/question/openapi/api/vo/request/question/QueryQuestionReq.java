@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 搜索问题-dtoReq
+ * 搜索问题-req
  *
  * @author yixihan
  * @date 2023/1/12 9:15
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("搜索问题-dtoReq")
+@ApiModel("搜索问题-req")
 public class QueryQuestionReq extends PageReq {
     
     @ApiModelProperty(value = "问题名")

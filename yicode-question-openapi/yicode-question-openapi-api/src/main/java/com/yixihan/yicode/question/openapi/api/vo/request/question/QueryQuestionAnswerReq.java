@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 获取问题答案-dtoReq
+ * 获取问题答案-req
  *
  * @author yixihan
  * @date 2023/1/12 10:02
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("获取问题答案-dtoReq")
+@ApiModel("获取问题答案-req")
 public class QueryQuestionAnswerReq extends PageDtoReq {
     
     @ApiModelProperty(value = "问题 id")
