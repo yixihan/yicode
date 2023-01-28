@@ -3,9 +3,11 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
+import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
@@ -20,10 +22,10 @@ import com.yixihan.yicode.question.openapi.api.vo.response.question.CommitRecord
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
 import com.yixihan.yicode.question.openapi.biz.feign.message.TaskFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionAnswerFeignClient;
-import com.yixihan.yicode.question.openapi.biz.feign.run.CodeRunFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionCommitService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 提交答案 服务实现类
@@ -46,24 +49,54 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     private UserService userService;
     
     @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+    
+    @Resource
     private QuestionAnswerFeignClient questionAnswerFeignClient;
     
     @Resource
     private TaskFeignClient taskFeignClient;
     
-    @Resource
-    private CodeRunFeignClient codeRunFeignClient;
-    
     private static final String DATE_FORMAT = "yyyy-MM-dd";
+    
+    private static final String TEST_RUN_CODE_KEY = "runcode:test:%s";
+    
+    private static final String COMMIT_RUN_CODE_KEY = "runcode:commit:%s";
     
     @Override
     public void test(CodeReq req) {
-    
+        Long userId = userService.getUser ().getUserId ();
+        
+        // redis 限流
+        String key = String.format (TEST_RUN_CODE_KEY, userId);
+        if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
+            return;
+        }
+        redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
+        
+        // 发送到任务队列
+        MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
+        dtoReq.setData (JSONUtil.toJsonStr (req));
+        dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
+        taskFeignClient.send (dtoReq);
     }
     
     @Override
     public void commit(CodeReq req) {
+        Long userId = userService.getUser ().getUserId ();
     
+        // redis 限流
+        String key = String.format (COMMIT_RUN_CODE_KEY, userId);
+        if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
+            return;
+        }
+        redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
+    
+        // 发送到任务队列
+        MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
+        dtoReq.setData (JSONUtil.toJsonStr (req));
+        dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
+        taskFeignClient.send (dtoReq);
     }
     
     @Override
