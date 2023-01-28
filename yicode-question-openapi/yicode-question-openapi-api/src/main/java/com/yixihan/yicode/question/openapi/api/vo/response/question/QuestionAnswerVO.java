@@ -48,6 +48,7 @@ public class QuestionAnswerVO {
     @ApiModelProperty(value = "备注")
     private String answerNote;
     
+    @ApiModelProperty(value = "提交时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 }

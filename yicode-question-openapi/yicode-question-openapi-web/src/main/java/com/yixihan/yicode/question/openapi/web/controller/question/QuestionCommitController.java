@@ -1,8 +1,19 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionCommitOpenApi;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRateVO;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
+import com.yixihan.yicode.question.openapi.biz.service.question.QuestionCommitService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 提交答案 前端控制器
@@ -13,5 +24,37 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 public class QuestionCommitController implements QuestionCommitOpenApi {
-
+    
+    @Resource
+    private QuestionCommitService service;
+    
+    @Override
+    public void test(CodeReq req) {
+        service.test (req);
+    }
+    
+    @Override
+    public void commit(CodeReq req) {
+        service.commit (req);
+    }
+    
+    @Override
+    public JsonResponse<PageVO<QuestionAnswerVO>> queryQuestionAnswer(QuestionAnswerReq req) {
+        return JsonResponse.ok (service.queryQuestionAnswer (req));
+    }
+    
+    @Override
+    public JsonResponse<PageVO<QuestionAnswerVO>> queryUserQuestionAnswer(UserQuestionAnswerReq req) {
+        return JsonResponse.ok (service.queryUserQuestionAnswer (req));
+    }
+    
+    @Override
+    public JsonResponse<List<List<Integer>>> codeCommitCount(String year) {
+        return JsonResponse.ok (service.codeCommitCount (year));
+    }
+    
+    @Override
+    public JsonResponse<CodeRateVO> codeRate() {
+        return JsonResponse.ok (service.codeRate ());
+    }
 }

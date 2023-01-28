@@ -1,6 +1,6 @@
 package com.yixihan.yicode.question.openapi.api.vo.request.question;
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,18 +9,18 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 搜索用户题目通过记录-req
+ * 获取用户问题提交记录-req
  *
  * @author yixihan
- * @date 2023/1/12 10:57
+ * @date 2023/1/12 10:02
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("搜索用户题目通过记录-req")
-public class QueryUserRecordReq extends PageDtoReq {
+@ApiModel("获取用户问题提交记录-req")
+public class QuestionAnswerReq extends PageReq {
     
-    @ApiModelProperty(value = "用户 id")
-    private Long userId;
+    @ApiModelProperty(value = "问题 id")
+    private Long questionId;
 }
