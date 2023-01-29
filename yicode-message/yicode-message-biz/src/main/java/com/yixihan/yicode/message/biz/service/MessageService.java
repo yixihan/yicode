@@ -18,7 +18,12 @@ public interface MessageService {
     CommonDtoResult<Boolean> sendMessage(MsgSendDtoReq dtoReq);
     
     /**
-     * 发送任务
+     * 发送任务-提交代码
      */
-    CommonDtoResult<Boolean> sendTask(MsgSendDtoReq dtoReq);
+    CommonDtoResult<Boolean> commit(MsgSendDtoReq dtoReq);
+    
+    /**
+     * 发送任务-自测代码
+     */
+    CommonDtoResult<Boolean> test(MsgSendDtoReq dtoReq);
 }

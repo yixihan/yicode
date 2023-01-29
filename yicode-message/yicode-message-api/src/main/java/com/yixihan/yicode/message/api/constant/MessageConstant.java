@@ -25,17 +25,32 @@ public class MessageConstant {
     public static final String MESSAGE_ROUTING_KEY = "yicode_message_key";
     
     /**
-     * 测评系统 - 交换机
+     * 测评系统 - 提交代码 - 交换机
      */
-    public static final String TASK_EXCHANGE_NAME = "yicode_task_exchange";
+    public static final String TASK_COMMIT_EXCHANGE_NAME = "yicode_task_commit_exchange";
     
     /**
-     * 测评系统 - 队列
+     * 测评系统 - 提交代码 - 队列
      */
-    public static final String TASK_QUEUE_NAME = "yicode_task_queue";
+    public static final String TASK_COMMIT_QUEUE_NAME = "yicode_task_commit_queue";
     
     /**
-     * 测评系统 - route key
+     * 测评系统 - 提交代码 - route key
      */
-    public static final String TASK_ROUTING_KEY = "yicode_task_key";
+    public static final String TASK_COMMIT_ROUTING_KEY = "yicode_task_commit_key";
+    
+    /**
+     * 测评系统 - 自测代码 - 交换机
+     */
+    public static final String TASK_TEST_EXCHANGE_NAME = "yicode_task_test_exchange";
+    
+    /**
+     * 测评系统 - 自测代码 - 队列
+     */
+    public static final String TASK_TEST_QUEUE_NAME = "yicode_task_test_queue";
+    
+    /**
+     * 测评系统 - 自测代码 - route key
+     */
+    public static final String TASK_TEST_ROUTING_KEY = "yicode_task__key";
 }

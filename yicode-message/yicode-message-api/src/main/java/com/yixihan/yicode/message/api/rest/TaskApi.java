@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/task")
 public interface TaskApi {
     
-    @ApiOperation("发送任务")
+    @ApiOperation("提交代码")
     @PostMapping(value = "/send", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> send (@RequestBody MsgSendDtoReq dtoReq);
+    ApiResult<CommonDtoResult<Boolean>> commit(@RequestBody MsgSendDtoReq dtoReq);
+    
+    @ApiOperation("自测代码")
+    @PostMapping(value = "/send", produces = "application/json")
+    ApiResult<CommonDtoResult<Boolean>> test(@RequestBody MsgSendDtoReq dtoReq);
 }
