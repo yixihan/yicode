@@ -48,17 +48,20 @@
 - [x] 完成 yicode-user-openapi 模块
 - [x] 完成 yicode-thirdpart 模块
 - [x] 完成 yicode-thirdpart-openapi 模块
-- [ ] 完成 yicode-question 模块
-- [ ] 完成 yicode-question-openapi 模块
+- [x] 完成 yicode-question 模块
+- [x] 完成 yicode-question-openapi 模块
 - [x] 完成 yicode-message 模块
 - [x] 完成 yicode-run 模块
 
-> 未完善功能
+> 待优化功能
 
-- [ ] question - 用户做题进度
+- [ ] question - 用户提交代码次数记录
 
 > 未开始功能
 
+- [ ] message - 消费者主动像前端推送消息
+
+> 额外功能
+
 - [ ] question - docker API 的对接
 - [ ] question - 对 yicode-run 模块的监控
-- [ ] message - 消费者主动像前端推送消息
