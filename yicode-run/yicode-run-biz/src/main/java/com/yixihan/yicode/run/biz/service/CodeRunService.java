@@ -62,6 +62,7 @@ public class CodeRunService {
             CodeRunExtractService service = SpringUtil.getBean (CodeRunConfig.getServiceName (req.getCodeType ()), CodeRunExtractService.class);
             
             // 运行代码
+            log.info ("req : {}", req);
             dtoResult = service.run (req);
         } catch (Exception e) {
             log.error ("出现异常", e);
@@ -140,7 +141,6 @@ public class CodeRunService {
         
         long useTime = 0;
         for (String param : req.getParamList ()) {
-            
             Process process = Runtime.getRuntime ().exec (runCommand);
             
             // 传入形参
