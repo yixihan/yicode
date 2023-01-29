@@ -75,5 +75,9 @@ public class CustomTest {
     @Test
     public void testOutput () {
         System.out.println ("/tmp/yicode2023-01-09-13/809815751351775232/main.js:3\nconst lines = fs.readFileSync(0).tString().trim().split(/\\r\\n|\\r|\\n/);\n                                 ^\n\nTypeError: fs.readFileSync(...).tString is not a function\n    at Object.<anonymous> (/tmp/yicode2023-01-09-13/809815751351775232/main.js:3:34)\n    at Module._compile (node:internal/modules/cjs/loader:1165:14)\n    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1219:10)\n    at Module.load (node:internal/modules/cjs/loader:1043:32)\n    at Function.Module._load (node:internal/modules/cjs/loader:878:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)\n    at node:internal/main/run_main_module:22:47\n");
+    
+        String questionCase = Base64.encode ("5\\nRenlaoshi123\\nYixihan123\\njiege\\nxiaoMa12\\nlaoBai");
+        System.out.println (questionCase);
+        System.out.println (Base64.decodeStr (questionCase));
     }
 }
