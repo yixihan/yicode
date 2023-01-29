@@ -1,10 +1,10 @@
 package com.yixihan.yicode.auth.oauth.email;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
-import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import org.springframework.security.authentication.*;
@@ -112,7 +112,7 @@ public class EmailTokenGranter extends AbstractTokenGranter {
      * @return {@link UserService}
      */
     private UserService getUserService () {
-        return SpringUtils.getBean (UserServiceImpl.class);
+        return SpringUtil.getBean (UserServiceImpl.class);
     }
 
 

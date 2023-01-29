@@ -1,9 +1,9 @@
 package com.yixihan.yicode.auth.oauth.password;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
-import com.yixihan.yicode.auth.util.SpringUtils;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import org.springframework.security.authentication.*;
@@ -98,7 +98,7 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
      * @return {@link UserService}
      */
     private UserService getUserService() {
-        return SpringUtils.getBean (UserServiceImpl.class);
+        return SpringUtil.getBean (UserServiceImpl.class);
     }
 
 
