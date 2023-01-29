@@ -65,6 +65,7 @@ public class CodeRunService {
             dtoResult = service.run (req);
         } catch (Exception e) {
             log.error (e.getMessage ());
+            e.printStackTrace ();
             return CodeRunDtoResult.error (e);
         }
         return dtoResult;
