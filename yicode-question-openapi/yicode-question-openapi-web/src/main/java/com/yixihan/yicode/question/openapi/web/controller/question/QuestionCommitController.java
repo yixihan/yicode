@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionCommitOpenApi;
@@ -10,6 +11,7 @@ import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRateVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.CommitRecordVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionAnswerVO;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionCommitService;
+import com.yixihan.yicode.question.openapi.web.fallback.CodeRunBlockHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,11 +33,19 @@ public class QuestionCommitController implements QuestionCommitOpenApi {
     private QuestionCommitService service;
     
     @Override
+    @SentinelResource(value = "test",
+            blockHandler = "blockHandlerTest",
+            blockHandlerClass = CodeRunBlockHandler.class
+    )
     public void test(CodeReq req) {
         service.test (req);
     }
     
     @Override
+    @SentinelResource(value = "commit",
+            blockHandler = "blockHandlerCommit",
+            blockHandlerClass = CodeRunBlockHandler.class
+    )
     public void commit(CodeReq req) {
         service.commit (req);
     }
