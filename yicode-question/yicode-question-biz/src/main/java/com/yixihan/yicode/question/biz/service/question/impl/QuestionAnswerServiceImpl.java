@@ -2,6 +2,7 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,15 +17,20 @@ import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDt
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionNumberDtoResult;
+import com.yixihan.yicode.question.api.enums.CodeAnswerEnums;
 import com.yixihan.yicode.question.biz.service.question.QuestionAnswerService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionAnswerMapper;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionAnswer;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -96,6 +102,8 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
     public Map<String, List<CommitRecordDtoResult>> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
         List<CommitRecordDtoResult> commitRecordDtoResults = baseMapper.codeCommitCount (dtoReq);
         
+        // TODO 优化 返回所有的日期, 无论有无提交记录
+        
         return commitRecordDtoResults.stream ()
                 .collect (Collectors.groupingBy (
                         (item) -> item.getDate ().substring (0, item.getDate ().lastIndexOf ("-")),
@@ -105,7 +113,106 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
     
     @Override
     public CodeRateDtoResult codeRate(Long userId) {
-        // TODO 待完善用户做题进度 sql 未完成
-        return baseMapper.codeRate (userId);
+        // 获取用户提交代码情况
+        List<QuestionAnswerDtoResult> questionAnswerList = baseMapper.codeRate (userId);
+        
+        // 获取题目数量情况
+        QuestionNumberDtoResult questionNumber = baseMapper.questionNumber ();
+    
+        // 按 questionId group by
+        HashMap<String, List<QuestionAnswerDtoResult>> answerMap = questionAnswerList
+                .stream ().collect (Collectors.groupingBy (
+                        (o) -> o.getQuestionId () + ":" + o.getQuestionDifficulty (),
+                        HashMap::new,
+                        Collectors.toList ()));
+    
+        // 计算通过&未通过题目数
+        AtomicInteger acceptedQuestion = new AtomicInteger ();
+        AtomicInteger acceptedHardQuestion = new AtomicInteger ();
+        AtomicInteger acceptedMediumQuestion = new AtomicInteger ();
+        AtomicInteger acceptedEasyQuestion = new AtomicInteger ();
+        AtomicInteger unAcceptedQuestion = new AtomicInteger ();
+        
+        answerMap.forEach ((k, v) -> {
+            if (v.stream ().anyMatch ((o) -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))) {
+                acceptedQuestion.getAndIncrement ();
+                switch (k.split (":")[1]) {
+                    case "EASY": {
+                        acceptedEasyQuestion.getAndIncrement ();
+                        break;
+                    }
+                    case "MEDIUM": {
+                        acceptedMediumQuestion.getAndIncrement ();
+                        break;
+                    }
+                    case "HARD": {
+                        acceptedHardQuestion.getAndIncrement ();
+                        break;
+                    }
+                    default: break;
+                }
+            } else {
+                unAcceptedQuestion.getAndIncrement ();
+            }
+        });
+        
+        // 计算未作题目数
+        int unDoQuestion = questionNumber.getQuestionCount () - acceptedQuestion.get () - unAcceptedQuestion.get ();
+        int unDoHardQuestion = questionNumber.getHardQuestionCount () - acceptedHardQuestion.get ();
+        int unDoMediumQuestion = questionNumber.getMediumQuestionCount () - acceptedMediumQuestion.get ();
+        int unDoEasyQuestion = questionNumber.getEasyQuestionCount () - acceptedEasyQuestion.get ();
+        
+        // 计算总提交数&通过提交数
+        int commitCount = questionAnswerList.size ();
+        int acceptedCommitCount = Math.toIntExact (questionAnswerList.stream ()
+                .filter ((o) -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))
+                .count ());
+        
+        // 计算百分比数值
+        BigDecimal acceptedCommitRate = NumberUtil.mul (NumberUtil.div (
+                NumberUtil.toBigDecimal (acceptedCommitCount),
+                NumberUtil.toBigDecimal (commitCount),
+                4,
+                RoundingMode.HALF_UP), 100);
+        BigDecimal acceptedQuestionRate = NumberUtil.mul (NumberUtil.div (
+                NumberUtil.toBigDecimal (acceptedQuestion.get ()),
+                NumberUtil.toBigDecimal (questionNumber.getQuestionCount ()),
+                4,
+                RoundingMode.HALF_UP), 100);
+        BigDecimal acceptedHardQuestionRate = NumberUtil.mul (NumberUtil.div (
+                NumberUtil.toBigDecimal (acceptedHardQuestion.get ()),
+                NumberUtil.toBigDecimal (questionNumber.getHardQuestionCount ()),
+                4,
+                RoundingMode.HALF_UP), 100);
+        
+        BigDecimal acceptedMediumQuestionRate = NumberUtil.mul (NumberUtil.div (
+                NumberUtil.toBigDecimal (acceptedMediumQuestion.get ()),
+                NumberUtil.toBigDecimal (questionNumber.getMediumQuestionCount ()),
+                4,
+                RoundingMode.HALF_UP), 100);
+        BigDecimal acceptedEasyQuestionRate = NumberUtil.mul (NumberUtil.div (
+                NumberUtil.toBigDecimal (acceptedEasyQuestion.get ()),
+                NumberUtil.toBigDecimal (questionNumber.getEasyQuestionCount ()),
+                4,
+                RoundingMode.HALF_UP), 100);
+        
+        return new CodeRateDtoResult (
+                acceptedQuestion.get (),
+                acceptedHardQuestion.get (),
+                acceptedMediumQuestion.get (),
+                acceptedEasyQuestion.get (),
+                unAcceptedQuestion.get (),
+                unDoQuestion,
+                unDoHardQuestion,
+                unDoMediumQuestion,
+                unDoEasyQuestion,
+                questionNumber,
+                commitCount,
+                acceptedCommitCount,
+                acceptedCommitRate,
+                acceptedQuestionRate,
+                acceptedHardQuestionRate,
+                acceptedMediumQuestionRate,
+                acceptedEasyQuestionRate);
     }
 }

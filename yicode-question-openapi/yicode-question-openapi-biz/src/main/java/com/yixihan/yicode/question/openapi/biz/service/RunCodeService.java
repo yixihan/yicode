@@ -6,7 +6,7 @@ import com.rabbitmq.client.Channel;
 import com.yixihan.yicode.message.api.constant.MessageConstant;
 import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
-import com.yixihan.yicode.question.openapi.api.enums.CodeAnswerEnums;
+import com.yixihan.yicode.question.api.enums.CodeAnswerEnums;
 import com.yixihan.yicode.question.openapi.api.prop.CodeJudgeProp;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionAnswerFeignClient;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -177,7 +178,13 @@ public class RunCodeService {
             log.info ("代码运行结果 : {}", status.getAnswer ());
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
+            try {
+                channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
+            } catch (IOException ex) {
+                log.error ("出现错误", e);
+            }
         } catch (Exception e) {
+            log.error ("出现错误", e);
             // 系统内部错误
             status = CodeAnswerEnums.SE;
             
@@ -185,6 +192,11 @@ public class RunCodeService {
             log.info ("代码运行结果 : {}", status.getAnswer ());
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
+            try {
+                channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
+            } catch (IOException ex) {
+                log.error ("出现错误", e);
+            }
         }
     }
     

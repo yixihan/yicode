@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @ApiModel("用户进度-vo")
 public class CodeRateVO {
-
+    
     @ApiModelProperty(value = "通过题目数量")
     private Integer acceptedQuestion;
     
@@ -31,6 +31,9 @@ public class CodeRateVO {
     
     @ApiModelProperty(value = "通过简单题目数量")
     private Integer acceptedEasyQuestion;
+    
+    @ApiModelProperty(value = "未通过题目数量")
+    private Integer unAcceptedQuestion;
     
     @ApiModelProperty(value = "未开始题目数量")
     private Integer unDoQuestion;
@@ -44,20 +47,8 @@ public class CodeRateVO {
     @ApiModelProperty(value = "未开始简单题目数量")
     private Integer unDoEasyQuestion;
     
-    @ApiModelProperty(value = "未通过题目数量")
-    private Integer unAcceptedQuestion;
-    
-    @ApiModelProperty(value = "题目总数")
-    private Integer questionCount;
-    
-    @ApiModelProperty(value = "困难题目总数")
-    private Integer hardQuestionCount;
-    
-    @ApiModelProperty(value = "普通题目总数")
-    private Integer mediumQuestionCount;
-    
-    @ApiModelProperty(value = "简单题目总数")
-    private Integer easyQuestionCount;
+    @ApiModelProperty(value = "题目数量情况")
+    private QuestionNumberVO questionNumber;
     
     @ApiModelProperty(value = "提交总数")
     private Integer commitCount;

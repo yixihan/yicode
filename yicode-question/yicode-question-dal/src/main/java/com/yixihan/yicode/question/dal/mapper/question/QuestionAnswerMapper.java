@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionNumberDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionAnswer;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -45,5 +45,8 @@ public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
      *
      * @param userId 用户 ID
      */
-    CodeRateDtoResult codeRate(@Param ("userId") Long userId);
+    List<QuestionAnswerDtoResult> codeRate(@Param ("userId") Long userId);
+    
+    
+    QuestionNumberDtoResult questionNumber ();
 }

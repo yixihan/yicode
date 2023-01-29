@@ -23,4 +23,7 @@ public class CodeCommitCountDtoReq {
     
     @ApiModelProperty(value = "统计截至日期")
     private String endDate;
+    
+    @ApiModelProperty(value = "统计截至日期")
+    private String startDate;
 }

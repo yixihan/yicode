@@ -28,7 +28,7 @@ public class QuestionAnswerDtoResult {
     private Long questionId;
     
     @ApiModelProperty(value = "问题名称")
-    private Long questionName;
+    private String questionName;
     
     @ApiModelProperty(value = "问题难度")
     private String questionDifficulty;

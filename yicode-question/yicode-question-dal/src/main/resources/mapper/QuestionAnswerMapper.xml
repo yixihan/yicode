@@ -7,8 +7,8 @@
         select
             qa.id,
             q.question_id,
-            q.question_name,
-            q.question_difficulty,
+            q.question_name as questionName,
+            q.question_difficulty as questionDifficulty,
             qa.user_id,
             qa.answer_type,
             qa.answer_code,
@@ -19,7 +19,8 @@
             qa.create_time
         from
             question_answer as qa
-        left join question as q on q.question_id = qa.question_id
+        left join
+                question as q on q.question_id = qa.question_id
         <where>
             and q.del_flag = 0
             and qa.del_flag = 0
@@ -57,35 +58,65 @@
     <select id="codeCommitCount"
             resultType="com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult">
         select
-        concat(year(create_time), '-',
-        if(month(create_time) &lt; 10, concat('0', month(create_time)), month(create_time)), '-',
-        if(day(create_time) &lt; 10, concat('0', day(create_time)), day(create_time))) as date,
-        count(*) as count
-        from
-        question_answer
-        <where>
-            and del_flag = 0
-            and user_id = #{params.userId}
-            and create_time &lt; #{params.endDate}
-        </where>
-        group by
-        year(create_time), month(create_time), day(create_time)
+            concat(year, '-',
+            if(month &lt; 10, concat('0', month), month), '-',
+            if(day &lt; 10, concat('0', day), day)) as `date`,
+            count
+        from (
+            select
+            year(create_time)  as `year`,
+            month(create_time) as `month`,
+            day(create_time)   as `day`,
+            count(*)           as `count`
+            from
+            question_answer
+            <where>
+                and del_flag = 0
+                and user_id = #{params.userId}
+                and create_time between #{params.startDate} and #{params.endDate}
+            </where>
+            group by
+            year(create_time), month(create_time), day(create_time)
+        ) as q
     </select>
 
-
-    <select id="codeRate" resultType="com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult">
+    <select id="codeRate" resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult">
         select
-            sum(if(qa.answer_flag = 'AC', 1, 0)) as acceptedQuestion,
-            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'HARD', 1, 0)) as acceptedHardQuestion,
-            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'MEDIUM', 1, 0)) as acceptedHardQuestion,
-            sum(if(qa.answer_flag = 'AC' and q.question_difficulty = 'EASY', 1, 0)) as acceptedHardQuestion,
-            sum(if(qa.answer_flag != 'AC', 1, 0)) as unAcceptedQuestion,
+            id,
+            qa.question_id,
+            q.question_name,
+            q.question_difficulty,
+            user_id,
+            answer_type,
+            answer_code,
+            answer_flag,
+            answer_time_consume,
+            answer_memory_consume,
+            answer_note,
+            qa.create_time
         from
-            question_answer as qa
-            left join question as q on q.del_flag = 0 and  qa.question_id = q.question_id
+            question_answer qa
+        left join
+                question q on qa.question_id = q.question_id
         <where>
             and qa.del_flag = 0
-            and qa.user_id = #{userId}
+            and q.del_flag = 0
+            and user_id = #{userId}
         </where>
     </select>
+    
+    <select id="questionNumber"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionNumberDtoResult">
+        select
+            count(*) as questionCount,
+            sum(if(question_difficulty = 'HARD', 1, 0)) as hardQuestionCount,
+            sum(if(question_difficulty = 'MEDIUM', 1, 0)) as mediumQuestionCount,
+            sum(if(question_difficulty = 'EASY', 1, 0)) as easyQuestionCount
+        from
+            question
+        where
+            del_flag = 0
+    </select>
+
+
 </mapper>

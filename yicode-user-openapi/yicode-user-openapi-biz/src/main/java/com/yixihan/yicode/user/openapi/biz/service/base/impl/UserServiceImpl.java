@@ -13,7 +13,7 @@ import com.yixihan.yicode.thirdpart.api.enums.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
-import com.yixihan.yicode.user.openapi.api.enums.LoginTypeEnums;
+import com.yixihan.yicode.user.api.enums.LoginTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;

@@ -59,7 +59,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     @Resource
     private TaskFeignClient taskFeignClient;
     
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     private static final String TEST_RUN_CODE_KEY = "runcode:test:%s";
     
@@ -133,7 +133,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         UserQuestionAnswerDtoReq dtoReq = BeanUtil.toBean (req, UserQuestionAnswerDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
     
-        // 获取单个问题提交记录
+        // 获取用户问题提交记录
         PageDtoResult<QuestionAnswerDtoResult> dtoResult = questionAnswerFeignClient.queryUserQuestionAnswer (dtoReq)
                 .getResult ();
     
@@ -146,15 +146,19 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
     @Override
     public Map<String, List<CommitRecordVO>> codeCommitCount(String year) {
-        // 设置 endDate
-        String endDate = StrUtil.isBlank (year) ?
-                DateUtil.format (DateUtil.endOfDay (new Date ()), DATE_FORMAT) :
-                DateUtil.format (DateUtil.endOfYear (DateUtil.parse (year)), DATE_FORMAT);
+        // 设置 endDate & startDate
+        Date endDate = StrUtil.isBlank (year) ?
+                DateUtil.endOfDay (new Date ()) :
+                DateUtil.endOfYear (DateUtil.parse (year));
+        
+        Date startDate = DateUtil.offsetMonth (endDate, -12);
+        
     
         // 构建请求 body
         CodeCommitCountDtoReq dtoReq = new CodeCommitCountDtoReq ();
         dtoReq.setUserId (userService.getUser ().getUserId ());
-        dtoReq.setEndDate (endDate);
+        dtoReq.setEndDate (DateUtil.format (endDate, DATE_FORMAT));
+        dtoReq.setStartDate (DateUtil.format (startDate, DATE_FORMAT));
         
         // 获取用户提交代码次数记录
         Map<String, List<CommitRecordDtoResult>> dotResult = questionAnswerFeignClient.codeCommitCount (dtoReq).getResult ();

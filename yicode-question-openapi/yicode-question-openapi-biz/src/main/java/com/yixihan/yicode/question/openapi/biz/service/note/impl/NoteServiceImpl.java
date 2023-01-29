@@ -16,7 +16,7 @@ import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.QueryNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.note.NoteDtoResult;
-import com.yixihan.yicode.question.openapi.api.enums.AnswerTypeEnums;
+import com.yixihan.yicode.question.api.enums.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
