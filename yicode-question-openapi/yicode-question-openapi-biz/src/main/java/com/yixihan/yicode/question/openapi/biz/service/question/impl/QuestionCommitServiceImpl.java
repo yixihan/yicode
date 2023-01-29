@@ -4,6 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
@@ -65,11 +67,16 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
     @Override
     public void test(CodeReq req) {
+        if (StrUtil.isBlank (req.getCode ()) || req.getQuestionId () == null) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
         Long userId = userService.getUser ().getUserId ();
+        req.setUserId (userId);
         
         // redis 限流
         String key = String.format (TEST_RUN_CODE_KEY, userId);
         if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
+            log.info ("redis 限流");
             return;
         }
         redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
@@ -83,11 +90,16 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
     @Override
     public void commit(CodeReq req) {
+        if (StrUtil.isBlank (req.getCode ()) || req.getQuestionId () == null) {
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
+        }
         Long userId = userService.getUser ().getUserId ();
+        req.setUserId (userId);
     
         // redis 限流
         String key = String.format (COMMIT_RUN_CODE_KEY, userId);
         if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
+            log.info ("redis 限流");
             return;
         }
         redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);

@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class RunCodeService {
-    
     @Resource
     private CodeRunFeignClient codeRunFeignClient;
     
@@ -196,10 +195,11 @@ public class RunCodeService {
      * @param result 代码运行结果
      * @param status 代码测评状态
      */
-    private void saveQuestionAnswer (@NotNull CodeReq req,
+    public void saveQuestionAnswer (@NotNull CodeReq req,
                                      @Nullable CodeRunDtoResult result,
                                      @NotNull CodeAnswerEnums status) {
         AddQuestionAnswerDtoReq dtoReq = new AddQuestionAnswerDtoReq ();
+        dtoReq.setUserId (req.getUserId ());
         dtoReq.setQuestionId (req.getQuestionId ());
         dtoReq.setAnswerCode (req.getCode ());
         dtoReq.setAnswerType (req.getType ());
