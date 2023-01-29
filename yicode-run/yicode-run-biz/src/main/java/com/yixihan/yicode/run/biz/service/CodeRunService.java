@@ -134,6 +134,7 @@ public class CodeRunService {
      * @return 代码运行结果 {@link CodeRunDtoResult}
      */
     public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand) throws Exception {
+        log.info ("req : {}", req);
         // 运行代码
         List<String> ansList = new ArrayList<> ();
         
