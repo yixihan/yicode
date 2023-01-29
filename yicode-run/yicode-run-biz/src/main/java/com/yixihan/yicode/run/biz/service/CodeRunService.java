@@ -144,6 +144,7 @@ public class CodeRunService {
             
             // 传入形参
             try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()))) {
+                log.info ("param : {}", param);
                 writer.write (param);
             }
             
