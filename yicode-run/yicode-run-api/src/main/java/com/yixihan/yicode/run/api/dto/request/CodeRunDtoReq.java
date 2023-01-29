@@ -27,5 +27,5 @@ public class CodeRunDtoReq {
     private String codeType;
     
     @ApiModelProperty(value = "形参")
-    private List<List<String>> paramList;
+    private List<String> paramList;
 }

@@ -138,17 +138,13 @@ public class CodeRunService {
         List<String> ansList = new ArrayList<> ();
         
         long useTime = 0;
-        for (List<String> params : req.getParamList ()) {
+        for (String param : req.getParamList ()) {
             
             Process process = Runtime.getRuntime ().exec (runCommand);
             
             // 传入形参
             try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()))) {
-                
-                for (String param : params) {
-                    writer.write (param);
-                    writer.newLine ();
-                }
+                writer.write (param);
             }
             
             // 获取开始时间

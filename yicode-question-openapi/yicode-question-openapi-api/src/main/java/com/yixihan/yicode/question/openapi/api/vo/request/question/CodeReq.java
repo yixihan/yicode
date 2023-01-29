@@ -23,4 +23,7 @@ public class CodeReq {
     
     @ApiModelProperty(value = "代码类型")
     private String type;
+    
+    @ApiModelProperty(value = "问题 ID")
+    private Long questionId;
 }
