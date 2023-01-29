@@ -62,7 +62,6 @@ public class CodeRunService {
             CodeRunExtractService service = SpringUtil.getBean (CodeRunConfig.getServiceName (req.getCodeType ()), CodeRunExtractService.class);
             
             // 运行代码
-            log.info ("req : {}", req);
             dtoResult = service.run (req);
         } catch (Exception e) {
             log.error ("出现异常", e);
@@ -135,7 +134,6 @@ public class CodeRunService {
      * @return 代码运行结果 {@link CodeRunDtoResult}
      */
     public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand) throws Exception {
-        log.info ("req : {}", req);
         // 运行代码
         List<String> ansList = new ArrayList<> ();
         
@@ -145,7 +143,6 @@ public class CodeRunService {
             
             // 传入形参
             try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()))) {
-                log.info ("param : {}", param);
                 writer.write (param);
             }
             
