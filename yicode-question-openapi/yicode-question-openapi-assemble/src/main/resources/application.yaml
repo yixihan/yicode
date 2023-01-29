@@ -62,7 +62,7 @@ feign:
         read-timeout: 30000
       yicode-run:
         connect-timeout: 30000
-        read-timeout: 30000
+        read-timeout: ${judge.max-run-time}
 
 management:
   endpoints:

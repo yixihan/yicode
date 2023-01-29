@@ -66,27 +66,27 @@ public class ConfirmConfig {
         return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_COMMIT_ROUTING_KEY);
     }
     /**
-     * 测评系统 - 提交代码 - 直连型交换机
+     * 测评系统 - 自测代码 - 直连型交换机
      */
     @Bean("taskTestExchange")
     public DirectExchange taskTestExchange() {
-        return new DirectExchange (MessageConstant.TASK_COMMIT_EXCHANGE_NAME);
+        return new DirectExchange (MessageConstant.TASK_TEST_EXCHANGE_NAME);
     }
     
     /**
-     * 测评系统 - 提交代码 - 队列
+     * 测评系统 - 自测代码 - 队列
      */
     @Bean("taskTestQueue")
     public Queue taskTestQueue() {
-        return QueueBuilder.durable (MessageConstant.TASK_COMMIT_QUEUE_NAME).build ();
+        return QueueBuilder.durable (MessageConstant.TASK_TEST_QUEUE_NAME).build ();
     }
     
     /**
-     * 测评系统 - 提交代码 - 队列绑定交换机-发布确认队列
+     * 测评系统 - 自测代码 - 队列绑定交换机-发布确认队列
      */
     @Bean
     public Binding taskTestQueueBindingExchange(@Qualifier("taskTestExchange") DirectExchange taskExchange,
                                                   @Qualifier("taskTestQueue") Queue taskQueue) {
-        return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_COMMIT_ROUTING_KEY);
+        return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_TEST_ROUTING_KEY);
     }
 }

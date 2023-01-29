@@ -78,7 +78,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
         dtoReq.setData (JSONUtil.toJsonStr (req));
         dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
-        taskFeignClient.send (dtoReq);
+        taskFeignClient.test (dtoReq);
     }
     
     @Override
@@ -96,7 +96,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
         dtoReq.setData (JSONUtil.toJsonStr (req));
         dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
-        taskFeignClient.send (dtoReq);
+        taskFeignClient.commit (dtoReq);
     }
     
     @Override

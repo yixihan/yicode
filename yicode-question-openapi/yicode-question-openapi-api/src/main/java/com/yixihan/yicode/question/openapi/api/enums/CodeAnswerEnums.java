@@ -13,22 +13,26 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CodeAnswerEnums {
     
-    AC ("AC", "Accepted"),
+    AC ("AC",  "正确", "Accepted"),
     
-    CE ("CE", "Compile Error"),
+    CE ("CE", "编译失败", "Compile Error"),
     
-    WA ("WA", "Wrong Answer"),
+    WA ("WA", "答案错误", "Wrong Answer"),
     
-    OL ("OL", "Output Limit"),
+    OL ("OL", "输出超限", "Output Limit" ),
     
-    PE ("PE", "Presentation Error"),
+    PE ("PE", "格式错误", "Presentation Error"),
     
-    TLE ("TLE", "Time Limited Exceed"),
+    TLE ("TLE", "时间超限", "Time Limited Exceed"),
     
-    RE ("RE", "Runtime Error");
+    RE ("RE", "运行错误", "Runtime Error"),
+    
+    SE ("OE", "系统内部错误", "System Error");
     
     
     private final String answer;
+    
+    private final String chineseName;
     
     private final String description;
 }

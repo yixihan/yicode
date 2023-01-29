@@ -37,5 +37,5 @@ public class AddQuestionAnswerDtoReq {
     private Integer answerTimeConsume;
     
     @ApiModelProperty(value = "内存消耗")
-    private Integer answerMemoryConsume;
+    private Double answerMemoryConsume;
 }
