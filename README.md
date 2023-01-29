@@ -55,16 +55,10 @@
 
 > 未完善功能
 
-- [x] 收藏模块 - 收藏题解与问题
-- [x] 个人资料模块 - 获取用户技能标签
+- [ ] question - 用户做题进度
 
 > 未开始功能
 
-- [ ] question - 基础模块的设计与实现
-- [x] question - 题解的设计与实现
-- [x] question - 评论的设计与实现
-- [x] question - 标签的设计与实现
 - [ ] question - docker API 的对接
 - [ ] question - 对 yicode-run 模块的监控
-- [ ] question - 测评代码的实现
 - [ ] message - 消费者主动像前端推送消息
