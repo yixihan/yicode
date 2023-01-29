@@ -64,8 +64,7 @@ public class CodeRunService {
             // 运行代码
             dtoResult = service.run (req);
         } catch (Exception e) {
-            log.error (e.getMessage ());
-            e.printStackTrace ();
+            log.error ("出现异常", e);
             return CodeRunDtoResult.error (e);
         }
         return dtoResult;
