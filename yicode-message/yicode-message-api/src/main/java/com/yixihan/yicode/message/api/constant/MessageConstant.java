@@ -52,5 +52,5 @@ public class MessageConstant {
     /**
      * 测评系统 - 自测代码 - route key
      */
-    public static final String TASK_TEST_ROUTING_KEY = "yicode_task__key";
+    public static final String TASK_TEST_ROUTING_KEY = "yicode_task_test_key";
 }

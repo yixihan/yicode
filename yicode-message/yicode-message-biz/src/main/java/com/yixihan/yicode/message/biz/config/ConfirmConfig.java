@@ -36,31 +36,57 @@ public class ConfirmConfig {
      * 消息系统 - 队列绑定交换机-发布确认队列
      */
     @Bean
-    public Binding messageQueueBindingExchange(@Qualifier("messageExchange") DirectExchange messageExchange, @Qualifier("messageQueue") Queue messageQueue) {
+    public Binding messageQueueBindingExchange(@Qualifier("messageExchange") DirectExchange messageExchange,
+                                               @Qualifier("messageQueue") Queue messageQueue) {
         return BindingBuilder.bind (messageQueue).to (messageExchange).with (MessageConstant.MESSAGE_ROUTING_KEY);
     }
     
     /**
-     * 测评系统 - 直连型交换机
+     * 测评系统 - 提交代码 - 直连型交换机
      */
-    @Bean("taskExchange")
-    public DirectExchange taskExchange() {
+    @Bean("taskCommitExchange")
+    public DirectExchange taskCommitExchange() {
         return new DirectExchange (MessageConstant.TASK_COMMIT_EXCHANGE_NAME);
     }
     
     /**
-     * 测评系统 - 队列
+     * 测评系统 - 提交代码 - 队列
      */
-    @Bean("taskQueue")
-    public Queue taskQueue() {
+    @Bean("taskCommitQueue")
+    public Queue taskCommitQueue() {
         return QueueBuilder.durable (MessageConstant.TASK_COMMIT_QUEUE_NAME).build ();
     }
     
     /**
-     * 测评系统 - 队列绑定交换机-发布确认队列
+     * 测评系统 - 提交代码 - 队列绑定交换机-发布确认队列
      */
     @Bean
-    public Binding taskQueueBindingExchange(@Qualifier("taskExchange") DirectExchange taskExchange, @Qualifier("taskQueue") Queue taskQueue) {
+    public Binding taskCommitQueueBindingExchange(@Qualifier("taskCommitExchange") DirectExchange taskExchange,
+                                                  @Qualifier("taskCommitQueue") Queue taskQueue) {
+        return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_COMMIT_ROUTING_KEY);
+    }
+    /**
+     * 测评系统 - 提交代码 - 直连型交换机
+     */
+    @Bean("taskTestExchange")
+    public DirectExchange taskTestExchange() {
+        return new DirectExchange (MessageConstant.TASK_COMMIT_EXCHANGE_NAME);
+    }
+    
+    /**
+     * 测评系统 - 提交代码 - 队列
+     */
+    @Bean("taskTestQueue")
+    public Queue taskTestQueue() {
+        return QueueBuilder.durable (MessageConstant.TASK_COMMIT_QUEUE_NAME).build ();
+    }
+    
+    /**
+     * 测评系统 - 提交代码 - 队列绑定交换机-发布确认队列
+     */
+    @Bean
+    public Binding taskTestQueueBindingExchange(@Qualifier("taskTestExchange") DirectExchange taskExchange,
+                                                  @Qualifier("taskTestQueue") Queue taskQueue) {
         return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_COMMIT_ROUTING_KEY);
     }
 }
