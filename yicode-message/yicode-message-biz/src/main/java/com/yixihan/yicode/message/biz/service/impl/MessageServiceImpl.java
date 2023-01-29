@@ -40,12 +40,26 @@ public class MessageServiceImpl implements MessageService {
     }
     
     @Override
-    public CommonDtoResult<Boolean> sendTask(MsgSendDtoReq dtoReq) {
+    public CommonDtoResult<Boolean> commit(MsgSendDtoReq dtoReq) {
         CorrelationData correlationData = new CorrelationData (dtoReq.getMessageId ());
     
         rabbitTemplate.convertAndSend (
-                MessageConstant.TASK_EXCHANGE_NAME,
-                MessageConstant.TASK_ROUTING_KEY,
+                MessageConstant.TASK_COMMIT_EXCHANGE_NAME,
+                MessageConstant.TASK_COMMIT_ROUTING_KEY,
+                dtoReq.getData (),
+                correlationData
+        );
+    
+        return new CommonDtoResult<> (Boolean.TRUE);
+    }
+    
+    @Override
+    public CommonDtoResult<Boolean> test(MsgSendDtoReq dtoReq) {
+        CorrelationData correlationData = new CorrelationData (dtoReq.getMessageId ());
+    
+        rabbitTemplate.convertAndSend (
+                MessageConstant.TASK_TEST_EXCHANGE_NAME,
+                MessageConstant.TASK_TEST_ROUTING_KEY,
                 dtoReq.getData (),
                 correlationData
         );

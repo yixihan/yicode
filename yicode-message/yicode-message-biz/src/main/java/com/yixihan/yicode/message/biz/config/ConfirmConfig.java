@@ -45,7 +45,7 @@ public class ConfirmConfig {
      */
     @Bean("taskExchange")
     public DirectExchange taskExchange() {
-        return new DirectExchange (MessageConstant.TASK_EXCHANGE_NAME);
+        return new DirectExchange (MessageConstant.TASK_COMMIT_EXCHANGE_NAME);
     }
     
     /**
@@ -53,7 +53,7 @@ public class ConfirmConfig {
      */
     @Bean("taskQueue")
     public Queue taskQueue() {
-        return QueueBuilder.durable (MessageConstant.TASK_QUEUE_NAME).build ();
+        return QueueBuilder.durable (MessageConstant.TASK_COMMIT_QUEUE_NAME).build ();
     }
     
     /**
@@ -61,6 +61,6 @@ public class ConfirmConfig {
      */
     @Bean
     public Binding taskQueueBindingExchange(@Qualifier("taskExchange") DirectExchange taskExchange, @Qualifier("taskQueue") Queue taskQueue) {
-        return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_ROUTING_KEY);
+        return BindingBuilder.bind (taskQueue).to (taskExchange).with (MessageConstant.TASK_COMMIT_ROUTING_KEY);
     }
 }

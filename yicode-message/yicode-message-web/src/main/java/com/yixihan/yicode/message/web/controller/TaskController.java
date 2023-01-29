@@ -25,7 +25,12 @@ public class TaskController implements TaskApi {
     
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> send(MsgSendDtoReq dtoReq) {
-        return ApiResult.create (service.sendTask (dtoReq));
+    public ApiResult<CommonDtoResult<Boolean>> commit(MsgSendDtoReq dtoReq) {
+        return ApiResult.create (service.commit (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Boolean>> test(MsgSendDtoReq dtoReq) {
+        return ApiResult.create (service.test (dtoReq));
     }
 }
