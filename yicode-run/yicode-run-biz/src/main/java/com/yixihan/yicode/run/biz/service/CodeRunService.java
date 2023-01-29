@@ -144,7 +144,7 @@ public class CodeRunService {
             
             // 传入形参
             try (BufferedWriter writer = new BufferedWriter (new OutputStreamWriter (process.getOutputStream ()))) {
-                writer.write (Base64.decodeStr (param));
+                writer.write (param);
             }
             
             // 获取开始时间
