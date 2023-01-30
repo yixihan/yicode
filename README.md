@@ -34,7 +34,7 @@
 </div>
 <div align="center">
 
-![](https://github.com/yixihan/yicode/blob/master/assets/github-contribution-grid-snake.svg)
+![](assets/github-contribution-grid-snake.svg)
 </div>
 
 ## TODO
