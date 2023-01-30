@@ -112,7 +112,6 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
                         (k1, k2) -> k1
                 ));
         
-        // TODO 优化 返回所有的日期, 无论有无提交记录
         // 获取起始时间和截至时间
         DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), FORMAT_DAY);
         DateTime startMonth = DateUtil.parse (dtoReq.getStartDate (), FORMAT_MONTH);

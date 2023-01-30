@@ -23,6 +23,7 @@ import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionC
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionDailyUserFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.run.CodeRunFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserLanguageFeignClient;
+import com.yixihan.yicode.question.openapi.biz.service.question.SseEmitterService;
 import com.yixihan.yicode.run.api.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
@@ -57,6 +58,9 @@ public class RunCodeService {
     
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+    
+    @Resource
+    private SseEmitterService sseEmitterService;
     
     @Resource
     private CodeRunFeignClient codeRunFeignClient;
@@ -103,8 +107,9 @@ public class RunCodeService {
             // 运行代码
             CodeRunDtoResult result = codeRunFeignClient.runCode (dtoReq).getResult ();
             log.info ("代码运行结果 : {}", result);
-            
-            // TODO 推送给前端
+    
+            // 推送给前端
+            sseEmitterService.sendMsgToClient (req.getUserId (), result);
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.error ("出现异常", e);
@@ -135,8 +140,8 @@ public class RunCodeService {
             // 测评代码
             status = judgeCode (result, questionCase);
             
-            // TODO 推送给前端
-            log.info ("代码运行结果 : {}", status.getAnswer ());
+            // 推送给前端
+            sseEmitterService.sendMsgToClient (req.getUserId (), result);
             
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
@@ -157,8 +162,8 @@ public class RunCodeService {
         } catch (RetryableException e) {
             // 超时
             status = CodeAnswerEnums.TLE;
-            // TODO 推送给前端
-            log.info ("代码运行结果 : {}", status.getAnswer ());
+            // 推送给前端
+            sseEmitterService.sendMsgToClient (req.getUserId (), result);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {
@@ -170,8 +175,8 @@ public class RunCodeService {
             log.error ("出现错误", e);
             // 系统内部错误
             status = CodeAnswerEnums.SE;
-            // TODO 推送给前端
-            log.info ("代码运行结果 : {}", status.getAnswer ());
+            // 推送给前端
+            sseEmitterService.sendMsgToClient (req.getUserId (), result);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {
