@@ -1,8 +1,10 @@
 package com.yixihan.yicode.user.openapi.biz.service.msg.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.Channel;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
@@ -26,6 +28,7 @@ import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
 import com.yixihan.yicode.user.openapi.biz.feign.message.MessageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.msg.UserMsgFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
+import com.yixihan.yicode.user.openapi.biz.service.msg.SseEmitterService;
 import com.yixihan.yicode.user.openapi.biz.service.msg.UserMsgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -48,6 +51,9 @@ public class UserMsgServiceImpl implements UserMsgService {
     
     @Resource
     private UserService userService;
+    
+    @Resource
+    private SseEmitterService sseEmitterService;
     
     @Resource
     private UserMsgFeignClient userMsgFeignClient;
@@ -81,7 +87,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         
         CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
         if (dtoResult.getData ()) {
-            sendMessage (message);
+            sendMessage (JSONUtil.toJsonStr (dtoReq));
         }
         return CommonVO.create (dtoResult);
     }
@@ -137,7 +143,9 @@ public class UserMsgServiceImpl implements UserMsgService {
     public void receiveConfirmMessage(Message message, Channel channel) {
         try {
             // TODO 接收到消息，主动推给前端
-            log.info ("接受到的队列 confirm.queue 消息 : {}", new String (message.getBody ()));
+            MessageDetailVO vo = JSONUtil.toBean (new String (message.getBody ()), MessageDetailVO.class );
+            log.info ("接受到的队列 confirm.queue 消息 : {}", vo);
+            sseEmitterService.sendMsgToClient (CollUtil.newArrayList (vo));
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.info ("出现异常 : {}", e.getMessage ());

@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 用户消息 api
+ * 用户消息 OpenApi
  *
  * @author yixihan
  * @since 2022-11-25
  */
-@Api(tags = "用户消息 api")
+@Api(tags = "用户消息 OpenApi")
 @RequestMapping("/open/msg")
 public interface UserMsgOpenApi {
     
