@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -13,10 +14,12 @@ import com.yixihan.yicode.user.api.dto.request.extra.ModifyFollowDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FollowQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFollowReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.msg.AddMessageReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FollowVO;
 import com.yixihan.yicode.user.openapi.biz.feign.user.extra.UserFollowFeignClient;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import com.yixihan.yicode.user.openapi.biz.service.extra.UserFollowService;
+import com.yixihan.yicode.user.openapi.biz.service.msg.UserMsgService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 public class UserFollowServiceImpl implements UserFollowService {
+    
+    @Resource
+    private UserMsgService userMsgService;
     
     @Resource
     private UserFollowFeignClient followFeignClient;
@@ -51,6 +57,13 @@ public class UserFollowServiceImpl implements UserFollowService {
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
         }
+        
+        // 发送消息
+        AddMessageReq messageReq = new AddMessageReq ();
+        messageReq.setMessageType (MsgTypeEnums.FOLLOW.getType ());
+        messageReq.setReceiveUseId (req.getFollowUserId ());
+        userMsgService.addMessage (messageReq);
+        
         return CommonVO.create (dtoResult);
     }
     

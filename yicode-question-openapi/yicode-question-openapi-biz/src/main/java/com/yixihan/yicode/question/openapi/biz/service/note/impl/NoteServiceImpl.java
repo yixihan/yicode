@@ -236,6 +236,14 @@ public class NoteServiceImpl implements NoteService {
         if (!dtoResult.getData ()) {
             throw new BizException (dtoResult.getMessage ());
         }
+    
+        // 收藏成功, 发送消息
+        AddMessageReq messageReq = new AddMessageReq ();
+        messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
+        messageReq.setSourceId (req.getCollectionId ());
+        NoteVO noteVO = noteDetail (dtoReq.getCollectionId ());
+        messageReq.setReceiveUseId (noteVO.getUserId ());
+        msgService.addMessage (messageReq);
         return CommonVO.create (dtoResult);
     }
     
