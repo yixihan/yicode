@@ -41,27 +41,17 @@
 
 > 总体情况
 
-- [x] 完成 yicode-common 模块
-- [x] 完成 yicode-auth 模块
-- [x] 完成 yicode-gateway 模块
-- [x] 完成 yicode-user 模块
-- [x] 完成 yicode-user-openapi 模块
-- [x] 完成 yicode-thirdpart 模块
-- [x] 完成 yicode-thirdpart-openapi 模块
-- [x] 完成 yicode-question 模块
-- [x] 完成 yicode-question-openapi 模块
-- [x] 完成 yicode-message 模块
-- [x] 完成 yicode-run 模块
+- [x] yicode 后端基本完成
+- [ ] yicode 前端未开始
+
 
 > 待优化功能
 
-- [ ] message - 消息模板
-
-> 未开始功能
-
-- [ ] message - 消费者主动像前端推送消息
+- [ ] 优化 message - 消息模板
 
 > 额外功能
 
 - [ ] question - docker API 的对接
 - [ ] question - 对 yicode-run 模块的监控
+- [ ] 完善 README
+- [ ] 优化 email 模板
