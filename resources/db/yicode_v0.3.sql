@@ -11,7 +11,7 @@
  Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 12/01/2023 17:48:13
+ Date: 30/01/2023 09:04:14
 */
 
 SET NAMES utf8mb4;
@@ -175,18 +175,18 @@ CREATE TABLE `label_user`
 DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note`
 (
-    `note_id`          bigint(20) UNSIGNED                             NOT NULL COMMENT '题解 id',
-    `question_id`      bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '问题 id',
-    `note_name`        varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '题解标题',
-    `note_content`     text CHARACTER SET utf8 COLLATE utf8_bin        NULL COMMENT '题解内容',
-    `user_id`          bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `like_count`       int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '点赞数量',
-    `collection_count` int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '收藏数量',
-    `read_count`       int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '阅读数量',
-    `create_time`      datetime                                        NOT NULL COMMENT '创建时间',
-    `update_time`      datetime                                        NOT NULL COMMENT '修改时间',
-    `version`          int(10) UNSIGNED                                NOT NULL DEFAULT 1 COMMENT '乐观锁',
-    `del_flag`         int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `note_id`       bigint(20) UNSIGNED                             NOT NULL COMMENT '题解 id',
+    `question_id`   bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '问题 id',
+    `note_name`     varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '题解标题',
+    `note_content`  text CHARACTER SET utf8 COLLATE utf8_bin        NULL COMMENT '题解内容',
+    `user_id`       bigint(20) UNSIGNED                             NOT NULL DEFAULT 0 COMMENT '用户 id',
+    `like_count`    int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '点赞数量',
+    `comment_count` int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '评论数量',
+    `read_count`    int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '阅读数量',
+    `create_time`   datetime                                        NOT NULL COMMENT '创建时间',
+    `update_time`   datetime                                        NOT NULL COMMENT '修改时间',
+    `version`       int(10) UNSIGNED                                NOT NULL DEFAULT 1 COMMENT '乐观锁',
+    `del_flag`      int(11)                                         NOT NULL DEFAULT 0 COMMENT '逻辑删除',
     PRIMARY KEY (`note_id`) USING BTREE,
     INDEX `common_idx` (`question_id`, `user_id`) USING BTREE
 ) ENGINE = InnoDB
@@ -207,8 +207,10 @@ CREATE TABLE `question`
     `question_id`         bigint(20) UNSIGNED                             NOT NULL COMMENT '问题 id',
     `question_name`       varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '问题题目',
     `question_desc`       text CHARACTER SET utf8 COLLATE utf8_bin        NULL COMMENT '问题描述',
-    `question_difficulty` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '问题难度',
+    `question_difficulty` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '问题难度(EASY,MEDIUM,HARD)',
     `like_count`          int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '问题点赞数',
+    `comment_count`       int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '问题评论数',
+    `note_count`          int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '问题题解数',
     `commit_count`        int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '问题提交数',
     `success_count`       int(10) UNSIGNED                                NOT NULL DEFAULT 0 COMMENT '问题通过数',
     `create_time`         datetime                                        NOT NULL COMMENT '创建时间',
@@ -239,7 +241,7 @@ CREATE TABLE `question_answer`
     `answer_code`           text CHARACTER SET utf8 COLLATE utf8_bin         NULL COMMENT '代码',
     `answer_flag`           varchar(10) CHARACTER SET utf8 COLLATE utf8_bin  NOT NULL DEFAULT '' COMMENT '代码运行结果(acm模式运行结果)',
     `answer_time_consume`   int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '时间消耗',
-    `answer_memory_consume` int(10) UNSIGNED                                 NOT NULL DEFAULT 0 COMMENT '内存消耗',
+    `answer_memory_consume` double UNSIGNED                                  NOT NULL DEFAULT 0 COMMENT '内存消耗',
     `answer_note`           varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '备注',
     `create_time`           datetime                                         NOT NULL COMMENT '创建时间',
     `update_time`           datetime                                         NOT NULL COMMENT '修改时间',
@@ -327,31 +329,6 @@ CREATE TABLE `question_daily_user`
 
 -- ----------------------------
 -- Records of question_daily_user
--- ----------------------------
-
--- ----------------------------
--- Table structure for question_user_record
--- ----------------------------
-DROP TABLE IF EXISTS `question_user_record`;
-CREATE TABLE `question_user_record`
-(
-    `id`          bigint(20) UNSIGNED NOT NULL COMMENT '主键 id',
-    `user_id`     bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户 id',
-    `question_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '题目 id',
-    `create_time` datetime            NOT NULL COMMENT '创建时间',
-    `update_time` datetime            NOT NULL COMMENT '修改时间',
-    `version`     int(10) UNSIGNED    NOT NULL DEFAULT 1 COMMENT '乐观锁',
-    `del_flag`    int(11)             NOT NULL DEFAULT 0 COMMENT '逻辑删除',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `user_id` (`user_id`) USING BTREE,
-    INDEX `question_id` (`question_id`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8
-  COLLATE = utf8_bin COMMENT = '用户题目通过记录表'
-  ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of question_user_record
 -- ----------------------------
 
 -- ----------------------------
@@ -513,8 +490,11 @@ CREATE TABLE `user`
 -- Records of user
 -- ----------------------------
 INSERT INTO `user`
-VALUES (1, 'yixihan', '$2a$10$2MThiN5AWiGbq43aHLCF/.3eFd4utijouCZlgxMTDVIGykIQEU38a', '17623850426',
-        '3113788997@qq.com', 'USERNAME_PASSWORD', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
+VALUES (1, 'yixihan', '$2a$10$2MThiN5AWiGbq43aHLCF/.3eFd4utijouCZlgxMTDVIGykIQEU38a', NULL, NULL, 'USERNAME_PASSWORD',
+        '2022-11-10 14:49:38', '2023-01-13 11:07:48', 3, 0);
+INSERT INTO `user`
+VALUES (1614537881802297345, '王麻子', '$2a$10$PAemGL.xbMYwBYICU275yOoszOjk5ttoShwsHw6bYH73D66ymLZX.', NULL, NULL,
+        'USERNAME_PASSWORD', '2023-01-15 16:20:02', '2023-01-15 16:20:02', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_collection
@@ -566,8 +546,10 @@ CREATE TABLE `user_favorite`
 -- Records of user_favorite
 -- ----------------------------
 INSERT INTO `user_favorite`
-VALUES (1, 1, 'QUESTION', '默认收藏夹', 0, '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
-
+VALUES (1, 1, 'QUESTION', '默认收藏夹', 3, '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
+INSERT INTO `user_favorite`
+VALUES (1614537881965875202, 1614537881802297345, '0', '默认收藏夹', 0, '2023-01-15 16:20:02', '2023-01-15 16:20:02', 1,
+        0);
 -- ----------------------------
 -- Table structure for user_follow
 -- ----------------------------
@@ -626,14 +608,8 @@ CREATE TABLE `user_info`
 INSERT INTO `user_info`
 VALUES (1, 1, '', '', '', 'SECRECY', '', '', NULL, '', '2022-11-10 14:49:38', '2022-11-10 14:49:38', 1, 0);
 INSERT INTO `user_info`
-VALUES (2, 810239828390490114, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:24:54', '2023-01-10 17:24:54', 1,
-        0);
-INSERT INTO `user_info`
-VALUES (3, 810239828390490116, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:24:54', '2023-01-10 17:24:54', 1,
-        0);
-INSERT INTO `user_info`
-VALUES (4, 810240034091741185, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-10 17:25:43', '2023-01-10 17:25:43', 1,
-        0);
+VALUES (1614537881965875201, 1614537881802297345, '', '', '', 'SECRECY', '', '', NULL, '', '2023-01-15 16:20:02',
+        '2023-01-15 16:20:02', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_language
@@ -714,6 +690,8 @@ INSERT INTO `user_role`
 VALUES (10000008, 1, 2, '2022-11-10 15:17:19', '2022-11-10 15:17:19', 1, 0);
 INSERT INTO `user_role`
 VALUES (10000009, 1, 3, '2022-11-10 15:17:19', '2022-11-10 15:17:19', 1, 0);
+INSERT INTO `user_role`
+VALUES (1614537881902960642, 1614537881802297345, 3, '2023-01-15 16:20:02', '2023-01-15 16:20:02', 1, 0);
 
 -- ----------------------------
 -- Table structure for user_website
