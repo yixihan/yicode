@@ -148,9 +148,9 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         // 设置 endDate & startDate
         Date endDate = StrUtil.isBlank (year) ?
                 DateUtil.endOfDay (new Date ()) :
-                DateUtil.endOfYear (DateUtil.parse (year));
+                DateUtil.endOfYear (DateUtil.parse (year, "yyyy"));
         
-        Date startDate = DateUtil.offsetMonth (endDate, -12);
+        Date startDate = DateUtil.beginOfDay (DateUtil.offsetDay (DateUtil.offsetMonth (endDate, -12), 1));
         
     
         // 构建请求 body

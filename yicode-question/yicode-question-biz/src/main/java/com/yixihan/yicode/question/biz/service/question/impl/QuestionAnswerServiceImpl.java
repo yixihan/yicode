@@ -2,6 +2,8 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,15 +24,14 @@ import com.yixihan.yicode.question.api.enums.CodeAnswerEnums;
 import com.yixihan.yicode.question.biz.service.question.QuestionAnswerService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionAnswerMapper;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionAnswer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -41,8 +42,12 @@ import java.util.stream.Collectors;
  * @author yixihan
  * @since 2023-01-11
  */
+@Slf4j
 @Service
 public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper, QuestionAnswer> implements QuestionAnswerService {
+    
+    private static final String FORMAT_DAY = "yyyy-MM-dd";
+    private static final String FORMAT_MONTH = "yyyy-MM";
     
     @Override
     public CommonDtoResult<Boolean> addQuestionAnswer(AddQuestionAnswerDtoReq dtoReq) {
@@ -100,15 +105,44 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
     
     @Override
     public Map<String, List<CommitRecordDtoResult>> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
-        List<CommitRecordDtoResult> commitRecordDtoResults = baseMapper.codeCommitCount (dtoReq);
+        Map<DateTime, CommitRecordDtoResult> commitRecordDtoResults = baseMapper.codeCommitCount (dtoReq).stream ()
+                .collect (Collectors.toMap (
+                        (o) -> DateUtil.parse (o.getDate (), FORMAT_DAY),
+                        Function.identity (),
+                        (k1, k2) -> k1
+                ));
         
         // TODO 优化 返回所有的日期, 无论有无提交记录
+        // 获取起始时间和截至时间
+        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), FORMAT_DAY);
+        DateTime startMonth = DateUtil.parse (dtoReq.getStartDate (), FORMAT_MONTH);
+        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), FORMAT_DAY);
         
-        return commitRecordDtoResults.stream ()
-                .collect (Collectors.groupingBy (
-                        (item) -> item.getDate ().substring (0, item.getDate ().lastIndexOf ("-")),
-                        HashMap::new,
-                        Collectors.toList ()));
+        TreeMap<String, List<CommitRecordDtoResult>> map = new TreeMap<> ();
+        List<CommitRecordDtoResult> list = new ArrayList<> ();
+        
+        while (DateUtil.compare (startDate, endDate) < 0) {
+            // 月份不相同
+            if (startDate.monthBaseOne () != startMonth.monthBaseOne ()) {
+                // 存储进 map
+                map.put (DateUtil.format (startMonth, FORMAT_MONTH), new ArrayList<> (list));
+                list.clear ();
+                // 偏移月
+                startMonth = DateUtil.offsetMonth (startMonth, 1);
+            }
+            
+            list.add (commitRecordDtoResults.getOrDefault (
+                    startDate,
+                    new CommitRecordDtoResult (DateUtil.format (startDate, FORMAT_DAY), 0))
+            );
+            
+            // 偏移天
+            startDate = DateUtil.offsetDay (startDate, 1);
+        }
+        // 存储进 map
+        map.put (DateUtil.format (startMonth, FORMAT_MONTH), new ArrayList<> (list));
+        
+        return map;
     }
     
     @Override

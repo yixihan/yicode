@@ -47,6 +47,8 @@ public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
      */
     List<QuestionAnswerDtoResult> codeRate(@Param ("userId") Long userId);
     
-    
+    /**
+     * 获取题目数量情况
+     */
     QuestionNumberDtoResult questionNumber ();
 }
