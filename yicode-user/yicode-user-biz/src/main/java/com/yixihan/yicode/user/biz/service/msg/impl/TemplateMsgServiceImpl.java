@@ -15,6 +15,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.MESSAGE_TEMPLATE_KEY;
+
 /**
  * <p>
  * 消息模板表 服务实现类
@@ -26,7 +28,6 @@ import java.util.List;
 @Service
 public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, TemplateMsg> implements TemplateMsgService {
     
-    private static final String MESSAGE_TEMPLATE_KEY = "template_key:message";
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     

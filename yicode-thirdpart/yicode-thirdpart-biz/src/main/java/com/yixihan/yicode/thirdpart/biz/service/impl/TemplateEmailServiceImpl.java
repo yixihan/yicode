@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.EMAIL_TEMPLATE_KEY;
+
 /**
  * <p>
  * 邮件模板表 服务实现类
@@ -25,7 +27,6 @@ import java.util.List;
 @Service
 public class TemplateEmailServiceImpl extends ServiceImpl<TemplateEmailMapper, TemplateEmail> implements TemplateEmailService {
     
-    private static final String EMAIL_TEMPLATE_KEY = "template_key:email";
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     

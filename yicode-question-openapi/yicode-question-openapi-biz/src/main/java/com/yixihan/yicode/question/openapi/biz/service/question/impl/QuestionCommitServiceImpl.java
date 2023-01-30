@@ -37,6 +37,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.COMMIT_RUN_CODE_KEY;
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.TEST_RUN_CODE_KEY;
+
 /**
  * 提交答案 服务实现类
  *
@@ -60,10 +63,6 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     private TaskFeignClient taskFeignClient;
     
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    
-    private static final String TEST_RUN_CODE_KEY = "runcode:test:%s";
-    
-    private static final String COMMIT_RUN_CODE_KEY = "runcode:commit:%s";
     
     @Override
     public void test(CodeReq req) {

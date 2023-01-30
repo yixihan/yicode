@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.USER_DAILY_QUESTION_KEY;
+
 /**
  * <p>
  * 用户每日一题表 服务实现类
@@ -37,10 +39,7 @@ public class QuestionDailyUserServiceImpl extends ServiceImpl<QuestionDailyUserM
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     
-    /**
-     * redis key : 用户每日一题做题情况
-     */
-    private static final String USER_DAILY_QUESTION_KEY = "question_daily:user:%s";
+    
     
     @Override
     public CommonDtoResult<Boolean> addUserDailyQuestion(AddUserDailyQuestionDtoReq dtoReq) {

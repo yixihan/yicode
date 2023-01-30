@@ -42,6 +42,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.NOTE_LIKE_KEY;
+
 /**
  * 题解 服务实现类
  *
@@ -78,11 +80,6 @@ public class NoteServiceImpl implements NoteService {
     
     @Resource
     private LikeService likeService;
-    
-    /**
-     * redis key : 点赞题解
-     */
-    private static final String NOTE_LIKE_KEY = "like:note";
     
     @Override
     public CommonVO<Boolean> addNote(ModifyNoteReq req) {

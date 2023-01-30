@@ -41,6 +41,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.QUESTION_LIKE_KEY;
+
 /**
  * 问题 服务实现类
  *
@@ -71,11 +73,6 @@ public class QuestionServiceImpl implements QuestionService {
     
     @Resource
     private LabelQuestionFeignClient labelQuestionFeignClient;
-    
-    /**
-     * redis key : 点赞问题
-     */
-    private static final String QUESTION_LIKE_KEY = "like:question";
     
     @Override
     public CommonVO<Boolean> addQuestion(ModifyQuestionReq req) {

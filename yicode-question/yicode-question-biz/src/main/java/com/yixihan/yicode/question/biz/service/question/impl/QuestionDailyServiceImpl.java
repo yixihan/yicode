@@ -26,6 +26,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.yixihan.yicode.common.constant.RedisKeyConstant.DAILY_QUESTION_KEY;
+
 /**
  * <p>
  * 每日一题表 服务实现类
@@ -43,11 +45,6 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     
     @Resource
     private QuestionService questionService;
-    
-    /**
-     * redis key : 每日一题
-     */
-    private static final String DAILY_QUESTION_KEY = "question_daily:question";
     
     @PostConstruct
     @Scheduled(cron = "0 5 0 * * ?")
