@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 添加用户标签-dtoReq
  *
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class ModifyLabelUserDtoReq {
     
     @ApiModelProperty(value = "标签 ID")
-    private Long labelId;
+    private List<Long> labelId;
     
     @ApiModelProperty(value = "用户 ID")
     private Long userId;

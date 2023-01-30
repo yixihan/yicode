@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
@@ -33,11 +32,17 @@ public class LabelUserServiceImpl extends ServiceImpl<LabelUserMapper, LabelUser
     
     @Override
     public CommonDtoResult<Boolean> addUserLabel(ModifyLabelUserDtoReq dtoReq) {
-        LabelUser labelUser = BeanUtil.toBean (dtoReq, LabelUser.class);
+        List<LabelUser> labelUserList = dtoReq.getLabelId ().stream ()
+                .map ((labelId) -> {
+                    LabelUser labelUser = new LabelUser ();
+                    labelUser.setLabelId (labelId);
+                    labelUser.setUserId (dtoReq.getUserId ());
+                    return labelUser;
+                }).collect(Collectors.toList());
     
-        int modify = baseMapper.insert (labelUser);
+        boolean modify = this.saveBatch (labelUserList);
     
-        if (modify != 1) {
+        if (modify) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);

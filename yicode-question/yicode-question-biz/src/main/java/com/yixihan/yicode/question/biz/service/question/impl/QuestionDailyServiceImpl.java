@@ -47,7 +47,7 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     private QuestionService questionService;
     
     @PostConstruct
-    @Scheduled(cron = "0 5 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void addDailyQuestion() {
         // 获取题目总数
         int count = questionService.count ();
@@ -59,19 +59,19 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
         // 获取当月每日一题生成情况
         String jsonStr = Optional.ofNullable (redisTemplate.opsForHash ().get (DAILY_QUESTION_KEY, yearMonth))
                 .orElse ("").toString ();
-        List<QuestionDaily> array = StrUtil.isBlank (jsonStr) ?
+        List<QuestionDailyDtoResult> array = StrUtil.isBlank (jsonStr) ?
                 new ArrayList<> () :
-                JSONUtil.parseArray (jsonStr).toList (QuestionDaily.class);
+                JSONUtil.parseArray (jsonStr).toList (QuestionDailyDtoResult.class);
         
         // 如果当天的每日一题已被创建, 则直接返回
-        if (array.stream ().map (QuestionDaily::getCreateTime).anyMatch ((o) ->
+        if (array.stream ().map (QuestionDailyDtoResult::getCreateTime).anyMatch ((o) ->
                 DateUtil.betweenDay (o, nowTime, Boolean.TRUE) == NumConstant.NUM_0)) {
             return;
         }
         
         // 获取当月每日一题的问题 ID
         Set<Long> questionIdSet = array.stream ()
-                .map (QuestionDaily::getQuestionId)
+                .map (QuestionDailyDtoResult::getQuestionId)
                 .collect (Collectors.toSet ());
     
         // 循环生成一个本月没生成过的每日一题
@@ -93,7 +93,7 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
         log.info ("questionDaily : {}", questionDaily);
         
         // 构建 jsonArray
-        array.add (questionDaily);
+        array.add (BeanUtil.toBean (questionDaily, QuestionDailyDtoResult.class));
         JSONArray jsonArray = JSONUtil.createArray ();
         jsonArray.addAll (array);
     
