@@ -1,30 +1,36 @@
-package com.yixihan.yicode.user.api.enums;
+package com.yixihan.yicode.common.enums.question;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 收藏夹类型枚举类
+ * 问题难度类型枚举类
  *
  * @author yixihan
- * @date 2022/12/21 14:38
+ * @date 2023/1/16 9:35
  */
 @AllArgsConstructor
 @Getter
-public enum FavoriteTypeEnums {
+public enum QuestionDifficultyTypeEnums {
     
     /**
-     * 问题
+     * 简单
      */
-    QUESTION ("QUESTION", "问题"),
+    EASY ("EASY", "简单"),
     
     /**
-     * 题解
+     * 中等
      */
-    NOTE("NOTE", "题解");
+    MEDIUM ("MEDIUM", "中等"),
     
     /**
-     * 类型
+     * 困难
+     */
+    HARD ("HARD", "困难");
+    
+    
+    /**
+     * 难度
      */
     private final String type;
     
@@ -40,7 +46,7 @@ public enum FavoriteTypeEnums {
      * @return 是 : true | 否 : false
      */
     public static Boolean contains (String type) {
-        for (FavoriteTypeEnums enums : FavoriteTypeEnums.values ()) {
+        for (QuestionDifficultyTypeEnums enums : QuestionDifficultyTypeEnums.values ()) {
             if (enums.getType ().equals (type)) {
                 return Boolean.TRUE;
             }

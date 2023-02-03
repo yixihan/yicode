@@ -1,6 +1,6 @@
 package com.yixihan.yicode.common.valid;
 
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 
 import java.lang.annotation.*;
 

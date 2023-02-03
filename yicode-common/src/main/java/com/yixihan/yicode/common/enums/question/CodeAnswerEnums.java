@@ -1,4 +1,4 @@
-package com.yixihan.yicode.question.api.enums;
+package com.yixihan.yicode.common.enums.question;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

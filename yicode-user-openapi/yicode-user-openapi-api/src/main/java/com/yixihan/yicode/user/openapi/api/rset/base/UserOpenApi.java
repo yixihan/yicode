@@ -1,6 +1,6 @@
 package com.yixihan.yicode.user.openapi.api.rset.base;
 
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;

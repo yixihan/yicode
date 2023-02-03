@@ -20,7 +20,7 @@ import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionNumberDtoResult;
-import com.yixihan.yicode.question.api.enums.CodeAnswerEnums;
+import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
 import com.yixihan.yicode.question.biz.service.question.QuestionAnswerService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionAnswerMapper;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionAnswer;

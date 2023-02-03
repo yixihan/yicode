@@ -7,7 +7,7 @@ import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.enums.code.CodeTypeEnums;
+import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.sms.SMSFeignClient;

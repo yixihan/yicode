@@ -18,7 +18,7 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
-import com.yixihan.yicode.question.api.enums.AnswerTypeEnums;
+import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.comment.AddRootCommentReq;

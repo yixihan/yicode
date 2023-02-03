@@ -5,7 +5,7 @@ import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.enums.email.EmailTemplateEnums;
+import com.yixihan.yicode.common.enums.thirdpart.email.EmailTemplateEnums;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.api.prop.email.EmailProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;

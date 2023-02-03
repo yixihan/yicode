@@ -12,8 +12,8 @@ import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestion
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
-import com.yixihan.yicode.question.api.enums.CodeAnswerEnums;
-import com.yixihan.yicode.question.api.enums.CodeTypeEnums;
+import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
+import com.yixihan.yicode.common.enums.question.CodeTypeEnums;
 import com.yixihan.yicode.question.openapi.api.prop.CodeJudgeProp;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelQuestionFeignClient;

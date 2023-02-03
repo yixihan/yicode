@@ -7,7 +7,7 @@ import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.enums.code.CodeTypeEnums;
+import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.email.EmailFeignClient;

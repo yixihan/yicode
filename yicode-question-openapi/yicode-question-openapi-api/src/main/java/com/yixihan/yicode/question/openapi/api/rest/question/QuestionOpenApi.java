@@ -1,6 +1,6 @@
 package com.yixihan.yicode.question.openapi.api.rest.question;
 
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;

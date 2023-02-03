@@ -1,7 +1,7 @@
 package com.yixihan.yicode.user.openapi.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

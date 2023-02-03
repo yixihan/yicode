@@ -1,4 +1,4 @@
-package com.yixihan.yicode.thirdpart.api.enums.oss;
+package com.yixihan.yicode.common.enums.thirdpart.oss;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

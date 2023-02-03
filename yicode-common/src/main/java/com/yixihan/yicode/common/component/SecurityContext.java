@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.pojo.Role;
 import com.yixihan.yicode.common.pojo.User;
 import lombok.Data;

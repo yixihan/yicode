@@ -13,7 +13,7 @@ import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.thirdpart.api.enums.oss.SMSTemplateEnums;
+import com.yixihan.yicode.common.enums.thirdpart.oss.SMSTemplateEnums;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.api.prop.sms.SMSProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateSmsService;

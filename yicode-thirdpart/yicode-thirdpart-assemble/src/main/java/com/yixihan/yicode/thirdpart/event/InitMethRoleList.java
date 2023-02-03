@@ -1,7 +1,7 @@
 package com.yixihan.yicode.thirdpart.event;
 
 import com.yixihan.yicode.common.constant.AuthConstant;
-import com.yixihan.yicode.common.enums.RoleEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.valid.RoleAccess;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

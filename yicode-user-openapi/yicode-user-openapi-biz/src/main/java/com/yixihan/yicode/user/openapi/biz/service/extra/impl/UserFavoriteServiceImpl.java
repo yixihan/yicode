@@ -11,7 +11,7 @@ import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
-import com.yixihan.yicode.user.api.enums.FavoriteTypeEnums;
+import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
