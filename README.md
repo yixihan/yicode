@@ -51,7 +51,7 @@
 
 > 额外功能
 
-- [ ] question - docker API 的对接
-- [ ] question - 对 yicode-run 模块的监控
+- [x] question - docker API 的对接
+- [x] question - 对 yicode-run 模块的监控
 - [ ] 完善 README
 - [ ] 优化 email 模板
