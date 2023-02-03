@@ -1,4 +1,4 @@
-package com.yixihan.yicode.message.biz.config;
+package com.yixihan.yicode.message.config;
 
 import com.yixihan.yicode.message.api.constant.MessageConstant;
 import org.springframework.amqp.core.*;
