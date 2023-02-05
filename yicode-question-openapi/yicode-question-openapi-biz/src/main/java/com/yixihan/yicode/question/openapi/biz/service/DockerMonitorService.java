@@ -103,7 +103,7 @@ public class DockerMonitorService {
      * 定时方法, 每十分钟执行一次<br>
      * 遍历容器, 找到不正常的容器, 删除并重新创建
      */
-    @Scheduled(cron = "0 0,10,20,30,40,50 * * * ? *")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void monitor () {
         ExecutorService executor = ThreadUtil.newExecutor ();
 
