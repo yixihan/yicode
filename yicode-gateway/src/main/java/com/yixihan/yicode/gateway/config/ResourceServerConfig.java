@@ -46,7 +46,9 @@ public class ResourceServerConfig {
         // 对白名单路径, 直接移除 jwt 请求头
         http.addFilterBefore (ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         http.authorizeExchange ()
-                .pathMatchers (ArrayUtil.toArray (ignoreUrlsConfig.getUrls (), String.class))
+                .pathMatchers (ArrayUtil.toArray (
+                        ignoreUrlsConfig.getUrls (),
+                        String.class))
                 .permitAll ()//白名单配置
                 .anyExchange ().access (authorizationManager)//鉴权管理器配置
                 .and ().exceptionHandling ().accessDeniedHandler (restfulAccessDeniedHandler)//处理未授权

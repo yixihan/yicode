@@ -1,4 +1,4 @@
-FROM oracle-jdk:8.1
+FROM ccr.ccs.tencentyun.com/yixihan/jdk:8
 EXPOSE 16200
 
 ARG APLLLICATION=yicode-thirdpart-openapi

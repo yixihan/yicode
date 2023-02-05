@@ -1,4 +1,4 @@
-FROM myos
+FROM ccr.ccs.tencentyun.com/yixihan/myos
 EXPOSE 18200
 
 ARG APLLLICATION=yicode-run
