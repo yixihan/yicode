@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 192.168.238.128&mysql5.7
+ Source Server         : 192.168.101.12&mysql5.7
  Source Server Type    : MySQL
  Source Server Version : 50740
- Source Host           : 192.168.238.128:1617
+ Source Host           : 192.168.101.12:1617
  Source Schema         : yicode
 
  Target Server Type    : MySQL
