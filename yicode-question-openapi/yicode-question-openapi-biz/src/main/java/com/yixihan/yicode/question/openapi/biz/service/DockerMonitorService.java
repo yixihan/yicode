@@ -159,14 +159,10 @@ public class DockerMonitorService {
                 executor.execute (() -> {
                     // 运行环境设置
                     ArrayList<String> env = new ArrayList<> ();
-                    env.add ("JAVA_OPTS=’-Xmx256m’");
+                    env.add ("JAVA_OPTS=’-Xmx512m’");
                     
                     // 主机配置
                     HostConfig hostConfig = new HostConfig ()
-                            // 内存限制 256M
-                            .withMemory (268435456L)
-                            // cpu 权重设置 4c
-                            .withCpuShares (4096)
                             // 设置自动重启
                             .withRestartPolicy (RestartPolicy.alwaysRestart ())
                             // 设置网络模式
