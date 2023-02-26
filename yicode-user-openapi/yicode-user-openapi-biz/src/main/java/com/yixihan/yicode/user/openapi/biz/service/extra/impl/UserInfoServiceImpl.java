@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,18 +84,34 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfoVO userInfoVO = BeanUtil.toBean (dtoResult, UserInfoVO.class);
     
         // 获取用户网战
-        userInfoVO.setUserWebsiteList (websiteFeignClient.getUserWebsite (userId).getResult ().
-                stream ().map (UserWebsiteDtoResult::getUserWebsite).collect(Collectors.toList()));
+        List<UserWebsiteDtoResult> websiteDtoResultList = websiteFeignClient.getUserWebsite (userId).getResult ();
+        
+        if (CollectionUtil.isNotEmpty (websiteDtoResultList)) {
+            userInfoVO.setUserWebsiteList (websiteDtoResultList.stream ()
+                    .map (UserWebsiteDtoResult::getUserWebsite)
+                    .collect (Collectors.toList ()));
+        } else {
+            userInfoVO.setUserWebsiteList (Collections.emptyList ());
+        }
     
         // 获取用户语言
         List<UserLanguageDtoResult> languageDtoResults = languageFeignClient.getUserLanguage (userId).getResult ();
-        userInfoVO.setUserLanguageList (BeanUtil.copyToList (languageDtoResults, UserLanguageVO.class));
+    
+        if (CollectionUtil.isNotEmpty (languageDtoResults)) {
+            userInfoVO.setUserLanguageList (BeanUtil.copyToList (languageDtoResults, UserLanguageVO.class));
+        } else {
+            userInfoVO.setUserLanguageList (Collections.emptyList ());
+        }
         
         // 获取用户标签
         List<LabelDtoResult> labelDtoResult = labelUserFeignClient.userLabelDetail (userId).getResult ();
-        
-        userInfoVO.setUserLabel (labelDtoResult.stream ()
-                .map (LabelDtoResult::getLabelName).collect(Collectors.toList()));
+
+        if (CollectionUtil.isNotEmpty (labelDtoResult)) {
+            userInfoVO.setUserLabel (labelDtoResult.stream ()
+                    .map (LabelDtoResult::getLabelName).collect(Collectors.toList()));
+        } else {
+            userInfoVO.setUserLabel (Collections.emptyList ());
+        }
     
         return userInfoVO;
     }
