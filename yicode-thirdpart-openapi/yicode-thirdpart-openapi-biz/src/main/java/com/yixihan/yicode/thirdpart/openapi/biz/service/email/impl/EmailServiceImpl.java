@@ -1,17 +1,19 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
-import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.email.EmailFeignClient;
+import com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user.UserFeignClient;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.email.EmailService;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +31,18 @@ public class EmailServiceImpl implements EmailService {
 
     @Resource
     private EmailFeignClient emailFeignClient;
+    
+    @Resource
+    private UserFeignClient userFeignClient;
 
     @Override
     public CommonVO<Boolean> loginSend(EmailSendReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
@@ -48,6 +57,10 @@ public class EmailServiceImpl implements EmailService {
     public CommonVO<Boolean> loginValidate(EmailValidateReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.LOGIN.getType ());
@@ -91,6 +104,10 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
+        }
         EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -104,6 +121,10 @@ public class EmailServiceImpl implements EmailService {
     public CommonVO<Boolean> resetValidate(EmailValidateReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
@@ -119,6 +140,10 @@ public class EmailServiceImpl implements EmailService {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
         }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
+        }
         EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
@@ -132,6 +157,10 @@ public class EmailServiceImpl implements EmailService {
     public CommonVO<Boolean> commonValidate(EmailValidateReq req) {
         if (!ValidationUtils.validateEmail (req.getEmail ())) {
             throw new BizException ("邮箱不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
         dtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());

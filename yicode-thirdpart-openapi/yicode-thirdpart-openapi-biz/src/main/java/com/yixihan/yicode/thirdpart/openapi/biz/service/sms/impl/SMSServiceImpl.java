@@ -1,17 +1,19 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.feign.thirdpart.sms.SMSFeignClient;
+import com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user.UserFeignClient;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.sms.SMSService;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +31,18 @@ public class SMSServiceImpl implements SMSService {
 
     @Resource
     private SMSFeignClient smsFeignClient;
+    
+    @Resource
+    private UserFeignClient userFeignClient;
 
     @Override
     public CommonVO<Boolean> loginSend(SMSSendReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
@@ -48,6 +57,10 @@ public class SMSServiceImpl implements SMSService {
     public CommonVO<Boolean> loginValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.LOGIN.getType ());
@@ -91,6 +104,10 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
+        }
         SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
@@ -104,6 +121,10 @@ public class SMSServiceImpl implements SMSService {
     public CommonVO<Boolean> resetValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
@@ -119,6 +140,10 @@ public class SMSServiceImpl implements SMSService {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
         }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
+        }
         SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
         dtoReq.setType (CodeTypeEnums.COMMON.getType ());
         CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
@@ -132,6 +157,10 @@ public class SMSServiceImpl implements SMSService {
     public CommonVO<Boolean> commonValidate(SMSValidateReq req) {
         if (!ValidationUtils.validateMobile (req.getMobile ())) {
             throw new BizException ("手机号不符合规范!");
+        }
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException ("没有该用户!");
         }
         SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
         dtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
