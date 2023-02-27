@@ -6,7 +6,7 @@ package com.yixihan.yicode.common.util;
  * @author yixihan
  * @date 2022-11-12-14:15
  */
-public class SnowFlake {
+public class SnowFlakeUtil {
 
     /**
      * 起始的时间戳（可设置当前时间之前的邻近时间）

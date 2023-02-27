@@ -7,7 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
-import com.yixihan.yicode.common.util.SnowFlake;
+import com.yixihan.yicode.common.util.SnowFlakeUtil;
 import com.yixihan.yicode.run.api.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
@@ -115,7 +115,7 @@ public class CodeRunService {
      */
     public File createFile(String code, String fileName) {
         // 生成源代码目录
-        File path = new File (getPath () + "/" + SnowFlake.nextId ());
+        File path = new File (getPath () + "/" + SnowFlakeUtil.nextId ());
         FileUtil.mkdir (path);
         // 生成源代码文件
         File file = new File (path + "/" + fileName);
