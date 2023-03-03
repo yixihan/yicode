@@ -27,7 +27,7 @@ import java.util.Date;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "TemplateMsg对象", description = "短信模板表")
+@ApiModel(value = "TemplateMsg对象", description = "消息模板表")
 public class TemplateMsg implements Serializable {
 
     private static final long serialVersionUID = 1L;

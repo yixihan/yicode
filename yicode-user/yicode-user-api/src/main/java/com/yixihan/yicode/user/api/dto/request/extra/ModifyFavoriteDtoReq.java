@@ -27,6 +27,9 @@ public class ModifyFavoriteDtoReq {
     @ApiModelProperty(value = "收藏夹名")
     private String favoriteName;
     
+    @ApiModelProperty(value = "收藏夹封面")
+    private String favoriteBg;
+    
     @ApiModelProperty(value = "收藏数量")
     private Integer favoriteCount;
 }

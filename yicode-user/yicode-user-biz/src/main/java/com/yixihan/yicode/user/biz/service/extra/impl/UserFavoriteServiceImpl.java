@@ -48,6 +48,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         wrapper.eq (UserFavorite.FAVORITE_ID, dtoReq.getFavoriteId ())
                 .eq (UserFavorite.USER_ID, dtoReq.getUserId ())
                 .set (StrUtil.isNotBlank (dtoReq.getFavoriteName ()),UserFavorite.FAVORITE_NAME, dtoReq.getFavoriteName ())
+                .set (StrUtil.isNotBlank (dtoReq.getFavoriteBg ()),UserFavorite.FAVORITE_BG, dtoReq.getFavoriteBg ())
                 .set (dtoReq.getFavoriteCount () != null, UserFavorite.FAVORITE_COUNT, dtoReq.getFavoriteCount ());
     
         FavoriteDetailQueryDtoReq queryDtoReq = new FavoriteDetailQueryDtoReq (dtoReq.getUserId (), dtoReq.getFavoriteId ());

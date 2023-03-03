@@ -41,6 +41,9 @@ public class UserFavorite implements Serializable {
 
     @ApiModelProperty(value = "收藏夹名")
     private String favoriteName;
+    
+    @ApiModelProperty(value = "收藏夹封面")
+    private String favoriteBg;
 
     @ApiModelProperty(value = "收藏数量")
     private Integer favoriteCount;
@@ -71,6 +74,7 @@ public class UserFavorite implements Serializable {
     public static final String FAVORITE_TYPE = "favorite_type";
 
     public static final String FAVORITE_NAME = "favorite_name";
+    public static final String FAVORITE_BG = "favorite_bg";
 
     public static final String FAVORITE_COUNT = "favorite_count";
 
