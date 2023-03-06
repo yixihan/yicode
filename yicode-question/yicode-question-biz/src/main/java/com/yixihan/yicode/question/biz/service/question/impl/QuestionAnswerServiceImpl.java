@@ -8,6 +8,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -20,13 +21,14 @@ import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionNumberDtoResult;
-import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
 import com.yixihan.yicode.question.biz.service.question.QuestionAnswerService;
+import com.yixihan.yicode.question.biz.service.question.QuestionService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionAnswerMapper;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionAnswer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -46,6 +48,9 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper, QuestionAnswer> implements QuestionAnswerService {
     
+    @Resource
+    private QuestionService questionService;
+    
     private static final String FORMAT_DAY = "yyyy-MM-dd";
     private static final String FORMAT_MONTH = "yyyy-MM";
     
@@ -57,6 +62,17 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         
         if (modify != 1) {
             return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
+        }
+        
+        if (CodeAnswerEnums.AC.getAnswer ().equals (dtoReq.getAnswerFlag ())) {
+            questionService.modifyQuestionSuccessCount (dtoReq.getQuestionId (),
+                    questionService.getById (dtoReq.getQuestionId ()).getSuccessCount ());
+    
+            questionService.modifyQuestionCommitCount (dtoReq.getQuestionId (),
+                    questionService.getById (dtoReq.getQuestionId ()).getCommitCount ());
+        } else {
+            questionService.modifyQuestionCommitCount (dtoReq.getQuestionId (),
+                    questionService.getById (dtoReq.getQuestionId ()).getCommitCount ());
         }
         return new CommonDtoResult<> (Boolean.TRUE);
     }
