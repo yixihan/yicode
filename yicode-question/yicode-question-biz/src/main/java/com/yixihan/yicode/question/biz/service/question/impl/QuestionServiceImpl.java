@@ -9,8 +9,11 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
+import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
+import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionService;
@@ -146,5 +149,25 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                         Question::getQuestionName,
                         (k1, k2) -> k1
                 ));
+    }
+    
+    @Override
+    public BrokenDataDtoResult brokenData(AdminDataDtoReq dtoReq) {
+        // 提交数&通过数
+        BrokenDataDtoResult dtoResult = baseMapper.brokenCodeData (dtoReq);
+        
+        // 评论数
+        dtoResult.setCommentCount (baseMapper.brokenCommentRootData (dtoReq).getCommentCount () +
+                baseMapper.brokenCommentReplyData (dtoReq).getCommentCount ());
+    
+        // 题解数
+        dtoResult.setNoteCount (baseMapper.brokenNoteData (dtoReq).getNoteCount ());
+        
+        return dtoResult;
+    }
+    
+    @Override
+    public CommitDataDtoResult commitData(AdminDataDtoReq dtoReq) {
+        return baseMapper.commitData (dtoReq);
     }
 }

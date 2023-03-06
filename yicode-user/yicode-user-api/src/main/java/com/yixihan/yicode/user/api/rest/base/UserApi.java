@@ -1,15 +1,15 @@
 package com.yixihan.yicode.user.api.rest.base;
 
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,6 +46,10 @@ public interface UserApi {
     @ApiOperation("通过缓存获取用户信息")
     @PostMapping(value = "/info/token/", produces = "application/json")
     ApiResult<UserDtoResult> getUserByToken(@RequestParam("token") String token);
+    
+    @ApiOperation ("获取用户列表")
+    @GetMapping(value = "/detail/list", produces = "application/json")
+    ApiResult<PageDtoResult<Long>> getUserList(@RequestBody PageDtoReq dtoReq);
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")
@@ -90,5 +94,8 @@ public interface UserApi {
     @ApiOperation ("校验手机号")
     @PostMapping(value = "/verify/mobile", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> verifyUserMobile (@RequestParam("mobile")String mobile);
-
+    
+    @ApiOperation ("获取新增用户数据")
+    @PostMapping(value = "/admin/data/user", produces = "application/json")
+    ApiResult<CommonDtoResult<Integer>> brokenData(@RequestBody AdminDataDtoReq dtoReq);
 }

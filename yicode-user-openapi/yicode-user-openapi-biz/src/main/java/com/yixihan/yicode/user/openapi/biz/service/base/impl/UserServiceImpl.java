@@ -2,18 +2,24 @@ package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
+import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
+import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
+import com.yixihan.yicode.common.enums.user.LoginTypeEnums;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
-import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
-import com.yixihan.yicode.common.enums.user.LoginTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.RoleVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
@@ -30,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,7 +74,14 @@ public class UserServiceImpl implements UserService {
         // 获取用户资料
         UserInfoVO userInfoVO = userInfoService.getUserInfo (userId);
         // 获取用户角色
-        List<RoleDtoResult> userRoleDtoResult = userRoleFeignClient.getUserRoleList (userId).getResult ();
+        List<RoleDtoResult> userRoleDtoResult = Collections.emptyList ();
+        if (getUserDetailInfo ().getUserRoleList ().stream().anyMatch (
+                o -> RoleEnums.ADMIN.getRoleId ().equals (o.getRoleId ()) ||
+                        RoleEnums.SUPER_ADMIN.getRoleId ().equals (o.getRoleId ())
+        )) {
+            userRoleDtoResult = userRoleFeignClient.getUserRoleList (userId).getResult ();
+        }
+        // 获取用户角色
         return getUserDetailInfoVO (userDtoResult, userInfoVO, userRoleDtoResult);
     }
     
@@ -90,6 +104,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtoResult getUser(Long userId) {
         return userFeignClient.getUserByUserId (userId).getResult ();
+    }
+    
+    @Override
+    public PageVO<UserDetailInfoVO> getUserList(PageReq req) {
+        PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
+        PageDtoResult<Long> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
+        PageVO<Long> userIdPage = PageVOUtil.pageDtoToPageVO (dtoResult, o -> o);
+        PageVO<UserDetailInfoVO> pageVO = PageVOUtil.convertPageVO (userIdPage, o -> null);
+        userIdPage.getRecords ().forEach (userId -> pageVO.getRecords ().add (getUserDetailInfo (userId)));
+        return pageVO;
     }
     
     @Override

@@ -1,9 +1,9 @@
 package com.yixihan.yicode.user.openapi.api.rset.base;
 
-import com.yixihan.yicode.common.enums.user.RoleEnums;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
-import com.yixihan.yicode.common.valid.RoleAccess;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 import io.swagger.annotations.Api;
@@ -21,13 +21,16 @@ import org.springframework.web.bind.annotation.*;
 public interface UserOpenApi {
 
     @ApiOperation ("获取用户详细信息")
-    @RoleAccess(value = RoleEnums.ADMIN)
     @GetMapping(value = "/detail", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserDetailInfo(@RequestParam("userId") Long userId);
 
     @ApiOperation ("获取当前登录用户详细信息")
     @GetMapping(value = "/now", produces = "application/json")
     JsonResponse<UserDetailInfoVO> getUserDetailInfo();
+    
+    @ApiOperation ("获取用户列表")
+    @GetMapping(value = "/detail/list", produces = "application/json")
+    JsonResponse<PageVO<UserDetailInfoVO>> getUserList(@RequestBody PageReq req);
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")

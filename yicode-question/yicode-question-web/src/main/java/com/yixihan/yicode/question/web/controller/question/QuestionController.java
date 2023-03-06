@@ -5,8 +5,11 @@ import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
+import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
+import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.api.rest.question.QuestionApi;
@@ -71,5 +74,15 @@ public class QuestionController implements QuestionApi {
     @Override
     public ApiResult<Map<Long, String>> questionName(List<Long> questionIdList) {
         return ApiResult.create (service.questionName (questionIdList));
+    }
+    
+    @Override
+    public ApiResult<BrokenDataDtoResult> brokenData(AdminDataDtoReq dtoReq) {
+        return ApiResult.create (service.brokenData (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<CommitDataDtoResult> commitData(AdminDataDtoReq dtoReq) {
+        return ApiResult.create (service.commitData (dtoReq));
     }
 }

@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
+import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
+import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.Question;
@@ -112,4 +115,20 @@ public interface QuestionService extends IService<Question> {
      * @return 问题名字
      */
     Map<Long, String> questionName(List<Long> questionIdList);
+    
+    /**
+     * 管理中心-查看网址数据
+     *
+     * @param dtoReq 请求参数
+     * @return {@link BrokenDataDtoResult}
+     */
+    BrokenDataDtoResult brokenData(AdminDataDtoReq dtoReq);
+    
+    /**
+     * 管理中心-代码提交数据
+     *
+     * @param dtoReq 请求参数
+     * @return {@link CommitDataDtoResult}
+     */
+    CommitDataDtoResult commitData(AdminDataDtoReq dtoReq);
 }

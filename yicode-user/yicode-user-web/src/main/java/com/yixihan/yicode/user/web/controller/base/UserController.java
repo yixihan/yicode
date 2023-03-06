@@ -1,8 +1,11 @@
 package com.yixihan.yicode.user.web.controller.base;
 
 
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
+import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.rest.base.UserApi;
@@ -57,7 +60,12 @@ public class UserController implements UserApi {
     public ApiResult<UserDtoResult> getUserByToken(String token) {
         return ApiResult.create (userService.getUserByToken (token));
     }
-
+    
+    @Override
+    public ApiResult<PageDtoResult<Long>> getUserList(PageDtoReq dtoReq) {
+        return ApiResult.create (userService.getUserList (dtoReq));
+    }
+    
     @Override
     public ApiResult<CommonDtoResult<Boolean>> register(RegisterUserDtoReq dtoReq) {
         return ApiResult.create (userService.register (dtoReq));
@@ -111,5 +119,10 @@ public class UserController implements UserApi {
     @Override
     public ApiResult<CommonDtoResult<Boolean>> verifyUserMobile(String mobile) {
         return ApiResult.create (userService.verifyUserMobile (mobile));
+    }
+    
+    @Override
+    public ApiResult<CommonDtoResult<Integer>> brokenData(AdminDataDtoReq dtoReq) {
+        return ApiResult.create (userService.brokenData (dtoReq));
     }
 }

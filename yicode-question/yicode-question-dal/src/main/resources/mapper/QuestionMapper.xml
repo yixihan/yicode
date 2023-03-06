@@ -123,4 +123,68 @@
             and question_id = #{questionId}
         </where>
     </select>
+
+    <select id="commitData"
+            resultType="com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult">
+        select
+            count(*) as commitCount,
+            sum(if(answer_flag = 'AC', 1, 0)) as commitSuccessCount,
+            sum(if(q.question_difficulty = 'EASY', 1, 0)) as commitEasyCount,
+            sum(if(q.question_difficulty = 'EASY' and answer_flag = 'AC', 1, 0)) as commitSuccessEasyCount,
+            sum(if(q.question_difficulty = 'MEDIUM', 1, 0)) as commitMediumCount,
+            sum(if(q.question_difficulty = 'MEDIUM' and answer_flag = 'AC', 1, 0)) as commitSuccessMediumCount,
+            sum(if(q.question_difficulty = 'HARD', 1, 0)) as commitHardCount,
+            sum(if(q.question_difficulty = 'HARD' and answer_flag = 'AC', 1, 0)) as commitSuccessHardCount
+        from
+            `question_answer` as qa
+        left join
+            `question` q on qa.question_id = q.question_id and q.del_flag = 0
+        where
+            qa.del_flag = 0
+            and qa.create_time between #{params.startDate} and #{params.endDate}
+    </select>
+    <select id="brokenCodeData"
+            resultType="com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult">
+        select
+            count(*) as commitCount,
+            sum(if(answer_flag = 'AC', 1, 0)) as commitSuccessCount
+        from
+            `question_answer`
+        where
+            del_flag = 0
+            and create_time between #{params.startDate} and #{params.endDate}
+    </select>
+
+    <select id="brokenCommentRootData"
+            resultType="com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult">
+        select
+            count(*) as commentCount
+        from
+            `comment_root`
+        where
+            del_flag = 0
+            and create_time between #{params.startDate} and #{params.endDate}
+    </select>
+
+    <select id="brokenCommentReplyData"
+            resultType="com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult">
+        select
+            count(*) as commentCount
+        from
+            `comment_reply`
+        where
+            del_flag = 0
+            and create_time between #{params.startDate} and #{params.endDate}
+    </select>
+
+    <select id="brokenNoteData"
+            resultType="com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult">
+        select
+            count(*) as noteCount
+        from
+            `note`
+        where
+            del_flag = 0
+            and create_time between #{params.startDate} and #{params.endDate}
+    </select>
 </mapper>

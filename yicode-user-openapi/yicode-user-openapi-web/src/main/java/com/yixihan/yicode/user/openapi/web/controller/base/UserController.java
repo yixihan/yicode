@@ -1,6 +1,8 @@
 package com.yixihan.yicode.user.openapi.web.controller.base;
 
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.base.UserOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
@@ -33,7 +35,12 @@ public class UserController implements UserOpenApi {
     public JsonResponse<UserDetailInfoVO> getUserDetailInfo() {
         return JsonResponse.ok (userService.getUserDetailInfo ());
     }
-
+    
+    @Override
+    public JsonResponse<PageVO<UserDetailInfoVO>> getUserList(PageReq req) {
+        return JsonResponse.ok (userService.getUserList (req));
+    }
+    
     @Override
     public JsonResponse<CommonVO<Boolean>> register(RegisterUserReq req) {
         return JsonResponse.ok (userService.register (req));

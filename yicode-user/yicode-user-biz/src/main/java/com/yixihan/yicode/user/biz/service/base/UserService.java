@@ -1,7 +1,10 @@
 package com.yixihan.yicode.user.biz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
@@ -151,4 +154,17 @@ public interface UserService extends IService<User> {
      * @return List {@link UserCommonDtoResult}
      */
     List<UserCommonDtoResult> getUserCommonInfo (List<Long> userIdList);
+    
+    /**
+     * 获取新增用户数据
+     *
+     * @param dtoReq 请求参数
+     * @return 指定时间段新增用户数
+     */
+    CommonDtoResult<Integer> brokenData(AdminDataDtoReq dtoReq);
+    
+    /**
+     * 获取用户列表
+     */
+    PageDtoResult<Long> getUserList(PageDtoReq dtoReq);
 }

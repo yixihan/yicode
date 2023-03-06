@@ -7,13 +7,18 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.AuthConstant;
+import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
 import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.PageUtil;
+import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
@@ -366,5 +371,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return CollectionUtil.isEmpty (dtoResultList) ?
                 Collections.emptyList () :
                 dtoResultList;
+    }
+    
+    @Override
+    public CommonDtoResult<Integer> brokenData(AdminDataDtoReq dtoReq) {
+        Integer count = lambdaQuery ()
+                .between (User::getCreateTime, dtoReq.getStartDate (), dtoReq.getEndDate ())
+                .count ();
+        
+        return new CommonDtoResult<> (count);
+    }
+    
+    
+    @Override
+    public PageDtoResult<Long> getUserList(PageDtoReq dtoReq) {
+        Page<User> userIdPage = lambdaQuery ()
+                .select (User::getUserId)
+                .page (new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()));
+        
+        return PageUtil.pageToPageDtoResult (userIdPage, User::getUserId);
     }
 }
