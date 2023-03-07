@@ -34,5 +34,7 @@ public class UserVO {
     
     @ApiModelProperty(value = "注册方式")
     private String registerType;
-
+    
+    @ApiModelProperty(value = "逻辑删除")
+    private Integer delFlag;
 }

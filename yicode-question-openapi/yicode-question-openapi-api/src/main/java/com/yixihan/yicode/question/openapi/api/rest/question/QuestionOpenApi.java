@@ -30,17 +30,17 @@ import java.util.List;
 public interface QuestionOpenApi {
     
     @ApiOperation("添加问题")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addQuestion(@RequestBody ModifyQuestionReq req);
     
     @ApiOperation("修改问题")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/modify", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> modifyQuestion(@RequestBody ModifyQuestionReq req);
     
     @ApiOperation("删除问题")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @DeleteMapping(value = "/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delQuestion(@RequestBody List<Long> questionIdList);
     
@@ -57,7 +57,7 @@ public interface QuestionOpenApi {
     JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("添加问题标签")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/label/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     

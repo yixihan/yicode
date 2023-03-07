@@ -25,32 +25,32 @@ import org.springframework.web.bind.annotation.*;
 public interface RoleOpenApi {
     
     @ApiOperation ("添加角色")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/role/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addRole (@RequestBody AddRoleReq req);
     
     @ApiOperation ("删除角色")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @DeleteMapping(value = "/role/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delRole (@RequestParam("roleId") Long roleId);
     
     @ApiOperation ("用户添加角色")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/user/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addUserRole (@RequestBody ModifyUserRoleReq req);
     
     @ApiOperation ("用户删除角色")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @DeleteMapping(value = "/user/del", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> delUserRole (@RequestBody ModifyUserRoleReq req);
     
     @ApiOperation ("获取角色列表")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/role/detail", produces = "application/json")
     JsonResponse<PageVO<RoleVO>> getRolePage (@RequestBody PageReq req);
     
     @ApiOperation ("获取用户拥有角色列表")
-    @RoleAccess(value = RoleEnums.ADMIN)
+    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
     @PostMapping(value = "/user/role/detail", produces = "application/json")
     JsonResponse<PageVO<RoleVO>> getUserRolePage (@RequestBody UserRoleQueryReq req);
 }
