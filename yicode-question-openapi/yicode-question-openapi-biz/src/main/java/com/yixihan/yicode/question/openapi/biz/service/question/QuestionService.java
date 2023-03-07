@@ -7,6 +7,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 
@@ -89,4 +90,11 @@ public interface QuestionService {
      * @param req 请求参数
      */
     PageVO<QuestionVO> queryQuestion(QueryQuestionReq req);
+    
+    /**
+     * 获取题目数量
+     *
+     * @return {@link QuestionCountVO}
+     */
+    QuestionCountVO questionCount();
 }

@@ -14,6 +14,7 @@ import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionService;
@@ -103,7 +104,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         
         return PageUtil.pageToPageDtoResult (
                 dtoResultPage,
-                (o) -> BeanUtil.toBean (o, QuestionDtoResult.class)
+                o -> BeanUtil.toBean (o, QuestionDtoResult.class)
         );
     }
     
@@ -169,5 +170,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public CommitDataDtoResult commitData(AdminDataDtoReq dtoReq) {
         return baseMapper.commitData (dtoReq);
+    }
+    
+    @Override
+    public QuestionCountDtoResult questionCount() {
+        return baseMapper.questionCount ();
     }
 }

@@ -3,6 +3,8 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
+import com.yixihan.yicode.common.enums.question.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
@@ -14,15 +16,15 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
-import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
-import com.yixihan.yicode.common.enums.question.QuestionDifficultyTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelFeignClient;
@@ -315,5 +317,12 @@ public class QuestionServiceImpl implements QuestionService {
                 dtoResult,
                 (o) -> BeanUtil.toBean (o, QuestionVO.class)
         );
+    }
+    
+    @Override
+    public QuestionCountVO questionCount() {
+        QuestionCountDtoResult dtoResult = questionFeignClient.questionCount ().getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionCountVO.class);
     }
 }

@@ -6,6 +6,7 @@ import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
+import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.Question;
@@ -73,5 +74,11 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @return {@link CommitDataDtoResult}
      */
     CommitDataDtoResult commitData(@Param ("params") AdminDataDtoReq dtoReq);
-
+    
+    /**
+     * 获取问题数量
+     *
+     * @return {@link QuestionCountDtoResult}
+     */
+    QuestionCountDtoResult questionCount();
 }

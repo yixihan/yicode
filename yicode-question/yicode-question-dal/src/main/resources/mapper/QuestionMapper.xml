@@ -187,4 +187,17 @@
             del_flag = 0
             and create_time between #{params.startDate} and #{params.endDate}
     </select>
+
+    <select id="questionCount"
+            resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult">
+        select
+            count(*) as question,
+            sum(if(question_difficulty = 'EASY', 1, 0)) as easyQuestion,
+            sum(if(question_difficulty = 'MEDIUM', 1, 0)) as easyQuestion,
+            sum(if(question_difficulty = 'HARD', 1, 0)) as easyQuestion
+        from
+            question
+        where
+            del_flag = 0
+    </select>
 </mapper>

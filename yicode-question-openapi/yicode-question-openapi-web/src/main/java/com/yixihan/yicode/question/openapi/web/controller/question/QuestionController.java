@@ -9,6 +9,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionService;
@@ -79,5 +80,10 @@ public class QuestionController implements QuestionOpenApi {
     @Override
     public JsonResponse<PageVO<QuestionVO>> queryQuestion(QueryQuestionReq req) {
         return JsonResponse.ok (service.queryQuestion (req));
+    }
+    
+    @Override
+    public JsonResponse<QuestionCountVO> questionCount() {
+        return JsonResponse.ok (service.questionCount ());
     }
 }

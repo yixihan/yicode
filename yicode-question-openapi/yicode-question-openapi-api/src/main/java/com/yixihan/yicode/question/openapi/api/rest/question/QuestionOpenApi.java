@@ -10,6 +10,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import io.swagger.annotations.Api;
@@ -56,6 +57,7 @@ public interface QuestionOpenApi {
     JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("添加问题标签")
+    @RoleAccess(value = RoleEnums.ADMIN)
     @PostMapping(value = "/label/add", produces = "application/json")
     JsonResponse<CommonVO<Boolean>> addQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     
@@ -70,5 +72,9 @@ public interface QuestionOpenApi {
     @ApiOperation("搜索问题")
     @PostMapping(value = "/query", produces = "application/json")
     JsonResponse<PageVO<QuestionVO>> queryQuestion(@RequestBody QueryQuestionReq req);
+    
+    @ApiOperation("获取题目数量")
+    @GetMapping(value = "/all/count", produces = "application/json")
+    JsonResponse<QuestionCountVO> questionCount();
 
 }
