@@ -153,16 +153,26 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
     
     @Override
-    public BrokenDataDtoResult brokenData(AdminDataDtoReq dtoReq) {
+    public Map<String, BrokenDataDtoResult> brokenData(AdminDataDtoReq dtoReq) {
         // 提交数&通过数
-        BrokenDataDtoResult dtoResult = baseMapper.brokenCodeData (dtoReq);
+        Map<String, BrokenDataDtoResult> dtoResult = baseMapper.brokenCodeData (dtoReq);
+        Map<String, BrokenDataDtoResult> commentRootData = baseMapper.brokenCommentRootData (dtoReq);
+        Map<String, BrokenDataDtoResult> commentReplyData = baseMapper.brokenCommentReplyData (dtoReq);
+        Map<String, BrokenDataDtoResult> noteData = baseMapper.brokenNoteData (dtoReq);
+        Map<String, BrokenDataDtoResult> userData = baseMapper.brokenUserData (dtoReq);
         
-        // 评论数
-        dtoResult.setCommentCount (baseMapper.brokenCommentRootData (dtoReq).getCommentCount () +
-                baseMapper.brokenCommentReplyData (dtoReq).getCommentCount ());
     
-        // 题解数
-        dtoResult.setNoteCount (baseMapper.brokenNoteData (dtoReq).getNoteCount ());
+        dtoResult.forEach ((k, v) -> {
+            // 评论数
+            v.setCommentCount (commentRootData.getOrDefault (k, new BrokenDataDtoResult ()).getCommentCount () +
+                    commentReplyData.getOrDefault (k, new BrokenDataDtoResult ()).getCommentCount ());
+    
+            // 题解数
+            v.setNoteCount (noteData.getOrDefault (k, new BrokenDataDtoResult ()).getNoteCount ());
+    
+            // 用户数
+            v.setUserCount (userData.getOrDefault (k, new BrokenDataDtoResult ()).getUserCount ());
+        });
         
         return dtoResult;
     }

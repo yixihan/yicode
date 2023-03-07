@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 管理中心 前端控制器
@@ -25,7 +26,7 @@ public class AdminController implements AdminOpenApi {
     private AdminService service;
     
     @Override
-    public JsonResponse<BrokenDataVO> brokenData(AdminDataReq req) {
+    public JsonResponse<List<BrokenDataVO>> brokenData(AdminDataReq req) {
         return JsonResponse.ok (service.brokenData (req));
     }
     

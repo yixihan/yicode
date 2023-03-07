@@ -4,6 +4,8 @@ import com.yixihan.yicode.question.openapi.api.vo.request.admin.AdminDataReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.BrokenDataVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.CommitDataVO;
 
+import java.util.List;
+
 /**
  * 管理中心 服务类
  *
@@ -18,7 +20,7 @@ public interface AdminService {
      * @param req 请求参数
      * @return {@link BrokenDataVO}
      */
-    BrokenDataVO brokenData(AdminDataReq req);
+    List<BrokenDataVO> brokenData(AdminDataReq req);
     
     /**
      * 代码提交数据获取

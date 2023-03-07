@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  * 管理中心 OpenApi
  *
@@ -22,7 +24,7 @@ public interface AdminOpenApi {
     
     @ApiOperation("管理中心-查看网址数据")
     @GetMapping(value = "/broken/data", produces = "application/json")
-    JsonResponse<BrokenDataVO> brokenData (@RequestBody AdminDataReq req);
+    JsonResponse<List<BrokenDataVO>> brokenData (@RequestBody AdminDataReq req);
     
     @ApiOperation("管理中心-代码提交数据")
     @GetMapping(value = "/commit/data", produces = "application/json")

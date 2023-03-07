@@ -10,8 +10,11 @@ import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoRes
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.Question;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -41,7 +44,8 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param dtoReq 请求参数
      * @return {@link BrokenDataDtoResult}
      */
-    BrokenDataDtoResult brokenCodeData(@Param ("params") AdminDataDtoReq dtoReq);
+    @MapKey ("month")
+    Map<String, BrokenDataDtoResult> brokenCodeData(@Param ("params") AdminDataDtoReq dtoReq);
     
     /**
      * 管理中心-查看网址数据-新增评论数-父评论
@@ -49,7 +53,8 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param dtoReq 请求参数
      * @return {@link BrokenDataDtoResult}
      */
-    BrokenDataDtoResult brokenCommentRootData(@Param ("params") AdminDataDtoReq dtoReq);
+    @MapKey ("month")
+    Map<String, BrokenDataDtoResult> brokenCommentRootData(@Param ("params") AdminDataDtoReq dtoReq);
     
     /**
      * 管理中心-查看网址数据-新增评论数-子评论
@@ -57,7 +62,8 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param dtoReq 请求参数
      * @return {@link BrokenDataDtoResult}
      */
-    BrokenDataDtoResult brokenCommentReplyData(@Param ("params") AdminDataDtoReq dtoReq);
+    @MapKey ("month")
+    Map<String, BrokenDataDtoResult> brokenCommentReplyData(@Param ("params") AdminDataDtoReq dtoReq);
     
     /**
      * 管理中心-查看网址数据-新增题解数
@@ -65,7 +71,17 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param dtoReq 请求参数
      * @return {@link BrokenDataDtoResult}
      */
-    BrokenDataDtoResult brokenNoteData(@Param ("params") AdminDataDtoReq dtoReq);
+    @MapKey ("month")
+    Map<String, BrokenDataDtoResult> brokenNoteData(@Param ("params") AdminDataDtoReq dtoReq);
+    
+    /**
+     * 管理中心-查看网址数据-新增用户数
+     *
+     * @param dtoReq 请求参数
+     * @return {@link BrokenDataDtoResult}
+     */
+    @MapKey ("month")
+    Map<String, BrokenDataDtoResult> brokenUserData(@Param ("params") AdminDataDtoReq dtoReq);
     
     /**
      * 管理中心-代码提交数据

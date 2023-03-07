@@ -18,7 +18,6 @@ import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.PageUtil;
-import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
@@ -372,16 +371,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 Collections.emptyList () :
                 dtoResultList;
     }
-    
-    @Override
-    public CommonDtoResult<Integer> brokenData(AdminDataDtoReq dtoReq) {
-        Integer count = lambdaQuery ()
-                .between (User::getCreateTime, dtoReq.getStartDate (), dtoReq.getEndDate ())
-                .count ();
-        
-        return new CommonDtoResult<> (count);
-    }
-    
     
     @Override
     public PageDtoResult<Long> getUserList(PageDtoReq dtoReq) {

@@ -18,6 +18,9 @@ import lombok.NoArgsConstructor;
 @ApiModel("网址数据-vo")
 public class BrokenDataVO {
     
+    @ApiModelProperty(value = "月份[yyyy-MM]")
+    private String month;
+    
     @ApiModelProperty(value = "代码提交数")
     private Integer commitCount;
     

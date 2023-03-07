@@ -65,7 +65,7 @@ public interface QuestionApi {
     
     @ApiOperation("管理中心-查看网址数据")
     @PostMapping(value = "/broken/data", produces = "application/json")
-    ApiResult<BrokenDataDtoResult> brokenData (@RequestBody AdminDataDtoReq dtoReq);
+    ApiResult<Map<String, BrokenDataDtoResult>> brokenData (@RequestBody AdminDataDtoReq dtoReq);
     
     @ApiOperation("管理中心-代码提交数据")
     @PostMapping(value = "/commit/data", produces = "application/json")

@@ -123,7 +123,7 @@ public interface QuestionService extends IService<Question> {
      * @param dtoReq 请求参数
      * @return {@link BrokenDataDtoResult}
      */
-    BrokenDataDtoResult brokenData(AdminDataDtoReq dtoReq);
+    Map<String, BrokenDataDtoResult> brokenData(AdminDataDtoReq dtoReq);
     
     /**
      * 管理中心-代码提交数据

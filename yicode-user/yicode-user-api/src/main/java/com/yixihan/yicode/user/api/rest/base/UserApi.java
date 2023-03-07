@@ -4,7 +4,6 @@ import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import io.swagger.annotations.Api;
@@ -94,8 +93,4 @@ public interface UserApi {
     @ApiOperation ("校验手机号")
     @PostMapping(value = "/verify/mobile", produces = "application/json")
     ApiResult<CommonDtoResult<Boolean>> verifyUserMobile (@RequestParam("mobile")String mobile);
-    
-    @ApiOperation ("获取新增用户数据")
-    @PostMapping(value = "/admin/data/user", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> brokenData(@RequestBody AdminDataDtoReq dtoReq);
 }

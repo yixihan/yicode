@@ -13,12 +13,14 @@ import com.yixihan.yicode.question.openapi.api.vo.request.admin.AdminDataReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.BrokenDataVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.CommitDataVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
-import com.yixihan.yicode.question.openapi.biz.feign.user.base.UserFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.admin.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 管理中心 服务实现类
@@ -33,21 +35,16 @@ public class AdminServiceImpl implements AdminService {
     @Resource
     private QuestionFeignClient questionFeignClient;
     
-    @Resource
-    private UserFeignClient userFeignClient;
-    
     @Override
-    public BrokenDataVO brokenData(AdminDataReq req) {
+    public List<BrokenDataVO> brokenData(AdminDataReq req) {
         AdminDataDtoReq dtoReq = getDtoReq (req);
-        com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq userReq = BeanUtil.toBean (
-                req,
-                com.yixihan.yicode.user.api.dto.request.admin.AdminDataDtoReq.class
-        );
     
-        BrokenDataDtoResult dtoResult = questionFeignClient.brokenData (dtoReq).getResult ();
-    
-        dtoResult.setUserCount (userFeignClient.brokenData(userReq).getResult ().getData ());
-        return BeanUtil.toBean (dtoResult, BrokenDataVO.class);
+        Map<String, BrokenDataDtoResult> dtoResult = questionFeignClient.brokenData (dtoReq).getResult ();
+        
+        return dtoResult.values ().stream ()
+                .map (item -> BeanUtil.toBean (item, BrokenDataVO.class))
+                .collect(Collectors.toList());
+                
     }
     
     @Override

@@ -18,18 +18,21 @@ import lombok.NoArgsConstructor;
 @ApiModel("网址数据-dtoResult")
 public class BrokenDataDtoResult {
     
+    @ApiModelProperty(value = "月份[yyyy-MM]")
+    private String month;
+    
     @ApiModelProperty(value = "代码提交数")
-    private Integer commitCount;
+    private Integer commitCount = 0;
     
     @ApiModelProperty(value = "提交通过数")
-    private Integer commitSuccessCount;
+    private Integer commitSuccessCount = 0;
     
     @ApiModelProperty(value = "新增题解数")
-    private Integer noteCount;
+    private Integer noteCount = 0;
     
     @ApiModelProperty(value = "新增评论数")
-    private Integer commentCount;
+    private Integer commentCount = 0;
     
     @ApiModelProperty(value = "新增用户数")
-    private Integer userCount;
+    private Integer userCount = 0;
 }

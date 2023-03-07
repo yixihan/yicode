@@ -78,7 +78,7 @@ public class QuestionController implements QuestionApi {
     }
     
     @Override
-    public ApiResult<BrokenDataDtoResult> brokenData(AdminDataDtoReq dtoReq) {
+    public ApiResult<Map<String, BrokenDataDtoResult>> brokenData(AdminDataDtoReq dtoReq) {
         return ApiResult.create (service.brokenData (dtoReq));
     }
     
