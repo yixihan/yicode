@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  * @date 2023/1/30 13:36
  */
 @Api(tags = "sse 通信 OpenApi")
-@RequestMapping("/sse")
+@RequestMapping("/open/user/sse")
 public interface SseEmitterOpenApi {
     
     @ApiOperation ("建立 sse 连接")

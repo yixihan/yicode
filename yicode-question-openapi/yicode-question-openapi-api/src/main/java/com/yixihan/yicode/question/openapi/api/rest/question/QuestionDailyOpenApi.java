@@ -23,7 +23,7 @@ public interface QuestionDailyOpenApi {
     
     @ApiOperation("获取当月每日一题详情")
     @GetMapping(value = "/detail", produces = "application/json")
-    JsonResponse<List<QuestionDailyVO>> dailyQuestionDetail (@RequestParam String month);
+    JsonResponse<List<QuestionDailyVO>> dailyQuestionDetail (@RequestParam("month") String month);
     
     @ApiOperation("获取用户连续做每日一题的天数")
     @PostMapping(value = "/count", produces = "application/json")

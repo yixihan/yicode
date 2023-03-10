@@ -6,7 +6,7 @@ import com.yixihan.yicode.question.openapi.api.vo.response.admin.BrokenDataVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.CommitDataVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,10 +23,10 @@ import java.util.List;
 public interface AdminOpenApi {
     
     @ApiOperation("管理中心-查看网址数据")
-    @GetMapping(value = "/broken/data", produces = "application/json")
+    @PostMapping(value = "/broken/data", produces = "application/json")
     JsonResponse<List<BrokenDataVO>> brokenData (@RequestBody AdminDataReq req);
     
     @ApiOperation("管理中心-代码提交数据")
-    @GetMapping(value = "/commit/data", produces = "application/json")
+    @PostMapping(value = "/commit/data", produces = "application/json")
     JsonResponse<CommitDataVO> commitData (@RequestBody AdminDataReq req);
 }
