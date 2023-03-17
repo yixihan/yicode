@@ -1,6 +1,5 @@
 package com.yixihan.yicode.message.biz.service;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 
 
@@ -15,15 +14,15 @@ public interface MessageService {
     /**
      * 发送消息
      */
-    CommonDtoResult<Boolean> sendMessage(MsgSendDtoReq dtoReq);
+    void sendMessage(MsgSendDtoReq dtoReq);
     
     /**
      * 发送任务-提交代码
      */
-    CommonDtoResult<Boolean> commit(MsgSendDtoReq dtoReq);
+    void commit(MsgSendDtoReq dtoReq);
     
     /**
      * 发送任务-自测代码
      */
-    CommonDtoResult<Boolean> test(MsgSendDtoReq dtoReq);
+    void test(MsgSendDtoReq dtoReq);
 }

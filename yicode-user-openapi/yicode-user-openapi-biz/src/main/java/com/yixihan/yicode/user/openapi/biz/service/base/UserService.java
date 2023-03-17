@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.service.base;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
@@ -38,6 +37,13 @@ public interface UserService {
     UserDtoResult getUser ();
     
     /**
+     * 获取当前登录用户 id
+     *
+     * @return 用户 id
+     */
+    Long getUserId ();
+    
+    /**
      * 获取指定 ID 用户信息
      *
      * @param userId 用户 ID
@@ -58,56 +64,56 @@ public interface UserService {
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> register(RegisterUserReq req);
+    void register(RegisterUserReq req);
     
     /**
      * 重置密码
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> resetPassword(ResetPasswordReq req);
+    void resetPassword(ResetPasswordReq req);
     
     /**
      * 绑定邮箱
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> bindEmail(EmailReq req);
+    void bindEmail(EmailReq req);
     
     /**
      * 解绑邮箱
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> unbindEmail(EmailReq req);
+    void unbindEmail(EmailReq req);
     
     /**
      * 绑定手机号
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> bindMobile(MobileReq req);
+    void bindMobile(MobileReq req);
     
     /**
      * 解绑手机号
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> unbindMobile(MobileReq req);
+    void unbindMobile(MobileReq req);
     
     /**
      * 更换用户名
      *
      * @param req     请求参数
      */
-    CommonVO<Boolean> resetUserName(ResetUserNameReq req);
+    void resetUserName(ResetUserNameReq req);
     
     /**
      * 用户注销
      *
      * @param userId 用户 ID
      */
-    CommonVO<Boolean> cancellation(Long userId);
+    void cancellation(Long userId);
     
     /**
      * 校验用户 ID 是否存在

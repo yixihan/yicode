@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.api.rset.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FollowQueryReq;
@@ -22,15 +21,15 @@ public interface UserFollowOpenApi {
     
     @ApiOperation("关注用户")
     @PostMapping(value = "/follow-user", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> followUser (@RequestBody ModifyFollowReq req);
+    void followUser (@RequestBody ModifyFollowReq req);
     
     @ApiOperation ("取消关注用户")
     @PostMapping(value = "/unfollow-user", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> unfollowUser (@RequestBody ModifyFollowReq req);
+    void unfollowUser (@RequestBody ModifyFollowReq req);
     
     @ApiOperation ("获取关注数量")
     @GetMapping(value = "/follow/count", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> getFollowCount (@RequestParam("userId") Long userId);
+    JsonResponse<Integer> getFollowCount (@RequestParam("userId") Long userId);
     
     @ApiOperation ("获取关注列表")
     @PostMapping(value = "/follow/detail", produces = "application/json")
@@ -38,7 +37,7 @@ public interface UserFollowOpenApi {
     
     @ApiOperation ("获取粉丝数量")
     @GetMapping(value = "/fan/count", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> getFanCount (@RequestParam("userId") Long userId);
+    JsonResponse<Integer> getFanCount (@RequestParam("userId") Long userId);
     
     @ApiOperation ("获取粉丝列表")
     @PostMapping(value = "/fan/detail", produces = "application/json")

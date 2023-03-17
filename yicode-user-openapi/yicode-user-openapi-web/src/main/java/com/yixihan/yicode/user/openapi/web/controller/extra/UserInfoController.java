@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.web.controller.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.extra.UserInfoOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
@@ -25,7 +24,7 @@ public class UserInfoController implements UserInfoOpenApi {
     private UserInfoService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> modifyInfo(ModifyUserInfoReq req) {
+    public JsonResponse<UserInfoVO> modifyInfo(ModifyUserInfoReq req) {
         return JsonResponse.ok (service.modifyInfo (req));
     }
     

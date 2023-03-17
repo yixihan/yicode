@@ -2,11 +2,11 @@ package com.yixihan.yicode.user.biz.service.extra.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserInfoService;
@@ -14,8 +14,8 @@ import com.yixihan.yicode.user.dal.mapper.extra.UserInfoMapper;
 import com.yixihan.yicode.user.dal.pojo.extra.UserInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -29,39 +29,42 @@ import java.util.Optional;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
     
     @Override
-    public CommonDtoResult<Boolean> modifyInfo(ModifyUserInfoDtoReq dtoReq) {
-        UserInfo oldInfo = baseMapper.selectOne (new QueryWrapper<UserInfo> ()
-                .eq (UserInfo.USER_ID, dtoReq.getUserId ()));
-        
+    public void modifyInfo(ModifyUserInfoDtoReq dtoReq) {
         UserInfo info = BeanUtil.toBean (dtoReq, UserInfo.class);
+        
+        // 获取乐观锁
+        Integer version = lambdaQuery ()
+                .eq (UserInfo::getUserId, dtoReq.getUserId ())
+                .one ()
+                .getVersion ();
+        info.setVersion (version);
+    
+        // 构造条件构造器
         UpdateWrapper<UserInfo> wrapper = new UpdateWrapper<> ();
         wrapper.eq (UserInfo.USER_ID, info.getUserId ());
-        info.setVersion (oldInfo.getVersion ());
         
-        int modify = baseMapper.update (info, wrapper);
-        if (modify != 1) {
-            return new CommonDtoResult<> (
-                    Boolean.FALSE,
-                    BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ()
-            );
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 更新
+        Assert.isTrue (update (info, wrapper), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
 
     @Override
     public UserInfoDtoResult getUserInfo(Long userId) {
-        QueryWrapper<UserInfo> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserInfo.USER_ID, userId);
-        UserInfo info = Optional.ofNullable (baseMapper.selectOne (wrapper)).orElse (new UserInfo ());
+        UserInfo info = lambdaQuery ()
+                .eq (UserInfo::getUserId, userId)
+                .one ();
+        
+        Assert.notNull (info, BizCodeEnum.ACCOUNT_NOT_FOUND);
     
         return BeanUtil.toBean (info, UserInfoDtoResult.class);
     }
     
     @Override
     public List<UserInfoDtoResult> getUserInfoList(List<Long> userIdList) {
-        QueryWrapper<UserInfo> wrapper = new QueryWrapper<> ();
-        wrapper.in (UserInfo.USER_ID, userIdList);
-        List<UserInfo> infoList = baseMapper.selectList (wrapper);
+        List<UserInfo> infoList = lambdaQuery ()
+                .in (CollUtil.isNotEmpty (userIdList), UserInfo::getUserId, userIdList)
+                .orderByDesc (UserInfo::getCreateTime)
+                .list ();
+        infoList = CollUtil.isEmpty (infoList) ? Collections.emptyList () : infoList;
     
         return BeanUtil.copyToList (infoList, UserInfoDtoResult.class);
     }

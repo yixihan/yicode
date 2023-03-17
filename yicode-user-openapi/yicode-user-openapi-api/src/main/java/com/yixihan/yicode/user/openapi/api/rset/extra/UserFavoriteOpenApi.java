@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.api.rset.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
@@ -25,19 +24,19 @@ public interface UserFavoriteOpenApi {
     
     @ApiOperation("添加收藏夹")
     @PostMapping(value = "/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addFavorite (@RequestBody AddFavoriteReq req);
+    JsonResponse<FavoriteVO> addFavorite (@RequestBody AddFavoriteReq req);
     
     @ApiOperation("修改收藏夹")
     @PostMapping(value = "/modify", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> modifyFavorite (@RequestBody ModifyFavoriteReq req);
+    JsonResponse<FavoriteVO> modifyFavorite (@RequestBody ModifyFavoriteReq req);
     
     @ApiOperation("删除收藏夹")
     @DeleteMapping(value = "/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delFavorite (@RequestParam("favoriteId") Long favoriteId);
+    void delFavorite (@RequestParam("favoriteId") Long favoriteId);
     
     @ApiOperation("获取收藏夹数量")
     @GetMapping(value = "/count", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> getFavoriteCount (@RequestParam("userId") Long userId);
+    JsonResponse<Integer> getFavoriteCount (@RequestParam("userId") Long userId);
     
     @ApiOperation("获取所有收藏夹")
     @PostMapping(value = "/detail", produces = "application/json")

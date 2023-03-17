@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.web.controller.base;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
@@ -28,25 +27,25 @@ import java.util.List;
 public class UserRoleController implements UserRoleApi {
 
     @Resource
-    private UserRoleService userRoleService;
+    private UserRoleService service;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addRole(ModifyUserRoleDtoReq dtoReq) {
-        return ApiResult.create (userRoleService.addRole(dtoReq));
+    public ApiResult<List<RoleDtoResult>> addRole(ModifyUserRoleDtoReq dtoReq) {
+        return ApiResult.create (service.addRole(dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delRole(ModifyUserRoleDtoReq dtoReq) {
-        return ApiResult.create (userRoleService.delRole (dtoReq));
+    public ApiResult<List<RoleDtoResult>> delRole(ModifyUserRoleDtoReq dtoReq) {
+        return ApiResult.create (service.delRole (dtoReq));
     }
     
     @Override
     public ApiResult<List<RoleDtoResult>> getUserRoleList(Long userId) {
-        return ApiResult.create (userRoleService.getUserRoleByUserId (userId));
+        return ApiResult.create (service.getUserRoleByUserId (userId));
     }
     
     @Override
     public ApiResult<PageDtoResult<RoleDtoResult>> getUserRolePage(UserRoleQueryDtoReq dtoReq) {
-        return ApiResult.create (userRoleService.getUserRoleByUserId (dtoReq));
+        return ApiResult.create (service.getUserRoleByUserId (dtoReq));
     }
 }

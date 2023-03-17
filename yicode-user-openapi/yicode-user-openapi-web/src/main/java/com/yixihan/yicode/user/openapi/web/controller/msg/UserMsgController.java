@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.openapi.web.controller.msg;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.msg.UserMsgOpenApi;
@@ -28,13 +27,13 @@ public class UserMsgController implements UserMsgOpenApi {
     private UserMsgService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addMessage(AddMessageReq req) {
+    public JsonResponse<MessageDetailVO> addMessage(AddMessageReq req) {
         return JsonResponse.ok (service.addMessage(req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> readMessages(ReadMessageReq req) {
-        return JsonResponse.ok (service.readMessages(req));
+    public void readMessages(ReadMessageReq req) {
+        service.readMessages(req);
     }
     
     @Override
@@ -43,7 +42,7 @@ public class UserMsgController implements UserMsgOpenApi {
     }
     
     @Override
-    public JsonResponse<CommonVO<Integer>> unReadMessageCount() {
+    public JsonResponse<Integer> unReadMessageCount() {
         return JsonResponse.ok (service.unReadMessageCount());
     }
 }

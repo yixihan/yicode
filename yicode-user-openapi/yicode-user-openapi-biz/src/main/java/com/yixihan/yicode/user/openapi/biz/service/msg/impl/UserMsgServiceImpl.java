@@ -6,16 +6,15 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.Channel;
+import com.yixihan.yicode.common.constant.MessageConstant;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
-import com.yixihan.yicode.message.api.constant.MessageConstant;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.MessageDetailDtoReq;
@@ -62,47 +61,46 @@ public class UserMsgServiceImpl implements UserMsgService {
     private MessageFeignClient messageFeignClient;
     
     @Override
-    public CommonVO<Boolean> addMessage(AddMessageReq req) {
+    public MessageDetailVO addMessage(AddMessageReq req) {
         // 参数校验
-        if (!userService.verifyUserId (req.getReceiveUseId ())) {
-            throw new BizException ("该用户不存在！");
-        }
-        if (Arrays.stream (MsgTypeEnums.values ()).noneMatch ((o) -> o.getType ().equals (req.getMessageType ()))) {
+        if (Arrays.stream (MsgTypeEnums.values ()).noneMatch (o -> o.getType ().equals (req.getMessageType ()))) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
         
+        // 获取用户信息
         UserDtoResult user = userService.getUser ();
         
-        String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
+        // 填充消息
+        String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
         String message;
-        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) || MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
+        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) ||
+                MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
             message = StrUtil.format (template, user.getUserName (), req.getSourceId ());
         } else {
             message = StrUtil.format (template, user.getUserName ());
         }
+        
+        // 保存消息
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
         dtoReq.setMsg (message);
         dtoReq.setSendUserId (user.getUserId ());
         dtoReq.setSendUserName (user.getUserName ());
+        MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
         
-        CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
-        if (dtoResult.getData ()) {
-            sendMessage (JSONUtil.toJsonStr (dtoReq));
-        }
-        return CommonVO.create (dtoResult);
+        // 发送消息
+        sendMessage (message);
+        return BeanUtil.toBean (dtoResult, MessageDetailVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> readMessages(ReadMessageReq req) {
-        if (req.getMessageIdList () == null) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+    public void readMessages(ReadMessageReq req) {
+        // 参数校验
+        Assert.isTrue (CollUtil.isNotEmpty (req.getMessageIdList ()), BizCodeEnum.PARAMS_VALID_ERR);
         
+        // 阅读消息
         ReadMessageDtoReq dtoReq = BeanUtil.toBean (req, ReadMessageDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
-        
-        CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.readMessages (dtoReq).getResult ();
-        return CommonVO.create (dtoResult);
+        userMsgFeignClient.readMessages (dtoReq);
     }
     
     @Override
@@ -111,13 +109,15 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setUserId (userService.getUser ().getUserId ());
         
         PageDtoResult<MessageDetailDtoResult> dtoResult = userMsgFeignClient.messageDetail (dtoReq).getResult ();
-        return PageVOUtil.pageDtoToPageVO (dtoResult, (o) -> BeanUtil.toBean (o, MessageDetailVO.class));
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                o -> BeanUtil.toBean (o, MessageDetailVO.class)
+        );
     }
     
     @Override
-    public CommonVO<Integer> unReadMessageCount() {
-        CommonDtoResult<Integer> dtoResult = userMsgFeignClient.unReadMessageCount (userService.getUser ().getUserId ()).getResult ();
-        return CommonVO.create (dtoResult);
+    public Integer unReadMessageCount() {
+        return userMsgFeignClient.unReadMessageCount (userService.getUser ().getUserId ()).getResult ();
     }
     
     /**
@@ -129,11 +129,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
         dtoReq.setData (message);
         dtoReq.setMessageId (UUID.randomUUID ().toString (Boolean.TRUE));
-        CommonDtoResult<Boolean> dtoResult = messageFeignClient.send (dtoReq).getResult ();
-        
-        if (!dtoResult.getData ()) {
-            log.error ("消息发送错误!");
-        }
+        messageFeignClient.send (dtoReq);
     }
     
     /**
@@ -142,14 +138,13 @@ public class UserMsgServiceImpl implements UserMsgService {
     @RabbitListener(queues = MessageConstant.MESSAGE_QUEUE_NAME)
     public void receiveConfirmMessage(Message message, Channel channel) {
         try {
-            // TODO 接收到消息，主动推给前端
             MessageDetailVO vo = JSONUtil.toBean (new String (message.getBody ()), MessageDetailVO.class );
             log.info ("接受到的队列 confirm.queue 消息 : {}", vo);
             sseEmitterService.sendMsgToClient (CollUtil.newArrayList (vo));
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.info ("出现异常 : {}", e.getMessage ());
-            throw new RuntimeException (e);
+            throw new BizException (e);
         }
     }
 }

@@ -1,18 +1,19 @@
 package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
 import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
 import com.yixihan.yicode.common.enums.user.LoginTypeEnums;
 import com.yixihan.yicode.common.enums.user.RoleEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
@@ -102,6 +103,13 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    public Long getUserId() {
+        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
+                .substring (AuthConstant.TOKEN_SUB_INDEX);
+        return userFeignClient.getUserByIdToken (token).getResult ();
+    }
+    
+    @Override
     public UserDtoResult getUser(Long userId) {
         return userFeignClient.getUserByUserId (userId).getResult ();
     }
@@ -112,250 +120,179 @@ public class UserServiceImpl implements UserService {
         PageDtoResult<Long> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
         PageVO<Long> userIdPage = PageVOUtil.pageDtoToPageVO (dtoResult, o -> o);
         PageVO<UserDetailInfoVO> pageVO = PageVOUtil.convertPageVO (userIdPage, o -> null);
-        userIdPage.getRecords ().forEach (userId -> pageVO.getRecords ().add (getUserDetailInfo (userId)));
+        userIdPage.getRecords ().parallelStream ().forEach (userId ->
+                pageVO.getRecords ().add (getUserDetailInfo (userId))
+        );
+        
         return pageVO;
     }
     
     @Override
-    public synchronized CommonVO<Boolean> register(RegisterUserReq req) {
+    public synchronized void register(RegisterUserReq req) {
         // 合法性校验
         if (LoginTypeEnums.USERNAME_PASSWORD.getType ().equals (req.getType ())) {
             // 用户名+密码注册
-            if (!ValidationUtils.validateUserName (req.getUserName ())) {
-                throw new BizException ("用户名不符合规范!");
-            }
-            if (!ValidationUtils.validatePassword (req.getPassword ())) {
-                throw new BizException ("密码不符合规范!");
-            }
-            if (!userFeignClient.verifyUserName (req.getUserName ()).getResult ().getData ()) {
-                throw new BizException ("用户名已被注册!");
-            }
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateUserName (req.getUserName ())),
+                    new BizException ("用户名不符合规范!"));
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validatePassword (req.getPassword ())),
+                    new BizException ("密码不符合规范!"));
+            Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserName (req.getUserName ()).getResult ()),
+                    new BizException ("用户名已被占用!"));
         } else if (LoginTypeEnums.EMAIL_CODE.getType ().equals (req.getType ())) {
             // 邮箱+验证码注册
-            if (!ValidationUtils.validateEmail (req.getEmail ())) {
-                throw new BizException ("邮箱不符合规范!");
-            }
-            CommonDtoResult<Boolean> emailDtoResult = userFeignClient.verifyUserEmail (req.getEmail ()).getResult ();
-            if (!emailDtoResult.getData ()) {
-                throw new BizException (emailDtoResult.getMessage ());
-            }
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                    BizCodeEnum.EMAIL_VALIDATE_ERR);
+            Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserEmail (req.getEmail ()).getResult ()),
+                    new BizException ("该邮箱已被绑定!"));
+            Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+
             // 校验验证码
-            EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
-            emailDtoReq.setEmail (req.getEmail ());
-            emailDtoReq.setCode (req.getCode ());
-            emailDtoReq.setEmailType (CodeTypeEnums.REGISTER.getType ());
-            if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-                throw new BizException ("验证码错误!");
-            }
+            validateEmailCode (req.getEmail (), req.getCode (), CodeTypeEnums.REGISTER);
+    
         } else if (LoginTypeEnums.MOBILE_CODE.getType ().equals (req.getType ())) {
             // 手机号+验证码注册
-            if (!ValidationUtils.validateMobile (req.getMobile ())) {
-                throw new BizException ("手机号不符合规范!");
-            }
-            CommonDtoResult<Boolean> mobileDtoResult = userFeignClient.verifyUserMobile (req.getMobile ()).getResult ();
-            if (!mobileDtoResult.getData ()) {
-                throw new BizException (mobileDtoResult.getMessage ());
-            }
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                    BizCodeEnum.MOBILE_VALIDATE_ERR);
+            Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserMobile (req.getMobile ()).getResult ()),
+                    new BizException ("该手机号已被绑定!"));
+            Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+
             // 校验验证码
-            SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
-            smsDtoReq.setMobile (req.getMobile ());
-            smsDtoReq.setCode (req.getCode ());
-            smsDtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
-            if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-                throw new BizException ("验证码错误!");
-            }
+            validateMobileCode (req.getMobile (), req.getCode (), CodeTypeEnums.REGISTER);
         } else {
-            log.error ("错误的注册方式!", new BizException (800001, "错误的注册方式!"));
-            throw new BizException ("错误的注册方式!");
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
+        
+        // 注册
         RegisterUserDtoReq dtoReq = BeanUtil.toBean (req, RegisterUserDtoReq.class);
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.register (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        userFeignClient.register (dtoReq);
     }
 
     @Override
-    public CommonVO<Boolean> resetPassword(ResetPasswordReq req) {
+    public void resetPassword(ResetPasswordReq req) {
         // 校验密码复杂度
-        if (!ValidationUtils.validatePassword (req.getNewPassword ())) {
-            throw new BizException ("密码不符合规范!");
-        }
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validatePassword (req.getNewPassword ())),
+                new BizException ("密码不符合规范!"));
         
         // 校验验证码
         if (VerificationCodeEnums.EMAIL.getMethod ().equals (req.getType ())) {
-            if (!ValidationUtils.validateEmail (req.getEmail ())) {
-                throw new BizException ("邮箱不符合规范!");
-            }
-            EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
-            emailDtoReq.setEmail (req.getEmail ());
-            emailDtoReq.setCode (req.getCode ());
-            emailDtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
-            if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-                throw new BizException ("验证码错误!");
-            }
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                    BizCodeEnum.EMAIL_VALIDATE_ERR);
+            Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+            validateEmailCode (req.getEmail (), req.getCode (), CodeTypeEnums.RESET_PASSWORD);
         } else if (VerificationCodeEnums.SMS.getMethod ().equals (req.getType ())) {
-            if (!ValidationUtils.validateMobile (req.getMobile ())) {
-                throw new BizException ("手机号不符合规范!");
-            }
-            SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
-            smsDtoReq.setMobile (req.getMobile ());
-            smsDtoReq.setCode (req.getCode ());
-            smsDtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
-            if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-                throw new BizException ("验证码错误!");
-            }
+            Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                    BizCodeEnum.MOBILE_VALIDATE_ERR);
+            Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+            validateMobileCode (req.getMobile (), req.getCode (), CodeTypeEnums.RESET_PASSWORD);
         } else {
-            log.error ("错误的验证码方式!", new BizException (800001, "错误的验证码方式!"));
-            throw new BizException ("错误的验证码方式!");
+            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
-
+        
+        // 重置密码
         ResetPasswordDtoReq dtoReq = BeanUtil.toBean (req, ResetPasswordDtoReq.class);
-
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.resetPassword (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        userFeignClient.resetPassword (dtoReq);
     }
 
     @Override
-    public CommonVO<Boolean> bindEmail(EmailReq req) {
+    public void bindEmail(EmailReq req) {
         // 校验邮箱
-        CommonDtoResult<Boolean> emailDtoResult = userFeignClient.verifyUserEmail (req.getEmail ()).getResult ();
-        if (!emailDtoResult.getData ()) {
-            throw new BizException (emailDtoResult.getMessage ());
-        }
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserEmail (req.getEmail ()).getResult ()),
+                new BizException ("该邮箱已被绑定!"));
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
         
         // 校验验证码
-        EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
-        emailDtoReq.setEmail (req.getEmail ());
-        emailDtoReq.setCode (req.getCode ());
-        emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
-        if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-            throw new BizException ("验证码错误!");
-        }
-        
+        validateEmailCode (req.getEmail (), req.getCode (), CodeTypeEnums.COMMON);
+    
+        // 绑定邮箱
         BindEmailDtoReq dtoReq = BeanUtil.toBean (req, BindEmailDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.bindEmail (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        userFeignClient.bindEmail (dtoReq);
     }
 
     @Override
-    public CommonVO<Boolean> unbindEmail(EmailReq req) {
+    public void unbindEmail(EmailReq req) {
         // 校验邮箱
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
         
         // 校验验证码
-        EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
-        emailDtoReq.setEmail (req.getEmail ());
-        emailDtoReq.setCode (req.getCode ());
-        emailDtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
-        if (!emailFeignClient.validate (emailDtoReq).getResult ().getData ()) {
-            throw new BizException ("验证码错误!");
-        }
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindEmail (getUser ().getUserId ()).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        CodeTypeEnums type = CodeTypeEnums.COMMON;
+        validateEmailCode (req.getEmail (), req.getCode (), type);
+    
+        // 解绑邮箱
+        userFeignClient.unbindEmail (getUser ().getUserId ());
     }
-
+    
     @Override
-    public CommonVO<Boolean> bindMobile(MobileReq req) {
+    public void bindMobile(MobileReq req) {
         // 校验手机号
-        CommonDtoResult<Boolean> mobileDtoResult = userFeignClient.verifyUserMobile (req.getMobile ()).getResult ();
-        if (!mobileDtoResult.getData ()) {
-            throw new BizException (mobileDtoResult.getMessage ());
-        }
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserMobile (req.getMobile ()).getResult ()),
+                new BizException ("该手机号已被绑定!"));
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
         
         // 校验验证码
-        SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
-        smsDtoReq.setMobile (req.getMobile ());
-        smsDtoReq.setCode (req.getCode ());
-        smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
-        if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-            throw new BizException ("验证码错误!");
-        }
+        validateMobileCode (req.getMobile (), req.getCode (), CodeTypeEnums.COMMON);
+    
+        // 绑定手机号
         BindMobileDtoReq dtoReq = BeanUtil.toBean (req, BindMobileDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.bindMobile (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        userFeignClient.bindMobile (dtoReq);
     }
-
+    
     @Override
-    public CommonVO<Boolean> unbindMobile(MobileReq req) {
+    public void unbindMobile(MobileReq req) {
         // 校验手机号
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
         
-        SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
-        smsDtoReq.setMobile (req.getMobile ());
-        smsDtoReq.setCode (req.getCode ());
-        smsDtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
-        if (!smsFeignClient.validate (smsDtoReq).getResult ().getData ()) {
-            throw new BizException ("验证码错误!");
-        }
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.unbindMobile (getUser ().getUserId ()).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        // 校验验证码
+        validateMobileCode (req.getMobile (), req.getCode (), CodeTypeEnums.COMMON);
+    
+        // 解绑手机号
+        userFeignClient.unbindMobile (getUser ().getUserId ());
     }
-
+    
     @Override
-    public CommonVO<Boolean> resetUserName(ResetUserNameReq req) {
-        if (!ValidationUtils.validateUserName (req.getUserName ())) {
-            throw new BizException ("用户名不符合规范!");
-        }
-        
-        if (!userFeignClient.verifyUserName (req.getUserName ()).getResult ().getData ()) {
-            throw new BizException ("用户名已被占用!");
-        }
+    public void resetUserName(ResetUserNameReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateUserName (req.getUserName ())),
+                new BizException ("用户名不符合规范!"));
+        Assert.isTrue (Boolean.TRUE.equals (userFeignClient.verifyUserName (req.getUserName ()).getResult ()),
+                new BizException ("用户名已被占用!"));
 
+        // 更新用户名
         ResetUserNameDtoReq dtoReq = BeanUtil.toBean (req, ResetUserNameDtoReq.class);
         dtoReq.setUserId (getUser ().getUserId ());
-
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.resetUserName (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-
+        userFeignClient.resetUserName (dtoReq);
     }
-
+    
     @Override
-    public CommonVO<Boolean> cancellation(Long userId) {
-        if (!verifyUserId (userId)) {
-            throw new BizException ("该用户不存在!");
-        }
+    public void cancellation(Long userId) {
+        // 参数校验
+        Assert.isTrue (verifyUserId (userId), BizCodeEnum.ACCOUNT_NOT_FOUND);
         
-        CommonDtoResult<Boolean> dtoResult = userFeignClient.cancellation (userId).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        // 注销
+        userFeignClient.cancellation (userId);
     }
     
     @Override
     public Boolean verifyUserId(Long userId) {
         UserDtoResult user = getUser (userId);
-        return user.getUserId () != null;
+        return user != null && user.getUserId () != null;
     }
     
     /**
      * 组装 {@link UserDetailInfoVO}
+     *
      * @param userDtoResult {@link UserDtoResult}
      * @param userInfoVO {@link UserInfoVO}
      * @param userRoleDtoResult {@link RoleDtoResult}
@@ -365,5 +302,35 @@ public class UserServiceImpl implements UserService {
         UserVO userVO = BeanUtil.toBean (userDtoResult, UserVO.class);
         List<RoleVO> userRoleList = BeanUtil.copyToList (userRoleDtoResult, RoleVO.class);
         return new UserDetailInfoVO (userVO, userRoleList, userInfoVO);
+    }
+    
+    /**
+     * 校验短信验证码
+     *
+     * @param mobile 手机号
+     * @param code 验证码
+     * @param type 发送类型
+     */
+    private void validateMobileCode(String mobile, String code, CodeTypeEnums type) {
+        SMSValidateDtoReq smsDtoReq = new SMSValidateDtoReq ();
+        smsDtoReq.setMobile (mobile);
+        smsDtoReq.setCode (code);
+        smsDtoReq.setMobileType (type.getType ());
+        smsFeignClient.validate (smsDtoReq);
+    }
+    
+    /**
+     * 校验邮箱验证码
+     *
+     * @param email 邮箱
+     * @param code 验证码
+     * @param type 发送类型
+     */
+    private void validateEmailCode(String email, String code, CodeTypeEnums type) {
+        EmailValidateDtoReq emailDtoReq = new EmailValidateDtoReq ();
+        emailDtoReq.setEmail (email);
+        emailDtoReq.setCode (code);
+        emailDtoReq.setEmailType (type.getType ());
+        emailFeignClient.validate (emailDtoReq);
     }
 }

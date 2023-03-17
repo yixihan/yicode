@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.api.rset.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
@@ -20,7 +19,7 @@ public interface UserInfoOpenApi {
     
     @ApiOperation("更新用户资料")
     @PostMapping(value = "/modify", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> modifyInfo (@RequestBody ModifyUserInfoReq req);
+    JsonResponse<UserInfoVO> modifyInfo (@RequestBody ModifyUserInfoReq req);
     
     @ApiOperation("获取用户资料")
     @GetMapping(value = "/detail", produces = "application/json")

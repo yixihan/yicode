@@ -1,12 +1,14 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserWebsiteService;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -31,10 +32,10 @@ import java.util.Optional;
 public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserWebsite> implements UserWebsiteService {
 
     @Override
-    public CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
+    public void addUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
         if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空!");
+            throw new BizException ("个人网址信息为空!");
         }
         
         List<UserWebsite> websiteList = new ArrayList<> (dtoReq.getUserWebsite ().size ());
@@ -44,39 +45,33 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
             website.setUserId (dtoReq.getUserId ());
             websiteList.add (website);
         }
-        boolean modify = this.saveBatch (websiteList);
-        if (!modify) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        
+        // 保存
+        Assert.isTrue (saveBatch (websiteList), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
 
     @Override
-    public CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
-        if (CollectionUtil.isEmpty (dtoReq.getUserWebsite ()) ||
+    public void delUserWebsite(ModifyUserWebsiteDtoReq dtoReq) {
+        if (CollUtil.isEmpty (dtoReq.getUserWebsite ()) ||
                 dtoReq.getUserWebsite ().stream ().anyMatch (StrUtil::isBlank)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "个人网址信息为空!");
+            throw new BizException ("个人网址信息为空!");
         }
     
         QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
         wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
                 .in (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
     
-        int modify = baseMapper.delete (wrapper);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        baseMapper.delete (wrapper);
     }
 
     @Override
     public List<UserWebsiteDtoResult> getUserWebsite(Long userId) {
-        QueryWrapper<UserWebsite> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserWebsite.USER_ID, userId);
-    
-        List<UserWebsite> values = Optional.ofNullable (baseMapper.selectList (wrapper))
-                .orElse (Collections.emptyList ());
+        List<UserWebsite> websiteList = lambdaQuery ()
+                .eq (UserWebsite::getUserId, userId)
+                .orderByDesc (UserWebsite::getCreateTime)
+                .list ();
+        websiteList = CollUtil.isEmpty (websiteList) ? Collections.emptyList () : websiteList;
         
-        return BeanUtil.copyToList (values, UserWebsiteDtoResult.class);
+        return BeanUtil.copyToList (websiteList, UserWebsiteDtoResult.class);
     }
 }

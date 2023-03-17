@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
  * @date 2022-09-29-14:48
  */
 public class PageUtil {
+    
+    private PageUtil() {
+    }
 
     public static <K, V> Page<V> convertTo(Page<K> page, Function<? super K, ? extends V> mapper) {
         Page<V> newPage = new Page<> ();
@@ -50,6 +54,17 @@ public class PageUtil {
         List<T> records = page.getRecords ();
         List<R> rList = records == null ? null : records.stream ().map (convert).collect (Collectors.toList ());
         return new PageDtoResult<> (page.getCurrent (), page.getTotal (), page.getSize (), page.getPages (), rList);
+    }
+    
+    /**
+     * 自定义分页请求参数转为 mybatis plus 分页请求参数
+     *
+     * @param <T> 目标类
+     * @param req 分页请求参数
+     * @return {@code Page<T>}
+     */
+    public static <T> Page<T> toPage (PageDtoReq req) {
+        return new Page<> (req.getPage (), req.getPageSize (), req.getSearchCount ());
     }
 
     private static CopyOptions getCopyOption() {

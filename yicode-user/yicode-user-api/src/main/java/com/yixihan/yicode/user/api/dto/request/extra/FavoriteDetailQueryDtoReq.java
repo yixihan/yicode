@@ -18,9 +18,6 @@ import lombok.NoArgsConstructor;
 @ApiModel("收藏夹详情获取-dtoReq")
 public class FavoriteDetailQueryDtoReq {
     
-    @ApiModelProperty(value = "用户 ID")
-    private Long userId;
-    
     @ApiModelProperty(value = "收藏夹 ID")
     private Long favoriteId;
 }

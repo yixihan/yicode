@@ -2,10 +2,10 @@ package com.yixihan.yicode.user.web.controller.base;
 
 
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.rest.base.UserApi;
 import com.yixihan.yicode.user.biz.service.base.UserService;
@@ -28,95 +28,105 @@ import java.util.List;
 public class UserController implements UserApi {
 
     @Resource
-    private UserService userService;
+    private UserService service;
 
     @Override
     public ApiResult<UserDtoResult> getUserByUserId(Long userId) {
-        return ApiResult.create (userService.getUserById (userId));
+        return ApiResult.create (service.getUserById (userId));
     }
     
     @Override
     public ApiResult<List<UserDtoResult>> getUserListByUserId(List<Long> userIdList) {
-        return ApiResult.create (userService.getUserListByUserId (userIdList));
+        return ApiResult.create (service.getUserListByUserId (userIdList));
+    }
+    
+    @Override
+    public ApiResult<List<UserCommonDtoResult>> getUserCommonInfo(List<Long> userIdList) {
+        return ApiResult.create (service.getUserCommonInfo (userIdList));
     }
     
     @Override
     public ApiResult<UserDtoResult> getUserByUserName(String userName) {
-        return ApiResult.create (userService.getUserByUserName (userName));
+        return ApiResult.create (service.getUserByUserName (userName));
     }
 
     @Override
     public ApiResult<UserDtoResult> getUserByMobile(String mobile) {
-        return ApiResult.create (userService.getUserByMobile (mobile));
+        return ApiResult.create (service.getUserByMobile (mobile));
     }
 
     @Override
     public ApiResult<UserDtoResult> getUserByEmail(String email) {
-        return ApiResult.create (userService.getUserByEmail (email));
+        return ApiResult.create (service.getUserByEmail (email));
     }
 
     @Override
     public ApiResult<UserDtoResult> getUserByToken(String token) {
-        return ApiResult.create (userService.getUserByToken (token));
+        return ApiResult.create (service.getUserByToken (token));
+    }
+    
+    @Override
+    public ApiResult<Long> getUserByIdToken(String token) {
+        return ApiResult.create (service.getUserByIdToken (token));
     }
     
     @Override
     public ApiResult<PageDtoResult<Long>> getUserList(PageDtoReq dtoReq) {
-        return ApiResult.create (userService.getUserList (dtoReq));
+        return ApiResult.create (service.getUserList (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> register(RegisterUserDtoReq dtoReq) {
-        return ApiResult.create (userService.register (dtoReq));
+    public void register(RegisterUserDtoReq dtoReq) {
+        service.register (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> resetPassword(ResetPasswordDtoReq dtoReq) {
-        return ApiResult.create (userService.resetPassword (dtoReq));
+    public void resetPassword(ResetPasswordDtoReq dtoReq) {
+        service.resetPassword (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> bindEmail(BindEmailDtoReq dtoReq) {
-        return ApiResult.create (userService.bindEmail (dtoReq));
+    public void bindEmail(BindEmailDtoReq dtoReq) {
+        service.bindEmail (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> unbindEmail(Long userId) {
-        return ApiResult.create (userService.unbindEmail (userId));
+    public void unbindEmail(Long userId) {
+        service.unbindEmail (userId);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> bindMobile(BindMobileDtoReq dtoReq) {
-        return ApiResult.create (userService.bindMobile (dtoReq));
+    public void bindMobile(BindMobileDtoReq dtoReq) {
+        service.bindMobile (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> unbindMobile(Long userId) {
-        return ApiResult.create (userService.unbindMobile (userId));
+    public void unbindMobile(Long userId) {
+        service.unbindMobile (userId);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> resetUserName(ResetUserNameDtoReq dtoReq) {
-        return ApiResult.create (userService.resetUserName (dtoReq));
+    public void resetUserName(ResetUserNameDtoReq dtoReq) {
+        service.resetUserName (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> cancellation(Long userId) {
-        return ApiResult.create (userService.cancellation (userId));
+    public void cancellation(Long userId) {
+        service.cancellation (userId);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyUserName(String userName) {
-        return ApiResult.create (userService.verifyUserName (userName));
+    public ApiResult<Boolean> verifyUserName(String userName) {
+        return ApiResult.create (service.verifyUserName (userName));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyUserEmail(String email) {
-        return ApiResult.create (userService.verifyUserEmail (email));
+    public ApiResult<Boolean> verifyUserEmail(String email) {
+        return ApiResult.create (service.verifyUserEmail (email));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyUserMobile(String mobile) {
-        return ApiResult.create (userService.verifyUserMobile (mobile));
+    public ApiResult<Boolean> verifyUserMobile(String mobile) {
+        return ApiResult.create (service.verifyUserMobile (mobile));
     }
 }

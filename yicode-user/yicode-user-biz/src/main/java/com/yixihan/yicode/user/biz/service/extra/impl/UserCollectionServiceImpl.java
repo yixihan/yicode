@@ -1,19 +1,17 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteDetailQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
-import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.biz.service.extra.UserCollectionService;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
 import com.yixihan.yicode.user.dal.mapper.extra.UserCollectionMapper;
@@ -24,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -41,71 +41,69 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     
     @Override
     @Transactional(rollbackFor = BizException.class)
-    public CommonDtoResult<Boolean> addCollection(ModifyCollectionDtoReq dtoReq) {
+    public List<CollectionDtoResult> addCollection(ModifyCollectionDtoReq dtoReq) {
+        // 校验是否有操作权限
+        Assert.isFalse (Boolean.TRUE.equals (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())),
+                new BizException ("该收藏夹不存在或您无权进行操作!"));
+        
         // 校验是否重复收藏
-        if (baseMapper.selectCount (new QueryWrapper<UserCollection> ()
-                .eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
-                .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ())) > 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, "请勿重复收藏内容!");
-        }
+        Integer count = lambdaQuery ()
+                .eq (UserCollection::getCollectionId, dtoReq.getCollectionId ())
+                .eq (UserCollection::getFavoriteId, dtoReq.getFavoriteId ())
+                .count ();
+        
+        Assert.isTrue (count <= 0, new BizException ("请勿重复收藏内容!"));
         
         // 收藏内容
         UserCollection collection = BeanUtil.toBean (dtoReq, UserCollection.class);
-        
-        int insert = baseMapper.insert (collection);
-        if (insert != 1) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
-        }
-        
-        // 更新收藏夹
-        FavoriteDtoResult favoriteDtoResult = favoriteService.getFavoriteDetail (
-                new FavoriteDetailQueryDtoReq (dtoReq.getUserId (), dtoReq.getFavoriteId ()));
-        UserFavorite favorite = BeanUtil.toBean (favoriteDtoResult, UserFavorite.class);
-        favorite.setFavoriteCount (favorite.getFavoriteCount () + 1);
-        
-        boolean modify = favoriteService.updateById (favorite);
-        if (!modify) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
-        }
- 
-        return new CommonDtoResult<> (Boolean.TRUE);
+        Assert.isTrue (save (collection), BizCodeEnum.FAILED_TYPE_BUSINESS);
+    
+        return collectionsDetailList (dtoReq.getFavoriteId ());
     }
 
     @Override
-    public CommonDtoResult<Boolean> delCollection(ModifyCollectionDtoReq dtoReq) {
-        if (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该收藏夹不存在或您无权进行操作!");
-        }
+    @Transactional(rollbackFor = BizException.class)
+    public List<CollectionDtoResult> delCollection(ModifyCollectionDtoReq dtoReq) {
+        Assert.isFalse (Boolean.TRUE.equals (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())),
+                new BizException ("该收藏夹不存在或您无权进行操作!"));
         
-        QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserCollection.COLLECTION_ID, dtoReq.getCollectionId ())
-                .eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
+        // 删除
+        Assert.isTrue (removeById (dtoReq.getCollectionId ()), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
-        int delete = baseMapper.delete (wrapper);
-        if (delete != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return collectionsDetailList (dtoReq.getFavoriteId ());
     }
 
     @Override
-    public PageDtoResult<CollectionDtoResult> getCollections(CollectionQueryDtoReq dtoReq) {
-        if (verifyFavorite (null, dtoReq.getFavoriteId ())) {
-            return new PageDtoResult<> ();
-        }
+    public PageDtoResult<CollectionDtoResult> collectionsDetailPage(CollectionQueryDtoReq dtoReq) {
+        Assert.isFalse (Boolean.TRUE.equals (verifyFavorite (null, dtoReq.getFavoriteId ())));
         
-        QueryWrapper<UserCollection> wrapper = new QueryWrapper<> ();
-        wrapper.eq (UserCollection.FAVORITE_ID, dtoReq.getFavoriteId ());
-        
-        Page<UserCollection> values = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
-                wrapper
-        );
+        Page<UserCollection> page = lambdaQuery ()
+                .eq (UserCollection::getFavoriteId, dtoReq.getFavoriteId ())
+                .orderByDesc (UserCollection::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
-                values,
-                (o) -> BeanUtil.toBean (o, CollectionDtoResult.class)
+                page,
+                o -> BeanUtil.toBean (o, CollectionDtoResult.class)
         );
+    }
+    
+    @Override
+    public List<CollectionDtoResult> collectionsDetailList(Long favoriteId) {
+        List<UserCollection> collectionList = lambdaQuery ()
+                .eq (UserCollection::getFavoriteId, favoriteId)
+                .orderByDesc (UserCollection::getCreateTime)
+                .list ();
+        
+        collectionList = CollUtil.isEmpty (collectionList) ? Collections.emptyList () : collectionList;
+        return BeanUtil.copyToList (collectionList, CollectionDtoResult.class);
+    }
+    
+    @Override
+    public Integer collectionCount(Long favoriteId) {
+        return lambdaQuery ()
+                .eq (UserCollection::getFavoriteId, favoriteId)
+                .count ();
     }
     
     /**
@@ -113,13 +111,12 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
      *
      * @param userId 用户 ID (可为空)
      * @param favoriteId 收藏夹 ID
-     * @return 不是：true | 是：false
+     * @return 不是:true | 是:false
      */
     private boolean verifyFavorite (@Nullable Long userId, Long favoriteId) {
-        QueryWrapper<UserFavorite> wrapper = new QueryWrapper<> ();
-        wrapper.eq (userId != null, UserFavorite.USER_ID, userId)
-                .eq (UserFavorite.FAVORITE_ID, favoriteId);
-        
-        return favoriteService.count (wrapper) <= 0;
+        return favoriteService.lambdaQuery ()
+                .eq (userId != null, UserFavorite::getUserId, userId)
+                .eq (UserFavorite::getFavoriteId, favoriteId)
+                .count () <= 0;
     }
 }

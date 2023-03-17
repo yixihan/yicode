@@ -1,6 +1,6 @@
 package com.yixihan.yicode.message.config;
 
-import com.yixihan.yicode.message.api.constant.MessageConstant;
+import com.yixihan.yicode.common.constant.MessageConstant;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

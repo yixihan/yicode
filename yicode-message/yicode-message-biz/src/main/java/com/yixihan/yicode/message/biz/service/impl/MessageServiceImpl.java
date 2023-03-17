@@ -1,7 +1,6 @@
 package com.yixihan.yicode.message.biz.service.impl;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.message.api.constant.MessageConstant;
+import com.yixihan.yicode.common.constant.MessageConstant;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.message.biz.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public CommonDtoResult<Boolean> sendMessage(MsgSendDtoReq dtoReq) {
+    public void sendMessage(MsgSendDtoReq dtoReq) {
         CorrelationData correlationData = new CorrelationData (dtoReq.getMessageId ());
 
         rabbitTemplate.convertAndSend (
@@ -35,12 +34,10 @@ public class MessageServiceImpl implements MessageService {
                 dtoReq.getData (),
                 correlationData
         );
-        
-        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
-    public CommonDtoResult<Boolean> commit(MsgSendDtoReq dtoReq) {
+    public void commit(MsgSendDtoReq dtoReq) {
         CorrelationData correlationData = new CorrelationData (dtoReq.getMessageId ());
     
         rabbitTemplate.convertAndSend (
@@ -49,12 +46,10 @@ public class MessageServiceImpl implements MessageService {
                 dtoReq.getData (),
                 correlationData
         );
-    
-        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
-    public CommonDtoResult<Boolean> test(MsgSendDtoReq dtoReq) {
+    public void test(MsgSendDtoReq dtoReq) {
         CorrelationData correlationData = new CorrelationData (dtoReq.getMessageId ());
     
         rabbitTemplate.convertAndSend (
@@ -63,7 +58,5 @@ public class MessageServiceImpl implements MessageService {
                 dtoReq.getData (),
                 correlationData
         );
-    
-        return new CommonDtoResult<> (Boolean.TRUE);
     }
 }

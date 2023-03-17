@@ -2,9 +2,8 @@ package com.yixihan.yicode.user.openapi.api.rset.msg;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
@@ -18,11 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface SseEmitterOpenApi {
     
     @ApiOperation ("建立 sse 连接")
-    @GetMapping(value = "/connect", produces = "text/event-stream")
-    SseEmitter connectSse(@RequestParam("userId") Long userId);
+    @PostMapping(value = "/connect", produces = "text/event-stream")
+    SseEmitter connectSse();
     
     @ApiOperation ("关闭 sse 连接")
-    @GetMapping(value = "/close", produces = "application/json")
-    void closeSse(@RequestParam("userId") Long userId);
+    @PostMapping(value = "/close", produces = "application/json")
+    void closeSse();
     
 }

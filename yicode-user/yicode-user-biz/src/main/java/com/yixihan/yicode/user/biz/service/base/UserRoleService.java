@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.biz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
@@ -19,34 +18,36 @@ import java.util.List;
  * @since 2022-10-22
  */
 public interface UserRoleService extends IService<UserRole> {
-
-    /**
-     * 获取用户角色信息
-     *
-     * @param userId 用户 id
-     * @return {@link RoleDtoResult}
-     */
-    List<RoleDtoResult> getUserRoleByUserId(Long userId);
     
-    /**
-     * 获取用户角色列表 以分页形式返回
-     *
-     * @param dtoReq 请求参数
-     */
-    PageDtoResult<RoleDtoResult> getUserRoleByUserId(UserRoleQueryDtoReq dtoReq);
-
     /**
      * 添加用户角色
      *
      * @param dtoReq 请求参数
+     * @return 用户角色列表 {@link RoleDtoResult}
      */
-    CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq);
-
+    List<RoleDtoResult> addRole(ModifyUserRoleDtoReq dtoReq);
+    
     /**
      * 删除用户角色
      *
      * @param dtoReq 请求参数
+     * @return 用户角色列表 {@link RoleDtoResult}
      */
-    CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq);
+    List<RoleDtoResult> delRole(ModifyUserRoleDtoReq dtoReq);
+    
+    /**
+     * 获取用户的角色信息-列表查询
+     *
+     * @param userId 用户 id
+     * @return 用户角色列表 {@link RoleDtoResult}
+     */
+    List<RoleDtoResult> getUserRoleByUserId(Long userId);
 
+    /**
+     * 获取用户的角色信息-分页查询
+     *
+     * @param dtoReq 请求参数
+     * @return 用户角色列表 {@link RoleDtoResult}
+     */
+    PageDtoResult<RoleDtoResult> getUserRoleByUserId(UserRoleQueryDtoReq dtoReq);
 }

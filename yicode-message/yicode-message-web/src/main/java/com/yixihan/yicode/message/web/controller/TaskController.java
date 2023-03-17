@@ -1,7 +1,5 @@
 package com.yixihan.yicode.message.web.controller;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.message.api.rest.TaskApi;
 import com.yixihan.yicode.message.biz.service.MessageService;
@@ -25,12 +23,12 @@ public class TaskController implements TaskApi {
     
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> commit(MsgSendDtoReq dtoReq) {
-        return ApiResult.create (service.commit (dtoReq));
+    public void commit(MsgSendDtoReq dtoReq) {
+        service.commit (dtoReq);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> test(MsgSendDtoReq dtoReq) {
-        return ApiResult.create (service.test (dtoReq));
+    public void test(MsgSendDtoReq dtoReq) {
+        service.test (dtoReq);
     }
 }

@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
@@ -21,34 +20,38 @@ public interface UserFavoriteService {
      * 添加收藏夹
      *
      * @param req 请求参数
+     * @return {@link FavoriteVO}
      */
-    CommonVO<Boolean> addFavorite(AddFavoriteReq req);
+    FavoriteVO addFavorite(AddFavoriteReq req);
     
     /**
      * 修改收藏夹
      *
      * @param req 请求参数
+     * @return {@link FavoriteVO}
      */
-    CommonVO<Boolean> modifyFavorite(ModifyFavoriteReq req);
+    FavoriteVO modifyFavorite(ModifyFavoriteReq req);
     
     /**
      * 删除收藏夹
      *
      * @param favoriteId 收藏夹 ID
      */
-    CommonVO<Boolean> delFavorite(Long favoriteId);
+    void delFavorite(Long favoriteId);
     
     /**
      * 获取收藏夹数量
      *
      * @param userId 用户 ID
+     * @return 收藏夹数量
      */
-    CommonVO<Integer> getFavoriteCount(Long userId);
+    Integer getFavoriteCount(Long userId);
     
     /**
      * 获取用户收藏夹列表
      *
      * @param req 请求参数
+     * @return {@link FavoriteVO}
      */
     PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req);
     
@@ -56,6 +59,7 @@ public interface UserFavoriteService {
      * 获取收藏夹内所有内容
      *
      * @param req 请求参数
+     * @return {@link CollectionVO}
      */
     PageVO<CollectionVO> getCollections(CollectionQueryReq req);
 }

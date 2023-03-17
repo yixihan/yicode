@@ -20,9 +20,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("收藏夹内容获取-dtoReq")
 public class CollectionQueryDtoReq extends PageDtoReq {
-    
-    @ApiModelProperty(value = "用户 ID")
-    private Long userId;
 
     @ApiModelProperty(value = "收藏夹 id")
     private Long favoriteId;

@@ -1,20 +1,16 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.util.PageUtil;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.user.api.dto.request.base.ModifyUserRoleDtoReq;
 import com.yixihan.yicode.user.api.dto.request.base.UserRoleQueryDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
 import com.yixihan.yicode.user.biz.service.base.UserRoleService;
 import com.yixihan.yicode.user.dal.mapper.base.UserRoleMapper;
-import com.yixihan.yicode.user.dal.pojo.base.Role;
 import com.yixihan.yicode.user.dal.pojo.base.UserRole;
 import org.springframework.stereotype.Service;
 
@@ -37,74 +33,70 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private RoleService roleService;
     
     @Override
+    public List<RoleDtoResult> addRole(ModifyUserRoleDtoReq dtoReq) {
+        // 角色 id 校验
+        Assert.isTrue (roleService.validateRole (dtoReq.getRoleId ()), new BizException ("没有该角色!"));
+        // 用户-角色校验
+        Integer count = lambdaQuery ()
+                .eq (UserRole::getUserId, dtoReq.getUserId ())
+                .eq (UserRole::getRoleId, dtoReq.getRoleId ())
+                .count ();
+        Assert.isTrue (count <= 0, new BizException ("该用户已添加该角色!"));
+    
+        // 给用户添加角色
+        UserRole userRole = new UserRole ();
+        userRole.setUserId (dtoReq.getUserId ());
+        userRole.setRoleId (dtoReq.getRoleId ());
+        Assert.isTrue (save (userRole), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
+        return getUserRoleByUserId (dtoReq.getUserId ());
+    }
+    
+    @Override
+    public List<RoleDtoResult> delRole(ModifyUserRoleDtoReq dtoReq) {
+        // 用户-角色校验
+        Integer count = lambdaQuery ()
+                .eq (UserRole::getUserId, dtoReq.getUserId ())
+                .eq (UserRole::getRoleId, dtoReq.getRoleId ())
+                .count ();
+        Assert.isTrue (count > 0, new BizException ("该用户无此角色!"));
+    
+        // 获取主键 id
+        Long id =  lambdaQuery ()
+                .eq (UserRole::getUserId, dtoReq.getUserId ())
+                .eq (UserRole::getRoleId, dtoReq.getRoleId ())
+                .one ()
+                .getRoleId ();
+    
+        // 删除
+        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
+        return getUserRoleByUserId (dtoReq.getUserId ());
+    }
+    
+    @Override
     public List<RoleDtoResult> getUserRoleByUserId(Long userId) {
-        QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_id", userId);
-        List<UserRole> userRoleIdList = baseMapper.selectList (wrapper);
-        // 提取用户 roleId 列表
-        List<Long> roleIdList = userRoleIdList.stream ()
-                .map (UserRole::getRoleId).collect(Collectors.toList());
-        List<Role> userRoleList = roleService.getRoleList (roleIdList);
-        return BeanUtil.copyToList (userRoleList, RoleDtoResult.class);
+        // 获取用户的角色 id 列表
+        List<Long> userRoleIdlist = lambdaQuery ()
+                .eq (UserRole::getUserId, userId)
+                .list ()
+                .stream ()
+                .map (UserRole::getRoleId)
+                .collect(Collectors.toList());
+        
+        return roleService.getRoleList (userRoleIdlist);
     }
     
     @Override
     public PageDtoResult<RoleDtoResult> getUserRoleByUserId(UserRoleQueryDtoReq dtoReq) {
-        QueryWrapper<UserRole> wrapper = new QueryWrapper<> ();
-        wrapper.eq ("user_id", dtoReq.getUserId ());
-        Page<UserRole> userRolePage = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
-                wrapper
-        );
-        // 提取用户 roleId 列表
-        List<Long> roleIdList = userRolePage.getRecords ()
-                .stream ().map (UserRole::getRoleId).collect(Collectors.toList());
-        Page<Role> rolePage = roleService.getRolePage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
-                roleIdList
-        );
-    
-        return PageUtil.pageToPageDtoResult (
-                rolePage,
-                (o) -> BeanUtil.toBean (o, RoleDtoResult.class)
-        );
-    }
-
-    @Override
-    public CommonDtoResult<Boolean> addRole(ModifyUserRoleDtoReq dtoReq) {
-        if (!roleService.hasRole (dtoReq.getRoleId ()).getData ()) {
-            return new CommonDtoResult<> (Boolean.FALSE, "无此角色!");
-        }
-        if (baseMapper.selectCount (new QueryWrapper<UserRole> ()
-                .eq (UserRole.USER_ID, dtoReq.getUserId ())
-                .eq (UserRole.ROLE_ID, dtoReq.getRoleId ())) > 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该用户已添加该角色!");
-        }
+        // 获取用户的角色 id 列表
+        List<Long> userRoleIdlist = lambdaQuery ()
+                .eq (UserRole::getUserId, dtoReq.getUserId ())
+                .list ()
+                .stream ()
+                .map (UserRole::getRoleId)
+                .collect(Collectors.toList());
         
-        UserRole userRole = new UserRole ();
-        userRole.setUserId (dtoReq.getUserId ());
-        userRole.setRoleId (dtoReq.getRoleId ());
-        int modify = baseMapper.insert (userRole);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
-    }
-
-    @Override
-    public CommonDtoResult<Boolean> delRole(ModifyUserRoleDtoReq dtoReq) {
-        QueryWrapper<UserRole> wrapper = new QueryWrapper<UserRole> ()
-                .eq (UserRole.USER_ID, dtoReq.getUserId ())
-                .eq (UserRole.ROLE_ID, dtoReq.getRoleId ());
-        
-        if (0 >= baseMapper.selectCount (wrapper)) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该用户无此角色!");
-        }
-        
-        int modify = baseMapper.delete (wrapper);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return roleService.getRolePage (dtoReq, userRoleIdlist);
     }
 }

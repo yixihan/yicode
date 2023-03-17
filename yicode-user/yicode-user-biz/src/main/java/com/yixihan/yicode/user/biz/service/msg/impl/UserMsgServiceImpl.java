@@ -1,15 +1,13 @@
 package com.yixihan.yicode.user.biz.service.msg.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.MessageDetailDtoReq;
@@ -22,7 +20,6 @@ import com.yixihan.yicode.user.dal.pojo.msg.UserMsg;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Optional;
 
 /**
  * <p>
@@ -39,38 +36,34 @@ public class UserMsgServiceImpl extends ServiceImpl<UserMsgMapper, UserMsg> impl
     private TemplateMsgService templateMsgService;
     
     @Override
-    public CommonDtoResult<Boolean> addMessage(AddMessageDtoReq dtoReq) {
+    public MessageDetailDtoResult addMessage(AddMessageDtoReq dtoReq) {
         UserMsg msg = BeanUtil.toBean (dtoReq, UserMsg.class);
-        int modify = baseMapper.insert (msg);
-        if (modify != NumConstant.NUM_1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_INTERNAL.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+    
+        // 保存
+        Assert.isTrue (save (msg), BizCodeEnum.FAILED_TYPE_INTERNAL);
+
+        return BeanUtil.toBean (msg, MessageDetailDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> readMessages(ReadMessageDtoReq dtoReq) {
-        UpdateWrapper<UserMsg> wrapper = new UpdateWrapper<UserMsg> ()
-                .eq (UserMsg.RECEIVE_USE_ID, dtoReq.getUserId ())
-                .in (CollectionUtil.isNotEmpty (dtoReq.getMessageIdList ()), UserMsg.ID, dtoReq.getMessageIdList ())
-                .set (CollectionUtil.isNotEmpty (dtoReq.getMessageIdList ()), UserMsg.FINISH, NumConstant.NUM_1);
+    public void readMessages(ReadMessageDtoReq dtoReq) {
+        boolean modify = lambdaUpdate ()
+                .eq (UserMsg::getReceiveUseId, dtoReq.getUserId ())
+                .in (CollUtil.isNotEmpty (dtoReq.getMessageIdList ()),
+                        UserMsg::getId, dtoReq.getMessageIdList ())
+                .set (CollUtil.isNotEmpty (dtoReq.getMessageIdList ()),
+                        UserMsg::getFinish, NumConstant.NUM_1)
+                .update ();
     
-        int modify = baseMapper.update (null, wrapper);
-        if (modify != dtoReq.getMessageIdList ().size ()) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_INTERNAL.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        Assert.isTrue (modify, BizCodeEnum.FAILED_TYPE_INTERNAL);
     }
     
     @Override
     public PageDtoResult<MessageDetailDtoResult> messageDetail(MessageDetailDtoReq dtoReq) {
-        QueryWrapper<UserMsg> wrapper = new QueryWrapper<UserMsg> ()
-                .eq (UserMsg.RECEIVE_USE_ID, dtoReq.getUserId ());
-        
-        Page<UserMsg> pages = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()),
-                wrapper
-        );
+        Page<UserMsg> pages = lambdaQuery ()
+                .eq (UserMsg::getReceiveUseId, dtoReq.getUserId ())
+                .orderByDesc (UserMsg::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
                 pages,
@@ -79,17 +72,15 @@ public class UserMsgServiceImpl extends ServiceImpl<UserMsgMapper, UserMsg> impl
     }
     
     @Override
-    public CommonDtoResult<Integer> unReadMessageCount(Long userId) {
-        QueryWrapper<UserMsg> wrapper = new QueryWrapper<UserMsg> ()
-                .eq (UserMsg.RECEIVE_USE_ID, userId)
-                .eq (UserMsg.FINISH, NumConstant.NUM_0);
-    
-        Integer count = Optional.ofNullable (baseMapper.selectCount (wrapper)).orElse (NumConstant.NUM_0);
-        return new CommonDtoResult<> (count);
+    public Integer unReadMessageCount(Long userId) {
+        return lambdaQuery ()
+                .eq (UserMsg::getReceiveUseId, userId)
+                .eq (UserMsg::getFinish, NumConstant.NUM_0)
+                .count ();
     }
     
     @Override
-    public CommonDtoResult<String> getMessageTemplate(String templateId) {
-        return new CommonDtoResult<> (templateMsgService.getMessageTemplate (templateId));
+    public String getMessageTemplate(String templateId) {
+        return templateMsgService.getMessageTemplate (templateId);
     }
 }

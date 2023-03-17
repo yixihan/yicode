@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyUserInfoReq;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserInfoVO;
 
@@ -17,7 +16,7 @@ public interface UserInfoService {
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> modifyInfo(ModifyUserInfoReq req);
+    UserInfoVO modifyInfo(ModifyUserInfoReq req);
     
     /**
      * 获取用户资料

@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.openapi.web.controller.base;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.base.UserOpenApi;
@@ -24,60 +23,60 @@ import javax.annotation.Resource;
 public class UserController implements UserOpenApi {
 
     @Resource
-    private UserService userService;
+    private UserService service;
 
     @Override
     public JsonResponse<UserDetailInfoVO> getUserDetailInfo(Long userId) {
-        return JsonResponse.ok (userService.getUserDetailInfo (userId));
+        return JsonResponse.ok (service.getUserDetailInfo (userId));
     }
 
     @Override
     public JsonResponse<UserDetailInfoVO> getUserDetailInfo() {
-        return JsonResponse.ok (userService.getUserDetailInfo ());
+        return JsonResponse.ok (service.getUserDetailInfo ());
     }
     
     @Override
     public JsonResponse<PageVO<UserDetailInfoVO>> getUserList(PageReq req) {
-        return JsonResponse.ok (userService.getUserList (req));
+        return JsonResponse.ok (service.getUserList (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> register(RegisterUserReq req) {
-        return JsonResponse.ok (userService.register (req));
+    public void register(RegisterUserReq req) {
+        service.register (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> resetPassword(ResetPasswordReq req) {
-        return JsonResponse.ok (userService.resetPassword (req));
+    public void resetPassword(ResetPasswordReq req) {
+        service.resetPassword (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindEmail(EmailReq req) {
-        return JsonResponse.ok (userService.bindEmail (req));
+    public void bindEmail(EmailReq req) {
+        service.bindEmail (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindEmail(EmailReq req) {
-        return JsonResponse.ok (userService.unbindEmail (req));
+    public void unbindEmail(EmailReq req) {
+        service.unbindEmail (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> bindMobile(MobileReq req) {
-        return JsonResponse.ok (userService.bindMobile (req));
+    public void bindMobile(MobileReq req) {
+        service.bindMobile (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> unbindMobile(MobileReq req) {
-        return JsonResponse.ok (userService.unbindMobile (req));
+    public void unbindMobile(MobileReq req) {
+        service.unbindMobile (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> resetUserName(ResetUserNameReq req) {
-        return JsonResponse.ok (userService.resetUserName(req));
+    public void resetUserName(ResetUserNameReq req) {
+        service.resetUserName(req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> cancellation(Long userId) {
-        return JsonResponse.ok (userService.cancellation (userId));
+    public void cancellation(Long userId) {
+        service.cancellation (userId);
     }
 }

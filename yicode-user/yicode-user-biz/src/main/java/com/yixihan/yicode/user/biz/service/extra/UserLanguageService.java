@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserLanguageDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserLanguageDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserLanguage;
@@ -22,20 +21,23 @@ public interface UserLanguageService extends IService<UserLanguage> {
      * 添加用户语言
      *
      * @param dtoReq 请求参数
+     * @return {@link UserLanguageDtoResult}
      */
-    CommonDtoResult<Boolean> addUserLanguage(ModifyUserLanguageDtoReq dtoReq);
+    List<UserLanguageDtoResult> addUserLanguage(ModifyUserLanguageDtoReq dtoReq);
 
     /**
      * 更新用户语言
      *
      * @param dtoReq 请求参数
+     * @return {@link UserLanguageDtoResult}
      */
-    CommonDtoResult<Boolean> modifyUserLanguage(ModifyUserLanguageDtoReq dtoReq);
+    List<UserLanguageDtoResult> modifyUserLanguage(ModifyUserLanguageDtoReq dtoReq);
 
     /**
      * 获取用户语言列表
      *
      * @param userId 用户 ID
+     * @return {@link UserLanguageDtoResult}
      */
     List<UserLanguageDtoResult> getUserLanguage(Long userId);
 

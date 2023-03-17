@@ -1,7 +1,5 @@
 package com.yixihan.yicode.message.web.controller;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.message.api.rest.MessageApi;
 import com.yixihan.yicode.message.biz.service.MessageService;
@@ -25,7 +23,7 @@ public class MessageController implements MessageApi {
     
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> send(MsgSendDtoReq dtoReq) {
-        return ApiResult.create (service.sendMessage (dtoReq));
+    public void send(MsgSendDtoReq dtoReq) {
+        service.sendMessage (dtoReq);
     }
 }

@@ -1,14 +1,14 @@
 package com.yixihan.yicode.user.biz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.biz.service.base.RoleService;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -33,72 +32,78 @@ import java.util.Optional;
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
-
+    
     @Resource
     private UserRoleService userRoleService;
     
     @Override
-    public List<Role> getRoleList(List<Long> roleIdList) {
-        List<Role> roleList = baseMapper.selectBatchIds (roleIdList);
-        return CollectionUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
+    public RoleDtoResult addRole(String roleName) {
+        Role role = new Role ();
+        role.setRoleName (roleName);
+    
+        // 保存
+        Assert.isTrue (save (role), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
     @Override
-    public Page<Role> getRolePage(Page<Role> page, List<Long> roleIdList) {
-        QueryWrapper<Role> wrapper = new QueryWrapper<> ();
-        wrapper.in (!CollectionUtil.isEmpty (roleIdList), "role_id", roleIdList);
-        return baseMapper.selectPage (page, wrapper);
+    public void delRole(Long roleId) {
+        // 校验该角色是否还有绑定用户
+        Integer count = userRoleService.lambdaQuery ()
+                .eq (UserRole::getRoleId, roleId)
+                .count ();
+        Assert.isTrue (count <= 0, new BizException ("该角色还有绑定用户,请先解绑再删除!"));
+    
+        // 删除
+        Assert.isTrue (removeById (roleId), BizCodeEnum.FAILED_TYPE_BUSINESS);
+    }
+    
+    @Override
+    public Boolean validateRole(Long roleId) {
+        return lambdaQuery ()
+                .eq (Role::getRoleId, roleId)
+                .count () > 0;
+    }
+    
+    @Override
+    public RoleDtoResult roleDetail(Long roleId) {
+        Role role = getById (roleId);
+    
+        Assert.notNull (role, new BizException ("没有该角色"));
+        
+        return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
     @Override
     public PageDtoResult<RoleDtoResult> getRolePage(PageDtoReq dtoReq) {
-        Page<Role> rolePage = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize ()),
-                null);
-        return PageUtil.pageToPageDtoResult (
-                Optional.ofNullable (rolePage).orElse (new Page<> ()),
-                (o) -> BeanUtil.toBean (o, RoleDtoResult.class)
-        );
+        return getRolePage (dtoReq, Collections.emptyList ());
     }
     
     @Override
     public List<RoleDtoResult> getRoleList() {
-        List<Role> roleList = Optional.ofNullable (baseMapper.selectList (null))
-                .orElse (Collections.emptyList ());
+        return getRoleList (Collections.emptyList ());
+    }
+    
+    @Override
+    public List<RoleDtoResult> getRoleList(List<Long> roleIdList) {
+        List<Role> roleList = lambdaQuery ()
+                .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
+                .list ();
+        roleList = CollUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
         
         return BeanUtil.copyToList (roleList, RoleDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> addRole(String roleName) {
-        Role role = new Role ();
-        role.setRoleName (roleName);
-        int modify = baseMapper.insert (role);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
-    }
+    public PageDtoResult<RoleDtoResult> getRolePage(PageDtoReq dtoReq, List<Long> roleIdList) {
+        Page<Role> page = lambdaQuery ()
+                .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
+                .page (PageUtil.toPage (dtoReq));
     
-    @Override
-    public CommonDtoResult<Boolean> delRole(Long roleId) {
-        if (userRoleService.count (new QueryWrapper<UserRole> ()
-                .eq (UserRole.ROLE_ID, roleId)) > 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, "该角色还有绑定用户,请先解绑再删除!");
-        }
-        
-        int modify = baseMapper.deleteById (roleId);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return PageUtil.pageToPageDtoResult (
+                page,
+                o -> BeanUtil.toBean (o, RoleDtoResult.class)
+        );
     }
-    
-    @Override
-    public CommonDtoResult<Boolean> hasRole (Long roleId) {
-        QueryWrapper<Role> wrapper = new QueryWrapper<> ();
-        wrapper.eq (Role.ROLE_ID, roleId);
-        return new CommonDtoResult<> (baseMapper.selectCount (wrapper) > 0);
-    }
-    
 }

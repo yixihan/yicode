@@ -1,7 +1,5 @@
 package com.yixihan.yicode.message.api.rest;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,5 +19,5 @@ public interface MessageApi {
     
     @ApiOperation("发送消息")
     @PostMapping(value = "/send", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> send(@RequestBody MsgSendDtoReq dtoReq);
+    void send(@RequestBody MsgSendDtoReq dtoReq);
 }

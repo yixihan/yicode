@@ -1,9 +1,11 @@
 package com.yixihan.yicode.user.biz.service.extra;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.user.api.dto.request.extra.*;
+import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.VerifyFavoriteTypeDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFavorite;
 
@@ -22,28 +24,28 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> addFavorite(AddFavoriteDtoReq dtoReq);
+    FavoriteDtoResult addFavorite(AddFavoriteDtoReq dtoReq);
 
     /**
      * 修改收藏夹
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> modifyFavorite(ModifyFavoriteDtoReq dtoReq);
+    FavoriteDtoResult modifyFavorite(ModifyFavoriteDtoReq dtoReq);
 
     /**
      * 删除收藏夹
      *
-     * @param dtoReq 请求参数
+     * @param favoriteId 收藏夹 id
      */
-    CommonDtoResult<Boolean> delFavorite(ModifyFavoriteDtoReq dtoReq);
+    void delFavorite(Long favoriteId);
 
     /**
      * 获取收藏夹数量
      *
      * @param userId 用户 ID
      */
-    CommonDtoResult<Integer> getFavoriteCount(Long userId);
+    Integer getFavoriteCount(Long userId);
 
     /**
      * 获取全部收藏夹
@@ -55,9 +57,9 @@ public interface UserFavoriteService extends IService<UserFavorite> {
     /**
      * 获取收藏夹详情
      *
-     * @param dtoReq 请求参数
+     * @param favoriteId 收藏夹 ID
      */
-    FavoriteDtoResult getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq);
+    FavoriteDtoResult getFavoriteDetail(Long favoriteId);
     
     /**
      * 校验收藏夹是否存在
@@ -65,7 +67,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * @param favoriteId 收藏夹 ID
      * @return 存在 : true | 不存在 : false
      */
-    CommonDtoResult<Boolean> verifyFavorite(Long favoriteId);
+    Boolean verifyFavorite(Long favoriteId);
     
     /**
      * 校验收藏夹类型
@@ -73,5 +75,5 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * @param dtoReq 请求参数
      * @return 正确 : true | 错误 : false
      */
-    CommonDtoResult<Boolean> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq);
+    Boolean verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq);
 }

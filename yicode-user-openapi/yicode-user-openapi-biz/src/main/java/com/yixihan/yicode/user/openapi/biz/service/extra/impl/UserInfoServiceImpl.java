@@ -2,10 +2,6 @@ package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
@@ -25,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,26 +50,20 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserService userService;
     
     @Override
-    public CommonVO<Boolean> modifyInfo(ModifyUserInfoReq req) {
-        if (req == null) {
-            return new CommonVO<> ();
-        }
-        Boolean flag = Boolean.TRUE;
-        Long userId = userService.getUser ().getUserId ();
+    public UserInfoVO modifyInfo(ModifyUserInfoReq req) {
+        Long userId = userService.getUserId ();
     
         // 如果网站列表不为空, 则修改网站列表
         if (CollectionUtil.isNotEmpty (req.getUserWebsiteList ())) {
-            flag = modifyUserWebsite (userId, req.getUserWebsiteList ());
+            modifyUserWebsite (userId, req.getUserWebsiteList ());
         }
     
+        // 更新用户资料
         ModifyUserInfoDtoReq dtoReq = BeanUtil.toBean (req, ModifyUserInfoDtoReq.class);
         dtoReq.setUserId (userId);
+        infoFeignClient.modifyInfo (dtoReq);
         
-        CommonDtoResult<Boolean> dtoResult = infoFeignClient.modifyInfo (dtoReq).getResult ();
-        if (!dtoResult.getData () || !flag) {
-            throw new BizException (BizCodeEnum.FAILED_TYPE_BUSINESS);
-        }
-        return new CommonVO<> (Boolean.TRUE);
+        return getUserInfo (userId);
     }
     
     @Override
@@ -90,8 +79,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfoVO.setUserWebsiteList (websiteDtoResultList.stream ()
                     .map (UserWebsiteDtoResult::getUserWebsite)
                     .collect (Collectors.toList ()));
-        } else {
-            userInfoVO.setUserWebsiteList (Collections.emptyList ());
         }
     
         // 获取用户语言
@@ -99,8 +86,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     
         if (CollectionUtil.isNotEmpty (languageDtoResults)) {
             userInfoVO.setUserLanguageList (BeanUtil.copyToList (languageDtoResults, UserLanguageVO.class));
-        } else {
-            userInfoVO.setUserLanguageList (Collections.emptyList ());
         }
         
         // 获取用户标签
@@ -109,8 +94,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (CollectionUtil.isNotEmpty (labelDtoResult)) {
             userInfoVO.setUserLabel (labelDtoResult.stream ()
                     .map (LabelDtoResult::getLabelName).collect(Collectors.toList()));
-        } else {
-            userInfoVO.setUserLabel (Collections.emptyList ());
         }
     
         return userInfoVO;
@@ -121,23 +104,25 @@ public class UserInfoServiceImpl implements UserInfoService {
      *
      * @param userId 用户 ID
      * @param websiteList 用户网站列表
-     * @return true : 修改成功 | false : 修改失败
      */
-    private Boolean modifyUserWebsite (Long userId, List<String> websiteList) {
+    private void modifyUserWebsite (Long userId, List<String> websiteList) {
         // 获取用户现有网站列表
         List<String> oldWebSiteList = websiteFeignClient.getUserWebsite (userId).getResult ()
-                .stream ().map (UserWebsiteDtoResult::getUserWebsite).collect (Collectors.toList ());
+                .stream ()
+                .map (UserWebsiteDtoResult::getUserWebsite)
+                .collect (Collectors.toList ());
         
         // 过滤已有网站列表
         List<String> addWebSiteList = websiteList.stream ()
-                .filter ((o) -> !oldWebSiteList.contains (o)).collect(Collectors.toList());
+                .filter (o -> !oldWebSiteList.contains (o))
+                .collect(Collectors.toList());
         List<String> delWebSiteList = oldWebSiteList.stream ()
-                .filter ((o) -> !websiteList.contains (o)).collect(Collectors.toList());
+                .filter (o -> !websiteList.contains (o))
+                .collect(Collectors.toList());
     
-        CommonDtoResult<Boolean> addResult = websiteFeignClient
-                .addUserWebsite (new ModifyUserWebsiteDtoReq (userId, addWebSiteList)).getResult ();
-        CommonDtoResult<Boolean> delResult = websiteFeignClient
-                .delUserWebsite (new ModifyUserWebsiteDtoReq (userId, delWebSiteList)).getResult ();
-        return addResult.getData () && delResult.getData ();
+        // 新增
+        websiteFeignClient.addUserWebsite (new ModifyUserWebsiteDtoReq (userId, addWebSiteList));
+        // 删除
+        websiteFeignClient.delUserWebsite (new ModifyUserWebsiteDtoReq (userId, delWebSiteList));
     }
 }

@@ -1,10 +1,12 @@
 package com.yixihan.yicode.user.web.controller.extra;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.user.api.dto.request.extra.*;
+import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.VerifyFavoriteTypeDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
 import com.yixihan.yicode.user.api.rest.extra.UserFavoriteApi;
 import com.yixihan.yicode.user.biz.service.extra.UserFavoriteService;
@@ -26,45 +28,45 @@ import javax.annotation.Resource;
 public class UserFavoriteController implements UserFavoriteApi {
 
     @Resource
-    private UserFavoriteService userFavoriteService;
+    private UserFavoriteService service;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addFavorite(AddFavoriteDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.addFavorite (dtoReq));
+    public ApiResult<FavoriteDtoResult> addFavorite(AddFavoriteDtoReq dtoReq) {
+        return ApiResult.create (service.addFavorite (dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyFavorite(ModifyFavoriteDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.modifyFavorite (dtoReq));
+    public ApiResult<FavoriteDtoResult> modifyFavorite(ModifyFavoriteDtoReq dtoReq) {
+        return ApiResult.create (service.modifyFavorite (dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delFavorite(ModifyFavoriteDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.delFavorite (dtoReq));
+    public void delFavorite(Long favoriteId) {
+        service.delFavorite (favoriteId);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Integer>> getFavoriteCount(Long userId) {
-        return ApiResult.create (userFavoriteService.getFavoriteCount (userId));
+    public ApiResult<Integer> getFavoriteCount(Long userId) {
+        return ApiResult.create (service.getFavoriteCount (userId));
     }
 
     @Override
     public ApiResult<PageDtoResult<FavoriteDtoResult>> getFavorites(FavoriteQueryDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.getFavorites (dtoReq));
+        return ApiResult.create (service.getFavorites (dtoReq));
     }
     
     @Override
-    public ApiResult<FavoriteDtoResult> getFavoriteDetail(FavoriteDetailQueryDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.getFavoriteDetail (dtoReq));
+    public ApiResult<FavoriteDtoResult> getFavoriteDetail(Long favoriteId) {
+        return ApiResult.create (service.getFavoriteDetail (favoriteId));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyFavorite(Long favoriteId) {
-        return ApiResult.create (userFavoriteService.verifyFavorite (favoriteId));
+    public ApiResult<Boolean> verifyFavorite(Long favoriteId) {
+        return ApiResult.create (service.verifyFavorite (favoriteId));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq) {
-        return ApiResult.create (userFavoriteService.verifyFavoriteType (dtoReq));
+    public ApiResult<Boolean> verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq) {
+        return ApiResult.create (service.verifyFavoriteType (dtoReq));
     }
 }

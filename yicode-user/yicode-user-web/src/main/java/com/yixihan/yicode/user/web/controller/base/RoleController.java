@@ -2,7 +2,6 @@ package com.yixihan.yicode.user.web.controller.base;
 
 
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
@@ -30,27 +29,32 @@ public class RoleController implements RoleApi {
     private RoleService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addRole(String roleName) {
+    public ApiResult<RoleDtoResult> addRole(String roleName) {
         return ApiResult.create (service.addRole (roleName));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delRole(Long roleId) {
-        return ApiResult.create (service.delRole (roleId));
+    public void delRole(Long roleId) {
+        service.delRole (roleId);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> hasRole(Long roleId) {
-        return ApiResult.create (service.hasRole (roleId));
+    public ApiResult<Boolean> validateRole(Long roleId) {
+        return ApiResult.create (service.validateRole (roleId));
     }
     
     @Override
-    public ApiResult<PageDtoResult<RoleDtoResult>> getRolePage(PageDtoReq dtoReq) {
+    public ApiResult<RoleDtoResult> roleDetail(Long roleId) {
+        return ApiResult.create (service.roleDetail (roleId));
+    }
+    
+    @Override
+    public ApiResult<PageDtoResult<RoleDtoResult>> rolePageDetail(PageDtoReq dtoReq) {
         return ApiResult.create (service.getRolePage (dtoReq));
     }
     
     @Override
-    public ApiResult<List<RoleDtoResult>> getRoleList() {
+    public ApiResult<List<RoleDtoResult>> roleListDetail() {
         return ApiResult.create (service.getRoleList ());
     }
 }

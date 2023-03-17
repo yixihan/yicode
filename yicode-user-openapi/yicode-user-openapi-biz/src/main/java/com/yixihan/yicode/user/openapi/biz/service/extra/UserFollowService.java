@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FollowQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFollowReq;
@@ -19,26 +18,28 @@ public interface UserFollowService {
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> followUser(ModifyFollowReq req);
+    void followUser(ModifyFollowReq req);
     
     /**
      * 取消关注用户
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> unfollowUser(ModifyFollowReq req);
+    void unfollowUser(ModifyFollowReq req);
     
     /**
      * 获取关注者数量
      *
      * @param userId 用户 ID
+     * @return 关注者数量
      */
-    CommonVO<Integer> getFollowCount(Long userId);
+    Integer getFollowCount(Long userId);
     
     /**
      * 获取关注者列表
      *
      * @param req 请求参数
+     * @return {@link FollowVO}
      */
     PageVO<FollowVO> getFollowList(FollowQueryReq req);
     
@@ -46,13 +47,15 @@ public interface UserFollowService {
      * 获取粉丝数量
      *
      * @param userId 用户 ID
+     * @return 粉丝数量
      */
-    CommonVO<Integer> getFanCount(Long userId);
+    Integer getFanCount(Long userId);
     
     /**
      * 获取粉丝列表
      *
      * @param req 请求参数
+     * @return {@link FollowVO}
      */
     PageVO<FollowVO> getFanList(FollowQueryReq req);
 }

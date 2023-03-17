@@ -2,16 +2,19 @@ package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
-import com.yixihan.yicode.user.api.dto.request.extra.*;
+import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
-import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
@@ -58,93 +61,73 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     private UserService userService;
     
     @Override
-    public CommonVO<Boolean> addFavorite(AddFavoriteReq req) {
+    public FavoriteVO addFavorite(AddFavoriteReq req) {
         // 校验收藏夹名 (不为空) & 收藏夹类型
-        if (StrUtil.isBlank (req.getFavoriteName ())) {
-            throw new BizException ("收藏夹不能为空!");
-        }
-        if (!FavoriteTypeEnums.contains (req.getFavoriteType ())) {
-            throw new BizException ("收藏夹类型错误!");
-        }
+        // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
+        Assert.isTrue (StrUtil.isBlank (req.getFavoriteName ()),
+                new BizException ("收藏夹不能为空!"));
+        Assert.isTrue (Boolean.FALSE.equals (FavoriteTypeEnums.contains (req.getFavoriteType ())),
+                new BizException ("收藏夹类型错误!"));
         
         // 新增收藏夹
         AddFavoriteDtoReq dtoReq = BeanUtil.toBean (req, AddFavoriteDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        FavoriteDtoResult dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
+        return BeanUtil.toBean (dtoResult, FavoriteVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> modifyFavorite(ModifyFavoriteReq req) {
+    public FavoriteVO modifyFavorite(ModifyFavoriteReq req) {
         Long userId = userService.getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
-        if (verifyFavoriteId (userId, req.getFavoriteId ())) {
-            throw new BizException ("收藏夹不存在!");
-        }
-        if (StrUtil.isBlank (req.getFavoriteName ())) {
-            throw new BizException ("收藏夹不能为空!");
-        }
+        Assert.isFalse (favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult (),
+                new BizException ("收藏夹不存在!"));
+        Assert.isTrue (StrUtil.isBlank (req.getFavoriteName ()),
+                new BizException ("收藏夹不能为空!"));
+        
         
         // 修改收藏夹
         ModifyFavoriteDtoReq dtoReq = BeanUtil.toBean (req, ModifyFavoriteDtoReq.class);
         dtoReq.setUserId (userId);
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        FavoriteDtoResult dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
+        return BeanUtil.toBean (dtoResult, FavoriteVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delFavorite(Long favoriteId) {
-        Long userId = userService.getUser ().getUserId ();
+    public void delFavorite(Long favoriteId) {
         // 校验收藏夹 ID
-        if (verifyFavoriteId (userId, favoriteId)) {
-            throw new BizException ("收藏夹不存在!");
-        }
+        Assert.isFalse (favoriteFeignClient.verifyFavorite (favoriteId).getResult (),
+                new BizException ("收藏夹不存在!"));
         
         // 删除收藏夹
-        ModifyFavoriteDtoReq dtoReq = new ModifyFavoriteDtoReq ();
-        dtoReq.setUserId (userId);
-        dtoReq.setFavoriteId (favoriteId);
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.delFavorite (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        favoriteFeignClient.delFavorite (favoriteId);
     }
     
     @Override
-    public CommonVO<Integer> getFavoriteCount(Long userId) {
-        CommonDtoResult<Integer> dtoResult = favoriteFeignClient.getFavoriteCount (userId).getResult ();
-        return CommonVO.create (dtoResult);
+    public Integer getFavoriteCount(Long userId) {
+        return favoriteFeignClient.getFavoriteCount (userId).getResult ();
     }
     
     @Override
     public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
+        UserDtoResult user = userService.getUser (req.getUserId ());
         FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
         dtoReq.setUserId (userService.getUser ().getUserId ());
 
         PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
-        dtoResult.getRecords ().forEach ((o) -> o.setUserName (userService.getUser ().getUserName ()));
+        dtoResult.getRecords ().parallelStream ().forEach (o -> o.setUserName (user.getUserName ()));
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, FavoriteVO.class)
+                o -> BeanUtil.toBean (o, FavoriteVO.class)
         );
     }
     
     @Override
     public PageVO<CollectionVO> getCollections(CollectionQueryReq req) {
-        Long userId = userService.getUser ().getUserId ();
         CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
-        dtoReq.setUserId (userId);
     
-        PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.getCollections (dtoReq).getResult ();
-        FavoriteDetailQueryDtoReq favoriteDetailQueryDtoReq = new FavoriteDetailQueryDtoReq (userId, req.getFavoriteId ());
-        FavoriteDtoResult favoriteDtoResult = favoriteFeignClient.getFavoriteDetail (favoriteDetailQueryDtoReq).getResult ();
+        PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();
+        FavoriteDtoResult favoriteDtoResult = favoriteFeignClient.getFavoriteDetail (req.getFavoriteId ()).getResult ();
     
         final Map<Long, String> nameMap;
         List<Long> collectionList = dtoResult.getRecords ().stream ().map (CollectionDtoResult::getCollectionId)
@@ -156,24 +139,11 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
             nameMap = noteFeignClient.noteName (collectionList).getResult ();
         }
         
-        dtoResult.getRecords ().forEach ((o) -> o.setCollectionName (nameMap.get (o.getCollectionId ())));
+        dtoResult.getRecords ().forEach (o -> o.setCollectionName (nameMap.get (o.getCollectionId ())));
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, CollectionVO.class)
+                o -> BeanUtil.toBean (o, CollectionVO.class)
         );
-    }
-    
-    /**
-     * 校验收藏夹 ID 是否存在
-     *
-     * @param userId 用户 ID
-     * @param favoriteId 收藏夹 ID
-     */
-    private Boolean verifyFavoriteId (Long userId, Long favoriteId) {
-        FavoriteDetailQueryDtoReq dtoReq = new FavoriteDetailQueryDtoReq (userId, favoriteId);
-    
-        FavoriteDtoResult dtoResult = favoriteFeignClient.getFavoriteDetail (dtoReq).getResult ();
-        return dtoResult == null;
     }
 }

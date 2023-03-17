@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.web.controller.extra;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
@@ -27,35 +26,35 @@ import javax.annotation.Resource;
 public class UserFollowController implements UserFollowApi {
 
     @Resource
-    private UserFollowService userFollowService;
+    private UserFollowService service;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> followUser(ModifyFollowDtoReq dtoReq) {
-        return ApiResult.create (userFollowService.followUser (dtoReq));
+    public void followUser(ModifyFollowDtoReq dtoReq) {
+        service.followUser (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> unfollowUser(ModifyFollowDtoReq dtoReq) {
-        return ApiResult.create (userFollowService.unfollowUser (dtoReq));
+    public void unfollowUser(ModifyFollowDtoReq dtoReq) {
+        service.unfollowUser (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Integer>> getFollowCount(Long userId) {
-        return ApiResult.create (userFollowService.getFollowCount (userId));
+    public ApiResult<Integer> getFollowCount(Long userId) {
+        return ApiResult.create (service.getFollowCount (userId));
     }
 
     @Override
     public ApiResult<PageDtoResult<FollowDtoResult>> getFollowList(FollowQueryDtoReq dtoReq) {
-        return ApiResult.create (userFollowService.getFollowList (dtoReq));
+        return ApiResult.create (service.getFollowList (dtoReq));
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Integer>> getFanCount(Long userId) {
-        return ApiResult.create (userFollowService.getFanCount (userId));
+    public ApiResult<Integer> getFanCount(Long userId) {
+        return ApiResult.create (service.getFanCount (userId));
     }
 
     @Override
     public ApiResult<PageDtoResult<FollowDtoResult>> getFanList(FollowQueryDtoReq dtoReq) {
-        return ApiResult.create (userFollowService.getFanList (dtoReq));
+        return ApiResult.create (service.getFanList (dtoReq));
     }
 }

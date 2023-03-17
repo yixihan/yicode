@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.web.controller.extra;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserInfoDtoResult;
@@ -26,20 +25,20 @@ import java.util.List;
 public class UserInfoController implements UserInfoApi {
 
     @Resource
-    private UserInfoService userInfoService;
+    private UserInfoService service;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyInfo(ModifyUserInfoDtoReq dtoReq) {
-        return ApiResult.create (userInfoService.modifyInfo (dtoReq));
+    public void modifyInfo(ModifyUserInfoDtoReq dtoReq) {
+        service.modifyInfo (dtoReq);
     }
 
     @Override
     public ApiResult<UserInfoDtoResult> getUserInfo(Long userId) {
-        return ApiResult.create (userInfoService.getUserInfo (userId));
+        return ApiResult.create (service.getUserInfo (userId));
     }
     
     @Override
     public ApiResult<List<UserInfoDtoResult>> getUserInfoList(List<Long> userIdList) {
-        return ApiResult.create (userInfoService.getUserInfoList (userIdList));
+        return ApiResult.create (service.getUserInfoList (userIdList));
     }
 }

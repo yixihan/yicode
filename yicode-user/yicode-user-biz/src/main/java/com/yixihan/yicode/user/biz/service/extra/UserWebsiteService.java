@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.biz.service.extra;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserWebsiteDtoReq;
 import com.yixihan.yicode.user.api.dto.response.extra.UserWebsiteDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserWebsite;
@@ -23,7 +22,7 @@ public interface UserWebsiteService extends IService<UserWebsite> {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> addUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
+    void addUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
     
 
     /**
@@ -31,12 +30,13 @@ public interface UserWebsiteService extends IService<UserWebsite> {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> delUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
+    void delUserWebsite(ModifyUserWebsiteDtoReq dtoReq);
     
     /**
      * 获取用户网站列表
      *
      * @param userId 用户 ID
+     * @return {@link UserWebsiteDtoResult}
      */
     List<UserWebsiteDtoResult> getUserWebsite(Long userId);
 }

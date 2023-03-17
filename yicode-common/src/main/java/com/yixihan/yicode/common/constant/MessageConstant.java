@@ -1,4 +1,4 @@
-package com.yixihan.yicode.message.api.constant;
+package com.yixihan.yicode.common.constant;
 
 /**
  * 消息模块 常量类
@@ -7,7 +7,6 @@ package com.yixihan.yicode.message.api.constant;
  * @date 2023/1/10 9:25
  */
 public class MessageConstant {
-    
     
     /**
      * 消息系统 - 交换机
@@ -53,4 +52,7 @@ public class MessageConstant {
      * 测评系统 - 自测代码 - route key
      */
     public static final String TASK_TEST_ROUTING_KEY = "yicode_task_test_key";
+    
+    private MessageConstant() {
+    }
 }

@@ -87,10 +87,6 @@ public class UserMsgServiceImpl implements UserMsgService {
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
         dtoReq.setData (message);
         dtoReq.setMessageId (UUID.randomUUID ().toString (Boolean.TRUE));
-        CommonDtoResult<Boolean> dtoResult = messageFeignClient.send (dtoReq).getResult ();
-        
-        if (!dtoResult.getData ()) {
-            log.error ("消息发送错误!");
-        }
+        messageFeignClient.send (dtoReq);
     }
 }

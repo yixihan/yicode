@@ -2,7 +2,6 @@ package com.yixihan.yicode.user.openapi.api.rset.msg;
 
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.vo.request.msg.AddMessageReq;
@@ -27,11 +26,11 @@ public interface UserMsgOpenApi {
     
     @ApiOperation("添加一条消息")
     @PostMapping(value = "/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addMessage(@RequestBody AddMessageReq req);
+    JsonResponse<MessageDetailVO> addMessage(@RequestBody AddMessageReq req);
     
     @ApiOperation("阅读消息")
     @PostMapping(value = "/read", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> readMessages(@RequestBody ReadMessageReq req);
+    void readMessages(@RequestBody ReadMessageReq req);
     
     @ApiOperation("获取消息明细")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -39,5 +38,5 @@ public interface UserMsgOpenApi {
     
     @ApiOperation("获取未读消息条数")
     @GetMapping(value = "/un-read/count", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> unReadMessageCount();
+    JsonResponse<Integer> unReadMessageCount();
 }

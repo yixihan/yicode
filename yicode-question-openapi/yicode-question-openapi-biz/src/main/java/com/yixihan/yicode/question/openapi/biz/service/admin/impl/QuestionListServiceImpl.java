@@ -149,7 +149,7 @@ public class QuestionListServiceImpl implements QuestionListService {
         CollectionQueryDtoReq dtoReq = new CollectionQueryDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (id);
-        PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.getCollections (dtoReq).getResult ();
+        PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,

@@ -11,10 +11,9 @@ import java.lang.annotation.*;
  * @date 2022-10-23-21:55
  */
 @Documented
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RoleAccess {
-
-    // 角色信息
+    
     RoleEnums[] value() default {};
 }

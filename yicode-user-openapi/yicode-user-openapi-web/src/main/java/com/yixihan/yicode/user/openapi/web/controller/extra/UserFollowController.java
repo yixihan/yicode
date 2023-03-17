@@ -1,8 +1,5 @@
 package com.yixihan.yicode.user.openapi.web.controller.extra;
 
-import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.extra.UserFollowOpenApi;
@@ -29,17 +26,17 @@ public class UserFollowController implements UserFollowOpenApi {
     private UserFollowService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> followUser(ModifyFollowReq req) {
-        return JsonResponse.ok (service.followUser (req));
+    public void followUser(ModifyFollowReq req) {
+        service.followUser (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> unfollowUser(ModifyFollowReq req) {
-        return JsonResponse.ok (service.unfollowUser (req));
+    public void unfollowUser(ModifyFollowReq req) {
+        service.unfollowUser (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Integer>> getFollowCount(Long userId) {
+    public JsonResponse<Integer> getFollowCount(Long userId) {
         return JsonResponse.ok (service.getFollowCount (userId));
     }
     
@@ -49,7 +46,7 @@ public class UserFollowController implements UserFollowOpenApi {
     }
     
     @Override
-    public JsonResponse<CommonVO<Integer>> getFanCount(Long userId) {
+    public JsonResponse<Integer> getFanCount(Long userId) {
         return JsonResponse.ok (service.getFanCount (userId));
     }
     
