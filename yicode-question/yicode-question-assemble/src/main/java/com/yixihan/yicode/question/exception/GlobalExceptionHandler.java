@@ -1,14 +1,16 @@
 package com.yixihan.yicode.question.exception;
 
+import cn.hutool.json.JSONUtil;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.exception.RRException;
-import com.yixihan.yicode.common.util.JsonResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * 全局异常捕获器
@@ -26,10 +28,11 @@ public class GlobalExceptionHandler {
      *
      */
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = BizException.class)
-    public JsonResponse<Object> handleBizException (BizException e) {
+    public String handleBizException (BizException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     /**
@@ -37,10 +40,11 @@ public class GlobalExceptionHandler {
      *
      */
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = RRException.class)
-    public JsonResponse<Object> handleRRException (RRException e) {
+    public String handleRRException (RRException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     /**
@@ -51,9 +55,9 @@ public class GlobalExceptionHandler {
      */
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public JsonResponse<Object> handleValidException(MethodArgumentNotValidException e) {
+    public String handleValidException(MethodArgumentNotValidException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     /**
@@ -63,32 +67,36 @@ public class GlobalExceptionHandler {
      *
      */
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = BindException.class)
-    public JsonResponse<Object> handleValidException(BindException e) {
+    public String handleValidException(BindException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = NullPointerException.class)
-    public JsonResponse<Object> handleNullPointerException (NullPointerException e) {
+    public String handleNullPointerException (NullPointerException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = RuntimeException.class)
-    public JsonResponse<Object> handleRuntimeException (RuntimeException e) {
+    public String handleRuntimeException (RuntimeException e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
     
     
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
-    public JsonResponse<Object> handleException (Exception e) {
+    public String handleException (Exception e) {
         log.error ("出现异常", e);
-        return JsonResponse.error (e.getMessage ());
+        return JSONUtil.toJsonStr (new BizException (e));
     }
 }

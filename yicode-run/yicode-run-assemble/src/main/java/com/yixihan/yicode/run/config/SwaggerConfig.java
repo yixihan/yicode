@@ -1,4 +1,4 @@
-package com.yixihan.yicode.run.exception;
+package com.yixihan.yicode.run.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
