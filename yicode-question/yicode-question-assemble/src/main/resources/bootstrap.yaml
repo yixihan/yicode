@@ -6,3 +6,6 @@ spring:
     name: yicode-question
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.question.web.controller

@@ -6,3 +6,6 @@ spring:
     name: yicode-user-openapi
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.user.openapi.web.controller

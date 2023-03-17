@@ -6,3 +6,6 @@ spring:
     name: yicode-question-openapi
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.question.openapi.web.controller

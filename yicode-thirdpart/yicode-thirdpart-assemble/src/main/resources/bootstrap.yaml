@@ -6,3 +6,6 @@ spring:
     name: yicode-thirdpart
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.thirdpart.web.controller

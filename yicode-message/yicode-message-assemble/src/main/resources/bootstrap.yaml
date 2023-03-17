@@ -6,3 +6,6 @@ spring:
     name: yicode-message
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.message.web.controller

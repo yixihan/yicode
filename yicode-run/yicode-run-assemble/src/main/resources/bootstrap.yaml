@@ -6,3 +6,6 @@ spring:
     name: yicode-run
   profiles:
     active: uat
+
+yicode:
+  base-package: com.yixihan.yicode.run.web.controller
