@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.web.controller.email;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.rest.email.EmailApi;
@@ -20,16 +18,16 @@ import javax.annotation.Resource;
 public class EmailController implements EmailApi {
 
     @Resource
-    private EmailSendService emailSendService;
+    private EmailSendService service;
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> sendEmail(EmailSendDtoReq req) {
-        return ApiResult.create (emailSendService.sendEmail (req));
+    public void send(EmailSendDtoReq req) {
+        service.send (req);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> validate(EmailValidateDtoReq dtoReq) {
-        return ApiResult.create (emailSendService.validate (dtoReq));
+    public void validate(EmailValidateDtoReq dtoReq) {
+        service.validate (dtoReq);
     }
 
 }

@@ -1,10 +1,11 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.email.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
@@ -36,138 +37,145 @@ public class EmailServiceImpl implements EmailService {
     private UserFeignClient userFeignClient;
 
     @Override
-    public CommonVO<Boolean> loginSend(EmailSendReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
+    public void loginSend(EmailSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        
+        // 用户校验
         UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
         if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
         }
+    
+        send (req, CodeTypeEnums.LOGIN);
+    }
+    
+    @Override
+    public void loginValidate(EmailValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+        
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 校验邮箱验证码
+        validate (req, CodeTypeEnums.LOGIN);
+    }
+    
+    @Override
+    public void registerSend(EmailSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+    
+        // 发送邮件
+        send (req, CodeTypeEnums.REGISTER);
+    }
+    
+    @Override
+    public void registerValidate(EmailValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 校验邮箱验证码
+        validate (req, CodeTypeEnums.REGISTER);
+    }
+    
+    @Override
+    public void resetSend(EmailSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 发送邮件
+        send (req, CodeTypeEnums.RESET_PASSWORD);
+    }
+    
+    @Override
+    public void resetValidate(EmailValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 校验邮箱验证码
+        validate (req, CodeTypeEnums.RESET_PASSWORD);
+    }
+    
+    @Override
+    public void commonSend(EmailSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 发送邮件
+        send (req, CodeTypeEnums.COMMON);
+    }
+    
+    @Override
+    public void commonValidate(EmailValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateEmail (req.getEmail ())),
+                BizCodeEnum.EMAIL_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+        
+        // 校验邮箱验证码
+        validate (req, CodeTypeEnums.COMMON);
+    }
+    
+    /**
+     * 通用方法-发送邮件
+     *
+     * @param req 请求类型
+     * @param type 发送类型
+     */
+    private void send(EmailSendReq req, CodeTypeEnums type) {
         EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        dtoReq.setType (type.getType ());
+        emailFeignClient.send (dtoReq);
     }
-
-    @Override
-    public CommonVO<Boolean> loginValidate(EmailValidateReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
+    
+    /**
+     * 通用方法-校验邮件验证码
+     *
+     * @param req 请求类型
+     * @param type 发送类型
+     */
+    private void validate(EmailValidateReq req, CodeTypeEnums type) {
         EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
-        dtoReq.setEmailType (CodeTypeEnums.LOGIN.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> registerSend(EmailSendReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> registerValidate(EmailValidateReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
-        dtoReq.setEmailType (CodeTypeEnums.REGISTER.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> resetSend(EmailSendReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> resetValidate(EmailValidateReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
-        dtoReq.setEmailType (CodeTypeEnums.RESET_PASSWORD.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> commonSend(EmailSendReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        EmailSendDtoReq dtoReq = BeanUtil.toBean (req, EmailSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.COMMON.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.sendEmail (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> commonValidate(EmailValidateReq req) {
-        if (!ValidationUtils.validateEmail (req.getEmail ())) {
-            throw new BizException ("邮箱不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByEmail (req.getEmail ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        EmailValidateDtoReq dtoReq = BeanUtil.toBean (req, EmailValidateDtoReq.class);
-        dtoReq.setEmailType (CodeTypeEnums.COMMON.getType ());
-        CommonDtoResult<Boolean> dtoResult = emailFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        dtoReq.setEmailType (type.getType ());
+        emailFeignClient.validate (dtoReq);
     }
 }

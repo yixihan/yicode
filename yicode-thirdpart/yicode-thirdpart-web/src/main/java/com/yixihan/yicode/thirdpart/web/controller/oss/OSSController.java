@@ -21,10 +21,10 @@ import java.util.Map;
 public class OSSController implements OSSApi {
 
     @Resource
-    private OSSService ossService;
+    private OSSService service;
 
     @Override
     public ApiResult<Map<String, String>> policy(OSSPolicyDtoReq dtoReq) {
-        return ApiResult.create (ossService.policy(dtoReq));
+        return ApiResult.create (service.policy(dtoReq));
     }
 }

@@ -1,10 +1,11 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.service.sms.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.thirdpart.code.CodeTypeEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.ValidationUtils;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
@@ -36,138 +37,146 @@ public class SMSServiceImpl implements SMSService {
     private UserFeignClient userFeignClient;
 
     @Override
-    public CommonVO<Boolean> loginSend(SMSSendReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.LOGIN.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
+    public void loginSend(SMSSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
 
-    @Override
-    public CommonVO<Boolean> loginValidate(SMSValidateReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
+        // 用户校验
         UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
         if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
         }
+        
+        // 发送短信
+        send (req, CodeTypeEnums.LOGIN);
+    }
+    
+    @Override
+    public void loginValidate(SMSValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 校验短信验证码
+        validate (req, CodeTypeEnums.LOGIN);
+    }
+    
+    @Override
+    public void registerSend(SMSSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+    
+        // 发送短信
+        send (req, CodeTypeEnums.REGISTER);
+    }
+    
+    @Override
+    public void registerValidate(SMSValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 校验短信验证码
+        validate (req, CodeTypeEnums.REGISTER);
+    }
+    
+    @Override
+    public void resetSend(SMSSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 发送短信
+        send (req, CodeTypeEnums.RESET_PASSWORD);
+    }
+    
+    @Override
+    public void resetValidate(SMSValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 校验短信验证码
+        validate (req, CodeTypeEnums.RESET_PASSWORD);
+    }
+    
+    @Override
+    public void commonSend(SMSSendReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 发送短信
+        send (req, CodeTypeEnums.COMMON);
+    }
+    
+    @Override
+    public void commonValidate(SMSValidateReq req) {
+        // 参数校验
+        Assert.isTrue (Boolean.TRUE.equals (ValidationUtils.validateMobile (req.getMobile ())),
+                BizCodeEnum.MOBILE_VALIDATE_ERR);
+        Assert.isTrue (StrUtil.isNotBlank (req.getCode ()), BizCodeEnum.CODE_EMPTY_ERR);
+    
+        // 用户校验
+        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
+        if (user.getUserId () == null) {
+            throw new BizException (BizCodeEnum.ACCOUNT_NOT_FOUND);
+        }
+    
+        // 校验短信验证码
+        validate (req, CodeTypeEnums.COMMON);
+    }
+    
+    /**
+     * 通用方法-校验短信验证码
+     *
+     * @param req 请求类型
+     * @param type 发送类型
+     */
+    private void validate(SMSValidateReq req, CodeTypeEnums type) {
         SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
-        dtoReq.setMobileType (CodeTypeEnums.LOGIN.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        dtoReq.setMobileType (type.getType ());
+        smsFeignClient.validate (dtoReq);
     }
-
-    @Override
-    public CommonVO<Boolean> registerSend(SMSSendReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
+    
+    /**
+     * 通用方法-发送短信
+     *
+     * @param req 请求类型
+     * @param type 发送类型
+     */
+    private void send(SMSSendReq req, CodeTypeEnums type) {
         SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.REGISTER.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> registerValidate(SMSValidateReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
-        dtoReq.setMobileType (CodeTypeEnums.REGISTER.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> resetSend(SMSSendReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.RESET_PASSWORD.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> resetValidate(SMSValidateReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
-        dtoReq.setMobileType (CodeTypeEnums.RESET_PASSWORD.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> commonSend(SMSSendReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        SMSSendDtoReq dtoReq = BeanUtil.toBean (req, SMSSendDtoReq.class);
-        dtoReq.setType (CodeTypeEnums.COMMON.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.send (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
-    }
-
-    @Override
-    public CommonVO<Boolean> commonValidate(SMSValidateReq req) {
-        if (!ValidationUtils.validateMobile (req.getMobile ())) {
-            throw new BizException ("手机号不符合规范!");
-        }
-        UserDtoResult user = userFeignClient.getUserByMobile (req.getMobile ()).getResult ();
-        if (user.getUserId () == null) {
-            throw new BizException ("没有该用户!");
-        }
-        SMSValidateDtoReq dtoReq = BeanUtil.toBean (req, SMSValidateDtoReq.class);
-        dtoReq.setMobileType (CodeTypeEnums.COMMON.getType ());
-        CommonDtoResult<Boolean> dtoResult = smsFeignClient.validate (dtoReq).getResult ();
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        dtoReq.setType (type.getType ());
+        smsFeignClient.send (dtoReq);
     }
 }

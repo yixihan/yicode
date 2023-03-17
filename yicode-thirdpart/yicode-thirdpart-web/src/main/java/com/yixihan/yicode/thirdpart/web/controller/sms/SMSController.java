@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.web.controller.sms;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.rest.sms.SMSApi;
@@ -22,16 +20,16 @@ import javax.annotation.Resource;
 public class SMSController implements SMSApi {
 
     @Resource
-    public SMSService smsService;
+    public SMSService service;
 
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> send(SMSSendDtoReq dtoReq) {
-        return ApiResult.create (smsService.send (dtoReq));
+    public void send(SMSSendDtoReq dtoReq) {
+        service.send (dtoReq);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> validate(SMSValidateDtoReq dtoReq) {
-        return ApiResult.create (smsService.validate (dtoReq));
+    public void validate(SMSValidateDtoReq dtoReq) {
+        service.validate (dtoReq);
     }
 }

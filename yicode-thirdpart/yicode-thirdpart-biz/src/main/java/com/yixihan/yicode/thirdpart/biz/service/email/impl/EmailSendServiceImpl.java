@@ -1,11 +1,10 @@
 package com.yixihan.yicode.thirdpart.biz.service.email.impl;
 
+import com.yixihan.yicode.common.enums.thirdpart.email.EmailTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
-import com.yixihan.yicode.common.enums.thirdpart.email.EmailTemplateEnums;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.api.prop.email.EmailProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;
@@ -17,7 +16,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -47,8 +45,7 @@ public class EmailSendServiceImpl implements EmailSendService {
 
 
     @Override
-    public CommonDtoResult<Boolean> sendEmail(EmailSendDtoReq dtoReq) {
-
+    public void send(EmailSendDtoReq dtoReq) {
         EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
         String emailContent = templateEmailService.getEmailContent (emailType.getId ());
@@ -67,20 +64,20 @@ public class EmailSendServiceImpl implements EmailSendService {
             helper.setFrom(emailProp.getSendEmail ());
             // 发送
             mailSender.send(mailMessage);
-        } catch (MessagingException e) {
-            log.error ("邮件发送失败 : {}", e.getMessage ());
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.EMAIL_SEND_ERR.getErrorMsg ());
+        } catch (Exception e) {
+            log.error ("邮件模块发生异常 : {}", e.getMessage (), e);
+            throw new BizException (BizCodeEnum.EMAIL_SEND_ERR);
         }
-
-        return new CommonDtoResult<> (Boolean.TRUE, "邮件发送成功");
     }
 
     @Override
-    public CommonDtoResult<Boolean> validate(EmailValidateDtoReq dtoReq) {
+    public void validate(EmailValidateDtoReq dtoReq) {
         // 生成 keyName
         EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getEmailType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
-        return codeService.validate (keyName, dtoReq.getCode ());
+        
+        // 校验验证码
+        codeService.validate (keyName, dtoReq.getCode ());
     }
 
 

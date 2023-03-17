@@ -1,8 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.email;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.thirdpart.open.api.rest.email.EmailOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.email.EmailValidateReq;
@@ -24,7 +22,7 @@ import javax.annotation.Resource;
 public class EmailController implements EmailOpenApi {
     
     @Resource
-    private EmailService emailService;
+    private EmailService service;
     
     
     @Override
@@ -32,27 +30,13 @@ public class EmailController implements EmailOpenApi {
             blockHandler = "blockHandlerEmail",
             blockHandlerClass = EmailBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> loginSend(EmailSendReq req) {
-        return JsonResponse.ok (emailService.loginSend (req));
+    public void loginSend(EmailSendReq req) {
+        service.loginSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> loginValidate(EmailValidateReq req) {
-        return JsonResponse.ok (emailService.loginValidate (req));
-    }
-
-    @Override
-    @SentinelResource(value = "sendEmail",
-            blockHandler = "blockHandlerEmail",
-            blockHandlerClass = EmailBlockHandler.class
-    )
-    public JsonResponse<CommonVO<Boolean>> registerSend(EmailSendReq req) {
-        return JsonResponse.ok (emailService.registerSend (req));
-    }
-
-    @Override
-    public JsonResponse<CommonVO<Boolean>> registerValidate(EmailValidateReq req) {
-        return JsonResponse.ok (emailService.registerValidate (req));
+    public void loginValidate(EmailValidateReq req) {
+        service.loginValidate (req);
     }
 
     @Override
@@ -60,13 +44,13 @@ public class EmailController implements EmailOpenApi {
             blockHandler = "blockHandlerEmail",
             blockHandlerClass = EmailBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> resetSend(EmailSendReq req) {
-        return JsonResponse.ok (emailService.resetSend (req));
+    public void registerSend(EmailSendReq req) {
+        service.registerSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> resetValidate(EmailValidateReq req) {
-        return JsonResponse.ok (emailService.resetValidate (req));
+    public void registerValidate(EmailValidateReq req) {
+        service.registerValidate (req);
     }
 
     @Override
@@ -74,12 +58,26 @@ public class EmailController implements EmailOpenApi {
             blockHandler = "blockHandlerEmail",
             blockHandlerClass = EmailBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> commonSend(EmailSendReq req) {
-        return JsonResponse.ok (emailService.commonSend (req));
+    public void resetSend(EmailSendReq req) {
+        service.resetSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> commonValidate(EmailValidateReq req) {
-        return JsonResponse.ok (emailService.commonValidate (req));
+    public void resetValidate(EmailValidateReq req) {
+        service.resetValidate (req);
+    }
+
+    @Override
+    @SentinelResource(value = "sendEmail",
+            blockHandler = "blockHandlerEmail",
+            blockHandlerClass = EmailBlockHandler.class
+    )
+    public void commonSend(EmailSendReq req) {
+        service.commonSend (req);
+    }
+
+    @Override
+    public void commonValidate(EmailValidateReq req) {
+        service.commonValidate (req);
     }
 }

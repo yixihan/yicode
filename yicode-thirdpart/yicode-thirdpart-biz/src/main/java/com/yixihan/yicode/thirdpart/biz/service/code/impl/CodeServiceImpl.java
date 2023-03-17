@@ -1,6 +1,7 @@
 package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -25,6 +26,8 @@ public class CodeServiceImpl implements CodeService {
     @Resource
     private CodeProp codeProp;
 
+    private static final Random random = new Random ();
+    
     private static final char[] RANDOM_Arr = "1234567890".toCharArray ();
 
     public String getCode(String keyName) {
@@ -37,21 +40,13 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public CommonDtoResult<Boolean> validate(String keyName, String code) {
-        // 校验验证码是否过期
+    public void validate(String keyName, String code) {
         // 校验验证码是否已经过期
         Long expire = stringRedisTemplate.getExpire(keyName);
-
-        if (expire == null || expire < 0L) {
-            return new CommonDtoResult<> (Boolean.FALSE, "验证码已过期!");
-        }
-
-        boolean flag = code.equals (stringRedisTemplate.opsForValue ().get (keyName));
-        if (flag) {
-            return new CommonDtoResult<> (Boolean.TRUE, "验证码校验成功");
-        } else {
-            return new CommonDtoResult<> (Boolean.FALSE, "验证码错误!");
-        }
+        Assert.isFalse (expire == null || expire < 0L, BizCodeEnum.CODE_EXPIRED_ERR);
+        
+        // 校验验证码是否正确
+        Assert.isTrue (code.equals (stringRedisTemplate.opsForValue ().get (keyName)), BizCodeEnum.CODE_VALIDATE_ERR);
     }
 
     /**
@@ -61,8 +56,8 @@ public class CodeServiceImpl implements CodeService {
      */
     private synchronized String getRandomCode() {
         int len = codeProp.getCodeLen ();
-        Random random = new Random ();
         StringBuilder sb = new StringBuilder (len);
+        
         for (int i = 0; i < len; i++) {
             sb.append (RANDOM_Arr[random.nextInt (RANDOM_Arr.length)]);
         }

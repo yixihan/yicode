@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 二维码 openapi
+ * 二维码 Openapi
  *
  * @author yixihan
  * @date 2022/12/26 14:38
  */
-@Api(tags = "二维码 openapi")
+@Api(tags = "二维码 Openapi")
 @RequestMapping("/open/qr")
 public interface QrCodeOpenApi {
     
     @ApiOperation("生成二维码")
     @GetMapping("/create")
-    void createCode(HttpServletResponse response, @RequestParam("param") String param);
+    void create(HttpServletResponse response, @RequestParam("param") String param);
 }

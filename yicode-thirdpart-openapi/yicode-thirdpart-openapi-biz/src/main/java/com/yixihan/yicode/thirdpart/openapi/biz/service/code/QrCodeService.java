@@ -16,5 +16,5 @@ public interface QrCodeService {
      * @param response 响应体
      * @param param 二维码内容
      */
-    void createCode(HttpServletResponse response, String param);
+    void create(HttpServletResponse response, String param);
 }

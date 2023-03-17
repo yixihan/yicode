@@ -20,10 +20,10 @@ import java.util.Map;
 public class OSSController implements OSSOpenApi {
 
     @Resource
-    private OSSService ossService;
+    private OSSService service;
 
     @Override
     public JsonResponse<Map<String, String>> policy() {
-        return JsonResponse.ok (ossService.policy ());
+        return JsonResponse.ok (service.policy ());
     }
 }

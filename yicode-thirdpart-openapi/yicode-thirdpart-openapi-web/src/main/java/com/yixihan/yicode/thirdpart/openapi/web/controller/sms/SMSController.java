@@ -1,8 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.sms;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.thirdpart.open.api.rest.sms.SMSOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSValidateReq;
@@ -24,34 +22,20 @@ import javax.annotation.Resource;
 public class SMSController implements SMSOpenApi {
     
     @Resource
-    private SMSService smsService;
+    private SMSService service;
     
     @Override
     @SentinelResource(value = "sendSMS",
             blockHandler = "blockHandlerSMS",
             blockHandlerClass = SMSBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> loginSend(SMSSendReq req) {
-        return JsonResponse.ok (smsService.loginSend (req));
+    public void loginSend(SMSSendReq req) {
+        service.loginSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> loginValidate(SMSValidateReq req) {
-        return JsonResponse.ok (smsService.loginValidate (req));
-    }
-
-    @Override
-    @SentinelResource(value = "sendSMS",
-            blockHandler = "blockHandlerSMS",
-            blockHandlerClass = SMSBlockHandler.class
-    )
-    public JsonResponse<CommonVO<Boolean>> registerSend(SMSSendReq req) {
-        return JsonResponse.ok (smsService.registerSend (req));
-    }
-
-    @Override
-    public JsonResponse<CommonVO<Boolean>> registerValidate(SMSValidateReq req) {
-        return JsonResponse.ok (smsService.registerValidate (req));
+    public void loginValidate(SMSValidateReq req) {
+        service.loginValidate (req);
     }
 
     @Override
@@ -59,13 +43,13 @@ public class SMSController implements SMSOpenApi {
             blockHandler = "blockHandlerSMS",
             blockHandlerClass = SMSBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> resetSend(SMSSendReq req) {
-        return JsonResponse.ok (smsService.resetSend (req));
+    public void registerSend(SMSSendReq req) {
+        service.registerSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> resetValidate(SMSValidateReq req) {
-        return JsonResponse.ok (smsService.resetValidate (req));
+    public void registerValidate(SMSValidateReq req) {
+        service.registerValidate (req);
     }
 
     @Override
@@ -73,12 +57,26 @@ public class SMSController implements SMSOpenApi {
             blockHandler = "blockHandlerSMS",
             blockHandlerClass = SMSBlockHandler.class
     )
-    public JsonResponse<CommonVO<Boolean>> commonSend(SMSSendReq req) {
-        return JsonResponse.ok (smsService.commonSend (req));
+    public void resetSend(SMSSendReq req) {
+        service.resetSend (req);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> commonValidate(SMSValidateReq req) {
-        return JsonResponse.ok (smsService.commonValidate (req));
+    public void resetValidate(SMSValidateReq req) {
+        service.resetValidate (req);
+    }
+
+    @Override
+    @SentinelResource(value = "sendSMS",
+            blockHandler = "blockHandlerSMS",
+            blockHandlerClass = SMSBlockHandler.class
+    )
+    public void commonSend(SMSSendReq req) {
+        service.commonSend (req);
+    }
+
+    @Override
+    public void commonValidate(SMSValidateReq req) {
+        service.commonValidate (req);
     }
 }

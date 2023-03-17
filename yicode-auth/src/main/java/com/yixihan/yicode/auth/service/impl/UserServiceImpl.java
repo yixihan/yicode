@@ -107,25 +107,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validateEmailCode(EmailValidateDtoReq dtoReq) {
-        Boolean result = emailFeignClient.validate (dtoReq).getResult ().getData ();
-        if (!result) {
-            return null;
-        }
+        emailFeignClient.validate (dtoReq);
         return findUserByEmail (dtoReq.getEmail ());
     }
 
     @Override
     public User validateMobileCode(SMSValidateDtoReq dtoReq) {
-        Boolean result = smsFeignClient.validate (dtoReq).getResult ().getData ();
-        if (!result) {
-            return null;
-        }
+        smsFeignClient.validate (dtoReq);
+       
         return findUserByMobile (dtoReq.getMobile ());
     }
 
     @Override
     public Boolean validatePhotoCode(CodeValidateDtoReq dtoReq) {
-        return codeFeignClient.validateCode (dtoReq).getResult ().getData ();
+        codeFeignClient.validate (dtoReq);
+        return true;
     }
 
     private User getUser (UserDtoResult userDtoResult) {

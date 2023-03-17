@@ -9,17 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 /**
- * oss模块 openApi
+ * oss模块 OpenApi
  *
  * @author yixihan
  * @date 2022/11/23 13:52
  */
-@Api(tags = "oss模块 openApi")
+@Api(tags = "oss模块 OpenApi")
 @RequestMapping("/open/oss")
 public interface OSSOpenApi {
 
     @ApiOperation (value = "获取上传密钥")
     @PostMapping(value = "/upload/policy")
     JsonResponse<Map<String, String>> policy ();
-
 }

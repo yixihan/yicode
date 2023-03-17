@@ -1,6 +1,5 @@
 package com.yixihan.yicode.thirdpart.biz.service.email;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 
@@ -17,12 +16,12 @@ public interface EmailSendService {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> sendEmail (EmailSendDtoReq dtoReq);
+    void send(EmailSendDtoReq dtoReq);
 
     /**
      * 邮件验证码验证
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> validate(EmailValidateDtoReq dtoReq);
+    void validate(EmailValidateDtoReq dtoReq);
 }

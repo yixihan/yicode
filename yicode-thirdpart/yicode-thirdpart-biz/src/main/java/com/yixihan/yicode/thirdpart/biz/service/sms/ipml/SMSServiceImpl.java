@@ -1,19 +1,18 @@
 package com.yixihan.yicode.thirdpart.biz.service.sms.ipml;
 
 import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
+import com.yixihan.yicode.common.enums.thirdpart.oss.SMSTemplateEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
-import com.yixihan.yicode.common.enums.thirdpart.oss.SMSTemplateEnums;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.api.prop.sms.SMSProp;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateSmsService;
@@ -48,8 +47,7 @@ public class SMSServiceImpl implements SMSService {
 
 
     @Override
-    public CommonDtoResult<Boolean> send(SMSSendDtoReq dtoReq) {
-
+    public void send(SMSSendDtoReq dtoReq) {
         SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
         String code = codeService.getCode(keyName);
@@ -57,7 +55,6 @@ public class SMSServiceImpl implements SMSService {
 
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户 secretId，secretKey,此处还需注意密钥对的保密
-            // 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取
             Credential cred = new Credential(smsProp.getSecretId (), smsProp.getSecretKey ());
             // 实例化一个http选项，可选的，没有特殊需求可以跳过
             HttpProfile httpProfile = new HttpProfile();
@@ -80,24 +77,21 @@ public class SMSServiceImpl implements SMSService {
             SendSmsResponse resp = client.SendSms(req);
             log.info ("response : {}", SendSmsResponse.toJsonString(resp));
             SendStatus sendStatus = resp.getSendStatusSet ()[0];
-            if ("Ok".equals (sendStatus.getCode ())) {
-                return new CommonDtoResult<> (Boolean.TRUE, "短信发送成功");
-            } else {
-                log.error (sendStatus.getMessage());
-                return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.SMS_SEND_ERR.getErrorMsg ());
-            }
-        } catch (TencentCloudSDKException e) {
-            log.error (e.getMessage ());
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.SMS_SEND_ERR.getErrorMsg ());
+            Assert.isTrue ("Ok".equals (sendStatus.getCode ()), BizCodeEnum.SMS_SEND_ERR);
+        } catch (Exception e) {
+            log.error ("短信上传模块发生异常 : {}", e.getMessage (), e);
+            throw new BizException (BizCodeEnum.SMS_SEND_ERR);
         }
     }
 
     @Override
-    public CommonDtoResult<Boolean> validate(SMSValidateDtoReq dtoReq) {
+    public void validate(SMSValidateDtoReq dtoReq) {
         // 生成 keyName
         SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getMobileType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
-        return codeService.validate (keyName, dtoReq.getCode ());
+        
+        // 校验验证码
+        codeService.validate (keyName, dtoReq.getCode ());
     }
 
     /**

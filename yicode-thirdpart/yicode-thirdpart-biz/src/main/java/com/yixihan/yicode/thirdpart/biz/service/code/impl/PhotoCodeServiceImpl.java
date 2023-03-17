@@ -1,6 +1,5 @@
 package com.yixihan.yicode.thirdpart.biz.service.code.impl;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.prop.code.CodeProp;
 import com.yixihan.yicode.thirdpart.biz.service.code.CodeService;
@@ -27,15 +26,15 @@ public class PhotoCodeServiceImpl implements PhotoCodeService {
     private CodeProp codeProp;
     
     @Override
-    public void createCode(String code, String uuid) {
+    public void create(String code, String uuid) {
         String keyName = String.format (codeProp.getCommonKey (), uuid);
         // 存入 redis
         codeService.addRedis (keyName, code);
     }
     
     @Override
-    public CommonDtoResult<Boolean> validateCode(CodeValidateDtoReq dtoReq) {
+    public void validate(CodeValidateDtoReq dtoReq) {
         String keyName = String.format (codeProp.getCommonKey (), dtoReq.getUuid ());
-        return codeService.validate (keyName, dtoReq.getCode ());
+        codeService.validate (keyName, dtoReq.getCode ());
     }
 }

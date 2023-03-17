@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.openapi.web.controller.code;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.thirdpart.open.api.rest.code.PhotoCodeOpenApi;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.code.CodeValidateReq;
 import com.yixihan.yicode.thirdpart.openapi.biz.service.code.PhotoCodeService;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 图片验证码 前端控制器
@@ -26,12 +23,12 @@ public class PhotoCodeController implements PhotoCodeOpenApi {
     private PhotoCodeService service;
 
     @Override
-    public void createCode(HttpServletResponse response, String uuid) throws IOException {
-        service.createCode (response, uuid);
+    public void create(HttpServletResponse response, String uuid) {
+        service.create (response, uuid);
     }
 
     @Override
-    public JsonResponse<CommonVO<Boolean>> validateCode(CodeValidateReq req) {
-        return JsonResponse.ok (service.validateCode (req));
+    public void validate(CodeValidateReq req) {
+        service.validate (req);
     }
 }

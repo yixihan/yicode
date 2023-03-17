@@ -85,7 +85,7 @@ public class SMSTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (mobile)) {
-            throw new OAuth2Exception (BizCodeEnum.MOBILE_EMPTY_ERR.getErrorMsg ());
+            throw new OAuth2Exception (BizCodeEnum.MOBILE_VALIDATE_ERR.getErrorMsg ());
         }
         if (StrUtil.isBlank (code)) {
             throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getErrorMsg ());

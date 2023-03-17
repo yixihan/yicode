@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.web.controller.code;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.rest.code.PhotoCodeApi;
 import com.yixihan.yicode.thirdpart.biz.service.code.PhotoCodeService;
@@ -24,12 +22,12 @@ public class PhotoCodeController implements PhotoCodeApi {
     private PhotoCodeService service;
 
     @Override
-    public void createCode(String code, String uuid){
-        service.createCode (code, uuid);
+    public void create(String code, String uuid){
+        service.create (code, uuid);
     }
 
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> validateCode(CodeValidateDtoReq dtoReq) {
-        return ApiResult.create (service.validateCode (dtoReq));
+    public void validate(CodeValidateDtoReq dtoReq) {
+        service.validate (dtoReq);
     }
 }

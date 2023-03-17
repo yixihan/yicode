@@ -22,7 +22,7 @@ public class QrCodeController implements QrCodeOpenApi {
     private QrCodeService service;
     
     @Override
-    public void createCode(HttpServletResponse response, String param) {
-        service.createCode (response, param);
+    public void create(HttpServletResponse response, String param) {
+        service.create (response, param);
     }
 }

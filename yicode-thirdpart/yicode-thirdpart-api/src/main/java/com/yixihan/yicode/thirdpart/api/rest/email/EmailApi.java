@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.api.rest.email;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import io.swagger.annotations.Api;
@@ -21,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface EmailApi {
 
     @ApiOperation ("/发送邮件")
-    @PostMapping("/sendemail")
-    ApiResult<CommonDtoResult<Boolean>> sendEmail(@RequestBody EmailSendDtoReq req);
+    @PostMapping("/send")
+    void send(@RequestBody EmailSendDtoReq req);
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")
-    ApiResult<CommonDtoResult<Boolean>> validate (@RequestBody EmailValidateDtoReq dtoReq);
+    void validate (@RequestBody EmailValidateDtoReq dtoReq);
 }

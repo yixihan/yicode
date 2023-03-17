@@ -1,9 +1,8 @@
 package com.yixihan.yicode.thirdpart.biz.service.sms;
 
 import com.yixihan.yicode.common.enums.thirdpart.oss.SMSTemplateEnums;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
+import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 
 /**
  * 短信服务类
@@ -20,7 +19,7 @@ public interface SMSService {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> send(SMSSendDtoReq dtoReq);
+    void send(SMSSendDtoReq dtoReq);
 
     /**
      * 校验短信验证码
@@ -29,5 +28,5 @@ public interface SMSService {
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> validate(SMSValidateDtoReq dtoReq);
+    void validate(SMSValidateDtoReq dtoReq);
 }

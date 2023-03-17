@@ -77,7 +77,7 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (uuid)) {
-            throw new OAuth2Exception (BizCodeEnum.UUID_EMPTY_ERR.getErrorMsg ());
+            throw new OAuth2Exception (BizCodeEnum.UUID_VALIDATE_ERR.getErrorMsg ());
         }
         if (StrUtil.isBlank (code)) {
             throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getErrorMsg ());

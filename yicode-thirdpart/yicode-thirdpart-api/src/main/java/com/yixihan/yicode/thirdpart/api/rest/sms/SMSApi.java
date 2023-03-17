@@ -1,7 +1,5 @@
 package com.yixihan.yicode.thirdpart.api.rest.sms;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSSendDtoReq;
 import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import io.swagger.annotations.Api;
@@ -22,10 +20,10 @@ public interface SMSApi {
 
     @ApiOperation ("发送短信")
     @PostMapping("/sendmobile")
-    ApiResult<CommonDtoResult<Boolean>> send (@RequestBody SMSSendDtoReq dtoReq);
+    void send (@RequestBody SMSSendDtoReq dtoReq);
 
     @ApiOperation ("校验验证码")
     @PostMapping("/validate")
-    ApiResult<CommonDtoResult<Boolean>> validate (@RequestBody SMSValidateDtoReq dtoReq);
+    void validate (@RequestBody SMSValidateDtoReq dtoReq);
 
 }

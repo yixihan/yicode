@@ -43,7 +43,7 @@ public enum BizCodeEnum implements CommonError {
      */
     NULL_ERR (20002, "空指针异常"),
 
-    // ===== sentinel 异常 ==== //
+    ///============================================================== sentinel 异常
     /**
      * 系统限流
      */
@@ -68,8 +68,8 @@ public enum BizCodeEnum implements CommonError {
      * 授权规则不通过
      */
     SENTINEL_AUTH_ERR (40005, "授权规则不通过"),
-
-    // 登录异常
+    
+    //============================================================== 认证授权异常
     /**
      * 用户名或密码错误
      */
@@ -104,49 +104,67 @@ public enum BizCodeEnum implements CommonError {
      * 没有访问权限
      */
     NO_METHOD_ROLE (10007, "没有访问权限"),
-
-
-    // 第三方服务
+    
+    /**
+     * 账户不存在
+     */
+    ACCOUNT_NOT_FOUND (10008, "账户不存在"),
+    
+    //==============================================================第三方服务
     /**
      * 文件上传失败
      */
     OSS_ERR (90001, "文件上传失败"),
-
+    
     /**
      * 邮件发送失败
      */
     EMAIL_SEND_ERR (90002, "邮件发送失败"),
-
+    
     /**
      * 短信发送失败
      */
     SMS_SEND_ERR (90003, "短信发送失败"),
-
+    
     /**
-     * 手机号为空
+     * 二维码生成错误
      */
-    MOBILE_EMPTY_ERR (90004, "手机号不能为空"),
-
+    QR_CODE_ERR (90004, "二维码生成错误"),
+    
     /**
-     * 邮箱为空
+     * 图片验证码生成错误
      */
-    EMAIL_EMPTY_ERR (90005, "邮箱不能为空"),
-
+    PHOTO_CODE_ERR (90005, "图片验证码生成错误"),
+    
+    /**
+     * 邮箱校验失败
+     */
+    MOBILE_VALIDATE_ERR (90006, "手机号校验失败"),
+    
+    /**
+     * 邮箱校验失败
+     */
+    EMAIL_VALIDATE_ERR (90007, "邮箱校验失败"),
+    
     /**
      * uuid 为空
      */
-    UUID_EMPTY_ERR (90008, "uuid不能为空"),
-
+    UUID_VALIDATE_ERR (90008, "uuid校验失败"),
+    
     /**
      * 验证码为空
      */
-    CODE_EMPTY_ERR (90006, "验证码不能为空"),
-
+    CODE_EMPTY_ERR (90009, "验证码不能为空"),
+    
     /**
      * 验证码错误
      */
-    CODE_VALIDATE_ERR (90007, "验证码错误"),
+    CODE_VALIDATE_ERR (90010, "验证码错误"),
 
+    /**
+     * 验证码已过期
+     */
+    CODE_EXPIRED_ERR (90011, "验证码已过期")
     ;
 
 

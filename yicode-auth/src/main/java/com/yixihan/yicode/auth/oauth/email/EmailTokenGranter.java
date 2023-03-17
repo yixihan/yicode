@@ -85,7 +85,7 @@ public class EmailTokenGranter extends AbstractTokenGranter {
         String code = parameters.get ("code");
 
         if (StrUtil.isBlank (email)) {
-            throw new OAuth2Exception (BizCodeEnum.EMAIL_EMPTY_ERR.getErrorMsg ());
+            throw new OAuth2Exception (BizCodeEnum.EMAIL_VALIDATE_ERR.getErrorMsg ());
         }
         if (StrUtil.isBlank (code)) {
             throw new OAuth2Exception (BizCodeEnum.CODE_EMPTY_ERR.getErrorMsg ());
