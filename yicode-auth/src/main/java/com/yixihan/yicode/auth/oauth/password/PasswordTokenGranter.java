@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
+import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.thirdpart.api.dto.request.code.CodeValidateDtoReq;
 import org.springframework.security.authentication.*;
@@ -43,9 +44,9 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
 
         Map<String, String> parameters = new LinkedHashMap<> (tokenRequest.getRequestParameters ());
         // 校验验证码
-        checkEmailCode (parameters);
-        String username = parameters.get ("username");
-        String password = parameters.get ("password");
+        checkPhotoCode (parameters);
+        String username = parameters.get (AuthConstant.USERNAME);
+        String password = parameters.get (AuthConstant.PASSWORD);
         // Protect from downstream leaks of password
         parameters.remove ("password");
 
@@ -70,9 +71,8 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
 
     /**
      * 校验 图片 验证码
-     *
      */
-    private void checkEmailCode(Map<String, String> parameters) {
+    private void checkPhotoCode(Map<String, String> parameters) {
         String uuid = parameters.get ("uuid");
         String code = parameters.get ("code");
 
@@ -87,7 +87,7 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         CodeValidateDtoReq dtoReq = new CodeValidateDtoReq ();
         dtoReq.setUuid (uuid);
         dtoReq.setCode (code);
-        if (!userService.validatePhotoCode (dtoReq)) {
+        if (Boolean.FALSE.equals (userService.validatePhotoCode (dtoReq))) {
             throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getErrorMsg ());
         }
     }

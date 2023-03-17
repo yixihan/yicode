@@ -5,6 +5,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.auth.pojo.User;
 import com.yixihan.yicode.auth.service.UserService;
 import com.yixihan.yicode.auth.service.impl.UserServiceImpl;
+import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.thirdpart.api.dto.request.email.EmailValidateDtoReq;
 import org.springframework.security.authentication.*;
@@ -52,8 +53,8 @@ public class EmailTokenGranter extends AbstractTokenGranter {
         Map<String, String> parameters = new LinkedHashMap<> (tokenRequest.getRequestParameters ());
         // 校验验证码
         checkEmailCode (parameters);
-        String username = parameters.get ("username");
-        String password = parameters.get ("password");
+        String username = parameters.get (AuthConstant.USERNAME);
+        String password = parameters.get (AuthConstant.PASSWORD);
         // Protect from downstream leaks of password
         parameters.remove ("password");
 

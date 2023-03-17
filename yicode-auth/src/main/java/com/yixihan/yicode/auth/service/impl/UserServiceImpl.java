@@ -88,12 +88,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUserName(String userName) {
         UserDtoResult userDtoResult = userFeignClient.getUserByUserName (userName).getResult ();
+        
         return getUser (userDtoResult);
     }
 
     @Override
     public User findUserByMobile(String mobile) {
         UserDtoResult userDtoResult = userFeignClient.getUserByMobile (mobile).getResult ();
+        
         return getUser (userDtoResult);
     }
 
@@ -106,6 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User validateEmailCode(EmailValidateDtoReq dtoReq) {
         emailFeignClient.validate (dtoReq);
+        
         return findUserByEmail (dtoReq.getEmail ());
     }
 
@@ -119,6 +122,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean validatePhotoCode(CodeValidateDtoReq dtoReq) {
         codeFeignClient.validate (dtoReq);
+        
         return true;
     }
 
