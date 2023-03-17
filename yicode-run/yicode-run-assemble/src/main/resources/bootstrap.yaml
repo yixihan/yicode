@@ -5,4 +5,4 @@ spring:
   application:
     name: yicode-run
   profiles:
-    active: dev
+    active: uat

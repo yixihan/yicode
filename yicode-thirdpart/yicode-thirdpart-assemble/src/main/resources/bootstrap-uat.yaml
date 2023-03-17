@@ -4,16 +4,16 @@ spring:
       username: yicode
       password: yicode
       discovery:
-        server-addr: 192.168.238.128:23412
+        server-addr: 192.168.101.30:8848
         namespace: dev
       config:
-        server-addr: 192.168.238.128:23412
+        server-addr: 192.168.101.30:8848
         namespace: dev
         file-extension: yaml
         extension-configs:
           - data-id: yicode-common-dev.yaml
             group: YICODE_DEV
             refresh: true
-          - data-id: yicode-run-dev.yaml
+          - data-id: yicode-thirdpart-dev.yaml
             group: YICODE_DEV
             refresh: true

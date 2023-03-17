@@ -4,10 +4,10 @@ spring:
       username: yicode
       password: yicode
       discovery:
-        server-addr: 192.168.238.128:23412
+        server-addr: 192.168.101.30:8848
         namespace: dev
       config:
-        server-addr: 192.168.238.128:23412
+        server-addr: 192.168.101.30:8848
         namespace: dev
         extension-configs:
           - data-id: yicode-common-dev.yaml
@@ -24,6 +24,6 @@ spring:
       eager: true # 是否饥饿加载。默认为 false 关闭
       transport:
 #        dashboard: 127.0.0.1:8080
-        dashboard: 192.168.238.128:8888
+        dashboard: 192.168.101.12:8888
         port: 8719
 

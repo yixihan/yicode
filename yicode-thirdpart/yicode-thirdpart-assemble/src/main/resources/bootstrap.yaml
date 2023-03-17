@@ -5,4 +5,4 @@ spring:
   application:
     name: yicode-thirdpart
   profiles:
-    active: dev
+    active: uat

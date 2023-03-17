@@ -5,4 +5,4 @@ spring:
   application:
     name: yicode-thirdpart-openapi
   profiles:
-    active: dev
+    active: uat
