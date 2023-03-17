@@ -17,7 +17,6 @@ import com.yixihan.yicode.thirdpart.api.dto.request.sms.SMSValidateDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.RoleDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,8 +84,7 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
-
-    @CachePut(cacheNames = "user", key = "#userName")
+    
     @Override
     public User findUserByUserName(String userName) {
         UserDtoResult userDtoResult = userFeignClient.getUserByUserName (userName).getResult ();

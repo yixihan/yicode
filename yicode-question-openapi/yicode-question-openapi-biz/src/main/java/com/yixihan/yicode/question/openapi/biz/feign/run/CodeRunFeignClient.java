@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.openapi.biz.feign.run;
 
+import com.yixihan.yicode.question.openapi.biz.feign.config.FeignExceptionConfig;
 import com.yixihan.yicode.run.api.rest.CodeRunApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -9,6 +10,6 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author yixihan
  * @date 2023/1/13 13:29
  */
-@FeignClient(value = "${feign.client.yicode-run.name}")
+@FeignClient(value = "${feign.client.yicode-run.name}", fallback = FeignExceptionConfig.class)
 public interface CodeRunFeignClient extends CodeRunApi {
 }

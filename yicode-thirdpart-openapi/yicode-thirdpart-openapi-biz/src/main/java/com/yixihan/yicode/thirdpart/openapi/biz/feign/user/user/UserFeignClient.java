@@ -1,5 +1,6 @@
 package com.yixihan.yicode.thirdpart.openapi.biz.feign.user.user;
 
+import com.yixihan.yicode.thirdpart.openapi.biz.feign.config.FeignExceptionConfig;
 import com.yixihan.yicode.user.api.rest.base.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -9,6 +10,6 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @author yixihan
  * @date 2022-10-22-21:17
  */
-@FeignClient(value = "${feign.client.yicode-user.name}")
+@FeignClient(value = "${feign.client.yicode-user.name}", fallback = FeignExceptionConfig.class)
 public interface UserFeignClient extends UserApi {
 }
