@@ -30,6 +30,9 @@ public class QuestionListVO {
     @ApiModelProperty(value = "收藏数量")
     private String favoriteName;
     
+    @ApiModelProperty(value = "收藏夹背景")
+    private String favoriteBg;
+    
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
