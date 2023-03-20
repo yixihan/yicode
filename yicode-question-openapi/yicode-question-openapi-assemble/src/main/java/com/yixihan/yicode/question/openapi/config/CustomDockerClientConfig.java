@@ -71,12 +71,12 @@ public class CustomDockerClientConfig {
                 .withDockerTlsVerify(tlsVerify);
         
         // certPath
-        if (tlsVerify) {
+        if (Boolean.TRUE.equals(tlsVerify)) {
             builder.withDockerCertPath (certPath);
         }
         
         // register
-        if (enableRegister) {
+        if (Boolean.TRUE.equals(enableRegister)) {
             builder.withRegistryUrl (registryUrl)
                     .withRegistryUsername (registryUsername)
                     .withRegistryPassword (registryPassword);

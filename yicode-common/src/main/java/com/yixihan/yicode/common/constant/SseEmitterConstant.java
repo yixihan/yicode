@@ -9,4 +9,7 @@ package com.yixihan.yicode.common.constant;
 public class SseEmitterConstant {
     
     public static final String TASK_RESULT = "yicode";
+    
+    private SseEmitterConstant() {
+    }
 }

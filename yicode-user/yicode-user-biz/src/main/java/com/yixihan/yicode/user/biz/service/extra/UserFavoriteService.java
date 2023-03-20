@@ -23,6 +23,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * 添加收藏夹
      *
      * @param dtoReq 请求参数
+     * @return {@link FavoriteDtoResult}
      */
     FavoriteDtoResult addFavorite(AddFavoriteDtoReq dtoReq);
 
@@ -30,6 +31,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * 修改收藏夹
      *
      * @param dtoReq 请求参数
+     * @return {@link FavoriteDtoResult}
      */
     FavoriteDtoResult modifyFavorite(ModifyFavoriteDtoReq dtoReq);
 
@@ -44,6 +46,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * 获取收藏夹数量
      *
      * @param userId 用户 ID
+     * @return 收藏夹数量
      */
     Integer getFavoriteCount(Long userId);
 
@@ -51,6 +54,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * 获取全部收藏夹
      *
      * @param dtoReq 请求参数
+     * @return {@link FavoriteDtoResult}
      */
     PageDtoResult<FavoriteDtoResult> getFavorites(FavoriteQueryDtoReq dtoReq);
     
@@ -58,6 +62,7 @@ public interface UserFavoriteService extends IService<UserFavorite> {
      * 获取收藏夹详情
      *
      * @param favoriteId 收藏夹 ID
+     * @return {@link FavoriteDtoResult}
      */
     FavoriteDtoResult getFavoriteDetail(Long favoriteId);
     

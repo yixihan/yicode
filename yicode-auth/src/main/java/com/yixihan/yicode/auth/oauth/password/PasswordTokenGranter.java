@@ -65,8 +65,8 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
             throw new InvalidGrantException ("Could not authenticate user: " + username);
         }
 
-        OAuth2Request storedOAuth2Request = getRequestFactory ().createOAuth2Request (client, tokenRequest);
-        return new OAuth2Authentication (storedOAuth2Request, userAuth);
+        OAuth2Request oAuth2Request = getRequestFactory ().createOAuth2Request (client, tokenRequest);
+        return new OAuth2Authentication (oAuth2Request, userAuth);
     }
 
     /**
@@ -87,7 +87,9 @@ public class PasswordTokenGranter extends AbstractTokenGranter {
         CodeValidateDtoReq dtoReq = new CodeValidateDtoReq ();
         dtoReq.setUuid (uuid);
         dtoReq.setCode (code);
-        if (Boolean.FALSE.equals (userService.validatePhotoCode (dtoReq))) {
+        try {
+            userService.validatePhotoCode (dtoReq);
+        } catch (Exception e) {
             throw new OAuth2Exception (BizCodeEnum.CODE_VALIDATE_ERR.getErrorMsg ());
         }
     }

@@ -7,6 +7,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.util.SnowFlakeUtil;
 import com.yixihan.yicode.run.api.dto.request.CodeRunDtoReq;
 import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
@@ -31,6 +33,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class CodeRunService {
+    
+    private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
     
     @PostConstruct
     public void init() {
@@ -86,7 +90,7 @@ public class CodeRunService {
      * @return 代码存放目录
      */
     public File getPath() {
-        return new File ("/tmp/yicode" + DateUtil.format (new Date (), "yyyy-MM-dd-HH"));
+        return new File ("/tmp/yicode" + DateUtil.format (new Date (), DATE_FORMAT));
     }
     
     /**
@@ -102,7 +106,7 @@ public class CodeRunService {
         try (BufferedWriter bufferedWriter = new BufferedWriter (new FileWriter (file.getPath ()))) {
             bufferedWriter.write (code);
         } catch (IOException e) {
-            throw new RuntimeException (e);
+            throw new BizException (BizCodeEnum.CODE_RUN_ERR);
         }
     }
     
@@ -133,7 +137,8 @@ public class CodeRunService {
      * @param runCommand     运行命令
      * @return 代码运行结果 {@link CodeRunDtoResult}
      */
-    public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand) throws Exception {
+    public CodeRunDtoResult run(@NotNull CodeRunDtoReq req, @NotNull String[] runCommand)
+            throws IOException, InterruptedException {
         // 运行代码
         List<String> ansList = new ArrayList<> ();
         
@@ -185,7 +190,7 @@ public class CodeRunService {
      * @param compileCommand 编译命令
      * @return 若编译失败, 则返回编译失败原因; 编译成功则返回一个空串
      */
-    public String compile(String[] compileCommand) throws Exception {
+    public String compile(String[] compileCommand) throws IOException, InterruptedException {
         Process process = Runtime.getRuntime ().exec (compileCommand);
         // 等待编译完成
         int modify = process.waitFor ();
@@ -214,7 +219,7 @@ public class CodeRunService {
     @Scheduled(cron = "0 5 * * * ?")
     public void cleanDir() {
         DateTime lastHour = DateUtil.offsetHour (DateUtil.beginOfHour (new Date ()), -1);
-        File path = new File ("/tmp/yicode/" + DateUtil.format (lastHour, "yyyy-MM-dd-HH"));
+        File path = new File ("/tmp/yicode/" + DateUtil.format (lastHour, DATE_FORMAT));
         
         FileUtil.del (path);
     }

@@ -27,6 +27,7 @@ public interface CodeRunExtractService {
      *
      * @param req 请求参数
      * @return 代码运行结果
+     * @throws Exception 代码运行出错时则抛出异常
      */
     CodeRunDtoResult run(CodeRunDtoReq req) throws Exception;
 }

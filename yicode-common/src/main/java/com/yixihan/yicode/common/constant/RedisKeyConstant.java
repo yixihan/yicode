@@ -63,4 +63,7 @@ public class RedisKeyConstant {
      * redis key : 邮件模板
      */
     public static final String EMAIL_TEMPLATE_KEY = "template_key:email";
+    
+    private RedisKeyConstant() {
+    }
 }

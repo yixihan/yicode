@@ -120,10 +120,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean validatePhotoCode(CodeValidateDtoReq dtoReq) {
+    public void validatePhotoCode(CodeValidateDtoReq dtoReq) {
         codeFeignClient.validate (dtoReq);
-        
-        return true;
     }
 
     private User getUser (UserDtoResult userDtoResult) {

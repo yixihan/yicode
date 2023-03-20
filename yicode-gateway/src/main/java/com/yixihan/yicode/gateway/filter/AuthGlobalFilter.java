@@ -32,7 +32,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
         try {
             //从token中解析用户信息并设置到Header中去
-            String realToken = token.replace (AuthConstant.JWT_TOKEN_PREFIX, "");
+            String realToken = StrUtil.replace (token, AuthConstant.JWT_TOKEN_PREFIX, "");
             JWSObject jwsObject = JWSObject.parse (realToken);
             String userStr = jwsObject.getPayload ().toString ();
             ServerHttpRequest request = exchange.getRequest ().mutate ().header (AuthConstant.USER_TOKEN_HEADER, userStr).build ();

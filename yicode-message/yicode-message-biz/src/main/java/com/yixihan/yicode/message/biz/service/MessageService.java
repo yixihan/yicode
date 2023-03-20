@@ -13,16 +13,22 @@ public interface MessageService {
     
     /**
      * 发送消息
+     *
+     * @param dtoReq 请求参数
      */
     void sendMessage(MsgSendDtoReq dtoReq);
     
     /**
      * 发送任务-提交代码
+     *
+     * @param dtoReq 请求参数
      */
     void commit(MsgSendDtoReq dtoReq);
     
     /**
      * 发送任务-自测代码
+     *
+     * @param dtoReq 请求参数
      */
     void test(MsgSendDtoReq dtoReq);
 }

@@ -81,11 +81,11 @@ public class JsonResponse<T> implements Serializable {
     }
 
     public static <T> JsonResponse<T> error(String message) {
-        return new <T>JsonResponse<T> (BizCodeEnum.FAILED_TYPE_INTERNAL.getCode (), message);
+        return new JsonResponse<> (BizCodeEnum.FAILED_TYPE_INTERNAL.getCode (), message);
     }
 
     public static <T> JsonResponse<T> error(BizCodeEnum err) {
-        return new <T>JsonResponse<T>(err.getErrorCode (), err.getErrorMsg ());
+        return new JsonResponse<>(err.getErrorCode (), err.getErrorMsg ());
     }
 
     public static <T> JsonResponse<T> error(T data, String message) {

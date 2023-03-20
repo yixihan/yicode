@@ -12,6 +12,9 @@ import org.apache.commons.lang.StringUtils;
  * @date 2022-10-10-13:33
  */
 public class SQLFilter {
+    
+    private SQLFilter() {
+    }
 
 
     /**

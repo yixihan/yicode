@@ -1,6 +1,7 @@
 package com.yixihan.yicode.auth.component;
 
 import com.yixihan.yicode.auth.pojo.User;
+import com.yixihan.yicode.common.constant.NumConstant;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -24,7 +25,7 @@ public class JwtTokenEnhancer implements TokenEnhancer {
         User securityUser = (User) authentication.getPrincipal ();
 
         // 自定义 jwt payload 信息
-        Map<String, Object> info = new HashMap<> ();
+        Map<String, Object> info = new HashMap<> (NumConstant.NUM_5);
         info.put ("userId", securityUser.getUserId ());
         info.put ("userName", securityUser.getUsername ());
         info.put ("userMobile", securityUser.getUserMobile ());

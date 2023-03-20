@@ -18,8 +18,14 @@ package com.yixihan.yicode.common.exception;
  */
 public interface CommonError {
 
+    /**
+     * 错误码
+     */
     int getErrorCode();
 
+    /**
+     * 错误信息
+     */
     String getErrorMsg();
 }
 

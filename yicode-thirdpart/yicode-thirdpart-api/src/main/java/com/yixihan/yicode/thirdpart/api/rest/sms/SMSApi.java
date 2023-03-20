@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SMSApi {
 
     @ApiOperation ("发送短信")
-    @PostMapping("/sendmobile")
+    @PostMapping("/send")
     void send (@RequestBody SMSSendDtoReq dtoReq);
 
     @ApiOperation ("校验验证码")

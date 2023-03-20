@@ -60,7 +60,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
 
         // 校验权限
         String token = request.getHeaders ().getFirst (AuthConstant.JWT_TOKEN_HEADER);
-        if (StrUtil.isEmpty (token)) {
+        if (token == null || StrUtil.isEmpty (token)) {
             return Mono.just (new AuthorizationDecision (false));
         }
         SecurityContext context = new SecurityContext (token.substring (AuthConstant.TOKEN_SUB_INDEX));

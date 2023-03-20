@@ -73,8 +73,8 @@ public class SMSTokenGranter extends AbstractTokenGranter {
             throw new InvalidGrantException ("Could not authenticate user: " + username);
         }
 
-        OAuth2Request storedOAuth2Request = getRequestFactory ().createOAuth2Request (client, tokenRequest);
-        return new OAuth2Authentication (storedOAuth2Request, userAuth);
+        OAuth2Request oAuth2Request = getRequestFactory ().createOAuth2Request (client, tokenRequest);
+        return new OAuth2Authentication (oAuth2Request, userAuth);
     }
 
     /**

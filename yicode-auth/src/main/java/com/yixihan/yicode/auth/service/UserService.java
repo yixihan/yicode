@@ -61,8 +61,7 @@ public interface UserService extends UserDetailsService {
      * 校验图片验证码
      *
      * @param dtoReq 请求参数
-     * @return 校验成功：true | 校验失败：false
      */
-    Boolean validatePhotoCode (CodeValidateDtoReq dtoReq);
+    void validatePhotoCode (CodeValidateDtoReq dtoReq);
 
 }

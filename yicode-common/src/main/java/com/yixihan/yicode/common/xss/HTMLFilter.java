@@ -1,5 +1,8 @@
 package com.yixihan.yicode.common.xss;
 
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.Assert;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -69,7 +72,9 @@ public final class HTMLFilter {
     private static final Pattern P_RIGHT_ARROW = Pattern.compile (">");
     private static final Pattern P_BOTH_ARROWS = Pattern.compile ("<>");
 
-    // @xxx could grow large... maybe use sesat's ReferenceMap
+    /**
+     * {@code @xxx} could grow large... maybe use sesat's ReferenceMap
+     */
     private static final ConcurrentMap<String, Pattern> P_REMOVE_PAIR_BLANKS = new ConcurrentHashMap<> ();
     private static final ConcurrentMap<String, Pattern> P_REMOVE_SELF_BLANKS = new ConcurrentHashMap<> ();
 
@@ -129,28 +134,29 @@ public final class HTMLFilter {
     public HTMLFilter() {
         vAllowed = new HashMap<> ();
 
-        final ArrayList<String> a_atts = new ArrayList<> ();
-        a_atts.add ("href");
-        a_atts.add ("target");
-        vAllowed.put ("a", a_atts);
+        final ArrayList<String> aAtts = new ArrayList<> ();
+        aAtts.add ("href");
+        aAtts.add ("target");
+        vAllowed.put ("a", aAtts);
 
-        final ArrayList<String> img_atts = new ArrayList<> ();
-        img_atts.add ("src");
-        img_atts.add ("width");
-        img_atts.add ("height");
-        img_atts.add ("alt");
-        vAllowed.put ("img", img_atts);
+        final ArrayList<String> imgAtts = new ArrayList<> ();
+        imgAtts.add ("src");
+        imgAtts.add ("width");
+        imgAtts.add ("height");
+        imgAtts.add ("alt");
+        vAllowed.put ("img", imgAtts);
 
-        final ArrayList<String> no_atts = new ArrayList<> ();
-        vAllowed.put ("b", no_atts);
-        vAllowed.put ("strong", no_atts);
-        vAllowed.put ("i", no_atts);
-        vAllowed.put ("em", no_atts);
+        final ArrayList<String> noAtts = new ArrayList<> ();
+        vAllowed.put ("b", noAtts);
+        vAllowed.put ("strong", noAtts);
+        vAllowed.put ("i", noAtts);
+        vAllowed.put ("em", noAtts);
 
         vSelfClosingTags = new String[]{"img"};
         vNeedClosingTags = new String[]{"a", "b", "strong", "i", "em"};
         vDisallowed = new String[]{};
-        vAllowedProtocols = new String[]{"http", "mailto", "https"}; // no ftp.
+        // no ftp.
+        vAllowedProtocols = new String[]{"http", "mailto", "https"};
         vProtocolAtts = new String[]{"src", "href"};
         vRemoveBlanks = new String[]{"a", "b", "strong", "i", "em"};
         vAllowedEntities = new String[]{"amp", "gt", "lt", "quot"};
@@ -176,15 +182,23 @@ public final class HTMLFilter {
      * @param conf map containing configuration. keys match field names.
      */
     public HTMLFilter(final Map<String, Object> conf) {
-
-        assert conf.containsKey ("vAllowed") : "configuration requires vAllowed";
-        assert conf.containsKey ("vSelfClosingTags") : "configuration requires vSelfClosingTags";
-        assert conf.containsKey ("vNeedClosingTags") : "configuration requires vNeedClosingTags";
-        assert conf.containsKey ("vDisallowed") : "configuration requires vDisallowed";
-        assert conf.containsKey ("vAllowedProtocols") : "configuration requires vAllowedProtocols";
-        assert conf.containsKey ("vProtocolAtts") : "configuration requires vProtocolAtts";
-        assert conf.containsKey ("vRemoveBlanks") : "configuration requires vRemoveBlanks";
-        assert conf.containsKey ("vAllowedEntities") : "configuration requires vAllowedEntities";
+    
+        Assert.isTrue (conf.containsKey ("vAllowed"),
+                new BizException ("configuration requires vAllowed"));
+        Assert.isTrue (conf.containsKey ("vSelfClosingTags"),
+                new BizException ("configuration requires vSelfClosingTags"));
+        Assert.isTrue (conf.containsKey ("vNeedClosingTags"),
+                new BizException ("configuration requires vNeedClosingTags"));
+        Assert.isTrue (conf.containsKey ("vDisallowed"),
+                new BizException ("configuration requires vDisallowed"));
+        Assert.isTrue (conf.containsKey ("vAllowedProtocols"),
+                new BizException ("configuration requires vAllowedProtocols"));
+        Assert.isTrue (conf.containsKey ("vProtocolAtts"),
+                new BizException ("configuration requires vProtocolAtts"));
+        Assert.isTrue (conf.containsKey ("vRemoveBlanks"),
+                new BizException ("configuration requires vRemoveBlanks"));
+        Assert.isTrue (conf.containsKey ("vAllowedEntities"),
+                new BizException ("configuration requires vAllowedEntities"));
 
         vAllowed = Collections.unmodifiableMap ((HashMap<String, List<String>>) conf.get ("vAllowed"));
         vSelfClosingTags = (String[]) conf.get ("vSelfClosingTags");
@@ -194,9 +208,9 @@ public final class HTMLFilter {
         vProtocolAtts = (String[]) conf.get ("vProtocolAtts");
         vRemoveBlanks = (String[]) conf.get ("vRemoveBlanks");
         vAllowedEntities = (String[]) conf.get ("vAllowedEntities");
-        stripComment = conf.containsKey ("stripComment") ? (Boolean) conf.get ("stripComment") : true;
-        encodeQuotes = conf.containsKey ("encodeQuotes") ? (Boolean) conf.get ("encodeQuotes") : true;
-        alwaysMakeTags = conf.containsKey ("alwaysMakeTags") ? (Boolean) conf.get ("alwaysMakeTags") : true;
+        stripComment = conf.containsKey ("stripComment") ? (Boolean) conf.get ("stripComment") : Boolean.TRUE;
+        encodeQuotes = conf.containsKey ("encodeQuotes") ? (Boolean) conf.get ("encodeQuotes") : Boolean.TRUE;
+        alwaysMakeTags = conf.containsKey ("alwaysMakeTags") ? (Boolean) conf.get ("alwaysMakeTags") : Boolean.TRUE;
     }
 
     private void reset() {
@@ -210,7 +224,9 @@ public final class HTMLFilter {
     }
 
     //---------------------------------------------------------------
-    // my versions of some PHP library functions
+    /**
+     * my versions of some PHP library functions
+     */
     public static String chr(final int decimal) {
         return String.valueOf ((char) decimal);
     }
@@ -257,14 +273,6 @@ public final class HTMLFilter {
 
         debug ("************************************************\n\n");
         return s;
-    }
-
-    public boolean isAlwaysMakeTags() {
-        return alwaysMakeTags;
-    }
-
-    public boolean isStripComments() {
-        return stripComment;
     }
 
     private String escapeComments(final String s) {
@@ -320,9 +328,9 @@ public final class HTMLFilter {
         // these get tallied in processTag
         // (remember to reset before subsequent calls to filter method)
         StringBuilder sBuilder = new StringBuilder (buf.toString ());
-        for (String key : vTagCounts.keySet ()) {
-            for (int ii = 0; ii < vTagCounts.get (key); ii++) {
-                sBuilder.append ("</").append (key).append (">");
+        for (Map.Entry<String, Integer> entry : vTagCounts.entrySet ()) {
+            for (int i = 0; i < vTagCounts.get (entry.getKey ()); i++) {
+                sBuilder.append ("</").append (entry.getKey ()).append (">");
             }
         }
         s = sBuilder.toString ();
@@ -346,8 +354,8 @@ public final class HTMLFilter {
         return result;
     }
 
-    private static String regexReplace(final Pattern regex_pattern, final String replacement, final String s) {
-        Matcher m = regex_pattern.matcher (s);
+    private static String regexReplace(final Pattern regexPattern, final String replacement, final String s) {
+        Matcher m = regexPattern.matcher (s);
         return m.replaceAll (replacement);
     }
 
@@ -356,13 +364,11 @@ public final class HTMLFilter {
         Matcher m = P_END_TAG.matcher (s);
         if (m.find ()) {
             final String name = m.group (1).toLowerCase ();
-            if (allowed (name)) {
-                if (!inArray (name, vSelfClosingTags)) {
-                    if (vTagCounts.containsKey (name)) {
-                        vTagCounts.put (name, vTagCounts.get (name) - 1);
-                        return "</" + name + ">";
-                    }
-                }
+            if (allowed (name)
+                    && !inArray (name, vSelfClosingTags)
+                    && vTagCounts.containsKey (name)) {
+                vTagCounts.put (name, vTagCounts.get (name) - 1);
+                return "</" + name + ">";
             }
         }
 
@@ -372,8 +378,7 @@ public final class HTMLFilter {
             final String name = m.group (1).toLowerCase ();
             final String body = m.group (2);
             String ending = m.group (3);
-
-            //debug( "in a starting tag, name='" + name + "'; body='" + body + "'; ending='" + ending + "'" );
+            
             if (allowed (name)) {
                 StringBuilder params = new StringBuilder ();
 
@@ -390,7 +395,8 @@ public final class HTMLFilter {
                     paramValues.add (m3.group (3)); //([^\"\\s']+)
                 }
 
-                String paramName, paramValue;
+                String paramName;
+                String paramValue;
                 for (int ii = 0; ii < paramNames.size (); ii++) {
                     paramName = paramNames.get (ii).toLowerCase ();
                     paramValue = paramValues.get (ii);

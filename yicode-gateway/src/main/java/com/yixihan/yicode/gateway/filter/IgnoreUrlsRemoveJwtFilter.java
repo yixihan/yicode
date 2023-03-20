@@ -1,6 +1,7 @@
 package com.yixihan.yicode.gateway.filter;
 
 import com.yixihan.yicode.gateway.config.IgnoreUrlsConfig;
+import lombok.NonNull;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -27,7 +28,8 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
 
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    @NonNull
+    public Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest ();
         URI uri = request.getURI ();
         PathMatcher pathMatcher = new AntPathMatcher ();

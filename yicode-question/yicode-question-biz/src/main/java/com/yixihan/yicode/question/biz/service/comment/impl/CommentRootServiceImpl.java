@@ -7,6 +7,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
+import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -279,9 +280,9 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     @Async
     public void modifyAnswerCommentCount (Long answerId, String answerType) {
         Integer count = commentCount (new QuestionCommentCountDtoReq (answerId, answerType));
-        if ("QUESTION".equals (answerType)) {
+        if (AnswerTypeEnums.QUESTION.getType ().equals (answerType)) {
             questionService.modifyQuestionCommentCount (answerId, count);
-        } else if ("NOTE".equals (answerType)) {
+        } else if (AnswerTypeEnums.NOTE.getType ().equals (answerType)) {
             noteService.modifyNoteCommentCount (answerId, count);
         }
     }

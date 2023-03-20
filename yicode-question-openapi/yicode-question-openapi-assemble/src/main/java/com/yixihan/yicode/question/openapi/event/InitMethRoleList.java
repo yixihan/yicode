@@ -30,7 +30,7 @@ import java.util.Map;
 public class InitMethRoleList {
 
 
-    static final List<RoleEnums> defaultRoleList = new ArrayList<> ();
+    static final List<RoleEnums> DEFAULT_ROLE_LIST = new ArrayList<> ();
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -51,7 +51,7 @@ public class InitMethRoleList {
             HandlerMethod method = m.getValue ();
             RoleAccess roleAccess = method.getMethodAnnotation (RoleAccess.class);
             if (roleAccess == null || roleAccess.value () == null || roleAccess.value ().length == 0) {
-                roleList = defaultRoleList;
+                roleList = DEFAULT_ROLE_LIST;
             } else {
                 roleList = new ArrayList<> (Arrays.asList (roleAccess.value ()));
             }

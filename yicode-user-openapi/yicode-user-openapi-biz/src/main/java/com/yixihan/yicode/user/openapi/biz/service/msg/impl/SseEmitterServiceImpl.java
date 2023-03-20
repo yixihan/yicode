@@ -33,7 +33,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     /**
      * 容器, 保存连接, 用于输出返回
      */
-    private static final Map<Long, SseEmitter> sseCache = new ConcurrentHashMap<> ();
+    private static final Map<Long, SseEmitter> SSE_CACHE = new ConcurrentHashMap<> ();
     
     @Override
     public SseEmitter connectSse() {
@@ -44,8 +44,8 @@ public class SseEmitterServiceImpl implements SseEmitterService {
         // 注册回调
         sseEmitter.onCompletion(completionCallBack(userId));
         
-        sseCache.put(userId, sseEmitter);
-        log.info ("sseCache : {}",  sseCache);
+        SSE_CACHE.put(userId, sseEmitter);
+        log.info ("sseCache : {}", SSE_CACHE);
         log.info("创建新的sse连接，当前用户：{}", userId);
     
         try {
@@ -60,7 +60,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     @Override
     public void closeSse() {
         Long userId = userService.getUserId ();
-        SseEmitter sseEmitter = sseCache.get(userId);
+        SseEmitter sseEmitter = SSE_CACHE.get(userId);
         if (sseEmitter != null) {
             sseEmitter.complete();
             removeUser(userId);
@@ -69,11 +69,11 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     
     @Override
     public void sendMsgToClient(List<MessageDetailVO> messageList) {
-        if (CollectionUtil.isEmpty(sseCache)) {
+        if (CollectionUtil.isEmpty(SSE_CACHE)) {
             return;
         }
         messageList.forEach (item -> {
-            if (sseCache.containsKey (item.getReceiveUseId ())) {
+            if (SSE_CACHE.containsKey (item.getReceiveUseId ())) {
                 sendMsgToClientByClientId(item.getReceiveUseId (), item);
             }
         });
@@ -86,7 +86,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      * @param message 信息明细
      */
     private void sendMsgToClientByClientId(Long userId, MessageDetailVO message) {
-        SseEmitter sseEmitter = sseCache.get (userId);
+        SseEmitter sseEmitter = SSE_CACHE.get (userId);
     
         SseEmitter.SseEventBuilder sendData = SseEmitter.event()
                 .id(SseEmitterConstant.TASK_RESULT)
@@ -120,7 +120,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      * @date 2021/12/14
      */
     private void removeUser(Long userId) {
-        sseCache.remove(userId);
+        SSE_CACHE.remove(userId);
         log.info("SseEmitterServiceImpl[removeUser] : 移除用户 : {}", userId);
     }
     

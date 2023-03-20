@@ -2,8 +2,7 @@ package com.yixihan.yicode.thirdpart.openapi.web.fallback;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
 
 /**
@@ -14,9 +13,7 @@ import com.yixihan.yicode.thirdpart.open.api.vo.request.sms.SMSSendReq;
  */
 public class SMSBlockHandler {
     
-    public static JsonResponse<CommonVO<Boolean>> blockHandlerSMS (SMSSendReq req, BlockException e) {
-        return JsonResponse.error (
-                new CommonVO<> (Boolean.FALSE),
-                BizCodeEnum.SENTINEL_FLOW_ERR.getErrorMsg ());
+    public static void blockHandlerSMS (SMSSendReq req, BlockException e) {
+        throw new BizException (BizCodeEnum.SENTINEL_FLOW_ERR);
     }
 }

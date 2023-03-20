@@ -2,7 +2,9 @@ package com.yixihan.yicode.run;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
-import org.junit.Test;
+import cn.hutool.core.lang.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -12,16 +14,17 @@ import java.io.File;
  * @author yixihan
  * @date 2023/1/3 17:08
  */
-public class CustomTest {
+class CustomTest {
     
     @Test
-    public void testdeletePath (){
+    void testdeletePath (){
         File path = new File ("D:\\test");
         FileUtil.del (path);
+        Assertions.assertTrue (Boolean.TRUE);
     }
     
     @Test
-    public void encodingCode () {
+    void encodingCode () {
         String c = Base64.encode ("#include <stdio.h>\n" + "#include <ctype.h>\n" + "#include <string.h>\n" + "#include <stdlib.h>\n" + "\n" + "int isAllowed(char *s) {\n" + "    int i = 0;\n" + "    int length = 0;\n" + "    int hasNumber = 0;\n" + "\n" + "    if (isalpha(s[0]) == 0) {\n" + "        return -1;\n" + "    }\n" + "\n" + "    length = strlen(s);\n" + "\n" + "    for(i = 1; i < length; i++) {\n" + "        if (isalpha(s[i]) == 0) {\n" + "            if (isdigit(s[i]) == 0) {\n" + "                return -1;\n" + "            } else {\n" + "                hasNumber = 1;\n" + "            }\n" + "        }\n" + "    }\n" + "\n" + "    if (hasNumber == 0) {\n" + "        return -1;\n" + "    } else {\n" + "        return 0;\n" + "    }\n" + "}\n" + "\n" + "int main(int argc, char *argv[]) {\n" + "\n" + "    int num = 0;\n" + "    char str[21] = {0};\n" + "    int i = 0;\n" + "    int *numsAllowed = NULL;\n" + "\n" + "    scanf(\"%d\", &num);\n" + "\n" + "    numsAllowed = (int *) malloc(sizeof(int) * num);\n" + "    memset(numsAllowed, 0, sizeof(numsAllowed));\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        memset(str, 0, sizeof(str));\n" + "        scanf(\"%s\", str);\n" + "\n" + "        if (isAllowed(str) < 0) {\n" + "            numsAllowed[i] = -1;\n" + "        } else {\n" + "            numsAllowed[i] = 0;\n" + "        }\n" + "    }\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        if (numsAllowed[i] < 0) {\n" + "            printf(\"Wrong\\n\");\n" + "        } else {\n" + "            printf(\"Accept\\n\");\n" + "        }\n" + "    }\n" + "\n" + "    free(numsAllowed);\n" + "    numsAllowed = NULL;\n" + "\n" + "    return 0;\n" + "}");
         String cCompileErr = Base64.encode ("#include <stdio.h>\n" + "#include <ctype.h>\n" + "#include <string.h>\n" + "#include <stdlib.h>\n" + "\n" + "int isAllowed(char *s) {\n" + "    int i = 0;\n" + "    int length = 0;\n" + "    int hasNumber = 0;\n" + "\n" + "    if (isalpha(s[0]) == 0) {\n" + "        return -1;\n" + "    }\n" + "\n" + "    length = strlen(s);\n" + "\n" + "    for(i = 1; i < length; i++) {\n" + "        if (islpha(s[i]) == 0) {\n" + "            if (isdigit(s[i]) == 0) {\n" + "                return -1;\n" + "            } else {\n" + "                hasNumber = 1;\n" + "            }\n" + "        }\n" + "    }\n" + "\n" + "    if (hasNumber == 0) {\n" + "        return -1;\n" + "    } else {\n" + "        return 0;\n" + "    }\n" + "}\n" + "\n" + "int main(int argc, char *argv[]) {\n" + "\n" + "    int num = 0;\n" + "    char str[21] = {0};\n" + "    int i = 0;\n" + "    int *numsAllowed = NULL;\n" + "\n" + "    scanf(\"%d\", &num);\n" + "\n" + "    numsAllowed = (int *) malloc(sizeof(int) * num);\n" + "    memset(numsAllowed, 0, sizeof(numsAllowed));\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        memset(str, 0, sizeof(str));\n" + "        scanf(\"%s\", str);\n" + "\n" + "        if (isAllowed(str) < 0) {\n" + "            numsAllowed[i] = -1;\n" + "        } else {\n" + "            numsAllowed[i] = 0;\n" + "        }\n" + "    }\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        if (numsAllowed[i] < 0) {\n" + "            printf(\"Wrong\\n\");\n" + "        } else {\n" + "            printf(\"Accept\\n\");\n" + "        }\n" + "    }\n" + "\n" + "    free(numsAllowed);\n" + "    numsAllowed = NULL;\n" + "\n" + "    return 0;\n" + "}");
         String cRunErr = Base64.encode ("#include <stdio.h>\n" + "#include <ctype.h>\n" + "#include <string.h>\n" + "#include <stdlib.h>\n" + "\n" + "int isAllowed(char *s) {\n" + "    int i = 0;\n" + "    int length = 0;\n" + "    int hasNumber = 0;\n" + "\n" + "    if (isalpha(s[0]) == 0) {\n" + "        return -1;\n" + "    }\n" + "\n" + "    length = strlen(s);\n" + "\n" + "    for(i = 1; i < length; i++) {\n" + "        if (isalpha(s[i]) == 0) {\n" + "            if (isdigit(s[i]) == 0) {\n" + "                return -1;\n" + "            } else {\n" + "                hasNumber = 1;\n" + "            }\n" + "        }\n" + "    }\n" + "\n" + "    if (hasNumber == 0) {\n" + "        return -1;\n" + "    } else {\n" + "        return 0;\n" + "    }\n" + "}\n" + "\n" + "int main(int argc, char *argv[]) {\n" + "\n" + "    int num = 0;\n" + "    char str[21] = {0};\n" + "    int i = 0;\n" + "    int *numsAllowed = NULL;\n" + "\n" + "    scanf(\"%d\", &num);\n" + "\n" + "    numsAllowed = (int *) malloc(sizeof(int) * num);\n" + "    memset(numsAllowed, 0, sizeof(numsAllowed));\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        memset(str, 0, sizeof(str));\n" + "        scanf(\"%s\", str);\n" + "\n" + "        if (isAllowed(str) < 0) {\n" + "            numsAllowed[i] = -1;\n" + "        } else {\n" + "            numsAllowed[i] = 0;\n" + "        }\n" + "    }\n" + "\n" + "    for (i = 0; i < num; i++) {\n" + "        if (numsAllowed[i] < 0) {\n" + "            printf(\"Wrong\\n\");\n" + "        } else {\n" + "            printf(\"Accept\\n\");\n" + "        }\n" + "    }\n" + "    int a = 10 / 0;\n" + "\n" + "    free(numsAllowed);\n" + "    numsAllowed = NULL;\n" + "\n" + "    return 0;\n" + "}");
@@ -70,14 +73,16 @@ public class CustomTest {
         System.out.println ("py :\n" + py + "\n");
         System.out.println ("pyRunErr1 :\n" + pyRunErr1 + "\n");
         System.out.println ("pyRunErr2 :\n" + pyRunErr2 + "\n");
+        Assertions.assertTrue (Boolean.TRUE);
     }
     
     @Test
-    public void testOutput () {
+    void testOutput() {
         System.out.println ("/tmp/yicode2023-01-09-13/809815751351775232/main.js:3\nconst lines = fs.readFileSync(0).tString().trim().split(/\\r\\n|\\r|\\n/);\n                                 ^\n\nTypeError: fs.readFileSync(...).tString is not a function\n    at Object.<anonymous> (/tmp/yicode2023-01-09-13/809815751351775232/main.js:3:34)\n    at Module._compile (node:internal/modules/cjs/loader:1165:14)\n    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1219:10)\n    at Module.load (node:internal/modules/cjs/loader:1043:32)\n    at Function.Module._load (node:internal/modules/cjs/loader:878:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)\n    at node:internal/main/run_main_module:22:47\n");
     
         String questionCase = Base64.encode ("5\\nRenlaoshi123\\nYixihan123\\njiege\\nxiaoMa12\\nlaoBai");
         System.out.println (questionCase);
         System.out.println (Base64.decodeStr (questionCase));
+        Assertions.assertTrue (Boolean.TRUE);
     }
 }

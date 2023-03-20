@@ -2,8 +2,7 @@ package com.yixihan.yicode.question.openapi.web.fallback;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
-import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 
 /**
@@ -14,15 +13,11 @@ import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
  */
 public class CodeRunBlockHandler {
     
-    public static JsonResponse<CommonVO<Boolean>> blockHandlerTest (CodeReq req, BlockException e) {
-        return JsonResponse.error (
-                new CommonVO<> (Boolean.FALSE),
-                BizCodeEnum.SENTINEL_FLOW_ERR.getErrorMsg ());
+    public static void blockHandlerTest (CodeReq req, BlockException e) {
+        throw new BizException (BizCodeEnum.CODE_FLOW_ERR);
     }
     
-    public static JsonResponse<CommonVO<Boolean>> blockHandlerCommit (CodeReq req, BlockException e) {
-        return JsonResponse.error (
-                new CommonVO<> (Boolean.FALSE),
-                BizCodeEnum.SENTINEL_FLOW_ERR.getErrorMsg ());
+    public static void blockHandlerCommit (CodeReq req, BlockException e) {
+        throw new BizException (BizCodeEnum.CODE_FLOW_ERR);
     }
 }

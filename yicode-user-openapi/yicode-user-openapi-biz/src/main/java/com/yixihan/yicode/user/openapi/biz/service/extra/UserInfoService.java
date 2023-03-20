@@ -15,6 +15,7 @@ public interface UserInfoService {
      * 更新用户资料
      *
      * @param req 请求参数
+     * @return {@link UserInfoVO}
      */
     UserInfoVO modifyInfo(ModifyUserInfoReq req);
     
@@ -22,6 +23,7 @@ public interface UserInfoService {
      * 获取用户资料
      *
      * @param userId 用户 ID
+     * @return {@link UserInfoVO}
      */
     UserInfoVO getUserInfo(Long userId);
 }

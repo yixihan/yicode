@@ -59,4 +59,7 @@ public class CodeRunConfig {
     public static String getServiceName (String type) {
         return STRATEGY_MAP.get (type);
     }
+    
+    private CodeRunConfig() {
+    }
 }

@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.config;
 
 import cn.hutool.core.date.DatePattern;
+import lombok.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -28,7 +29,7 @@ public class WebMvcConfigurerConfig extends WebMvcConfigurationSupport {
         // lambda 会报错
         registry.addConverter (new Converter<String, Date> () {
             @Override
-            public Date convert( String stringDate) {
+            public Date convert(@NonNull String stringDate) {
                 SimpleDateFormat simpleDateFormat;
                 if (stringDate.contains (" ")) {
                     simpleDateFormat = new SimpleDateFormat (DatePattern.NORM_DATETIME_PATTERN);

@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
  * @date 2022-09-29-14:32
  */
 public class PageVOUtil {
+    
+    private PageVOUtil() {
+    }
 
     public static <S, T> void convertPageVO(PageVO<S> source, PageVO<T> target, Function<S, T> convert) {
         List<S> records = source.getRecords ();

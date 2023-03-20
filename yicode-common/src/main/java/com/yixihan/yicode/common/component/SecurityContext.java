@@ -5,6 +5,8 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
 import com.yixihan.yicode.common.enums.user.RoleEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.pojo.Role;
 import com.yixihan.yicode.common.pojo.User;
 import lombok.Data;
@@ -53,7 +55,7 @@ public class SecurityContext {
                     null : jwtClaimsSet.getClaim ("userMobile").toString ());
             getUser ().setAuthorities (getAuthorities (jwtClaimsSet.getClaim ("authorities").toString ()));
         } catch (ParseException e) {
-            throw new RuntimeException (e);
+            throw new BizException (BizCodeEnum.FAILED_TYPE_INTERNAL);
         }
     }
 

@@ -35,10 +35,10 @@ public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, Templ
      * 将数据库种的所有模板提取到 Redis 中<br>
      * 执行频率
      * <li>项目启动时执行一次</li>
-     * <li>每隔十分钟执行一次</li>
+     * <li>每一天执行一次</li>
      */
     @PostConstruct
-    @Scheduled(cron = "0 0,10,20,30,40,50 * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void initMessageTemplate() {
         List<TemplateMsg> templateList = baseMapper.selectList (null);
         JSONArray array = JSONUtil.createArray ();
@@ -53,9 +53,13 @@ public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, Templ
                 .eq (TemplateMsg.TEMPLATE_ID, templateId);
         try {
             String jsonStr = JSONUtil.toJsonStr (redisTemplate.opsForValue ().get (MESSAGE_TEMPLATE_KEY));
-            template = JSONUtil.parseArray (jsonStr).toList (TemplateMsg.class).stream ()
-                    .filter ((o) -> o.getTemplateId ().equals (templateId)).findFirst ()
-                    .orElse (baseMapper.selectOne (wrapper)).getTemplateContent ();
+            template = JSONUtil.parseArray (jsonStr)
+                    .toList (TemplateMsg.class)
+                    .stream ()
+                    .filter (o -> o.getTemplateId ().equals (templateId))
+                    .findFirst ()
+                    .orElse (baseMapper.selectOne (wrapper))
+                    .getTemplateContent ();
         } catch (Exception e) {
             template = baseMapper.selectOne (wrapper).getTemplateContent ();
         }
