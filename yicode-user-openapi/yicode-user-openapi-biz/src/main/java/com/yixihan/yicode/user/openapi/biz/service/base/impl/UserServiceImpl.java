@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         UserInfoVO userInfoVO = userInfoService.getUserInfo (userId);
         // 获取用户角色
         List<RoleDtoResult> userRoleDtoResult = Collections.emptyList ();
-        if (getUserDetailInfo ().getUserRoleList ().stream().anyMatch (
+        if (userRoleFeignClient.getUserRoleList (getUserId ()).getResult ().stream().anyMatch (
                 o -> RoleEnums.ADMIN.getRoleId ().equals (o.getRoleId ()) ||
                         RoleEnums.SUPER_ADMIN.getRoleId ().equals (o.getRoleId ())
         )) {
