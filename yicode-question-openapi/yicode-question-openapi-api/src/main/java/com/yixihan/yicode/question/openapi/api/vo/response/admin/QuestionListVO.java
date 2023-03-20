@@ -30,7 +30,7 @@ public class QuestionListVO {
     @ApiModelProperty(value = "收藏数量")
     private String favoriteName;
     
-    @ApiModelProperty(value = "收藏夹背景")
+    @ApiModelProperty(value = "收藏夹封面")
     private String favoriteBg;
     
     @ApiModelProperty(value = "创建时间")
