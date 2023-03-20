@@ -73,7 +73,8 @@ public class QuestionDailyServiceImpl implements QuestionDailyService {
         
         // 构建请求 body
         UserDailyQuestionDetailDtoReq dtoReq = BeanUtil.toBean (req, UserDailyQuestionDetailDtoReq.class);
-    
+        dtoReq.setUserId (userService.getUserId ());
+        
         // 获取数据
         List<UserDailyQuestionDtoResult> dtoResultList = questionDailyUserFeignClient.userDailyQuestionDetail (dtoReq).getResult ();
     
