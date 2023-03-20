@@ -51,11 +51,15 @@ public interface RoleService extends IService<Role> {
     
     /**
      * 获取所有角色列表-分页查询
+     *
+     * @return {@link RoleDtoResult}
      */
     PageDtoResult<RoleDtoResult> getRolePage(PageDtoReq dtoReq);
     
     /**
      * 获取所有角色列表-列表查询
+     *
+     * @return {@link RoleDtoResult}
      */
     List<RoleDtoResult> getRoleList();
     

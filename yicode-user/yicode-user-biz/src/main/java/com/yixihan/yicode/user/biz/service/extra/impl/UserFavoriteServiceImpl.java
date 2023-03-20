@@ -50,7 +50,12 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
         UserFavorite favorite = BeanUtil.toBean (dtoReq, UserFavorite.class);
         
         // 获取乐观锁
-        Integer version = getFavoriteDetail (dtoReq.getFavoriteId ()).getVersion ();
+        Integer version = lambdaQuery ()
+                .select (UserFavorite::getVersion)
+                .eq (UserFavorite::getFavoriteId, dtoReq.getFavoriteId ())
+                .one ()
+                .getVersion ();
+        Assert.notNull (version, new BizException ("该收藏夹不存在"));
         favorite.setVersion (version);
         
         // 更新

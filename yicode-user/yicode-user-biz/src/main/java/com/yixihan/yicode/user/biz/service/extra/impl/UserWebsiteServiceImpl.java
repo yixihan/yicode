@@ -61,7 +61,7 @@ public class UserWebsiteServiceImpl extends ServiceImpl<UserWebsiteMapper, UserW
         wrapper.eq (UserWebsite.USER_ID, dtoReq.getUserId ())
                 .in (UserWebsite.USER_WEBSITE, dtoReq.getUserWebsite ());
     
-        baseMapper.delete (wrapper);
+        remove (wrapper);
     }
 
     @Override

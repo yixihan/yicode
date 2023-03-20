@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     public Long getUserId() {
         String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
                 .substring (AuthConstant.TOKEN_SUB_INDEX);
-        return userFeignClient.getUserByIdToken (token).getResult ();
+        return userFeignClient.getUserIdByToken (token).getResult ();
     }
     
     @Override

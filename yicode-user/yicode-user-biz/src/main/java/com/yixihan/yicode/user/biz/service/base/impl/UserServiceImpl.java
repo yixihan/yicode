@@ -107,11 +107,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     
     @Override
     public UserDtoResult getUserByToken(String token) {
-        return getUserById (getUserByIdToken (token));
+        return getUserById (getUserIdByToken (token));
     }
     
     @Override
-    public Long getUserByIdToken(String token) {
+    public Long getUserIdByToken(String token) {
         String str = Optional
                 .ofNullable (redisTemplate.opsForHash ().get (AuthConstant.USER_MAP_KEY, token))
                 .orElse ("")

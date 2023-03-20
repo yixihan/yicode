@@ -27,6 +27,8 @@ public interface SseEmitterService {
     
     /**
      * 推送消息到客户端
+     *
+     * @param messageList 消息内容
      */
     void sendMsgToClient(List<MessageDetailVO> messageList);
 }

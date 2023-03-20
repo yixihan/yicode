@@ -47,7 +47,7 @@ public interface UserApi {
     
     @ApiOperation("通过 cache 获取用户信息")
     @PostMapping(value = "/id/token", produces = "application/json")
-    ApiResult<Long> getUserByIdToken(@RequestBody String token);
+    ApiResult<Long> getUserIdByToken(@RequestBody String token);
     
     
     @ApiOperation("通过 userId 获取用户信息-列表查询")

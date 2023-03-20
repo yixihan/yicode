@@ -66,8 +66,8 @@ public class UserController implements UserApi {
     }
     
     @Override
-    public ApiResult<Long> getUserByIdToken(String token) {
-        return ApiResult.create (service.getUserByIdToken (token));
+    public ApiResult<Long> getUserIdByToken(String token) {
+        return ApiResult.create (service.getUserIdByToken (token));
     }
     
     @Override

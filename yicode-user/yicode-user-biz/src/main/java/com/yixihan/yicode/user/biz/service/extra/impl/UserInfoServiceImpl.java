@@ -34,9 +34,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         
         // 获取乐观锁
         Integer version = lambdaQuery ()
+                .select (UserInfo::getVersion)
                 .eq (UserInfo::getUserId, dtoReq.getUserId ())
                 .one ()
                 .getVersion ();
+        Assert.notNull (version, BizCodeEnum.ACCOUNT_NOT_FOUND);
         info.setVersion (version);
     
         // 构造条件构造器

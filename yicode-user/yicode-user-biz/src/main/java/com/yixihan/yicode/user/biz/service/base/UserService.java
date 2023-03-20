@@ -67,7 +67,7 @@ public interface UserService extends IService<User> {
      * @param token token
      * @return 用户 id
      */
-    Long getUserByIdToken(String token);
+    Long getUserIdByToken(String token);
     
     /**
      * 通过 userId 获取用户信息
