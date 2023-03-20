@@ -28,7 +28,7 @@ public class QuestionListVO {
     private String favoriteType;
     
     @ApiModelProperty(value = "收藏数量")
-    private Integer favoriteName;
+    private String favoriteName;
     
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
