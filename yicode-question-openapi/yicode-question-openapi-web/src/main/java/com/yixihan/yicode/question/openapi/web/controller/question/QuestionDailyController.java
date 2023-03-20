@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionDailyOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserDailyQuestionDetailReq;
@@ -32,7 +31,7 @@ public class QuestionDailyController implements QuestionDailyOpenApi {
     }
     
     @Override
-    public JsonResponse<CommonVO<Integer>> dailyQuestionCount() {
+    public JsonResponse<Integer> dailyQuestionCount() {
         return JsonResponse.ok (service.dailyQuestionCount ());
     }
     

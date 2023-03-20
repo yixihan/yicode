@@ -29,6 +29,7 @@ public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
      *
      * @param dtoReq 请求参数
      * @param page 分页参数
+     * @return {@link QuestionAnswerDtoResult}
      */
     Page<QuestionAnswerDtoResult> queryUserQuestionAnswer(@Param ("params") UserQuestionAnswerDtoReq dtoReq,
                                                           @Param ("page") Page<QuestionAnswerDtoResult> page);
@@ -37,6 +38,7 @@ public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
      * 获取用户提交代码次数记录
      *
      * @param dtoReq 请求参数
+     * @return {@link CommitRecordDtoResult}
      */
     List<CommitRecordDtoResult> codeCommitCount(@Param ("params") CodeCommitCountDtoReq dtoReq);
     
@@ -44,11 +46,14 @@ public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
      * 获取用户做题进度
      *
      * @param userId 用户 ID
+     * @return {@link QuestionAnswerDtoResult}
      */
     List<QuestionAnswerDtoResult> codeRate(@Param ("userId") Long userId);
     
     /**
      * 获取题目数量情况
+     *
+     * @return {@link QuestionNumberDtoResult}
      */
     QuestionNumberDtoResult questionNumber ();
 }

@@ -9,7 +9,9 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.RestartPolicy;
 import com.yixihan.yicode.common.enums.DockerContainerStatusEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -54,7 +56,7 @@ public class DockerMonitorService {
     /**
      * 镜像 ID
      */
-    private static String imageId;
+    private String imageId;
     
     /**
      * 镜像名称
@@ -74,20 +76,20 @@ public class DockerMonitorService {
             try {
                 // 拉取远程镜像
                 pullRemoteImage ();
-                
+            
                 // 获取镜像
                 image = getImage ();
-                
+            
                 if (image == null) {
-                    log.error ("镜像拉取错误!");
-                    throw new BizException ("镜像拉取错误!");
+                    throw new BizException (BizCodeEnum.DOCKER_PULL_ERR);
                 }
             } catch (InterruptedException e) {
                 log.error ("镜像拉取错误!, {}", e.getMessage (), e);
-                throw new BizException (e);
+                Thread.currentThread ().interrupt ();
+                throw new BizException (BizCodeEnum.DOCKER_PULL_ERR);
             }
         }
-        
+    
         // 镜像 ID
         imageId = image.getId ();
         
@@ -107,7 +109,7 @@ public class DockerMonitorService {
     public void monitor () {
         ExecutorService executor = ThreadUtil.newExecutor ();
 
-        CONTAINER_ID_SET.forEach ((item) -> executor.execute (() -> {
+        CONTAINER_ID_SET.forEach (item -> executor.execute (() -> {
             String status = client.inspectContainerCmd (item).exec ().getState ().getStatus ();
             DockerContainerStatusEnums statusEnums = DockerContainerStatusEnums.valueOf (status);
             if (DockerContainerStatusEnums.dead.equals (statusEnums) ||
@@ -140,10 +142,11 @@ public class DockerMonitorService {
      */
     private Image getImage() {
         return client.listImagesCmd ().exec ().stream ()
-                .filter ((item) ->
-                        Arrays.stream (item.getRepoTags ()).anyMatch ((o) ->
+                .filter (item ->
+                        Arrays.stream (item.getRepoTags ()).anyMatch (o ->
                                 StrUtil.contains (o, IMAGE_NAME)))
-                .findFirst ().orElse (null);
+                .findFirst ()
+                .orElse (null);
     }
     
     /**
@@ -186,9 +189,11 @@ public class DockerMonitorService {
             // 关闭线程
             executor.shutdown();
             // 等待线程执行完毕
-            executor.awaitTermination (Long.MAX_VALUE, TimeUnit.SECONDS);
+            Assert.isTrue (executor.awaitTermination (Long.MAX_VALUE, TimeUnit.SECONDS),
+                    BizCodeEnum.DOCKER_CREATE_ERR);
         } catch (InterruptedException e) {
-            throw new RuntimeException (e);
+            Thread.currentThread ().interrupt ();
+            throw new BizException (BizCodeEnum.DOCKER_CREATE_ERR);
         }
     }
     
@@ -203,19 +208,21 @@ public class DockerMonitorService {
                     .withShowAll (Boolean.TRUE)
                     .exec ()
                     .stream ()
-                    .filter ((item) ->
+                    .filter (item ->
                             item.getImageId () != null && item.getImageId ().equals (imageId))
-                    .forEach ((contain) -> executor.execute (() -> {
+                    .forEach (contain -> executor.execute (() -> {
                         client.stopContainerCmd (contain.getId ()).exec ();
                         client.removeContainerCmd (contain.getId ()).exec ();
                     }));
             // 关闭线程
             executor.shutdown();
             // 等待线程执行完毕
-            executor.awaitTermination (Long.MAX_VALUE, TimeUnit.SECONDS);
+            Assert.isTrue (executor.awaitTermination (Long.MAX_VALUE, TimeUnit.SECONDS),
+                    BizCodeEnum.DOCKER_REMOVE_ERR);
             log.info ("原有容器删除完毕!");
         } catch (InterruptedException e) {
-            throw new RuntimeException (e);
+            Thread.currentThread ().interrupt ();
+            throw new BizException (BizCodeEnum.DOCKER_REMOVE_ERR);
         }
     }
 }

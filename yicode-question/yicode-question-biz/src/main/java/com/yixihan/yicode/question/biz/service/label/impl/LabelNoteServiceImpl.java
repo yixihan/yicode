@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.biz.service.label.LabelNoteService;
@@ -32,47 +32,57 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     private LabelService labelService;
     
     @Override
-    public CommonDtoResult<Boolean> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+    public List<LabelDtoResult> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
         Label label = labelService.getById (dtoReq.getLabelId ());
         
         LabelNote labelNote = new LabelNote ();
         labelNote.setLabelId (label.getLabelId ());
         labelNote.setNoteId (dtoReq.getNoteId ());
     
-        int modify = baseMapper.insert (labelNote);
+        // 保存
+        Assert.isTrue (save (labelNote), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return noteLabelDetail (dtoReq.getNoteId ());
     }
     
     @Override
-    public CommonDtoResult<Boolean> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        int modify = baseMapper.delete (new QueryWrapper<LabelNote> ()
-                .eq (LabelNote.NOTE_ID, dtoReq.getNoteId ())
-                .eq (LabelNote.LABEL_ID, dtoReq.getLabelId ()));
-    
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+    public List<LabelDtoResult> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+        Long id = lambdaQuery ()
+                .select (LabelNote::getId)
+                .eq (LabelNote::getNoteId, dtoReq.getNoteId ())
+                .eq (LabelNote::getLabelId, dtoReq.getNoteId ())
+                .one ()
+                .getId ();
+        Assert.notNull (id, new BizException ("该标签不存在"));
+        
+        // 删除
+        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        return noteLabelDetail (dtoReq.getNoteId ());
     }
     
     @Override
     public List<LabelDtoResult> noteLabelDetail(Long noteId) {
-        List<LabelNote> labelNoteList = baseMapper.selectList (new QueryWrapper<LabelNote> ()
-                .eq (LabelNote.NOTE_ID, noteId));
-    
-        return labelService.labelDetail (labelNoteList.stream ()
-                .map (LabelNote::getLabelId).collect (Collectors.toList ()));
+        // 获取标签 id
+        List<Long> labelIdList = lambdaQuery ()
+                .eq (LabelNote::getNoteId, noteId)
+                .orderByDesc (LabelNote::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelNote::getLabelId)
+                .collect (Collectors.toList ());
+                
+        return labelService.labelDetail (labelIdList);
     }
     
     @Override
     public List<LabelDtoResult> allNoteLabel() {
-        List<Long> labelIdList = baseMapper.selectList (null).stream ()
-                .map (LabelNote::getLabelId).collect (Collectors.toList ());
-        
+        List<Long> labelIdList = lambdaQuery ()
+                .orderByDesc (LabelNote::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelNote::getLabelId)
+                .collect (Collectors.toList ());
+    
         return labelService.labelDetail (labelIdList);
     }
 }

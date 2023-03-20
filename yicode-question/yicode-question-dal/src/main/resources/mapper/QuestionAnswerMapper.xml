@@ -58,26 +58,18 @@
     <select id="codeCommitCount"
             resultType="com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult">
         select
-            concat(year, '-',
-            if(month &lt; 10, concat('0', month), month), '-',
-            if(day &lt; 10, concat('0', day), day)) as `date`,
-            count
-        from (
-            select
-            year(create_time)  as `year`,
-            month(create_time) as `month`,
-            day(create_time)   as `day`,
-            count(*)           as `count`
-            from
+            date_format(create_time, '%Y-%m-%d') as date,
+            count(*)           as count
+        from
             question_answer
-            <where>
-                and del_flag = 0
-                and user_id = #{params.userId}
-                and create_time between #{params.startDate} and #{params.endDate}
-            </where>
-            group by
-            year(create_time), month(create_time), day(create_time)
-        ) as q
+        <where>
+            and del_flag = 0
+            and user_id = #{params.userId}
+            and create_time between #{params.startDate} and #{params.endDate}
+        </where>
+        group by
+            date_format(create_time, '%Y-%m-%d')
+
     </select>
 
     <select id="codeRate" resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult">

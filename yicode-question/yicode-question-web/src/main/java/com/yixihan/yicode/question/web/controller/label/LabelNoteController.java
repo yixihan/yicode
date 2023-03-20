@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.label;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
@@ -29,12 +28,12 @@ public class LabelNoteController implements LabelNoteApi {
     private LabelNoteService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+    public ApiResult<List<LabelDtoResult>> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
         return ApiResult.create (service.addNoteLabel (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+    public ApiResult<List<LabelDtoResult>> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
         return ApiResult.create (service.delNoteLabel (dtoReq));
     }
     

@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.api.rest.label;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
@@ -22,11 +23,11 @@ public interface LabelOpenApi {
     
     @ApiOperation("添加标签")
     @PostMapping(value = "/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addLabel(@RequestBody AddLabelReq req);
+    JsonResponse<LabelVO> addLabel(@RequestBody AddLabelReq req);
     
     @ApiOperation("删除标签")
     @DeleteMapping(value = "/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delLabel(@RequestBody List<Long> labelIdList);
+    void delLabel(@RequestBody List<Long> labelIdList);
     
     @ApiOperation("标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -40,12 +41,16 @@ public interface LabelOpenApi {
     @GetMapping(value = "/detail/question", produces = "application/json")
     JsonResponse<List<LabelVO>> questionLabelDetail(@RequestParam Long questionId);
     
+    @ApiOperation("获取全部标签")
+    @PostMapping(value = "/all", produces = "application/json")
+    JsonResponse<PageVO<LabelVO>> allLabel(@RequestBody PageReq req);
+    
     @ApiOperation("全部题解标签")
     @GetMapping(value = "/all/note", produces = "application/json")
-    JsonResponse<List<LabelVO>> AllNoteLabel();
+    JsonResponse<List<LabelVO>> allNoteLabel();
     
     @ApiOperation("全部问题标签")
     @GetMapping(value = "/all/question", produces = "application/json")
-    JsonResponse<List<LabelVO>> AllQuestionLabel();
+    JsonResponse<List<LabelVO>> allLabel();
     
 }

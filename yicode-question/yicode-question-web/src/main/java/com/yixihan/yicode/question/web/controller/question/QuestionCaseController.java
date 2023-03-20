@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
@@ -29,18 +28,18 @@ public class QuestionCaseController implements QuestionCaseApi {
     private QuestionCaseService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+    public ApiResult<QuestionCaseDtoResult> addQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
         return ApiResult.create (service.addQuestionCase (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+    public ApiResult<QuestionCaseDtoResult> modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
         return ApiResult.create (service.modifyQuestionCase (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delQuestionCase(Long id) {
-        return ApiResult.create (service.delQuestionCase (id));
+    public void delQuestionCase(Long id) {
+        service.delQuestionCase (id);
     }
     
     @Override
@@ -49,7 +48,7 @@ public class QuestionCaseController implements QuestionCaseApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyQuestionCase(Long id) {
+    public ApiResult<Boolean> verifyQuestionCase(Long id) {
         return ApiResult.create (service.verifyQuestionCase (id));
     }
 }

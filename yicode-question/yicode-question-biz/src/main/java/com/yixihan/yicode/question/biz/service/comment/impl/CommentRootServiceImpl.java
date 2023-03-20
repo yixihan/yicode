@@ -1,23 +1,25 @@
 package com.yixihan.yicode.question.biz.service.comment.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.*;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
+import com.yixihan.yicode.question.biz.service.comment.CommentReplyService;
 import com.yixihan.yicode.question.biz.service.comment.CommentRootService;
 import com.yixihan.yicode.question.biz.service.note.NoteService;
 import com.yixihan.yicode.question.biz.service.question.QuestionService;
-import com.yixihan.yicode.question.dal.mapper.comment.CommentReplyMapper;
 import com.yixihan.yicode.question.dal.mapper.comment.CommentRootMapper;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentReply;
 import com.yixihan.yicode.question.dal.pojo.comment.CommentRoot;
@@ -25,6 +27,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,7 @@ import java.util.stream.Collectors;
 public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, CommentRoot> implements CommentRootService {
     
     @Resource
-    private CommentReplyMapper commentReplyMapper;
+    private CommentReplyService commentReplyService;
     
     @Resource
     private QuestionService questionService;
@@ -51,111 +54,125 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     private NoteService noteService;
     
     @Override
-    public CommonDtoResult<Boolean> addRootComment(AddRootCommentDtoReq dtoReq) {
+    public RootCommentDetailDtoResult addRootComment(AddRootCommentDtoReq dtoReq) {
         CommentRoot commentRoot = BeanUtil.toBean (dtoReq, CommentRoot.class);
     
-        int modify = baseMapper.insert (commentRoot);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+        // 保存
+        Assert.isTrue (save (commentRoot), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
         // 异步更新评论内容评论数
         modifyAnswerCommentCount (dtoReq.getAnswerId (), dtoReq.getAnswerType ());
-        return new CommonDtoResult<> (Boolean.TRUE);
+        
+        return BeanUtil.toBean (commentRoot, RootCommentDetailDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> addSonComment(AddSonCommentDtoReq dtoReq) {
+    public SonCommentDetailDtoResult addSonComment(AddSonCommentDtoReq dtoReq) {
         CommentReply commentReply = BeanUtil.toBean (dtoReq, CommentReply.class);
     
-        int modify = commentReplyMapper.insert (commentReply);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+        // 保存
+        Assert.isTrue (commentReplyService.save (commentReply), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
         // 更新父评论回复数量
         Long rootId = commentReply.getRootId ();
         modifyRootCommentReply (rootId);
         // 异步更新评论内容评论数
         CommentRoot commentRoot = baseMapper.selectById (rootId);
         modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
-        return new CommonDtoResult<> (Boolean.TRUE);
+    
+        return BeanUtil.toBean (commentReply, SonCommentDetailDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> delRootComment(Long rootCommentId) {
+    public void delRootComment(Long rootCommentId) {
         // 异步更新评论内容评论数
         CommentRoot commentRoot = baseMapper.selectById (rootCommentId);
-        int modify = baseMapper.deleteById (rootCommentId);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+        // 删除父评论
+        Assert.isTrue (removeById (rootCommentId), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        // 获取子评论 id
+        List<Long> sonCommentIdList = sonCommentDetail (CollUtil.newArrayList (rootCommentId))
+                .values ()
+                .stream()
+                .findFirst ()
+                .orElse (Collections.emptyList ())
+                .stream ()
+                .map (SonCommentDetailDtoResult::getReplyId)
+                .collect(Collectors.toList());
+        // 删除子评论
+        Assert.isTrue (commentReplyService.removeByIds (sonCommentIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+    
+    
         // 异步更新评论内容评论数
         modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
-        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
-    public CommonDtoResult<Boolean> delSonComment(Long sunCommentId) {
-        CommentReply commentReply = commentReplyMapper.selectById (sunCommentId);
-        int modify = commentReplyMapper.deleteById (sunCommentId);
-    
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+    public void delSonComment(Long sunCommentId) {
+        CommentReply commentReply = commentReplyService.getById (sunCommentId);
+        
+        // 删除
+        Assert.isTrue (commentReplyService.removeById (sunCommentId), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
         // 更新父评论回复数量
         Long rootId = commentReply.getRootId ();
         modifyRootCommentReply (rootId);
         // 异步更新评论内容评论数
         CommentRoot commentRoot = baseMapper.selectById (rootId);
         modifyAnswerCommentCount (commentRoot.getAnswerId (), commentRoot.getAnswerType ());
-        return new CommonDtoResult<> (Boolean.TRUE);
     }
     
     @Override
-    public CommonDtoResult<Integer> commentCount(QuestionCommentCountDtoReq dtoReq) {
-        List<CommentRoot> commentRootList = baseMapper.selectList (new QueryWrapper<CommentRoot> ()
-                .eq (CommentRoot.ANSWER_ID, dtoReq.getAnswerId ())
-                .eq (CommentRoot.ANSWER_TYPE, dtoReq.getAnswerType ()));
+    public Integer commentCount(QuestionCommentCountDtoReq dtoReq) {
+        // 获取父评论 id 列表
+        List<Long > commentRootIdList = lambdaQuery ()
+                .eq (CommentRoot::getAnswerId, dtoReq.getAnswerId ())
+                .eq (CommentRoot::getAnswerType, dtoReq.getAnswerType ())
+                .list ()
+                .stream ()
+                .map (CommentRoot::getRootId)
+                .collect(Collectors.toList());
     
-        if (CollectionUtil.isEmpty (commentRootList)) {
-            return new CommonDtoResult<> (NumConstant.NUM_0);
+        if (CollectionUtil.isEmpty (commentRootIdList)) {
+            return NumConstant.NUM_0;
         }
     
-        Integer count = commentReplyMapper.selectCount (new QueryWrapper<CommentReply> ()
-                .in (CommentReply.ROOT_ID, commentRootList.stream ()
-                        .map (CommentRoot::getRootId).collect(Collectors.toList())));
-    
-        return new CommonDtoResult<> (commentRootList.size () + count);
+        // 获取子评论数量
+        Integer count = commentReplyService.lambdaQuery ()
+                .in (CommentReply::getRootId, commentRootIdList)
+                .count ();
+        
+        return commentRootIdList.size () + count;
     }
     
     @Override
     public PageDtoResult<RootCommentDetailDtoResult> rootCommentDetail(RootCommentDetailDtoReq dtoReq) {
         // 获取父评论, 以分页的形式
-        Page<CommentRoot> pages = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()),
-                new QueryWrapper<CommentRoot> ()
-                        .eq (CommentRoot.ANSWER_ID, dtoReq.getAnswerId ())
-                        .eq (CommentRoot.ANSWER_TYPE, dtoReq.getAnswerType ())
-        );
+        Page<CommentRoot> page = lambdaQuery ()
+                .eq (CommentRoot::getAnswerType, dtoReq.getAnswerType ())
+                .eq (CommentRoot::getAnswerId, dtoReq.getAnswerId ())
+                .orderByDesc (CommentRoot::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
+        
     
         // 转换为 RootCommentDetailDtoResult 格式
         PageDtoResult<RootCommentDetailDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (
-                pages,
-                (o) -> BeanUtil.toBean (o, RootCommentDetailDtoResult.class)
+                page,
+                o -> BeanUtil.toBean (o, RootCommentDetailDtoResult.class)
         );
         
         // 如果父评论不为空
         if (CollectionUtil.isNotEmpty (pageDtoResult.getRecords ())) {
             // 获取子评论明细
-            Map<Long, List<SonCommentDetailDtoResult>> sonCommentDetail = sonCommentDetail (
-                    pageDtoResult.getRecords ().stream ()
-                            .map (RootCommentDetailDtoResult::getRootId)
-                            .collect (Collectors.toList ())
-            );
+            List<Long> rootCommentIdList = pageDtoResult.getRecords ()
+                    .stream ()
+                    .map (RootCommentDetailDtoResult::getRootId)
+                    .collect (Collectors.toList ());
+            Map<Long, List<SonCommentDetailDtoResult>> sonCommentDetail = sonCommentDetail (rootCommentIdList);
         
             // 设置父评论的子评论
-            pageDtoResult.getRecords ().forEach ((o) -> o.setSonCommentDetailList (sonCommentDetail.get (o.getRootId ())));
+            pageDtoResult.getRecords ().parallelStream ().forEach (o ->
+                    o.setSonCommentDetailList (sonCommentDetail.get (o.getRootId ())));
         }
         return pageDtoResult;
     }
@@ -163,70 +180,87 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     @Override
     public PageDtoResult<SonCommentDetailDtoResult> sonCommentDetail(SonCommentDetailDtoReq dtoReq) {
         // 获取子评论, 以分页的形式
-        Page<CommentReply> pages = commentReplyMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()),
-                new QueryWrapper<CommentReply> ().eq (CommentReply.ROOT_ID, dtoReq.getRootId ())
-        );
+        Page<CommentReply> page = commentReplyService.lambdaQuery ()
+                .eq (CommentReply::getRootId, dtoReq.getRootId ())
+                .orderByDesc (CommentReply::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
-                pages,
-                (o) -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class)
+                page,
+                o -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class)
         );
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeRootComment(LikeDtoReq dtoReq) {
-        CommentRoot commentRoot = baseMapper.selectById (dtoReq.getSourceId ());
-        commentRoot.setLikeCount (dtoReq.getLikeCount ());
+    public void likeRootComment(LikeDtoReq dtoReq) {
+        // 获取当前点赞数
+        CommentRoot commentRoot = getById (dtoReq.getSourceId ());
+        commentRoot.setLikeCount (commentRoot.getLikeCount ());
     
-        int modify = baseMapper.updateById (commentRoot);
-        
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 更新
+        Assert.isTrue (updateById (commentRoot), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeSonComment(LikeDtoReq dtoReq) {
-        CommentReply commentReply = commentReplyMapper.selectById (dtoReq.getSourceId ());
-        commentReply.setLikeCount (dtoReq.getLikeCount ());
-        
+    public void likeSonComment(LikeDtoReq dtoReq) {
+        // 获取当前点赞数
+        CommentReply commentReply = commentReplyService.getById (dtoReq.getSourceId ());
+        commentReply.setLikeCount (commentReply.getLikeCount ());
     
-        int modify = commentReplyMapper.updateById (commentReply);
-    
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 更新
+        Assert.isTrue (commentReplyService.updateById (commentReply), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifyRootComment(Long rootCommentId) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<CommentRoot> ()
-                .eq (CommentRoot.ROOT_ID, rootCommentId)) > 0);
+    public Boolean verifyRootComment(Long rootCommentId) {
+        return lambdaQuery ()
+                .eq (CommentRoot::getRootId, rootCommentId)
+                .count () > 0;
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifySonComment(Long sonCommentId) {
-        return new CommonDtoResult<> (commentReplyMapper.selectCount (new QueryWrapper<CommentReply> ()
-                .eq (CommentReply.REPLY_ID, sonCommentId)) > 0);
+    public Boolean verifySonComment(Long sonCommentId) {
+        return commentReplyService.lambdaQuery ()
+                .eq (CommentReply::getReplyId, sonCommentId)
+                .count () > 0;
     }
     
     @Override
     public RootCommentDetailDtoResult getRootComment(Long rootCommentId) {
-        return BeanUtil.toBean  (
-                baseMapper.selectById (rootCommentId),
-                RootCommentDetailDtoResult.class
-        );
+        CommentRoot commentRoot = getById (rootCommentId);
+        Assert.notNull (commentRoot, new BizException ("该评论不存在!"));
+        
+        return BeanUtil.toBean  (commentRoot, RootCommentDetailDtoResult.class);
     }
     
     @Override
     public SonCommentDetailDtoResult getSonComment(Long sonCommentId) {
-        return BeanUtil.toBean (
-                commentReplyMapper.selectById (sonCommentId),
-                SonCommentDetailDtoResult.class
-        );
+        CommentReply commentReply = commentReplyService.getById (sonCommentId);
+        Assert.notNull (commentReply, new BizException ("该评论不存在!"));
+    
+        return BeanUtil.toBean  (commentReply, SonCommentDetailDtoResult.class);
+    }
+    
+    /**
+     * 获取父评论的所有子评论, 以map形式返回
+     *
+     * @param rootCommentIdList 父评论 ID
+     * @return Map 集合, rootCommentId => key, 子评论列表 => value
+     */
+    private Map<Long, List<SonCommentDetailDtoResult>> sonCommentDetail (List<Long> rootCommentIdList) {
+        if (CollectionUtil.isEmpty (rootCommentIdList)) {
+            return MapUtil.empty ();
+        }
+        return commentReplyService.lambdaQuery ()
+                .in (CommentReply::getRootId, rootCommentIdList)
+                .orderByDesc (CommentReply::getCreateTime)
+                .list ()
+                .stream()
+                .map (o -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class))
+                .collect (Collectors.groupingBy (
+                        SonCommentDetailDtoResult::getRootId,
+                        HashMap::new,
+                        Collectors.toList ()));
     }
     
     /**
@@ -235,38 +269,20 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     @Async
     public void modifyRootCommentReply (Long rootCommentId) {
         CommentRoot commentRoot = baseMapper.selectById (rootCommentId);
-        Integer replyCount = commentReplyMapper.selectCount (new QueryWrapper<CommentReply> ()
-                .eq (CommentReply.ROOT_ID, rootCommentId));
+        Integer replyCount = commentReplyService.lambdaQuery ()
+                .eq (CommentReply::getRootId, rootCommentId)
+                .count ();
         commentRoot.setReplyCount (replyCount);
         baseMapper.updateById (commentRoot);
     }
     
     @Async
     public void modifyAnswerCommentCount (Long answerId, String answerType) {
-        Integer count = commentCount (new QuestionCommentCountDtoReq (answerId, answerType)).getData ();
+        Integer count = commentCount (new QuestionCommentCountDtoReq (answerId, answerType));
         if ("QUESTION".equals (answerType)) {
             questionService.modifyQuestionCommentCount (answerId, count);
         } else if ("NOTE".equals (answerType)) {
             noteService.modifyNoteCommentCount (answerId, count);
         }
-    }
-    
-    /**
-     * 获取父评论的所有子评论, 以列表形式返回
-     *
-     * @param rootCommentIdList 父评论 ID
-     * @return Map 集合, rootCommentId => key, 子评论列表 => value
-     */
-    private Map<Long, List<SonCommentDetailDtoResult>> sonCommentDetail (List<Long> rootCommentIdList) {
-        if (CollectionUtil.isEmpty (rootCommentIdList)) {
-            return new HashMap<> ();
-        }
-        return commentReplyMapper.selectList (new QueryWrapper<CommentReply> ()
-                .in (CommentReply.ROOT_ID, rootCommentIdList)).stream ()
-                .map ((o) -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class))
-                .collect (Collectors.groupingBy (
-                        SonCommentDetailDtoResult::getRootId,
-                        HashMap::new,
-                        Collectors.toList ()));
     }
 }

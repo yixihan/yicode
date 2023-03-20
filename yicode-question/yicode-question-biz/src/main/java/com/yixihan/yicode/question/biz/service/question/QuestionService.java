@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
@@ -31,34 +30,37 @@ public interface QuestionService extends IService<Question> {
      * 添加问题
      *
      * @param dtoReq 请求参数
+     * @return {@link QuestionDetailDtoResult}
      */
-    CommonDtoResult<Boolean> addQuestion(ModifyQuestionDtoReq dtoReq);
+    QuestionDetailDtoResult addQuestion(ModifyQuestionDtoReq dtoReq);
     
     /**
      * 修改问题
      *
      * @param dtoReq 请求参数
+     * @return {@link QuestionDetailDtoResult}
      */
-    CommonDtoResult<Boolean> modifyQuestion(ModifyQuestionDtoReq dtoReq);
+    QuestionDetailDtoResult modifyQuestion(ModifyQuestionDtoReq dtoReq);
     
     /**
      * 删除问题
      *
      * @param questionIdList 问题 ID
      */
-    CommonDtoResult<Boolean> delQuestion(List<Long> questionIdList);
+    void delQuestion(List<Long> questionIdList);
     
     /**
      * 点赞问题
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> likeQuestion(LikeDtoReq dtoReq);
+    void likeQuestion(LikeDtoReq dtoReq);
     
     /**
      * 问题明细
      *
      * @param questionId 问题 ID
+     * @return {@link QuestionDetailDtoResult}
      */
     QuestionDetailDtoResult questionDetail(Long questionId);
     
@@ -66,6 +68,7 @@ public interface QuestionService extends IService<Question> {
      * 搜索问题
      *
      * @param dtoReq 请求参数
+     * @return {@link QuestionDtoResult}
      */
     PageDtoResult<QuestionDtoResult> queryQuestion(QueryQuestionDtoReq dtoReq);
     
@@ -75,7 +78,7 @@ public interface QuestionService extends IService<Question> {
      * @param questionId 问题 ID
      * @return 存在 : true | 不存在 : false
      */
-    CommonDtoResult<Boolean> verifyQuestion(Long questionId);
+    Boolean verifyQuestion(Long questionId);
     
     /**
      * 更新问题评论数
@@ -113,7 +116,7 @@ public interface QuestionService extends IService<Question> {
      * 获取问题名字
      *
      * @param questionIdList 问题 ID
-     * @return 问题名字
+     * @return 问题 ID-问题名字
      */
     Map<Long, String> questionName(List<Long> questionIdList);
     

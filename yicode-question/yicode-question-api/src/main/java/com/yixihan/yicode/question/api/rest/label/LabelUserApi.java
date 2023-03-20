@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.label;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelUserDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
@@ -24,11 +23,11 @@ public interface LabelUserApi {
     
     @ApiOperation("添加用户标签")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addUserLabel (@RequestBody ModifyLabelUserDtoReq dtoReq);
+    ApiResult<List<LabelDtoResult>> addUserLabel (@RequestBody ModifyLabelUserDtoReq dtoReq);
     
     @ApiOperation ("删除用户标签")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delUserLabel (@RequestBody ModifyLabelUserDtoReq dtoReq);
+    ApiResult<List<LabelDtoResult>> delUserLabel (@RequestBody ModifyLabelUserDtoReq dtoReq);
     
     @ApiOperation ("用户标签明细")
     @PostMapping(value = "/detail", produces = "application/json")

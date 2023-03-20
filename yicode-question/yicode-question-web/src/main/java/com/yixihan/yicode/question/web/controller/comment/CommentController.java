@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.web.controller.comment;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
@@ -28,27 +27,27 @@ public class CommentController implements CommentApi {
     private CommentRootService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addRootComment(AddRootCommentDtoReq dtoReq) {
+    public ApiResult<RootCommentDetailDtoResult> addRootComment(AddRootCommentDtoReq dtoReq) {
         return ApiResult.create (service.addRootComment (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addSonComment(AddSonCommentDtoReq dtoReq) {
+    public ApiResult<SonCommentDetailDtoResult> addSonComment(AddSonCommentDtoReq dtoReq) {
         return ApiResult.create (service.addSonComment (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delRootComment(Long rootCommentId) {
-        return ApiResult.create (service.delRootComment (rootCommentId));
+    public void delRootComment(Long rootCommentId) {
+        service.delRootComment (rootCommentId);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delSonComment(Long sunCommentId) {
-        return ApiResult.create (service.delSonComment (sunCommentId));
+    public void delSonComment(Long sunCommentId) {
+        service.delSonComment (sunCommentId);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Integer>> commentCount(QuestionCommentCountDtoReq dtoReq) {
+    public ApiResult<Integer> commentCount(QuestionCommentCountDtoReq dtoReq) {
         return ApiResult.create (service.commentCount (dtoReq));
     }
     
@@ -63,22 +62,22 @@ public class CommentController implements CommentApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeRootComment(LikeDtoReq dtoReq) {
-        return ApiResult.create (service.likeRootComment (dtoReq));
+    public void likeRootComment(LikeDtoReq dtoReq) {
+        service.likeRootComment (dtoReq);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeSonComment(LikeDtoReq dtoReq) {
-        return ApiResult.create (service.likeSonComment (dtoReq));
+    public void likeSonComment(LikeDtoReq dtoReq) {
+        service.likeSonComment (dtoReq);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyRootComment(Long rootCommentId) {
+    public ApiResult<Boolean> verifyRootComment(Long rootCommentId) {
         return ApiResult.create (service.verifyRootComment (rootCommentId));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifySonComment(Long sonCommentId) {
+    public ApiResult<Boolean> verifySonComment(Long sonCommentId) {
         return ApiResult.create (service.verifySonComment (sonCommentId));
     }
     

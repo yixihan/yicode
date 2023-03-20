@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.question;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.UserDailyQuestionDetailDtoReq;
@@ -25,11 +24,11 @@ public interface QuestionDailyUserApi {
 
     @ApiOperation ("添加每日一题用户做题情况")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addUserDailyQuestion (@RequestBody AddUserDailyQuestionDtoReq dtoReq);
+    ApiResult<UserDailyQuestionDtoResult> addUserDailyQuestion (@RequestBody AddUserDailyQuestionDtoReq dtoReq);
     
     @ApiOperation("获取用户连续做每日一题的天数")
     @PostMapping(value = "/count", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> dailyQuestionCount (@RequestBody Long userId);
+    ApiResult<Integer> dailyQuestionCount (@RequestBody Long userId);
     
     @ApiOperation ("查询用户每月每日一题情况")
     @PostMapping(value = "/query", produces = "application/json")

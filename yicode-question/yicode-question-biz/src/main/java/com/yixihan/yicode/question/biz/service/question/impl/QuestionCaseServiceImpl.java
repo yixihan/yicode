@@ -2,11 +2,10 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionCaseService;
@@ -29,52 +28,54 @@ import java.util.List;
 public class QuestionCaseServiceImpl extends ServiceImpl<QuestionCaseMapper, QuestionCase> implements QuestionCaseService {
     
     @Override
-    public CommonDtoResult<Boolean> addQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+    public QuestionCaseDtoResult addQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
         QuestionCase questionCase = BeanUtil.toBean (dtoReq, QuestionCase.class);
     
-        int modify = baseMapper.insert (questionCase);
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 保存
+        Assert.isTrue (save (questionCase), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        return BeanUtil.toBean (questionCase, QuestionCaseDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
+    public QuestionCaseDtoResult modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq) {
         QuestionCase questionCase = BeanUtil.toBean (dtoReq, QuestionCase.class);
-        questionCase.setVersion (baseMapper.selectById (dtoReq.getId ()).getVersion ());
     
-        int modify = baseMapper.updateById (questionCase);
+        // 获取乐观锁
+        Integer version = lambdaQuery ()
+                .select (QuestionCase::getVersion)
+                .eq (QuestionCase::getId, dtoReq.getId ())
+                .one ()
+                .getVersion ();
+        Assert.notNull (version, BizCodeEnum.ACCOUNT_NOT_FOUND);
+        questionCase.setVersion (version);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
-    }
-    
-    @Override
-    public CommonDtoResult<Boolean> delQuestionCase(Long id) {
-        int modify = baseMapper.deleteById (id);
+        // 更新
+        Assert.isTrue (updateById (questionCase), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return BeanUtil.toBean (getById (dtoReq.getId ()), QuestionCaseDtoResult.class);
+    }
+    
+    @Override
+    public void delQuestionCase(Long id) {
+        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public List<QuestionCaseDtoResult> allQuestionCase(Long questionId) {
-        List<QuestionCase> questionCaseList = baseMapper.selectList (new QueryWrapper<QuestionCase> ()
-                .eq (QuestionCase.QUESTION_ID, questionId)
-                .eq (QuestionCase.ENABLE, NumConstant.NUM_1));
-        
+        List<QuestionCase> questionCaseList = lambdaQuery ()
+                .eq (QuestionCase::getQuestionId, questionId)
+                .eq (QuestionCase::getEnable, NumConstant.NUM_1)
+                .orderByDesc (QuestionCase::getCreateTime)
+                .list ();
         questionCaseList = CollectionUtil.isEmpty (questionCaseList) ? Collections.emptyList () : questionCaseList;
+        
         return BeanUtil.copyToList (questionCaseList, QuestionCaseDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifyQuestionCase(Long id) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<QuestionCase> ()
-                .eq (QuestionCase.ID, id)) > 0);
+    public Boolean verifyQuestionCase(Long id) {
+        return lambdaQuery ()
+                .eq (QuestionCase::getId, id)
+                .count () > 0;
     }
 }

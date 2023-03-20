@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionCaseOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
@@ -26,18 +25,18 @@ public class QuestionCaseController implements QuestionCaseOpenApi {
     private QuestionCaseService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addQuestionCase(ModifyQuestionCaseReq req) {
+    public JsonResponse<QuestionCaseVO> addQuestionCase(ModifyQuestionCaseReq req) {
         return JsonResponse.ok (service.addQuestionCase (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> modifyQuestionCase(ModifyQuestionCaseReq req) {
+    public JsonResponse<QuestionCaseVO> modifyQuestionCase(ModifyQuestionCaseReq req) {
         return JsonResponse.ok (service.modifyQuestionCase (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delQuestionCase(Long id) {
-        return JsonResponse.ok (service.delQuestionCase (id));
+    public void delQuestionCase(Long id) {
+       service.delQuestionCase (id);
     }
     
     @Override

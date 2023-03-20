@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.api.rest.label;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
@@ -21,22 +22,25 @@ import java.util.List;
 @Api(tags = "标签 api")
 @RequestMapping("/label")
 public interface LabelApi {
-
-    @ApiOperation ("添加标签")
+    
+    @ApiOperation("添加标签")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addLabel (@RequestBody AddLabelDtoReq dtoReq);
+    ApiResult<LabelDtoResult> addLabel(@RequestBody AddLabelDtoReq dtoReq);
     
-    @ApiOperation ("删除标签")
+    @ApiOperation("删除标签")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delLabel (@RequestBody List<Long> labelIdList);
+    void delLabel(@RequestBody List<Long> labelIdList);
     
-    @ApiOperation ("标签明细")
+    @ApiOperation("标签明细")
     @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> labelDetail (@RequestBody List<Long> labelIdList);
+    ApiResult<List<LabelDtoResult>> labelDetail(@RequestBody List<Long> labelIdList);
+    
+    @ApiOperation("获取全部标签")
+    @PostMapping(value = "/all", produces = "application/json")
+    ApiResult<PageDtoResult<LabelDtoResult>> allLabel(@RequestBody PageDtoReq dtoReq);
     
     
-    
-    @ApiOperation ("校验标签")
+    @ApiOperation("校验标签")
     @PostMapping(value = "/verify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> verifyLabel (@RequestBody Long labelId);
+    ApiResult<Boolean> verifyLabel(@RequestBody Long labelId);
 }

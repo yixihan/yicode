@@ -4,12 +4,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.constant.SseEmitterConstant;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.question.openapi.biz.service.question.SseEmitterService;
+import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,21 +26,26 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class SseEmitterServiceImpl implements SseEmitterService {
     
+    @Resource
+    private UserService userService;
+    
     /**
      * 容器, 保存连接, 用于输出返回
      */
-    private static final Map<Long, SseEmitter> sseCache = new ConcurrentHashMap<> ();
+    private static final Map<Long, SseEmitter> SSE_CACHE = new ConcurrentHashMap<> ();
     
     @Override
-    public SseEmitter connectSse(Long userId) {
+    public SseEmitter connectSse() {
+        Long userId = userService.getUserId ();
+        
         // 设置超时时间, 0 表示不过期, 默认 30 秒, 超过时间未完成会抛出异常 : AsyncRequestTimeoutException
         SseEmitter sseEmitter = new SseEmitter(0L);
     
         // 注册回调
         sseEmitter.onCompletion(completionCallBack(userId));
         
-        sseCache.put(userId, sseEmitter);
-        log.info ("sseCache : {}",  sseCache);
+        SSE_CACHE.put(userId, sseEmitter);
+        log.info ("sseCache : {}", SSE_CACHE);
         log.info("创建新的sse连接，当前用户：{}", userId);
     
         try {
@@ -51,8 +58,9 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     }
     
     @Override
-    public void closeSse(Long userId) {
-        SseEmitter sseEmitter = sseCache.get(userId);
+    public void closeSse() {
+        Long userId = userService.getUserId ();
+        SseEmitter sseEmitter = SSE_CACHE.get(userId);
         if (sseEmitter != null) {
             sseEmitter.complete();
             removeUser(userId);
@@ -60,12 +68,13 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     }
     
     @Override
-    public void sendMsgToClient(Long userId, CodeRunDtoResult result) {
-        if (CollectionUtil.isEmpty(sseCache)) {
+    public void sendMsgToClient(CodeRunDtoResult result) {
+        Long userId = userService.getUserId ();
+        if (CollectionUtil.isEmpty(SSE_CACHE)) {
             return;
         }
         
-        if (sseCache.containsKey (userId)) {
+        if (SSE_CACHE.containsKey (userId)) {
             sendMsgToClientByClientId(userId, result);
         }
 
@@ -78,7 +87,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      * @param message 信息明细
      */
     private void sendMsgToClientByClientId(Long userId, CodeRunDtoResult message) {
-        SseEmitter sseEmitter = sseCache.get (userId);
+        SseEmitter sseEmitter = SSE_CACHE.get (userId);
     
         SseEmitter.SseEventBuilder sendData = SseEmitter.event()
                 .id(SseEmitterConstant.TASK_RESULT)
@@ -112,7 +121,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      * @date 2021/12/14
      */
     private void removeUser(Long userId) {
-        sseCache.remove(userId);
+        SSE_CACHE.remove(userId);
         log.info("SseEmitterServiceImpl[removeUser] : 移除用户 : {}", userId);
     }
     

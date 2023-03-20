@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.web.controller.label;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.label.LabelOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
@@ -26,13 +27,13 @@ public class LabelController implements LabelOpenApi {
     private LabelService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addLabel(AddLabelReq req) {
+    public JsonResponse<LabelVO> addLabel(AddLabelReq req) {
         return JsonResponse.ok (service.addLabel (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delLabel(List<Long> labelIdList) {
-        return JsonResponse.ok (service.delLabel (labelIdList));
+    public void delLabel(List<Long> labelIdList) {
+        service.delLabel (labelIdList);
     }
     
     @Override
@@ -51,12 +52,17 @@ public class LabelController implements LabelOpenApi {
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> AllNoteLabel() {
-        return JsonResponse.ok (service.AllNoteLabel ());
+    public JsonResponse<PageVO<LabelVO>> allLabel(PageReq req) {
+        return JsonResponse.ok (service.allLabel (req));
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> AllQuestionLabel() {
-        return JsonResponse.ok (service.AllQuestionLabel ());
+    public JsonResponse<List<LabelVO>> allNoteLabel() {
+        return JsonResponse.ok (service.allNoteLabel ());
+    }
+    
+    @Override
+    public JsonResponse<List<LabelVO>> allLabel() {
+        return JsonResponse.ok (service.allQuestionLabel ());
     }
 }

@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.note;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
@@ -28,23 +27,23 @@ public interface NoteApi {
     
     @ApiOperation("添加题解")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addNote (@RequestBody ModifyNoteDtoReq dtoReq);
+    ApiResult<NoteDtoResult> addNote (@RequestBody ModifyNoteDtoReq dtoReq);
     
     @ApiOperation("修改题解")
     @PostMapping(value = "/modify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> modifyNote (@RequestBody ModifyNoteDtoReq dtoReq);
+    ApiResult<NoteDtoResult> modifyNote (@RequestBody ModifyNoteDtoReq dtoReq);
     
     @ApiOperation("删除题解")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delNote (@RequestBody List<Long> noteIdList);
+    void delNote (@RequestBody List<Long> noteIdList);
     
     @ApiOperation("点赞题解")
     @PostMapping(value = "/like", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> likeNote (@RequestBody LikeDtoReq dtoReq);
+    void likeNote (@RequestBody LikeDtoReq dtoReq);
     
     @ApiOperation("获取问题题解总数")
     @PostMapping(value = "/count", produces = "application/json")
-    ApiResult<CommonDtoResult<Integer>> questionNoteCount(Long questionId);
+    ApiResult<Integer> questionNoteCount(Long questionId);
     
     @ApiOperation("查看题解")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -57,7 +56,7 @@ public interface NoteApi {
     
     @ApiOperation("校验题解 ID 是否存在")
     @PostMapping(value = "/verify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> verifyNote (@RequestBody Long noteId);
+    ApiResult<Boolean> verifyNote (@RequestBody Long noteId);
     
     @ApiOperation ("获取题解名字")
     @PostMapping(value = "/detail/name", produces = "application/json")

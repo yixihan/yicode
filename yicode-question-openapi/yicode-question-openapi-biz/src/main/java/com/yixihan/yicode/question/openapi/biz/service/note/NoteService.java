@@ -1,12 +1,12 @@
 package com.yixihan.yicode.question.openapi.biz.service.note;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
 
 import java.util.List;
@@ -23,61 +23,66 @@ public interface NoteService {
      * 添加题解
      *
      * @param req 请求参数
+     * @return {@link NoteVO}
      */
-    CommonVO<Boolean> addNote(ModifyNoteReq req);
+    NoteVO addNote(ModifyNoteReq req);
     
     /**
      * 修改题解
      *
      * @param req 请求参数
+     * @return {@link NoteVO}
      */
-    CommonVO<Boolean> modifyNote(ModifyNoteReq req);
+    NoteVO modifyNote(ModifyNoteReq req);
     
     /**
      * 删除题解
      *
      * @param noteIdList 题解 ID
      */
-    CommonVO<Boolean> delNote(List<Long> noteIdList);
+    void delNote(List<Long> noteIdList);
     
     /**
      * 点赞题解
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> likeNote(LikeReq req);
+    void likeNote(LikeReq req);
     /**
      * 收藏题解
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> collectionNote(ModifyCollectionReq req);
+    void collectionNote(ModifyCollectionReq req);
     
     /**
      * 取消收藏题解
      *
      * @param req 请求参数
      */
-    CommonVO<Boolean> cancelCollectionNote(ModifyCollectionReq req);
+    void cancelCollectionNote(ModifyCollectionReq req);
     
     /**
      * 添加题解标签
      *
      * @param req 请求参数
+     * @return {@link LabelVO}
      */
-    CommonVO<Boolean> addNoteLabel(ModifyLabelNoteReq req);
+    List<LabelVO> addNoteLabel(ModifyLabelNoteReq req);
     
     /**
      * 删除题解标签
      *
      * @param req 请求参数
+     * @return {@link LabelVO}
      */
-    CommonVO<Boolean> delNoteLabel(ModifyLabelNoteReq req);
+    List<LabelVO> delNoteLabel(ModifyLabelNoteReq req);
     
     /**
      * 题解明细
      *
      * @param noteId 题解 ID
+     * @return {@link NoteVO}
      */
     NoteVO noteDetail(Long noteId);
     
@@ -85,6 +90,7 @@ public interface NoteService {
      * 搜索题解
      *
      * @param req 请求参数
+     * @return {@link NoteVO}
      */
     PageVO<NoteVO> queryNote(QueryNoteReq req);
 }

@@ -4,12 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
+import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.comment.AddRootCommentDtoReq;
@@ -18,7 +18,6 @@ import com.yixihan.yicode.question.api.dto.request.comment.RootCommentDetailDtoR
 import com.yixihan.yicode.question.api.dto.request.comment.SonCommentDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.comment.RootCommentDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.comment.SonCommentDetailDtoResult;
-import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.LikeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.comment.AddRootCommentReq;
@@ -36,6 +35,7 @@ import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -77,235 +77,157 @@ public class CommentServiceImpl implements CommentService {
     private LikeService likeService;
     
     @Override
-    public CommonVO<Boolean> addRootComment(AddRootCommentReq req) {
+    public RootCommentDetailVO addRootComment(AddRootCommentReq req) {
         // 参数校验 (评论, 评论内容 ID)
-        if (StrUtil.isBlank (req.getContent ())) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
-        !noteFeignClient.verifyNote (req.getAnswerId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
-        !questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isFalse (StrUtil.isBlank (req.getContent ()));
+        Assert.isFalse (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
+                Boolean.FALSE.equals(noteFeignClient.verifyNote (req.getAnswerId ()).getResult ()));
+        Assert.isFalse (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
+                Boolean.FALSE.equals(questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ()));
         
         // 构建请求 body
         AddRootCommentDtoReq dtoReq = BeanUtil.toBean (req, AddRootCommentDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userService.getUserId ());
         
         // 添加父评论
-        CommonDtoResult<Boolean> dtoResult = commentFeignClient.addRootComment (dtoReq).getResult ();
-        
-        // 添加失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
+        RootCommentDetailDtoResult dtoResult = commentFeignClient.addRootComment (dtoReq).getResult ();
         
         if (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ())) {
             // 发送消息
-            AddMessageReq messageReq = new AddMessageReq ();
-            messageReq.setMessageType (MsgTypeEnums.REPLY.getType ());
-            messageReq.setSourceId (req.getAnswerId ());
-            messageReq.setReceiveUseId (noteFeignClient.noteDetail (req.getAnswerId ())
-                    .getResult ().getUserId ());
-            msgService.addMessage (messageReq);
+            sendMessage (MsgTypeEnums.REPLY, req.getAnswerId (),
+                    noteFeignClient.noteDetail (req.getAnswerId ()).getResult ().getUserId ());
         }
-        return CommonVO.create (dtoResult);
+        return BeanUtil.toBean (dtoResult, RootCommentDetailVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> addSonComment(AddSonCommentReq req) {
+    public SonCommentDetailVO addSonComment(AddSonCommentReq req) {
         // 参数校验 (id 是否存在 & 评论内容不能为空)
+        Assert.isFalse (StrUtil.isBlank (req.getContent ()));
+        Assert.isTrue (commentFeignClient.verifyRootComment (req.getRootId ()).getResult ());
         if (StrUtil.isBlank (req.getContent ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
-        if (!commentFeignClient.verifyRootComment (req.getRootId ()).getResult ().getData ()) {
+        if (Boolean.FALSE.equals (commentFeignClient.verifyRootComment (req.getRootId ()).getResult ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
     
         // 构建请求 body
         AddSonCommentDtoReq dtoReq = BeanUtil.toBean (req, AddSonCommentDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userService.getUserId ());
         
         // 添加子评论
-        CommonDtoResult<Boolean> dtoResult = commentFeignClient.addSonComment (dtoReq).getResult ();
-    
-        // 添加失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
+        SonCommentDetailDtoResult dtoResult = commentFeignClient.addSonComment (dtoReq).getResult ();
         
         // 添加成功, 发送消息
-        AddMessageReq messageReq = new AddMessageReq ();
-        messageReq.setMessageType (MsgTypeEnums.REPLY.getType ());
-        messageReq.setSourceId (req.getRootId ());
-        messageReq.setReceiveUseId (commentFeignClient.getRootComment (req.getRootId ()).getResult ().getUserId ());
-        msgService.addMessage (messageReq);
-        
-        return CommonVO.create (dtoResult);
+        sendMessage (MsgTypeEnums.REPLY, req.getRootId (), commentFeignClient.getRootComment (req.getRootId ()).getResult ().getUserId ());
+    
+        return BeanUtil.toBean (dtoResult, SonCommentDetailVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delRootComment(Long rootCommentId) {
+    public void delRootComment(Long rootCommentId) {
         // 参数校验 (id 是否存在)
-        if (!commentFeignClient.verifyRootComment (rootCommentId).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (commentFeignClient.verifyRootComment (rootCommentId).getResult ());
     
         // 删除父评论
-        CommonDtoResult<Boolean> dtoResult = commentFeignClient.delRootComment (rootCommentId).getResult ();
-    
-        // 删除失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        // 删除成功
-        return CommonVO.create (dtoResult);
+        commentFeignClient.delRootComment (rootCommentId);
     }
     
     @Override
-    public CommonVO<Boolean> delSonComment(Long sunCommentId) {
+    public void delSonComment(Long sunCommentId) {
         // 参数校验 (id 是否存在)
-        if (!commentFeignClient.verifySonComment (sunCommentId).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (commentFeignClient.verifySonComment (sunCommentId).getResult ());
         
         // 删除子评论
-        CommonDtoResult<Boolean> dtoResult = commentFeignClient.delSonComment (sunCommentId).getResult ();
-    
-        // 删除失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        // 删除成功
-        return CommonVO.create (dtoResult);
+        commentFeignClient.delSonComment (sunCommentId);
     }
     
     @Override
-    public CommonVO<Boolean> likeRootComment(LikeReq req) {
+    public void likeRootComment(LikeReq req) {
         // 参数校验 (id)
-        if (!commentFeignClient.verifyRootComment (req.getSourceId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (commentFeignClient.verifyRootComment (req.getSourceId ()).getResult ());
+        
         // 获取点赞人用户 ID
-        Long userId = userService.getUser ().getUserId ();
+        Long userId = userService.getUserId ();
         // 获取点赞情况
         Boolean isLike = likeService.isLike (ROOT_COMMENT_LIKE_KEY, req.getSourceId (), userId);
         
-        if (!req.getLike ()) {
+        if (Boolean.FALSE.equals (req.getLike ())) {
             // 取消点赞
             // 本身未点赞
-            if (!isLike) {
-                throw new BizException ("您已经取消点赞了");
-            }
+            Assert.isTrue (isLike, new BizException ("您已经取消点赞了"));
+            
             // 更新 redis
             Integer likeCount = likeService.unLike (ROOT_COMMENT_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
             LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeRootComment (dtoReq).getResult ();
-            
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
-            return CommonVO.create (dtoResult);
+            commentFeignClient.likeRootComment (dtoReq);
         } else {
             // 点赞
             // 本身已点赞
-            if (isLike) {
-                throw new BizException ("您已经点赞了");
-            }
+            Assert.isFalse (isLike, new BizException ("您已经点赞了"));
+            
             // 更新 redis
             Integer likeCount = likeService.like (ROOT_COMMENT_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
             LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeRootComment (dtoReq).getResult ();
-            
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
+            commentFeignClient.likeRootComment (dtoReq);
+
             // 点赞成功, 发送消息
             RootCommentDetailDtoResult rootComment = commentFeignClient
                     .getRootComment (req.getSourceId ()).getResult ();
             if (AnswerTypeEnums.NOTE.getType ().equals (rootComment.getAnswerType ())) {
-                AddMessageReq messageReq = new AddMessageReq ();
-                messageReq.setReceiveUseId (noteFeignClient.noteDetail (rootComment.getAnswerId ())
-                        .getResult ().getUserId ());
-                messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
-                messageReq.setSourceId (req.getSourceId ());
-                msgService.addMessage (messageReq);
+                sendMessage (MsgTypeEnums.LIKE, req.getSourceId (),
+                        noteFeignClient.noteDetail (rootComment.getAnswerId ()).getResult ().getUserId ());
             }
-            return CommonVO.create (dtoResult);
         }
     }
     
     @Override
-    public CommonVO<Boolean> likeSonComment(LikeReq req) {
+    public void likeSonComment(LikeReq req) {
         // 参数校验 (id)
-        if (!commentFeignClient.verifySonComment (req.getSourceId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (commentFeignClient.verifySonComment (req.getSourceId ()).getResult ());
+
         // 获取点赞人用户 ID
-        Long userId = userService.getUser ().getUserId ();
+        Long userId = userService.getUserId ();
         // 获取点赞情况
         Boolean isLike = likeService.isLike (SON_COMMENT_LIKE_KEY, req.getSourceId (), userId);
     
-        if (!req.getLike ()) {
+        if (Boolean.FALSE.equals (req.getLike ())) {
             // 取消点赞
             // 本身未点赞
-            if (!isLike) {
-                throw new BizException ("您已经取消点赞了");
-            }
+            Assert.isTrue (isLike, new BizException ("您已经取消点赞了"));
+            
             // 更新 redis
             Integer likeCount = likeService.unLike (SON_COMMENT_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
             LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeSonComment (dtoReq).getResult ();
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
-            return CommonVO.create (dtoResult);
+            commentFeignClient.likeSonComment (dtoReq);
         } else {
             // 点赞
             // 本身已点赞
-            if (isLike) {
-                throw new BizException ("您已经点赞了");
-            }
+            Assert.isFalse (isLike, new BizException ("您已经点赞了"));
+            
             // 更新 redis
             Integer likeCount = likeService.like (SON_COMMENT_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
             LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = commentFeignClient.likeSonComment (dtoReq).getResult ();
+            commentFeignClient.likeSonComment (dtoReq);
             
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
             // 点赞成功, 发送消息
-            AddMessageReq messageReq = new AddMessageReq ();
-            messageReq.setMessageType (MsgTypeEnums.LIKE.getType ());
-            messageReq.setSourceId (req.getSourceId ());
-            messageReq.setReceiveUseId (commentFeignClient.getSonComment (req.getSourceId ()).getResult ().getUserId ());
-            msgService.addMessage (messageReq);
-            return CommonVO.create (dtoResult);
+            sendMessage (MsgTypeEnums.LIKE, req.getSourceId (),
+                    commentFeignClient.getSonComment (req.getSourceId ()).getResult ().getUserId ());
         }
     }
     
     @Override
     public PageVO<RootCommentDetailVO> rootCommentDetail(RootCommentDetailReq req) {
         // 评论内容参数校验
-        if (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
-                !noteFeignClient.verifyNote (req.getAnswerId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
-                !questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isFalse (AnswerTypeEnums.NOTE.getType ().equals (req.getAnswerType ()) &&
+                Boolean.FALSE.equals(noteFeignClient.verifyNote (req.getAnswerId ()).getResult ()));
+        Assert.isFalse (AnswerTypeEnums.QUESTION.getType ().equals (req.getAnswerType ()) &&
+                Boolean.FALSE.equals(questionFeignClient.verifyQuestion (req.getAnswerId ()).getResult ()));
         
         // 构建请求 body
         RootCommentDetailDtoReq dtoReq = BeanUtil.toBean (req, RootCommentDetailDtoReq.class);
@@ -316,10 +238,9 @@ public class CommentServiceImpl implements CommentService {
         // 转为 PageVO 格式
         PageVO<RootCommentDetailVO> pageVO = PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, RootCommentDetailVO.class)
+                o -> BeanUtil.toBean (o, RootCommentDetailVO.class)
                 
         );
-        
         
         if (CollectionUtil.isEmpty (pageVO.getRecords ())) {
             return pageVO;
@@ -331,8 +252,8 @@ public class CommentServiceImpl implements CommentService {
                 .collect (Collectors.toList ());
         userIdList.addAll (pageVO.getRecords ().stream ()
                 .map (RootCommentDetailVO::getSonCommentDetailList)
-                .flatMap ((o) -> o.stream ()
-                        .flatMap ((item) -> Stream.of (item.getUserId (), item.getReplyUserId ())))
+                .flatMap (o -> o.stream ()
+                        .flatMap (item -> Stream.of (item.getUserId (), item.getReplyUserId ())))
                 .collect(Collectors.toList()));
         Map<Long, UserCommonDtoResult> commonInfoMap = userService.getUserCommonInfo (userIdList).stream ()
                 .collect (Collectors.toMap (
@@ -341,11 +262,11 @@ public class CommentServiceImpl implements CommentService {
                         (k1, k2) -> k1));
     
         // 设置用户名, 头像等信息
-        pageVO.getRecords ().forEach ((root) -> {
+        pageVO.getRecords ().parallelStream ().forEach (root -> {
             UserCommonDtoResult rootUser = commonInfoMap.get (root.getUserId ());
             root.setUserName (rootUser.getUserName ());
             root.setUserAvatar (rootUser.getUserAvatar ());
-            root.getSonCommentDetailList ().forEach ((son) -> {
+            root.getSonCommentDetailList ().parallelStream ().forEach (son -> {
                 UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
                 son.setUserName (sunCommentUser.getUserName ());
                 UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
@@ -358,9 +279,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public PageVO<SonCommentDetailVO> sonCommentDetail(SonCommentDetailReq req) {
         // 参数校验 (rootId)
-        if (!commentFeignClient.verifyRootComment (req.getRootId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (commentFeignClient.verifyRootComment (req.getRootId ()).getResult ());
         
         // 构建请求 body
         SonCommentDetailDtoReq dtoReq = BeanUtil.toBean (req, SonCommentDetailDtoReq.class);
@@ -370,7 +289,7 @@ public class CommentServiceImpl implements CommentService {
     
         PageVO<SonCommentDetailVO> pageVO = PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, SonCommentDetailVO.class)
+                o -> BeanUtil.toBean (o, SonCommentDetailVO.class)
         );
     
         if (CollectionUtil.isEmpty (pageVO.getRecords ())) {
@@ -379,7 +298,7 @@ public class CommentServiceImpl implements CommentService {
     
         // 获取用户通用信息
         List<Long> userIdList = pageVO.getRecords ().stream ()
-                .flatMap (((item) -> Stream.of (item.getReplyUserId (), item.getReplyUserId ())))
+                .flatMap ((item -> Stream.of (item.getReplyUserId (), item.getReplyUserId ())))
                 .collect (Collectors.toList ());
         Map<Long, UserCommonDtoResult> commonInfoMap = userService.getUserCommonInfo (userIdList).stream ()
                 .collect (Collectors.toMap (
@@ -388,12 +307,28 @@ public class CommentServiceImpl implements CommentService {
                         (k1, k2) -> k1));
         
         // 设置用户名, 头像等信息
-        pageVO.getRecords ().forEach ((son) -> {
+        pageVO.getRecords ().parallelStream ().forEach (son -> {
             UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
             son.setUserName (sunCommentUser.getUserName ());
             UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
             son.setReplyUserName (sunReplyUser.getUserName ());
         });
         return pageVO;
+    }
+    
+    /**
+     * 通用-发送信息
+     *
+     * @param type 消息类型
+     * @param sourceId 发送消息对应 id
+     * @param userId 接收者用户 id
+     */
+    @Async
+    public void sendMessage(MsgTypeEnums type, Long sourceId, Long userId) {
+        AddMessageReq messageReq = new AddMessageReq ();
+        messageReq.setMessageType (type.getType ());
+        messageReq.setSourceId (sourceId);
+        messageReq.setReceiveUseId (userId);
+        msgService.addMessage (messageReq);
     }
 }

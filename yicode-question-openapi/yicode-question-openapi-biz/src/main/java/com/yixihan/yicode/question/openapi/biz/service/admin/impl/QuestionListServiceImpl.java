@@ -2,11 +2,8 @@ package com.yixihan.yicode.question.openapi.biz.service.admin.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
-import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
@@ -16,6 +13,7 @@ import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserFavoriteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.admin.QuestionListService;
+import com.yixihan.yicode.question.openapi.biz.service.question.QuestionService;
 import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
@@ -41,82 +39,66 @@ public class QuestionListServiceImpl implements QuestionListService {
     @Resource
     private UserCollectionFeignClient collectionFeignClient;
     
+    @Resource
+    private QuestionService questionService;
+    
     private static final Long USER_ID = 1L;
     
     @Override
-    public CommonVO<Boolean> createQuestionList(ModifyQuestionListReq req) {
+    public QuestionListVO createQuestionList(ModifyQuestionListReq req) {
         AddFavoriteDtoReq dtoReq = new AddFavoriteDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteType (FavoriteTypeEnums.QUESTION.name ());
         dtoReq.setFavoriteName (req.getQuestionListName ());
         dtoReq.setFavoriteBg (req.getQuestionListBg ());
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
         
-        if (Boolean.FALSE.equals (dtoResult.getData ())) {
-            throw new BizException (dtoResult.getMessage ());
-        }
+        // 保存
+        FavoriteDtoResult dtoResult = favoriteFeignClient.addFavorite (dtoReq).getResult ();
         
-        return CommonVO.create (dtoResult);
+        return BeanUtil.toBean (dtoResult, QuestionListVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> ModifyQuestionListReq(ModifyQuestionListReq req) {
+    public QuestionListVO modifyQuestionListReq(ModifyQuestionListReq req) {
         ModifyFavoriteDtoReq dtoReq = new ModifyFavoriteDtoReq ();
         dtoReq.setFavoriteId (req.getId ());
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteName (req.getQuestionListName ());
         dtoReq.setFavoriteBg (req.getQuestionListBg ());
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
-    
-        if (Boolean.FALSE.equals (dtoResult.getData ())) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        return CommonVO.create (dtoResult);
+        
+        // 更新
+        FavoriteDtoResult dtoResult = favoriteFeignClient.modifyFavorite (dtoReq).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionListVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delQuestionList(Long id) {
-        ModifyFavoriteDtoReq dtoReq = new ModifyFavoriteDtoReq ();
-        dtoReq.setFavoriteId (id);
-        dtoReq.setUserId (USER_ID);
-        CommonDtoResult<Boolean> dtoResult = favoriteFeignClient.delFavorite (dtoReq).getResult ();
-    
-        if (Boolean.FALSE.equals (dtoResult.getData ())) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        return CommonVO.create (dtoResult);
+    public void delQuestionList(Long id) {
+        favoriteFeignClient.delFavorite (id);
     }
     
     @Override
-    public CommonVO<Boolean> addListQuestion(ModifyListQuestionReq req) {
+    public QuestionVO addListQuestion(ModifyListQuestionReq req) {
         ModifyCollectionDtoReq dtoReq = new ModifyCollectionDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (req.getId ());
         dtoReq.setCollectionId (req.getQuestionId ());
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.addCollection (dtoReq).getResult ();
-    
-        if (Boolean.FALSE.equals (dtoResult.getData ())) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        return CommonVO.create (dtoResult);
+        
+        // 添加
+        collectionFeignClient.addCollection (dtoReq);
+        
+        return questionService.questionDetail (req.getQuestionId ());
     }
     
     @Override
-    public CommonVO<Boolean> delListQuestion(ModifyListQuestionReq req) {
+    public void delListQuestion(ModifyListQuestionReq req) {
         ModifyCollectionDtoReq dtoReq = new ModifyCollectionDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (req.getId ());
         dtoReq.setCollectionId (req.getQuestionId ());
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
-    
-        if (Boolean.FALSE.equals (dtoResult.getData ())) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-    
-        return CommonVO.create (dtoResult);
+        
+        // 删除
+        collectionFeignClient.delCollection (dtoReq);
     }
     
     @Override
@@ -134,26 +116,23 @@ public class QuestionListServiceImpl implements QuestionListService {
     
     @Override
     public List<QuestionListVO> questionListList() {
-        FavoriteQueryDtoReq dtoReq = new FavoriteQueryDtoReq ();
-        dtoReq.setPage (1L);
-        dtoReq.setPageSize (10000L);
-        dtoReq.setUserId (USER_ID);
+        PageReq req = new PageReq ();
+        req.setPage (1L);
+        req.setPageSize (100000L);
+        req.setSearchCount (Boolean.FALSE);
     
-        PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
-    
-        return BeanUtil.copyToList (dtoResult.getRecords (), QuestionListVO.class);
+        return questionListPage (req).getRecords ();
     }
     
     @Override
     public PageVO<QuestionVO> questionPage(Long id) {
         CollectionQueryDtoReq dtoReq = new CollectionQueryDtoReq ();
-        dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (id);
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                o -> BeanUtil.toBean (o, QuestionVO.class)
+                o -> questionService.questionDetail (o.getCollectionId ())
         );
     }
 }

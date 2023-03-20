@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionCase;
@@ -22,27 +21,30 @@ public interface QuestionCaseService extends IService<QuestionCase> {
      * 添加测试用例
      *
      * @param dtoReq 请求参数
+     * @return {@link QuestionCaseDtoResult}
      */
-    CommonDtoResult<Boolean> addQuestionCase(ModifyQuestionCaseDtoReq dtoReq);
+    QuestionCaseDtoResult addQuestionCase(ModifyQuestionCaseDtoReq dtoReq);
     
     /**
      * 修改测试用例
      *
      * @param dtoReq 请求参数
+     * @return {@link QuestionCaseDtoResult}
      */
-    CommonDtoResult<Boolean> modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq);
+    QuestionCaseDtoResult modifyQuestionCase(ModifyQuestionCaseDtoReq dtoReq);
     
     /**
      * 删除测试用例
      *
      * @param id 测试用例 ID
      */
-    CommonDtoResult<Boolean> delQuestionCase(Long id);
+    void delQuestionCase(Long id);
     
     /**
      * 获取测试用例
      *
      * @param questionId 问题 ID
+     * @return {@link QuestionCaseDtoResult}
      */
     List<QuestionCaseDtoResult> allQuestionCase(Long questionId);
     
@@ -50,6 +52,7 @@ public interface QuestionCaseService extends IService<QuestionCase> {
      * 校验测试用例
      *
      * @param id 测试用例 ID
+     * @return 存在 : true | 不存在 : false
      */
-    CommonDtoResult<Boolean> verifyQuestionCase(Long id);
+    Boolean verifyQuestionCase(Long id);
 }

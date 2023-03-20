@@ -5,17 +5,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
 import com.yixihan.yicode.common.enums.question.QuestionDifficultyTypeEnums;
-import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult;
@@ -24,6 +23,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
@@ -77,226 +77,150 @@ public class QuestionServiceImpl implements QuestionService {
     private LabelQuestionFeignClient labelQuestionFeignClient;
     
     @Override
-    public CommonVO<Boolean> addQuestion(ModifyQuestionReq req) {
+    public QuestionDetailVO addQuestion(ModifyQuestionReq req) {
         // 参数校验
-        if (!QuestionDifficultyTypeEnums.contains (req.getQuestionDifficulty ()) ||
-                StrUtil.isBlank (req.getQuestionName ()) ||
-                StrUtil.isBlank (req.getQuestionDesc ())) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (QuestionDifficultyTypeEnums.contains (req.getQuestionDifficulty ()));
+        Assert.isFalse (StrUtil.isBlank (req.getQuestionName ()));
+
         // 构建请求 body
         ModifyQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyQuestionDtoReq.class);
         
         // 添加题目
-        CommonDtoResult<Boolean> dtoResult = questionFeignClient.addQuestion (dtoReq).getResult ();
-    
-        // 如果添加失败, 抛出异常
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        QuestionDetailDtoResult dtoResult = questionFeignClient.addQuestion (dtoReq).getResult ();
+
+        return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> modifyQuestion(ModifyQuestionReq req) {
+    public QuestionDetailVO modifyQuestion(ModifyQuestionReq req) {
         // 参数校验
-        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (!QuestionDifficultyTypeEnums.contains (req.getQuestionDifficulty ()) ||
-                StrUtil.isBlank (req.getQuestionName ()) ||
-                StrUtil.isBlank (req.getQuestionDesc ())) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
+        Assert.isTrue (QuestionDifficultyTypeEnums.contains (req.getQuestionDifficulty ()));
+        Assert.isFalse (StrUtil.isBlank (req.getQuestionName ()));
+        Assert.isFalse (StrUtil.isBlank (req.getQuestionDesc ()));
         
         // 构建请求 body
         ModifyQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyQuestionDtoReq.class);
     
         // 修改题目
-        CommonDtoResult<Boolean> dtoResult = questionFeignClient.modifyQuestion (dtoReq).getResult ();
+        QuestionDetailDtoResult dtoResult = questionFeignClient.modifyQuestion (dtoReq).getResult ();
     
-        // 如果修改失败, 抛出异常
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delQuestion(List<Long> questionIdList) {
+    public void delQuestion(List<Long> questionIdList) {
         // 参数校验
-        if (CollectionUtil.isEmpty (questionIdList)) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isFalse (CollectionUtil.isEmpty (questionIdList));
         
         // 删除题目
-        CommonDtoResult<Boolean> dtoResult = questionFeignClient.delQuestion (questionIdList).getResult ();
-    
-        // 如果删除失败, 抛出异常
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+       questionFeignClient.delQuestion (questionIdList);
     }
     
     @Override
-    public CommonVO<Boolean> likeQuestion(LikeReq req) {
+    public void likeQuestion(LikeReq req) {
         // 参数校验 (id)
-        if (!questionFeignClient.verifyQuestion (req.getSourceId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getSourceId ()).getResult ());
         // 获取点赞人用户 ID
-        Long userId = userService.getUser ().getUserId ();
+        Long userId = userService.getUserId ();
         // 获取点赞情况
         Boolean isLike = likeService.isLike (QUESTION_LIKE_KEY, req.getSourceId (), userId);
     
-        if (!req.getLike ()) {
+        if (Boolean.FALSE.equals (req.getLike ())) {
             // 取消点赞
             // 本身未点赞
-            if (!isLike) {
-                throw new BizException ("您已经取消点赞了");
-            }
+            Assert.isTrue (isLike, new BizException ("您已经取消点赞了"));
+
             // 更新 redis
             Integer likeCount = likeService.unLike (QUESTION_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
-            LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = questionFeignClient.likeQuestion (dtoReq).getResult ();
-            
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
-            return CommonVO.create (dtoResult);
+            LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);questionFeignClient.likeQuestion (dtoReq);
         } else {
             // 点赞
             // 本身已点赞
-            if (isLike) {
-                throw new BizException ("您已经点赞了");
-            }
+            Assert.isFalse (isLike, new BizException ("您已经点赞了"));
+            
             // 更新 redis
             Integer likeCount = likeService.like (QUESTION_LIKE_KEY, req.getSourceId (), userId);
             // 更新数据库
             LikeDtoReq dtoReq = new LikeDtoReq (userId, req.getSourceId (), likeCount);
-            CommonDtoResult<Boolean> dtoResult = questionFeignClient.likeQuestion (dtoReq).getResult ();
-        
-            if (!dtoResult.getData ()) {
-                throw new BizException (dtoResult.getMessage ());
-            }
-            return CommonVO.create (dtoResult);
+            questionFeignClient.likeQuestion (dtoReq);
         }
     }
     
     @Override
-    public CommonVO<Boolean> collectionQuestion(ModifyCollectionReq req) {
-        Long userId = userService.getUser ().getUserId ();
+    public void collectionQuestion(ModifyCollectionReq req) {
         // 校验收藏夹类型
         VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
                 req.getFavoriteId (),
                 AnswerTypeEnums.QUESTION.getType ()
         );
-        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ());
         // 校验收藏内容 ID
-        if (!questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ());
     
         // 构造请求 body
         ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
-        dtoReq.setUserId (userId);
+        dtoReq.setUserId (userService.getUserId ());
         
         // 收藏内容
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.addCollection (dtoReq).getResult ();
-    
-        // 如果操作失败, 排除异常原因
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        collectionFeignClient.addCollection (dtoReq);
     }
     
     @Override
-    public CommonVO<Boolean> cancelCollectionQuestion(ModifyCollectionReq req) {
-        Long userId = userService.getUser ().getUserId ();
+    public void cancelCollectionQuestion(ModifyCollectionReq req) {
         // 校验收藏夹类型
         VerifyFavoriteTypeDtoReq verifyFavoriteTypeDtoReq = new VerifyFavoriteTypeDtoReq (
                 req.getFavoriteId (),
                 AnswerTypeEnums.QUESTION.getType ()
         );
-        if (!favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (favoriteFeignClient.verifyFavoriteType (verifyFavoriteTypeDtoReq).getResult ());
         // 校验收藏内容 ID
-        if (!questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getCollectionId ()).getResult ());
+
         
         // 构造请求 body
         ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
-        dtoReq.setUserId (userId);
+        dtoReq.setUserId (userService.getUserId ());
         
         // 取消收藏内容
-        CommonDtoResult<Boolean> dtoResult = collectionFeignClient.delCollection (dtoReq).getResult ();
-    
-        // 如果操作失败, 排除异常原因
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        collectionFeignClient.delCollection (dtoReq);
     }
     
     @Override
-    public CommonVO<Boolean> addQuestionLabel(ModifyLabelQuestionReq req) {
+    public List<LabelVO> addQuestionLabel(ModifyLabelQuestionReq req) {
         // 校验参数
-        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
     
         // 构造请求 body
         ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
     
         // 添加题解标签
-        CommonDtoResult<Boolean> dtoResult = labelQuestionFeignClient.addQuestionLabel (dtoReq).getResult ();
-    
-        // 如果操作失败, 排除异常原因
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        List<LabelDtoResult> dtoResult = labelQuestionFeignClient.addQuestionLabel (dtoReq).getResult ();
+        
+        return BeanUtil.copyToList (dtoResult, LabelVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delQuestionLabel(ModifyLabelQuestionReq req) {
+    public List<LabelVO> delQuestionLabel(ModifyLabelQuestionReq req) {
         // 校验参数
-        if (!labelFeignClient.verifyLabel (req.getLabelId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
     
         // 构造请求 body
         ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
     
         // 添加题解标签
-        CommonDtoResult<Boolean> dtoResult = labelQuestionFeignClient.delQuestionLabel (dtoReq).getResult ();
-    
-        // 如果操作失败, 排除异常原因
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        List<LabelDtoResult> dtoResult = labelQuestionFeignClient.delQuestionLabel (dtoReq).getResult ();
+        
+        return BeanUtil.copyToList (dtoResult, LabelVO.class);
     }
     
     @Override
     public QuestionDetailVO questionDetail(Long questionId) {
         // 参数校验
-        if (!questionFeignClient.verifyQuestion (questionId).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (questionId).getResult ());
         
         // 获取问题明细
         QuestionDetailDtoResult dtoResult = questionFeignClient.questionDetail (questionId).getResult ();
@@ -315,7 +239,7 @@ public class QuestionServiceImpl implements QuestionService {
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, QuestionVO.class)
+                o -> BeanUtil.toBean (o, QuestionVO.class)
         );
     }
     

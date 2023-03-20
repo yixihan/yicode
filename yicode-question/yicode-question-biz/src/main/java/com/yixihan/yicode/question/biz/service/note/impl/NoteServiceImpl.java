@@ -1,12 +1,12 @@
 package com.yixihan.yicode.question.biz.service.note.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
@@ -39,106 +39,103 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     private QuestionService questionService;
     
     @Override
-    public CommonDtoResult<Boolean> addNote(ModifyNoteDtoReq dtoReq) {
+    public NoteDtoResult addNote(ModifyNoteDtoReq dtoReq) {
         Note note = BeanUtil.toBean (dtoReq, Note.class);
     
-        int modify = baseMapper.insert (note);
-        
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+        // 保存
+        Assert.isTrue (save (note), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
         // 异步更新问题题解数
         modifyQuestionNoteCount(dtoReq.getQuestionId ());
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return BeanUtil.toBean (note, NoteDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> modifyNote(ModifyNoteDtoReq dtoReq) {
+    public NoteDtoResult modifyNote(ModifyNoteDtoReq dtoReq) {
         Note note = BeanUtil.toBean (dtoReq, Note.class);
+        // 获取乐观锁
+        Integer version = lambdaQuery ()
+                .select (Note::getVersion)
+                .eq (Note::getNoteId, dtoReq.getNoteId ())
+                .one ()
+                .getVersion ();
+        Assert.notNull (version, new BizException ("该题解不存在！"));
+        note.setVersion (version);
     
-        int modify = baseMapper.updateById (note);
+        // 更新
+        Assert.isTrue (updateById (note), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return noteDetail (dtoReq.getNoteId ());
     }
     
     @Override
-    public CommonDtoResult<Boolean> delNote(List<Long> noteIdList) {
+    public void delNote(List<Long> noteIdList) {
         List<Note> noteList = baseMapper.selectBatchIds (noteIdList);
-        int modify = baseMapper.deleteBatchIds (noteIdList);
-        
-        if (modify < 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
+    
+        // 删除
+        Assert.isTrue (removeByIds (noteIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
         // 异步更新问题题解数
-        noteList.forEach ((item) -> modifyQuestionNoteCount(item.getQuestionId ()));
-        return new CommonDtoResult<> (Boolean.TRUE);
+        noteList.parallelStream ().forEach (item -> modifyQuestionNoteCount(item.getQuestionId ()));
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeNote(LikeDtoReq dtoReq) {
-        Note note = baseMapper.selectById (dtoReq.getSourceId ());
+    public void likeNote(LikeDtoReq dtoReq) {
+        Note note = getById (dtoReq.getSourceId ());
         note.setLikeCount (dtoReq.getLikeCount ());
-        
     
-        int modify = baseMapper.updateById (note);
-    
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 更新
+        Assert.isTrue (updateById (note), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
-    public CommonDtoResult<Integer> questionNoteCount(Long questionId) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Note> ()
-                .eq (Note.QUESTION_ID, questionId)));
+    public Integer questionNoteCount(Long questionId) {
+        return lambdaQuery ()
+                .eq (Note::getQuestionId, questionId)
+                .count ();
     }
     
     @Override
     public NoteDtoResult noteDetail(Long noteId) {
         Note note = baseMapper.selectById (noteId);
         
-        if (note != null) {
-            note.setReadCount (note.getReadCount () + 1);
-            baseMapper.updateById (note);
-            return BeanUtil.toBean (note, NoteDtoResult.class);
-        }
+        Assert.notNull (note, new BizException ("该题解不存在!"));
         
-        return new NoteDtoResult ();
+        // 更新阅读数
+        note.setReadCount (note.getReadCount () + 1);
+        Assert.isTrue (updateById (note), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        return BeanUtil.toBean (note, NoteDtoResult.class);
     }
     
     @Override
     public PageDtoResult<NoteDtoResult> queryNote(QueryNoteDtoReq dtoReq) {
-        Page<NoteDtoResult> dtoResultPage = baseMapper.queryNote (dtoReq,
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()));
+        Page<NoteDtoResult> dtoResultPage = baseMapper.queryNote (dtoReq, PageUtil.toPage (dtoReq));
     
         return PageUtil.pageToPageDtoResult (
                 dtoResultPage,
-                (o) -> BeanUtil.toBean (o, NoteDtoResult.class)
+                o -> BeanUtil.toBean (o, NoteDtoResult.class)
         );
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifyNote(Long noteId) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Note> ()
-                .eq (Note.NOTE_ID, noteId)) > 0);
+    public Boolean verifyNote(Long noteId) {
+        return lambdaQuery ()
+                .eq (Note::getNoteId, noteId)
+                .count () > 0;
     }
     
     @Override
     public void modifyNoteCommentCount(Long noteId, Integer commentCount) {
-        Note note = baseMapper.selectById (noteId);
+        Note note = getById (noteId);
         note.setCommentCount (commentCount);
-        
-        baseMapper.updateById (note);
+    
+        Assert.isTrue (updateById (note), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public Map<Long, String> noteName(List<Long> noteIdList) {
-        return baseMapper.selectBatchIds (noteIdList).stream ()
+        return listByIds (noteIdList)
+                .stream ()
                 .collect (Collectors.toMap (
                         Note::getNoteId,
                         Note::getNoteName,
@@ -148,7 +145,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     
     @Async
     public void modifyQuestionNoteCount (Long questionId) {
-        Integer count = questionNoteCount(questionId).getData ();
+        Integer count = questionNoteCount(questionId);
         
         questionService.modifyQuestionNoteCount (questionId, count);
     }

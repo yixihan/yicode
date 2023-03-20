@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.web.controller.note;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.note.NoteOpenApi;
@@ -9,6 +8,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.ModifyNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.note.QueryNoteReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.note.NoteVO;
 import com.yixihan.yicode.question.openapi.biz.service.note.NoteService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,42 +31,42 @@ public class NoteController implements NoteOpenApi {
     private NoteService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addNote(ModifyNoteReq req) {
+    public JsonResponse<NoteVO> addNote(ModifyNoteReq req) {
         return JsonResponse.ok (service.addNote (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> modifyNote(ModifyNoteReq req) {
+    public JsonResponse<NoteVO> modifyNote(ModifyNoteReq req) {
         return JsonResponse.ok (service.modifyNote (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delNote(List<Long> noteIdList) {
-        return JsonResponse.ok (service.delNote (noteIdList));
+    public void delNote(List<Long> noteIdList) {
+        service.delNote (noteIdList);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> likeNote(LikeReq req) {
-        return JsonResponse.ok (service.likeNote (req));
+    public void likeNote(LikeReq req) {
+        service.likeNote (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> collectionNote(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.collectionNote (req));
+    public void collectionNote(ModifyCollectionReq req) {
+        service.collectionNote (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> cancelCollectionNote(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.cancelCollectionNote (req));
+    public void cancelCollectionNote(ModifyCollectionReq req) {
+        service.cancelCollectionNote (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addNoteLabel(ModifyLabelNoteReq req) {
+    public JsonResponse<List<LabelVO>> addNoteLabel(ModifyLabelNoteReq req) {
         return JsonResponse.ok (service.addNoteLabel (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delNoteLabel(ModifyLabelNoteReq req) {
+    public JsonResponse<List<LabelVO>> delNoteLabel(ModifyLabelNoteReq req) {
         return JsonResponse.ok (service.delNoteLabel (req));
     }
     

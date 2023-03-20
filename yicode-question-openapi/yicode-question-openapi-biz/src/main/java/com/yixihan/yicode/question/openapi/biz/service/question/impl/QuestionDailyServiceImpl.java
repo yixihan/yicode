@@ -1,10 +1,9 @@
 package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.question.api.dto.request.question.UserDailyQuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.UserDailyQuestionDtoResult;
@@ -41,11 +40,11 @@ public class QuestionDailyServiceImpl implements QuestionDailyService {
     @Resource
     private UserService userService;
     
-    private static final String DATE_FORMAT = "yyyy-MM";
-    
     @Override
     public List<QuestionDailyVO> dailyQuestionDetail(String month) {
-        Date date =StrUtil.isBlank (month) ? new Date () :  DateUtil.parse (month, DATE_FORMAT);
+        Date date =StrUtil.isBlank (month) ?
+                new Date () :
+                DateUtil.parse (month, DatePattern.NORM_MONTH_PATTERN);
     
         List<QuestionDailyDtoResult> dtoResultList = questionDailyFeignClient.dailyQuestionDetail (date).getResult ();
         
@@ -53,20 +52,18 @@ public class QuestionDailyServiceImpl implements QuestionDailyService {
     }
     
     @Override
-    public CommonVO<Integer> dailyQuestionCount() {
+    public Integer dailyQuestionCount() {
         // 获取用户 ID
-        Long userId = userService.getUser ().getUserId ();
+        Long userId = userService.getUserId ();
     
         // 获取数据
-        CommonDtoResult<Integer> dtoResult = questionDailyUserFeignClient.dailyQuestionCount (userId).getResult ();
-        
-        return CommonVO.create (dtoResult);
+        return questionDailyUserFeignClient.dailyQuestionCount (userId).getResult ();
     }
     
     @Override
     public List<UserDailyQuestionVO> userDailyQuestionDetail(UserDailyQuestionDetailReq req) {
         // 规范参数
-        String month = DateUtil.format (new Date (), DATE_FORMAT);
+        String month = DateUtil.format (new Date (), DatePattern.NORM_MONTH_PATTERN);
         if (StrUtil.isBlank (req.getStartMonth ())) {
             req.setStartMonth (month);
         }

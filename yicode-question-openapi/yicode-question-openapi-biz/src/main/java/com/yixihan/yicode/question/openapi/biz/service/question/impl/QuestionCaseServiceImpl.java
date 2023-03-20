@@ -3,10 +3,7 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.NumConstant;
-import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
@@ -37,14 +34,11 @@ public class QuestionCaseServiceImpl implements QuestionCaseService {
     private QuestionCaseFeignClient questionCaseFeignClient;
     
     @Override
-    public CommonVO<Boolean> addQuestionCase(ModifyQuestionCaseReq req) {
+    public QuestionCaseVO addQuestionCase(ModifyQuestionCaseReq req) {
         // 参数校验
-        if (!questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (StrUtil.isBlank (req.getCaseParams ()) || StrUtil.isBlank (req.getCaseAnswer ())) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
+        Assert.isFalse (StrUtil.isBlank (req.getCaseParams ()));
+        Assert.isFalse (StrUtil.isBlank (req.getCaseAnswer ()));
         
         // 构建请求 body
         ModifyQuestionCaseDtoReq dtoReq = BeanUtil.toBean (req, ModifyQuestionCaseDtoReq.class);
@@ -52,62 +46,41 @@ public class QuestionCaseServiceImpl implements QuestionCaseService {
         dtoReq.setEnable (NumConstant.NUM_0);
         
         // 添加测试用例
-        CommonDtoResult<Boolean> dtoResult = questionCaseFeignClient.addQuestionCase (dtoReq).getResult ();
-    
-        // 如果操作失败
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        QuestionCaseDtoResult dtoResult = questionCaseFeignClient.addQuestionCase (dtoReq).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionCaseVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> modifyQuestionCase(ModifyQuestionCaseReq req) {
+    public QuestionCaseVO modifyQuestionCase(ModifyQuestionCaseReq req) {
         // 参数校验
-        if (!questionCaseFeignClient.verifyQuestionCase (req.getId ()).getResult ().getData () ||
-                !questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        if (StrUtil.isBlank (req.getCaseParams ()) || StrUtil.isBlank (req.getCaseAnswer ())) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionCaseFeignClient.verifyQuestionCase (req.getId ()).getResult ());
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
+        Assert.isFalse (StrUtil.isBlank (req.getCaseParams ()));
+        Assert.isFalse (StrUtil.isBlank (req.getCaseAnswer ()));
     
         // 构建请求 body
         ModifyQuestionCaseDtoReq dtoReq = BeanUtil.toBean (req, ModifyQuestionCaseDtoReq.class);
     
         // 修改测试用例
-        CommonDtoResult<Boolean> dtoResult = questionCaseFeignClient.modifyQuestionCase (dtoReq).getResult ();
-    
-        // 如果操作失败
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        QuestionCaseDtoResult dtoResult = questionCaseFeignClient.modifyQuestionCase (dtoReq).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionCaseVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delQuestionCase(Long id) {
+    public void delQuestionCase(Long id) {
         // 参数校验
-        if (!questionCaseFeignClient.verifyQuestionCase (id).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionCaseFeignClient.verifyQuestionCase (id).getResult ());
         
-        // 修改测试用例
-        CommonDtoResult<Boolean> dtoResult = questionCaseFeignClient.delQuestionCase (id).getResult ();
-    
-        // 如果操作失败
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        // 删除测试用例
+        questionCaseFeignClient.delQuestionCase (id);
     }
     
     @Override
     public List<QuestionCaseVO> allQuestionCase(Long questionId) {
         // 参数校验
-        if (!questionFeignClient.verifyQuestion (questionId).getResult ().getData ()) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (questionFeignClient.verifyQuestion (questionId).getResult ());
         
         // 获取测试用例
         List<QuestionCaseDtoResult> dtoResultList = questionCaseFeignClient.allQuestionCase (questionId).getResult ();

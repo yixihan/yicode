@@ -17,15 +17,17 @@ public interface SseEmitterService {
      *
      * @return {@link SseEmitter}
      */
-    SseEmitter connectSse(Long userId);
+    SseEmitter connectSse();
     
     /**
      * 关闭 sse 连接
      */
-    void closeSse(Long userId);
+    void closeSse();
     
     /**
-     * 推送消息到客户端
+     * 推送代码运行结果到客户端
+     *
+     * @param result 代码运行结果
      */
-    void sendMsgToClient(Long userId, CodeRunDtoResult result);
+    void sendMsgToClient(CodeRunDtoResult result);
 }

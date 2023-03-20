@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.biz.service.label.LabelQuestionService;
@@ -32,46 +32,58 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     private LabelService labelService;
     
     @Override
-    public CommonDtoResult<Boolean> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+    public List<LabelDtoResult> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
         Label label = labelService.getById (dtoReq.getLabelId ());
     
         LabelQuestion labelQuestion = new LabelQuestion ();
         labelQuestion.setLabelId (label.getLabelId ());
         labelQuestion.setQuestionId (dtoReq.getQuestionId ());
     
-        int modify = baseMapper.insert (labelQuestion);
+        // 保存
+        Assert.isTrue (save (labelQuestion), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return questionLabelDetail (dtoReq.getQuestionId ());
     }
     
     @Override
-    public CommonDtoResult<Boolean> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        int modify = baseMapper.delete (new QueryWrapper<LabelQuestion> ()
-                .eq (LabelQuestion.QUESTION_ID, dtoReq.getQuestionId ())
-                .eq (LabelQuestion.LABEL_ID, dtoReq.getLabelId ()));
+    public List<LabelDtoResult> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+        Long id = lambdaQuery ()
+                .select (LabelQuestion::getId)
+                .eq (LabelQuestion::getQuestionId, dtoReq.getQuestionId ())
+                .eq (LabelQuestion::getLabelId, dtoReq.getLabelId ())
+                .one ()
+                .getId ();
+        Assert.notNull (id, new BizException ("该标签不存在"));
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 删除
+        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
+    
+        return questionLabelDetail (dtoReq.getQuestionId ());
     }
     
     @Override
     public List<LabelDtoResult> questionLabelDetail(Long questionId) {
-        List<LabelQuestion> labelNoteList = baseMapper.selectList (new QueryWrapper<LabelQuestion> ()
-                .eq (LabelQuestion.QUESTION_ID, questionId));
+        // 获取标签 id
+        List<Long> labelIdList = lambdaQuery ()
+                .eq (LabelQuestion::getQuestionId, questionId)
+                .orderByDesc (LabelQuestion::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelQuestion::getLabelId)
+                .collect (Collectors.toList ());
     
-        return labelService.labelDetail (labelNoteList.stream ()
-                .map (LabelQuestion::getLabelId).collect (Collectors.toList ()));
+        return labelService.labelDetail (labelIdList);
     }
     
     @Override
     public List<LabelDtoResult> allQuestionLabel() {
-        List<Long> labelIdList = baseMapper.selectList (null).stream ()
-                .map (LabelQuestion::getLabelId).collect (Collectors.toList ());
+        // 获取标签 id
+        List<Long> labelIdList = lambdaQuery ()
+                .orderByDesc (LabelQuestion::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelQuestion::getLabelId)
+                .collect (Collectors.toList ());
     
         return labelService.labelDetail (labelIdList);
     }

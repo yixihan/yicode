@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 提交答案 前端控制器
@@ -61,8 +60,8 @@ public class QuestionCommitController implements QuestionCommitOpenApi {
     }
     
     @Override
-    public JsonResponse<Map<String, List<CommitRecordVO>>> codeCommitCount(String year) {
-        return JsonResponse.ok (service.codeCommitCount (year));
+    public JsonResponse<List<CommitRecordVO>> codeCommitCount(String month) {
+        return JsonResponse.ok (service.codeCommitCount (month));
     }
     
     @Override

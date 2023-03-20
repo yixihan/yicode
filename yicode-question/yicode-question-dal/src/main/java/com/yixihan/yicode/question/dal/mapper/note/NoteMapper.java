@@ -21,6 +21,10 @@ public interface NoteMapper extends BaseMapper<Note> {
     
     /**
      * 搜索题解
+     *
+     * @param dtoReq 请求参数
+     * @param page 分页参数
+     * @return {@link NoteDtoResult}
      */
     Page<NoteDtoResult> queryNote(@Param ("params") QueryNoteDtoReq dtoReq,
                                   @Param ("page") Page<NoteDtoResult> page);

@@ -1,17 +1,17 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
@@ -31,7 +31,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -51,113 +54,85 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
     @Resource
     private QuestionService questionService;
     
-    private static final String FORMAT_DAY = "yyyy-MM-dd";
-    private static final String FORMAT_MONTH = "yyyy-MM";
-    
     @Override
-    public CommonDtoResult<Boolean> addQuestionAnswer(AddQuestionAnswerDtoReq dtoReq) {
+    public QuestionAnswerDtoResult addQuestionAnswer(AddQuestionAnswerDtoReq dtoReq) {
         QuestionAnswer questionAnswer = BeanUtil.toBean (dtoReq, QuestionAnswer.class);
     
-        int modify = baseMapper.insert (questionAnswer);
+        // 保存
+        Assert.isTrue (save (questionAnswer), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
         
         if (CodeAnswerEnums.AC.getAnswer ().equals (dtoReq.getAnswerFlag ())) {
+            // 更新问题提交通过次数
             questionService.modifyQuestionSuccessCount (dtoReq.getQuestionId (),
                     questionService.getById (dtoReq.getQuestionId ()).getSuccessCount ());
-    
-            questionService.modifyQuestionCommitCount (dtoReq.getQuestionId (),
-                    questionService.getById (dtoReq.getQuestionId ()).getCommitCount ());
-        } else {
-            questionService.modifyQuestionCommitCount (dtoReq.getQuestionId (),
-                    questionService.getById (dtoReq.getQuestionId ()).getCommitCount ());
         }
-        return new CommonDtoResult<> (Boolean.TRUE);
-    }
-    
-    @Override
-    public QuestionAnswerDtoResult questionAnswerDetail(Long questionAnswerId) {
-        QuestionAnswer questionAnswer = baseMapper.selectById (questionAnswerId);
-        
-        questionAnswer = Optional.ofNullable (questionAnswer).orElse (new QuestionAnswer ());
+        // 更新问题提交次数
+        questionService.modifyQuestionCommitCount (dtoReq.getQuestionId (),
+                questionService.getById (dtoReq.getQuestionId ()).getCommitCount ());
         
         return BeanUtil.toBean (questionAnswer, QuestionAnswerDtoResult.class);
     }
     
     @Override
+    public QuestionAnswerDtoResult questionAnswerDetail(Long questionAnswerId) {
+        QuestionAnswer questionAnswer = getById (questionAnswerId);
+        Assert.notNull (questionAnswer, new BizException ("没有该提交记录"));
+    
+        return BeanUtil.toBean (questionAnswer, QuestionAnswerDtoResult.class);
+    }
+    
+    @Override
     public PageDtoResult<QuestionAnswerDtoResult> queryQuestionAnswer(QuestionAnswerDtoReq dtoReq) {
-        Page<QuestionAnswer> pages = baseMapper.selectPage (
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ()),
-                new QueryWrapper<QuestionAnswer> ()
-                        .eq (QuestionAnswer.QUESTION_ID, dtoReq.getQuestionId ())
-                        .eq (QuestionAnswer.USER_ID, dtoReq.getUserId ())
-        );
-        
-        if (CollectionUtil.isEmpty (pages.getRecords ())) {
-            return new PageDtoResult<> ();
-        }
+        Page<QuestionAnswer> page = lambdaQuery ()
+                .eq (QuestionAnswer::getQuestionId, dtoReq.getQuestionId ())
+                .eq (QuestionAnswer::getUserId, dtoReq.getUserId ())
+                .orderByDesc (QuestionAnswer::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
-                pages,
-                (o) -> BeanUtil.toBean (o, QuestionAnswerDtoResult.class)
+                page,
+                o -> BeanUtil.toBean (o, QuestionAnswerDtoResult.class)
         );
     }
     
     @Override
     public PageDtoResult<QuestionAnswerDtoResult> queryUserQuestionAnswer(UserQuestionAnswerDtoReq dtoReq) {
-        Page<QuestionAnswerDtoResult> pages = baseMapper.queryUserQuestionAnswer (
-                dtoReq,
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ())
-        );
-    
-        if (CollectionUtil.isEmpty (pages.getRecords ())) {
-            return new PageDtoResult<> ();
-        }
+        Page<QuestionAnswerDtoResult> pages = baseMapper.queryUserQuestionAnswer (dtoReq, PageUtil.toPage (dtoReq));
     
         return PageUtil.pageToPageDtoResult (pages);
     }
     
     @Override
-    public Map<String, List<CommitRecordDtoResult>> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
+    public List<CommitRecordDtoResult> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
+        // 日期-提交次数
         Map<DateTime, CommitRecordDtoResult> commitRecordDtoResults = baseMapper.codeCommitCount (dtoReq).stream ()
                 .collect (Collectors.toMap (
-                        (o) -> DateUtil.parse (o.getDate (), FORMAT_DAY),
+                        o -> DateUtil.parse (o.getDate (), DatePattern.NORM_MONTH_PATTERN),
                         Function.identity (),
                         (k1, k2) -> k1
                 ));
         
         // 获取起始时间和截至时间
-        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), FORMAT_DAY);
-        DateTime startMonth = DateUtil.parse (dtoReq.getStartDate (), FORMAT_MONTH);
-        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), FORMAT_DAY);
+        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), DatePattern.NORM_MONTH_PATTERN);
+        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), DatePattern.NORM_MONTH_PATTERN);
         
-        TreeMap<String, List<CommitRecordDtoResult>> map = new TreeMap<> ();
         List<CommitRecordDtoResult> list = new ArrayList<> ();
         
         while (DateUtil.compare (startDate, endDate) < 0) {
-            // 月份不相同
-            if (startDate.monthBaseOne () != startMonth.monthBaseOne ()) {
-                // 存储进 map
-                map.put (DateUtil.format (startMonth, FORMAT_MONTH), new ArrayList<> (list));
-                list.clear ();
-                // 偏移月
-                startMonth = DateUtil.offsetMonth (startMonth, 1);
-            }
-            
+            String date = DateUtil.format (startDate, DatePattern.NORM_MONTH_PATTERN);
             list.add (commitRecordDtoResults.getOrDefault (
                     startDate,
-                    new CommitRecordDtoResult (DateUtil.format (startDate, FORMAT_DAY), 0))
+                    new CommitRecordDtoResult (date, 0))
             );
             
             // 偏移天
             startDate = DateUtil.offsetDay (startDate, 1);
         }
-        // 存储进 map
-        map.put (DateUtil.format (startMonth, FORMAT_MONTH), new ArrayList<> (list));
         
-        return map;
+        // 排序
+        list.sort ((o1, o2) -> compareDate(o1.getDate (), o2.getDate ()));
+        return list;
     }
     
     @Override
@@ -171,7 +146,7 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         // 按 questionId group by
         HashMap<String, List<QuestionAnswerDtoResult>> answerMap = questionAnswerList
                 .stream ().collect (Collectors.groupingBy (
-                        (o) -> o.getQuestionId () + ":" + o.getQuestionDifficulty (),
+                        o -> o.getQuestionId () + ":" + o.getQuestionDifficulty (),
                         HashMap::new,
                         Collectors.toList ()));
     
@@ -183,7 +158,7 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         AtomicInteger unAcceptedQuestion = new AtomicInteger ();
         
         answerMap.forEach ((k, v) -> {
-            if (v.stream ().anyMatch ((o) -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))) {
+            if (v.stream ().anyMatch (o -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))) {
                 acceptedQuestion.getAndIncrement ();
                 switch (k.split (":")[1]) {
                     case "EASY": {
@@ -214,7 +189,7 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         // 计算总提交数&通过提交数
         int commitCount = questionAnswerList.size ();
         int acceptedCommitCount = Math.toIntExact (questionAnswerList.stream ()
-                .filter ((o) -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))
+                .filter (o -> o.getAnswerFlag ().equals (CodeAnswerEnums.AC.getAnswer ()))
                 .count ());
         
         // 计算百分比数值
@@ -262,6 +237,15 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
                 acceptedQuestionRate,
                 acceptedHardQuestionRate,
                 acceptedMediumQuestionRate,
-                acceptedEasyQuestionRate);
+                acceptedEasyQuestionRate
+        );
+    }
+    
+    private int compareDate (String date1, String date2) {
+        return DateUtil.compare (
+                DateUtil.parse (date1, DatePattern.NORM_MONTH_PATTERN),
+                DateUtil.parse (date2, DatePattern.NORM_MONTH_PATTERN),
+                DatePattern.NORM_MONTH_PATTERN
+        );
     }
 }

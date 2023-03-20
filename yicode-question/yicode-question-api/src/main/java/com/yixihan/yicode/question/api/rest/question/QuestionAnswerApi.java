@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.question;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 问题答案 api
@@ -31,7 +29,7 @@ public interface QuestionAnswerApi {
     
     @ApiOperation("添加问题答案")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addQuestionAnswer(@RequestBody AddQuestionAnswerDtoReq dtoReq);
+    ApiResult<QuestionAnswerDtoResult> addQuestionAnswer(@RequestBody AddQuestionAnswerDtoReq dtoReq);
     
     @ApiOperation("获取问题答案详情")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -47,7 +45,7 @@ public interface QuestionAnswerApi {
     
     @ApiOperation("获取用户提交代码次数记录")
     @PostMapping(value = "/result/count", produces = "application/json")
-    ApiResult<Map<String, List<CommitRecordDtoResult>>> codeCommitCount(@RequestBody CodeCommitCountDtoReq dtoReq);
+    ApiResult<List<CommitRecordDtoResult>> codeCommitCount(@RequestBody CodeCommitCountDtoReq dtoReq);
     
     @ApiOperation("获取用户做题进度")
     @PostMapping(value = "/rate", produces = "application/json")

@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.question;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
@@ -33,19 +32,19 @@ public interface QuestionApi {
     
     @ApiOperation("添加问题")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addQuestion(@RequestBody ModifyQuestionDtoReq dtoReq);
+    ApiResult<QuestionDetailDtoResult> addQuestion(@RequestBody ModifyQuestionDtoReq dtoReq);
     
     @ApiOperation("修改问题")
     @PostMapping(value = "/modify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> modifyQuestion(@RequestBody ModifyQuestionDtoReq dtoReq);
+    ApiResult<QuestionDetailDtoResult> modifyQuestion(@RequestBody ModifyQuestionDtoReq dtoReq);
     
     @ApiOperation("删除问题")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delQuestion(@RequestBody List<Long> questionIdList);
+    void delQuestion(@RequestBody List<Long> questionIdList);
     
     @ApiOperation("点赞问题")
     @PostMapping(value = "/like", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> likeQuestion(@RequestBody LikeDtoReq dtoReq);
+    void likeQuestion(@RequestBody LikeDtoReq dtoReq);
     
     @ApiOperation("问题明细")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -57,7 +56,7 @@ public interface QuestionApi {
     
     @ApiOperation("校验问题是否存在")
     @PostMapping(value = "/verify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> verifyQuestion(@RequestBody Long questionId);
+    ApiResult<Boolean> verifyQuestion(@RequestBody Long questionId);
     
     @ApiOperation ("获取问题名字")
     @PostMapping(value = "/detail/name", produces = "application/json")

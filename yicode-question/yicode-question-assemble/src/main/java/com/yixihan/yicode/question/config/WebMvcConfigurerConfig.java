@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.config;
 
+import cn.hutool.core.date.DatePattern;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -30,9 +31,9 @@ public class WebMvcConfigurerConfig extends WebMvcConfigurationSupport {
             public Date convert( String stringDate) {
                 SimpleDateFormat simpleDateFormat;
                 if (stringDate.contains (" ")) {
-                    simpleDateFormat = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+                    simpleDateFormat = new SimpleDateFormat (DatePattern.NORM_DATETIME_PATTERN);
                 } else {
-                    simpleDateFormat = new SimpleDateFormat ("yyyy-MM-dd");
+                    simpleDateFormat = new SimpleDateFormat (DatePattern.NORM_DATE_PATTERN);
                 }
                 try {
                     return simpleDateFormat.parse (stringDate);

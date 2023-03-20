@@ -21,6 +21,7 @@ public interface QuestionDailyService extends IService<QuestionDaily> {
      * 获取指定月每日一题
      *
      * @param month 月份
+     * @return {@link QuestionDailyDtoResult}
      */
     List<QuestionDailyDtoResult> dailyQuestionDetail(Date month);
 }

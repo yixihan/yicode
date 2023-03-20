@@ -1,5 +1,7 @@
 package com.yixihan.yicode.question.openapi.biz.service;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -8,6 +10,8 @@ import com.yixihan.yicode.common.constant.MessageConstant;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.enums.question.CodeAnswerEnums;
 import com.yixihan.yicode.common.enums.question.CodeTypeEnums;
+import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelUserDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
@@ -94,26 +98,21 @@ public class RunCodeService {
             // 获取 req
             CodeReq req = JSONUtil.toBean (new String (message.getBody ()), CodeReq.class);
             
-            // 获取测试用例
-            List<QuestionCaseDtoResult> questionCase = questionCaseFeignClient.allQuestionCase (req.getQuestionId ()).getResult ();
-            
             // 构建请求 body
             CodeRunDtoReq dtoReq = new CodeRunDtoReq ();
             dtoReq.setCode (req.getCode ());
             dtoReq.setCodeType (req.getType ());
-            dtoReq.setParamList (questionCase.stream ()
-                    .map (QuestionCaseDtoResult::getCaseParams).collect (Collectors.toList ()));
+            dtoReq.setParamList (CollUtil.newArrayList (req.getParam ()));
             
             // 运行代码
             CodeRunDtoResult result = codeRunFeignClient.runCode (dtoReq).getResult ();
-            log.info ("代码运行结果 : {}", result);
     
             // 推送给前端
-            sseEmitterService.sendMsgToClient (req.getUserId (), result);
+            sseEmitterService.sendMsgToClient (result);
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.error ("出现异常", e);
-            throw new RuntimeException (e);
+            throw new BizException (BizCodeEnum.CODE_RUN_ERR);
         }
     }
     
@@ -141,7 +140,7 @@ public class RunCodeService {
             status = judgeCode (result, questionCase);
             
             // 推送给前端
-            sseEmitterService.sendMsgToClient (req.getUserId (), result);
+            sseEmitterService.sendMsgToClient (result);
             
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
@@ -163,26 +162,26 @@ public class RunCodeService {
             // 超时
             status = CodeAnswerEnums.TLE;
             // 推送给前端
-            sseEmitterService.sendMsgToClient (req.getUserId (), result);
+            sseEmitterService.sendMsgToClient (result);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {
                 channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
             } catch (IOException ex) {
-                log.error ("出现错误", e);
+                throw new BizException (BizCodeEnum.CODE_RUN_ERR);
             }
         } catch (Exception e) {
             log.error ("出现错误", e);
             // 系统内部错误
             status = CodeAnswerEnums.SE;
             // 推送给前端
-            sseEmitterService.sendMsgToClient (req.getUserId (), result);
+            sseEmitterService.sendMsgToClient (result);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {
                 channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
             } catch (IOException ex) {
-                log.error ("出现错误", e);
+                throw new BizException (BizCodeEnum.CODE_RUN_ERR);
             }
         }
     }
@@ -195,19 +194,20 @@ public class RunCodeService {
      */
     private CodeAnswerEnums judgeCode (CodeRunDtoResult result, List<QuestionCaseDtoResult> questionCase) {
         // 编译失败
-        if (!result.getCompile ()) {
+        if (Boolean.FALSE.equals (result.getCompile ())) {
             return CodeAnswerEnums.CE;
         }
     
         // 运行失败
-        if (!result.getRun ()) {
+        if (Boolean.FALSE.equals (result.getRun ())) {
             return CodeAnswerEnums.RE;
         }
     
         // 编译, 运行成功
         List<String> runAnsList = result.getAnsList ();
         List<String> paramAnsList = questionCase.stream ()
-                .map (QuestionCaseDtoResult::getCaseAnswer).collect(Collectors.toList());
+                .map (QuestionCaseDtoResult::getCaseAnswer)
+                .collect(Collectors.toList());
     
         // 长度不一
         if (paramAnsList.size () != runAnsList.size ()) {
@@ -215,38 +215,29 @@ public class RunCodeService {
         }
     
         // 逐个对比
-        boolean flag = true;
         int len = 0;
-        CodeAnswerEnums status = null;
         for (int i = 0; i < paramAnsList.size (); i++) {
             // 累计输出长度
             len += runAnsList.get (i).length ();
             
             // 长度超限
             if (len >= codeJudgeProp.getMaxOutputLen ()) {
-                status = CodeAnswerEnums.OL;
-                flag = false;
-                break;
+                return CodeAnswerEnums.OL;
             }
-            // 输出相等
-            if (StrUtil.equals (paramAnsList.get (i), runAnsList.get (i))) {
-                continue;
-            }
-            
-            String replaceStr = runAnsList.get (i).replaceAll ("\\s*", "");
-            if (StrUtil.equals (paramAnsList.get (i), replaceStr)) {
-                // 格式错误
-                flag = false;
-                status = CodeAnswerEnums.PE;
-                break;
-            } else {
-                // 输出不等
-                flag = false;
-                break;
+            // 输出不等
+            if (!StrUtil.equals (paramAnsList.get (i), runAnsList.get (i))) {
+                String replaceStr = runAnsList.get (i).replaceAll ("\\s*", "");
+                if (StrUtil.equals (paramAnsList.get (i), replaceStr)) {
+                    // 格式错误
+                    return CodeAnswerEnums.PE;
+                } else {
+                    // 输出不等
+                    return CodeAnswerEnums.WA;
+                }
             }
         }
-    
-        return status == null ? flag ? CodeAnswerEnums.AC : CodeAnswerEnums.WA : status;
+        
+        return CodeAnswerEnums.AC;
     }
     
     /**
@@ -300,7 +291,7 @@ public class RunCodeService {
         Set<Long> labelList = questionLableList.stream ()
                 .map (LabelDtoResult::getLabelId)
                 .filter (labelId ->
-                        userLableList.stream ().noneMatch ((o2) -> labelId.equals (o2.getLabelId ())))
+                        userLableList.stream ().noneMatch (o -> labelId.equals (o.getLabelId ())))
                 .collect (Collectors.toSet ());
     
         ModifyLabelUserDtoReq dtoReq = new ModifyLabelUserDtoReq ();
@@ -325,14 +316,15 @@ public class RunCodeService {
         dtoReq.setLanguage (language);
         
         // 用户没有此语言, 添加语言
-        if (userLanguage.stream ().noneMatch ((o) -> o.getLanguage ().equals (language))) {
+        if (userLanguage.stream ().noneMatch (o -> o.getLanguage ().equals (language))) {
             userLanguageFeignClient.addUserLanguage (dtoReq);
             return;
         }
         // 用户有此语言, 更新语言
         UserLanguageDtoResult userLanguageDtoResult = userLanguage.stream ()
-                .filter ((o) -> o.getLanguage ().equals (language))
-                .findFirst ().orElse (new UserLanguageDtoResult ());
+                .filter (o -> o.getLanguage ().equals (language))
+                .findFirst ()
+                .orElse (new UserLanguageDtoResult ());
         dtoReq.setDealCount (userLanguageDtoResult.getDealCount () + 1);
         userLanguageFeignClient.modifyUserLanguage (dtoReq);
     }
@@ -345,7 +337,7 @@ public class RunCodeService {
     public void getDailyQuestion () {
         // 生成当月 redis key
         Date nowTime = new Date ();
-        String yearMonth = DateUtil.format (nowTime, "yyyy-MM");
+        String yearMonth = DateUtil.format (nowTime, DatePattern.NORM_DATE_PATTERN);
     
         // 获取当月每日一题生成情况
         String jsonStr = Optional.ofNullable (redisTemplate.opsForHash ().get (DAILY_QUESTION_KEY, yearMonth))
@@ -355,8 +347,9 @@ public class RunCodeService {
                 JSONUtil.parseArray (jsonStr).toList (QuestionDailyDtoResult.class);
     
         dailyQuestionId = array.stream ()
-                .filter ((o) ->
+                .filter (o ->
                         DateUtil.betweenDay (o.getCreateTime (), nowTime, Boolean.TRUE) == NumConstant.NUM_0)
-                .findFirst ().orElse (new QuestionDailyDtoResult ()).getQuestionId ();
+                .findFirst ()
+                .orElse (new QuestionDailyDtoResult ()).getQuestionId ();
     }
 }

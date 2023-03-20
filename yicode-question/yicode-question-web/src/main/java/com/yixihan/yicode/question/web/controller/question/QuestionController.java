@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
@@ -38,23 +37,23 @@ public class QuestionController implements QuestionApi {
     private QuestionService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addQuestion(ModifyQuestionDtoReq dtoReq) {
+    public ApiResult<QuestionDetailDtoResult> addQuestion(ModifyQuestionDtoReq dtoReq) {
         return ApiResult.create (service.addQuestion (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyQuestion(ModifyQuestionDtoReq dtoReq) {
+    public ApiResult<QuestionDetailDtoResult> modifyQuestion(ModifyQuestionDtoReq dtoReq) {
         return ApiResult.create (service.modifyQuestion (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delQuestion(List<Long> questionIdList) {
-        return ApiResult.create (service.delQuestion (questionIdList));
+    public void delQuestion(List<Long> questionIdList) {
+        service.delQuestion (questionIdList);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeQuestion(LikeDtoReq dtoReq) {
-        return ApiResult.create (service.likeQuestion (dtoReq));
+    public void likeQuestion(LikeDtoReq dtoReq) {
+        service.likeQuestion (dtoReq);
     }
     
     @Override
@@ -68,7 +67,7 @@ public class QuestionController implements QuestionApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyQuestion(Long questionId) {
+    public ApiResult<Boolean> verifyQuestion(Long questionId) {
         return ApiResult.create (service.verifyQuestion (questionId));
     }
     

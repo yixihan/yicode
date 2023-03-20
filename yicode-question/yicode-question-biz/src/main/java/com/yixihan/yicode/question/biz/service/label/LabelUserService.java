@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.biz.service.label;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelUserDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.dal.pojo.label.LabelUser;
@@ -22,20 +21,23 @@ public interface LabelUserService extends IService<LabelUser> {
      * 添加用户标签
      *
      * @param dtoReq 请求参数
+     * @return {@link LabelDtoResult}
      */
-    CommonDtoResult<Boolean> addUserLabel(ModifyLabelUserDtoReq dtoReq);
+    List<LabelDtoResult> addUserLabel(ModifyLabelUserDtoReq dtoReq);
     
     /**
      * 删除用户标签
      *
      * @param dtoReq 请求参数
+     * @return {@link LabelDtoResult}
      */
-    CommonDtoResult<Boolean> delUserLabel(ModifyLabelUserDtoReq dtoReq);
+    List<LabelDtoResult> delUserLabel(ModifyLabelUserDtoReq dtoReq);
     
     /**
      * 获取用户标签
      *
      * @param userId 标签 ID
+     * @return {@link LabelDtoResult}
      */
     List<LabelDtoResult> userLabelDetail(Long userId);
 }

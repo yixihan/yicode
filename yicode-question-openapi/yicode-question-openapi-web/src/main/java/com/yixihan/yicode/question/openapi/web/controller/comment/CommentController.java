@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.web.controller.comment;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.comment.CommentOpenApi;
@@ -31,33 +30,33 @@ public class CommentController implements CommentOpenApi {
     private CommentService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addRootComment(AddRootCommentReq req) {
+    public JsonResponse<RootCommentDetailVO> addRootComment(AddRootCommentReq req) {
         return JsonResponse.ok (service.addRootComment (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addSonComment(AddSonCommentReq req) {
+    public JsonResponse<SonCommentDetailVO> addSonComment(AddSonCommentReq req) {
         return JsonResponse.ok (service.addSonComment (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delRootComment(Long rootCommentId) {
-        return JsonResponse.ok (service.delRootComment (rootCommentId));
+    public void delRootComment(Long rootCommentId) {
+        service.delRootComment (rootCommentId);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delSonComment(Long sunCommentId) {
-        return JsonResponse.ok (service.delSonComment (sunCommentId));
+    public void delSonComment(Long sunCommentId) {
+        service.delSonComment (sunCommentId);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> likeRootComment(LikeReq req) {
-        return JsonResponse.ok (service.likeRootComment (req));
+    public void likeRootComment(LikeReq req) {
+        service.likeRootComment (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> likeSonComment(LikeReq req) {
-        return JsonResponse.ok (service.likeSonComment (req));
+    public void likeSonComment(LikeReq req) {
+        service.likeSonComment (req);
     }
     
     @Override

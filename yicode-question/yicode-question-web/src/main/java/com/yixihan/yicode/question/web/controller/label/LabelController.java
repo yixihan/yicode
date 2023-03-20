@@ -1,7 +1,8 @@
 package com.yixihan.yicode.question.web.controller.label;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
@@ -29,13 +30,13 @@ public class LabelController implements LabelApi {
     private LabelService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addLabel(AddLabelDtoReq dtoReq) {
+    public ApiResult<LabelDtoResult> addLabel(AddLabelDtoReq dtoReq) {
         return ApiResult.create (service.addLabel (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delLabel(List<Long> labelIdList) {
-        return ApiResult.create (service.delLabel (labelIdList));
+    public void delLabel(List<Long> labelIdList) {
+        service.delLabel (labelIdList);
     }
     
     @Override
@@ -44,7 +45,12 @@ public class LabelController implements LabelApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyLabel(Long labelId) {
+    public ApiResult<PageDtoResult<LabelDtoResult>> allLabel(PageDtoReq dtoReq) {
+        return ApiResult.create (service.allLabel (dtoReq));
+    }
+    
+    @Override
+    public ApiResult<Boolean> verifyLabel(Long labelId) {
         return ApiResult.create (service.verifyLabel (labelId));
     }
 }

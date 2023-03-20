@@ -29,4 +29,7 @@ public class CodeReq {
     
     @ApiModelProperty(value = "用户 ID")
     private Long userId;
+    
+    @ApiModelProperty(value = "测试用例")
+    private String param;
 }

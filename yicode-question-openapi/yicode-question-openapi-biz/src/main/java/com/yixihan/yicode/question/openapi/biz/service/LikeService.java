@@ -31,9 +31,7 @@ public class LikeService {
      */
     public Integer like (String key, Long sourceKey, Long likeUserId) {
         // 获取点赞列表
-        Set<Long> likeSet = JSONUtil.parseArray (redisTemplate.opsForHash ().get (key, sourceKey.toString ()))
-                .stream ().map (Object::toString).map (Long::parseLong)
-                .collect(Collectors.toSet());
+        Set<Long> likeSet = getLikeSet (key, sourceKey);
         // 添加点赞用户
         likeSet.add (likeUserId);
     
@@ -54,9 +52,7 @@ public class LikeService {
      */
     public Integer unLike (String key, Long sourceKey, Long unLikeUserId) {
         // 获取点赞列表
-        Set<Long> likeSet = JSONUtil.parseArray (redisTemplate.opsForHash ().get (key, sourceKey.toString ()))
-                .stream ().map (Object::toString).map (Long::parseLong)
-                .collect(Collectors.toSet());
+        Set<Long> likeSet = getLikeSet (key, sourceKey);
         // 添加点赞用户
         likeSet.remove (unLikeUserId);
         
@@ -76,11 +72,7 @@ public class LikeService {
      * @return true : 已点赞 | false : 未点赞
      */
     public Boolean isLike (String key, Long sourceKey, Long userId) {
-        Set<Long> likeSet = JSONUtil.parseArray (redisTemplate.opsForHash ().get (key, sourceKey.toString ()))
-                .stream ().map (Object::toString).map (Long::parseLong)
-                .collect(Collectors.toSet());
-        
-        return likeSet.contains (userId);
+        return getLikeSet (key, sourceKey).contains (userId);
     }
     
     /**
@@ -92,5 +84,19 @@ public class LikeService {
      */
     public Integer getLikeCount (String key, Long sourceKey) {
         return JSONUtil.parseArray (redisTemplate.opsForHash ().get (key, sourceKey.toString ())).size ();
+    }
+    
+    /**
+     * 获取点赞列表
+     *
+     * @param key redis key
+     * @param sourceKey 具体内容的 redis key
+     * @return 点赞列表
+     */
+    private Set<Long> getLikeSet(String key, Long sourceKey) {
+        return JSONUtil.parseArray (redisTemplate.opsForHash ().get (key, sourceKey.toString ()))
+                .stream ().map (Object::toString)
+                .map (Long::parseLong)
+                .collect(Collectors.toSet());
     }
 }

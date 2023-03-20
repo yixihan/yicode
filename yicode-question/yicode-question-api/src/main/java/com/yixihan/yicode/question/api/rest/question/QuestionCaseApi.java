@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.api.rest.question;
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
@@ -24,15 +23,15 @@ public interface QuestionCaseApi {
     
     @ApiOperation("添加测试用例")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> addQuestionCase (@RequestBody ModifyQuestionCaseDtoReq dtoReq);
+    ApiResult<QuestionCaseDtoResult> addQuestionCase (@RequestBody ModifyQuestionCaseDtoReq dtoReq);
     
     @ApiOperation("修改测试用例")
     @PostMapping(value = "/modify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> modifyQuestionCase (@RequestBody ModifyQuestionCaseDtoReq dtoReq);
+    ApiResult<QuestionCaseDtoResult> modifyQuestionCase (@RequestBody ModifyQuestionCaseDtoReq dtoReq);
     
     @ApiOperation("删除测试用例")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> delQuestionCase (@RequestBody Long id);
+    void delQuestionCase (@RequestBody Long id);
     
     @ApiOperation("获取测试用例")
     @PostMapping(value = "/detail", produces = "application/json")
@@ -41,5 +40,5 @@ public interface QuestionCaseApi {
     
     @ApiOperation("校验测试用例")
     @PostMapping(value = "/verify", produces = "application/json")
-    ApiResult<CommonDtoResult<Boolean>> verifyQuestionCase (@RequestBody Long id);
+    ApiResult<Boolean> verifyQuestionCase (@RequestBody Long id);
 }

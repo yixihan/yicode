@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.openapi.api.rest.admin;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
@@ -29,23 +28,23 @@ public interface QuestionListOpenApi {
     
     @ApiOperation ("添加题单")
     @PostMapping(value = "/create", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> createQuestionList (@RequestBody ModifyQuestionListReq req);
+    JsonResponse<QuestionListVO> createQuestionList (@RequestBody ModifyQuestionListReq req);
     
     @ApiOperation ("修改题单")
     @PostMapping(value = "/modify", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> modifyQuestionList (@RequestBody ModifyQuestionListReq req);
+    JsonResponse<QuestionListVO> modifyQuestionList (@RequestBody ModifyQuestionListReq req);
     
     @ApiOperation ("删除题单")
     @PostMapping(value = "/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delQuestionList (@RequestParam("id") Long id);
+    void delQuestionList (@RequestParam("id") Long id);
     
     @ApiOperation ("添加题单题目")
     @PostMapping(value = "/question/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addListQuestion (@RequestBody ModifyListQuestionReq req);
+    JsonResponse<QuestionVO> addListQuestion (@RequestBody ModifyListQuestionReq req);
     
     @ApiOperation ("删除题单题目")
     @PostMapping(value = "/question/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delListQuestion (@RequestBody ModifyListQuestionReq req);
+    void delListQuestion (@RequestBody ModifyListQuestionReq req);
     
     @ApiOperation ("分页搜索题单")
     @PostMapping(value = "/page", produces = "application/json")

@@ -1,13 +1,14 @@
 package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
@@ -32,9 +33,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.yixihan.yicode.common.constant.RedisKeyConstant.COMMIT_RUN_CODE_KEY;
@@ -62,22 +61,17 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     @Resource
     private TaskFeignClient taskFeignClient;
     
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    
     @Override
     public void test(CodeReq req) {
-        if (StrUtil.isBlank (req.getCode ()) || req.getQuestionId () == null) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        Long userId = userService.getUser ().getUserId ();
-        req.setUserId (userId);
+        // 参数校验
+        Assert.notNull (req.getQuestionId ());
+        Assert.isFalse (StrUtil.isBlank (req.getCode ()));
+        Assert.isFalse (StrUtil.isBlank (req.getParam ()));
         
         // redis 限流
+        Long userId = userService.getUserId ();
         String key = String.format (TEST_RUN_CODE_KEY, userId);
-        if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
-            log.info ("redis 限流");
-            return;
-        }
+        Assert.isFalse (redisTemplate.hasKey (key), BizCodeEnum.CODE_FLOW_ERR);
         redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
         
         // 发送到任务队列
@@ -89,18 +83,15 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
     @Override
     public void commit(CodeReq req) {
-        if (StrUtil.isBlank (req.getCode ()) || req.getQuestionId () == null) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
-        Long userId = userService.getUser ().getUserId ();
-        req.setUserId (userId);
+        // 参数校验
+        Assert.notNull (req.getQuestionId ());
+        Assert.isFalse (StrUtil.isBlank (req.getCode ()));
+    
     
         // redis 限流
+        Long userId = userService.getUserId ();
         String key = String.format (COMMIT_RUN_CODE_KEY, userId);
-        if (Boolean.TRUE.equals (redisTemplate.hasKey (key))) {
-            log.info ("redis 限流");
-            return;
-        }
+        Assert.isFalse (redisTemplate.hasKey (key), BizCodeEnum.CODE_FLOW_ERR);
         redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
     
         // 发送到任务队列
@@ -114,7 +105,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     public PageVO<QuestionAnswerVO> queryQuestionAnswer(QuestionAnswerReq req) {
         // 构造请求 body
         QuestionAnswerDtoReq dtoReq = BeanUtil.toBean (req, QuestionAnswerDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userService.getUserId ());
     
         // 获取单个问题提交记录
         PageDtoResult<QuestionAnswerDtoResult> dtoResult = questionAnswerFeignClient.queryQuestionAnswer (dtoReq).getResult ();
@@ -122,7 +113,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, QuestionAnswerVO.class)
+                o -> BeanUtil.toBean (o, QuestionAnswerVO.class)
         );
     }
     
@@ -130,7 +121,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     public PageVO<QuestionAnswerVO> queryUserQuestionAnswer(UserQuestionAnswerReq req) {
         // 构造请求 body
         UserQuestionAnswerDtoReq dtoReq = BeanUtil.toBean (req, UserQuestionAnswerDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userService.getUserId ());
     
         // 获取用户问题提交记录
         PageDtoResult<QuestionAnswerDtoResult> dtoResult = questionAnswerFeignClient.queryUserQuestionAnswer (dtoReq)
@@ -139,12 +130,12 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
-                (o) -> BeanUtil.toBean (o, QuestionAnswerVO.class)
+                o -> BeanUtil.toBean (o, QuestionAnswerVO.class)
         );
     }
     
     @Override
-    public Map<String, List<CommitRecordVO>> codeCommitCount(String year) {
+    public List<CommitRecordVO> codeCommitCount(String year) {
         // 设置 endDate & startDate
         Date endDate = StrUtil.isBlank (year) ?
                 DateUtil.endOfDay (new Date ()) :
@@ -156,20 +147,18 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         // 构建请求 body
         CodeCommitCountDtoReq dtoReq = new CodeCommitCountDtoReq ();
         dtoReq.setUserId (userService.getUser ().getUserId ());
-        dtoReq.setEndDate (DateUtil.format (endDate, DATE_FORMAT));
-        dtoReq.setStartDate (DateUtil.format (startDate, DATE_FORMAT));
+        dtoReq.setEndDate (DateUtil.format (endDate, DatePattern.NORM_DATETIME_PATTERN));
+        dtoReq.setStartDate (DateUtil.format (startDate, DatePattern.NORM_DATETIME_PATTERN));
         
         // 获取用户提交代码次数记录
-        Map<String, List<CommitRecordDtoResult>> dotResult = questionAnswerFeignClient.codeCommitCount (dtoReq).getResult ();
-    
-        Map<String, List<CommitRecordVO>> vo = new HashMap<> ();
-        dotResult.forEach ((k, v) -> vo.put (k, BeanUtil.copyToList (v, CommitRecordVO.class)));
-        return vo;
+        List<CommitRecordDtoResult> dtoResult = questionAnswerFeignClient.codeCommitCount (dtoReq).getResult ();
+        
+        return BeanUtil.copyToList (dtoResult, CommitRecordVO.class);
     }
     
     @Override
     public CodeRateVO codeRate() {
-        Long userId = userService.getUser ().getUserId ();
+        Long userId = userService.getUserId ();
     
         CodeRateDtoResult dtoResult = questionAnswerFeignClient.codeRate (userId).getResult ();
         

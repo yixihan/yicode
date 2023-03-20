@@ -38,10 +38,16 @@ public class UserServiceImpl implements UserService {
     private HttpServletRequest request;
     
     @Override
-    public UserDtoResult getUser() {
+    public Long getUserId() {
         String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
                 .substring (AuthConstant.TOKEN_SUB_INDEX);
-        return userFeignClient.getUserByToken (token).getResult ();
+        
+        return userFeignClient.getUserIdByToken (token).getResult ();
+    }
+    
+    @Override
+    public UserDtoResult getUser() {
+        return getUser (getUserId ());
     }
     
     @Override

@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionOpenApi;
@@ -9,6 +8,7 @@ import com.yixihan.yicode.question.openapi.api.vo.request.ModifyCollectionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.ModifyLabelQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCountVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDetailVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
@@ -33,42 +33,42 @@ public class QuestionController implements QuestionOpenApi {
     private QuestionService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addQuestion(ModifyQuestionReq req) {
+    public JsonResponse<QuestionDetailVO> addQuestion(ModifyQuestionReq req) {
         return JsonResponse.ok (service.addQuestion (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> modifyQuestion(ModifyQuestionReq req) {
+    public JsonResponse<QuestionDetailVO> modifyQuestion(ModifyQuestionReq req) {
         return JsonResponse.ok (service.modifyQuestion (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delQuestion(List<Long> questionIdList) {
-        return JsonResponse.ok (service.delQuestion (questionIdList));
+    public void delQuestion(List<Long> questionIdList) {
+        service.delQuestion (questionIdList);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> likeQuestion(LikeReq req) {
-        return JsonResponse.ok (service.likeQuestion (req));
+    public void likeQuestion(LikeReq req) {
+        service.likeQuestion (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> collectionQuestion(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.collectionQuestion (req));
+    public void collectionQuestion(ModifyCollectionReq req) {
+        service.collectionQuestion (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> cancelCollectionQuestion(ModifyCollectionReq req) {
-        return JsonResponse.ok (service.cancelCollectionQuestion (req));
+    public void cancelCollectionQuestion(ModifyCollectionReq req) {
+        service.cancelCollectionQuestion (req);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addQuestionLabel(ModifyLabelQuestionReq req) {
+    public JsonResponse<List<LabelVO>> addQuestionLabel(ModifyLabelQuestionReq req) {
         return JsonResponse.ok (service.addQuestionLabel (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delQuestionLabel(ModifyLabelQuestionReq req) {
+    public JsonResponse<List<LabelVO>> delQuestionLabel(ModifyLabelQuestionReq req) {
         return JsonResponse.ok (service.delQuestionLabel (req));
     }
     

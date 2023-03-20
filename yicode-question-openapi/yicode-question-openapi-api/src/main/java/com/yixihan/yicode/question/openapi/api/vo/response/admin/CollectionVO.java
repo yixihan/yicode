@@ -10,31 +10,27 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 题单-vo
+ * 收藏内容-vo
  *
  * @author yixihan
- * @date 2023/3/9 9:36
+ * @date 2022/12/21 10:52
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("题单-vo")
-public class QuestionListVO {
+@ApiModel("收藏内容-vo")
+public class CollectionVO {
     
-    @ApiModelProperty(value = "题单")
+    @ApiModelProperty(value = "收藏夹 id")
     private Long favoriteId;
     
-    @ApiModelProperty(value = "收藏夹名")
-    private String favoriteType;
+    @ApiModelProperty(value = "用户收藏内容 id")
+    private Long collectionId;
     
-    @ApiModelProperty(value = "收藏数量")
-    private Integer favoriteName;
+    @ApiModelProperty(value = "用户收藏内容 名字")
+    private String collectionName;
     
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "收藏时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
-    
-    @ApiModelProperty(value = "修改时间")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date updateTime;
 }

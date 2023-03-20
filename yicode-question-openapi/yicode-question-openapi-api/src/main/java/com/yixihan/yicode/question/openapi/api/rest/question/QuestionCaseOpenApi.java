@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.api.rest.question;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCaseVO;
@@ -22,15 +21,15 @@ public interface QuestionCaseOpenApi {
     
     @ApiOperation("添加测试用例")
     @PostMapping(value = "/add", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> addQuestionCase (@RequestBody ModifyQuestionCaseReq req);
+    JsonResponse<QuestionCaseVO> addQuestionCase (@RequestBody ModifyQuestionCaseReq req);
     
     @ApiOperation("修改测试用例")
     @PostMapping(value = "/modify", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> modifyQuestionCase (@RequestBody ModifyQuestionCaseReq req);
+    JsonResponse<QuestionCaseVO> modifyQuestionCase (@RequestBody ModifyQuestionCaseReq req);
     
     @ApiOperation("删除测试用例")
     @DeleteMapping(value = "/del", produces = "application/json")
-    JsonResponse<CommonVO<Boolean>> delQuestionCase (@RequestParam Long id);
+    void delQuestionCase (@RequestParam Long id);
     
     @ApiOperation("获取测试用例")
     @GetMapping(value = "/detail", produces = "application/json")

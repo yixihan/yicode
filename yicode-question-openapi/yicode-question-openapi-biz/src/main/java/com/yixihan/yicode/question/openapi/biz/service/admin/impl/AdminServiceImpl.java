@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.biz.service.admin.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.yixihan.yicode.common.enums.DateDimensionEnums;
@@ -81,8 +82,8 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         
-        dtoReq.setStartDate (DateUtil.format (startDate, "yyyy-MM-dd HH:mm:ss"));
-        dtoReq.setEndDate (DateUtil.format (endDate, "yyyy-MM-dd HH:mm:ss"));
+        dtoReq.setStartDate (DateUtil.format (startDate, DatePattern.NORM_DATETIME_PATTERN));
+        dtoReq.setEndDate (DateUtil.format (endDate, DatePattern.NORM_DATETIME_PATTERN));
         
         return dtoReq;
     }

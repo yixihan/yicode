@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.question.api.dto.request.question.AddUserDailyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.UserDailyQuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.UserDailyQuestionDtoResult;
@@ -23,20 +22,23 @@ public interface QuestionDailyUserService extends IService<QuestionDailyUser> {
      * 添加每日一题用户做题情况
      *
      * @param dtoReq 请求参数
+     * @return {@link UserDailyQuestionDtoResult}
      */
-    CommonDtoResult<Boolean> addUserDailyQuestion(AddUserDailyQuestionDtoReq dtoReq);
+    UserDailyQuestionDtoResult addUserDailyQuestion(AddUserDailyQuestionDtoReq dtoReq);
     
     /**
      * 获取用户连续做每日一题的天数
      *
      * @param userId 用户 ID
+     * @return 用户连续做每日一题的天数
      */
-    CommonDtoResult<Integer> dailyQuestionCount(Long userId);
+    Integer dailyQuestionCount(Long userId);
     
     /**
      * 查询用户每月每日一题情况
      *
      * @param dtoReq 请求参数
+     * @return {@link UserDailyQuestionDtoResult}
      */
     List<UserDailyQuestionDtoResult> monthUserDailyQuestionDetail(UserDailyQuestionDetailDtoReq dtoReq);
 }

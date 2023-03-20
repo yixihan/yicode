@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -36,7 +34,7 @@ public class QuestionAnswerController implements QuestionAnswerApi {
     private QuestionAnswerService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addQuestionAnswer(AddQuestionAnswerDtoReq dtoReq) {
+    public ApiResult<QuestionAnswerDtoResult> addQuestionAnswer(AddQuestionAnswerDtoReq dtoReq) {
         return ApiResult.create (service.addQuestionAnswer (dtoReq));
     }
     
@@ -56,7 +54,7 @@ public class QuestionAnswerController implements QuestionAnswerApi {
     }
     
     @Override
-    public ApiResult<Map<String, List<CommitRecordDtoResult>>> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
+    public ApiResult<List<CommitRecordDtoResult>> codeCommitCount(CodeCommitCountDtoReq dtoReq) {
         return ApiResult.create (service.codeCommitCount (dtoReq));
     }
     

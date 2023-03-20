@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.openapi.web.controller.admin;
 
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.admin.QuestionListOpenApi;
@@ -30,28 +29,28 @@ public class QuestionListController implements QuestionListOpenApi {
     private QuestionListService service;
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> createQuestionList(ModifyQuestionListReq req) {
+    public JsonResponse<QuestionListVO> createQuestionList(ModifyQuestionListReq req) {
         return JsonResponse.ok (service.createQuestionList (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> modifyQuestionList(ModifyQuestionListReq req) {
-        return JsonResponse.ok (service.ModifyQuestionListReq (req));
+    public JsonResponse<QuestionListVO> modifyQuestionList(ModifyQuestionListReq req) {
+        return JsonResponse.ok (service.modifyQuestionListReq (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delQuestionList(Long id) {
-        return JsonResponse.ok (service.delQuestionList (id));
+    public void delQuestionList(Long id) {
+        service.delQuestionList (id);
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> addListQuestion(ModifyListQuestionReq req) {
+    public JsonResponse<QuestionVO> addListQuestion(ModifyListQuestionReq req) {
         return JsonResponse.ok (service.addListQuestion (req));
     }
     
     @Override
-    public JsonResponse<CommonVO<Boolean>> delListQuestion(ModifyListQuestionReq req) {
-        return JsonResponse.ok (service.delListQuestion (req));
+    public void delListQuestion(ModifyListQuestionReq req) {
+        service.delListQuestion (req);
     }
     
     @Override

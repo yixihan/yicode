@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.biz.service.note;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.note.ModifyNoteDtoReq;
@@ -26,29 +25,31 @@ public interface NoteService extends IService<Note> {
      * 添加题解
      *
      * @param dtoReq 请求参数
+     * @return {@link NoteDtoResult}
      */
-    CommonDtoResult<Boolean> addNote(ModifyNoteDtoReq dtoReq);
+    NoteDtoResult addNote(ModifyNoteDtoReq dtoReq);
     
     /**
      * 修改题解
      *
      * @param dtoReq 请求参数
+     * @return {@link NoteDtoResult}
      */
-    CommonDtoResult<Boolean> modifyNote(ModifyNoteDtoReq dtoReq);
+    NoteDtoResult modifyNote(ModifyNoteDtoReq dtoReq);
     
     /**
      * 删除题解
      *
      * @param noteIdList 题解 ID
      */
-    CommonDtoResult<Boolean> delNote(List<Long> noteIdList);
+    void delNote(List<Long> noteIdList);
     
     /**
      * 点赞题解
      *
      * @param dtoReq 请求参数
      */
-    CommonDtoResult<Boolean> likeNote(LikeDtoReq dtoReq);
+    void likeNote(LikeDtoReq dtoReq);
     
     /**
      * 获取问题题解数量
@@ -56,12 +57,13 @@ public interface NoteService extends IService<Note> {
      * @param questionId 问题 ID
      * @return 题解数量
      */
-    CommonDtoResult<Integer> questionNoteCount (Long questionId);
+    Integer questionNoteCount (Long questionId);
     
     /**
      * 查看题解
      *
      * @param noteId 题解 ID
+     * @return {@link NoteDtoResult}
      */
     NoteDtoResult noteDetail(Long noteId);
     
@@ -69,6 +71,7 @@ public interface NoteService extends IService<Note> {
      * 搜索题解
      *
      * @param dtoReq 请求参数
+     * @return {@link NoteDtoResult}
      */
     PageDtoResult<NoteDtoResult> queryNote(QueryNoteDtoReq dtoReq);
     
@@ -78,7 +81,7 @@ public interface NoteService extends IService<Note> {
      * @param noteId 题解 ID
      * @return 存在 : true | 不存在 : false
      */
-    CommonDtoResult<Boolean> verifyNote(Long noteId);
+    Boolean verifyNote(Long noteId);
     
     /**
      * 更新题解评论数
@@ -92,7 +95,7 @@ public interface NoteService extends IService<Note> {
      * 获取题解名字
      *
      * @param noteIdList 问题 ID
-     * @return 问题名字
+     * @return 题解 id-题解名字
      */
     Map<Long, String> noteName(List<Long> noteIdList);
 }

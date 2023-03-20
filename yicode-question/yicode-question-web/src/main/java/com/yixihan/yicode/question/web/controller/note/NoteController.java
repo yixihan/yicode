@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.note;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
@@ -33,27 +32,27 @@ public class NoteController implements NoteApi {
     private NoteService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addNote(ModifyNoteDtoReq dtoReq) {
+    public ApiResult<NoteDtoResult> addNote(ModifyNoteDtoReq dtoReq) {
         return ApiResult.create (service.addNote (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> modifyNote(ModifyNoteDtoReq dtoReq) {
+    public ApiResult<NoteDtoResult> modifyNote(ModifyNoteDtoReq dtoReq) {
         return ApiResult.create (service.modifyNote (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delNote(List<Long> noteIdList) {
-        return ApiResult.create (service.delNote (noteIdList));
+    public void delNote(List<Long> noteIdList) {
+        service.delNote (noteIdList);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> likeNote(LikeDtoReq dtoReq) {
-        return ApiResult.create (service.likeNote (dtoReq));
+    public void likeNote(LikeDtoReq dtoReq) {
+        service.likeNote (dtoReq);
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Integer>> questionNoteCount(Long questionId) {
+    public ApiResult<Integer> questionNoteCount(Long questionId) {
         return ApiResult.create (service.questionNoteCount (questionId));
     }
     
@@ -68,7 +67,7 @@ public class NoteController implements NoteApi {
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> verifyNote(Long noteId) {
+    public ApiResult<Boolean> verifyNote(Long noteId) {
         return ApiResult.create (service.verifyNote (noteId));
     }
     

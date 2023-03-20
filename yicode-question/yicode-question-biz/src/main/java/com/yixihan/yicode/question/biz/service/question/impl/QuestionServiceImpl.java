@@ -1,12 +1,12 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
@@ -39,51 +39,46 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements QuestionService {
     
     @Override
-    public CommonDtoResult<Boolean> addQuestion(ModifyQuestionDtoReq dtoReq) {
+    public QuestionDetailDtoResult addQuestion(ModifyQuestionDtoReq dtoReq) {
         Question question = BeanUtil.toBean (dtoReq, Question.class);
     
-        int modify = baseMapper.insert (question);
+        // 保存
+        Assert.isTrue (save (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return BeanUtil.toBean (question, QuestionDetailDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> modifyQuestion(ModifyQuestionDtoReq dtoReq) {
+    public QuestionDetailDtoResult modifyQuestion(ModifyQuestionDtoReq dtoReq) {
         Question question = BeanUtil.toBean (dtoReq, Question.class);
-        question.setVersion (baseMapper.selectById (dtoReq.getQuestionId ()).getVersion ());
         
-        int modify = baseMapper.updateById (question);
+        // 获取乐观锁
+        Integer version = lambdaQuery ()
+                .select (Question::getVersion)
+                .eq (Question::getQuestionId, dtoReq.getQuestionId ())
+                .one ()
+                .getVersion ();
+        Assert.notNull (version, new BizException ("该问题不存在"));
+        question.setVersion (version);
+        
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return questionDetail (dtoReq.getQuestionId ());
     }
     
     @Override
-    public CommonDtoResult<Boolean> delQuestion(List<Long> questionIdList) {
-        int modify = baseMapper.deleteBatchIds (questionIdList);
-        
-        if (modify < 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+    public void delQuestion(List<Long> questionIdList) {
+        Assert.isTrue (removeByIds (questionIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
-    public CommonDtoResult<Boolean> likeQuestion(LikeDtoReq dtoReq) {
-        Question question = baseMapper.selectById (dtoReq.getSourceId ());
+    public void likeQuestion(LikeDtoReq dtoReq) {
+        Question question = getById (dtoReq.getSourceId ());
         question.setLikeCount (dtoReq.getLikeCount ());
     
-        int modify = baseMapper.updateById (question);
-    
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
@@ -97,10 +92,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public PageDtoResult<QuestionDtoResult> queryQuestion(QueryQuestionDtoReq dtoReq) {
         // 搜索问题
-        Page<QuestionDtoResult> dtoResultPage = baseMapper.queryQuestion (
-                dtoReq,
-                new Page<> (dtoReq.getPage (), dtoReq.getPageSize (), dtoReq.getSearchCount ())
-        );
+        Page<QuestionDtoResult> dtoResultPage = baseMapper.queryQuestion (dtoReq, PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
                 dtoResultPage,
@@ -109,47 +101,56 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifyQuestion(Long questionId) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Question> ()
-                .eq (Question.QUESTION_ID, questionId)) > 0);
+    public Boolean verifyQuestion(Long questionId) {
+        return lambdaQuery ()
+                .eq (Question::getQuestionId, questionId)
+                .count () > 0;
     }
     
     @Override
     public void modifyQuestionCommentCount(Long questionId, Integer commentCount) {
-        Question question = baseMapper.selectById (questionId);
+        Question question = getById (questionId);
         question.setCommentCount (commentCount);
-        baseMapper.updateById (question);
+    
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public void modifyQuestionNoteCount(Long questionId, Integer noteCount) {
-        Question question = baseMapper.selectById (questionId);
+        Question question = getById (questionId);
         question.setNoteCount (noteCount);
-        baseMapper.updateById (question);
+        
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public void modifyQuestionCommitCount(Long questionId, Integer commitCount) {
-        Question question = baseMapper.selectById (questionId);
+        Question question = getById (questionId);
         question.setCommitCount (commitCount);
-        baseMapper.updateById (question);
+        
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public void modifyQuestionSuccessCount(Long questionId, Integer successCount) {
-        Question question = baseMapper.selectById (questionId);
+        Question question = getById (questionId);
         question.setSuccessCount (successCount);
-        baseMapper.updateById (question);
+        
+        // 更新
+        Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public Map<Long, String> questionName(List<Long> questionIdList) {
-        return baseMapper.selectBatchIds (questionIdList).stream ()
+        return listByIds (questionIdList)
+                .stream ()
                 .collect (Collectors.toMap (
                         Question::getQuestionId,
                         Question::getQuestionName,
-                        (k1, k2) -> k1
-                ));
+                        (k1, k2) -> k1));
     }
     
     @Override

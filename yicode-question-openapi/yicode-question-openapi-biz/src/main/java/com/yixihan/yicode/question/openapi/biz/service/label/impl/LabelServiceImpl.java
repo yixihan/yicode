@@ -5,8 +5,11 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.reset.vo.request.PageReq;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
@@ -50,7 +53,7 @@ public class LabelServiceImpl implements LabelService {
     
     
     @Override
-    public CommonVO<Boolean> addLabel(AddLabelReq req) {
+    public LabelVO addLabel(AddLabelReq req) {
         // 参数校验 (标签名)
         if (StrUtil.isBlank (req.getLabelName ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
@@ -58,30 +61,20 @@ public class LabelServiceImpl implements LabelService {
         
         // 添加标签
         AddLabelDtoReq dtoReq = BeanUtil.toBean (req, AddLabelDtoReq.class);
-        CommonDtoResult<Boolean> dtoResult = labelFeignClient.addLabel (dtoReq).getResult ();
-    
-        // 如果添加失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        LabelDtoResult dtoResult = labelFeignClient.addLabel (dtoReq).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, LabelVO.class);
     }
     
     @Override
-    public CommonVO<Boolean> delLabel(List<Long> labelIdList) {
+    public void delLabel(List<Long> labelIdList) {
         // 参数校验 (标签 ID)
         if (CollectionUtil.isEmpty (labelIdList)) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
     
         // 删除标签
-        CommonDtoResult<Boolean> dtoResult = labelFeignClient.delLabel (labelIdList).getResult ();
-    
-        // 如果删除失败, 抛出异常信息
-        if (!dtoResult.getData ()) {
-            throw new BizException (dtoResult.getMessage ());
-        }
-        return CommonVO.create (dtoResult);
+        labelFeignClient.delLabel (labelIdList);
     }
     
     @Override
@@ -99,7 +92,7 @@ public class LabelServiceImpl implements LabelService {
     
     @Override
     public List<LabelVO> noteLabelDetail(Long noteId) {
-        if (!noteFeignClient.verifyNote (noteId).getResult ().getData ()) {
+        if (Boolean.FALSE.equals (noteFeignClient.verifyNote (noteId).getResult ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
     
@@ -110,7 +103,7 @@ public class LabelServiceImpl implements LabelService {
     
     @Override
     public List<LabelVO> questionLabelDetail(Long questionId) {
-        if (!questionFeignClient.verifyQuestion (questionId).getResult ().getData ()) {
+        if (Boolean.FALSE.equals (questionFeignClient.verifyQuestion (questionId).getResult ())) {
             throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
         }
     
@@ -120,14 +113,25 @@ public class LabelServiceImpl implements LabelService {
     }
     
     @Override
-    public List<LabelVO> AllNoteLabel() {
+    public PageVO<LabelVO> allLabel(PageReq req) {
+        PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
+        PageDtoResult<LabelDtoResult> dtoResult = labelFeignClient.allLabel (dtoReq).getResult ();
+        
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                o -> BeanUtil.toBean (o, LabelVO.class)
+        );
+    }
+    
+    @Override
+    public List<LabelVO> allNoteLabel() {
         List<LabelDtoResult> dtoResultList = labelNoteFeignClient.allNoteLabel ().getResult ();
     
         return BeanUtil.copyToList (dtoResultList, LabelVO.class);
     }
     
     @Override
-    public List<LabelVO> AllQuestionLabel() {
+    public List<LabelVO> allQuestionLabel() {
         List<LabelDtoResult> dtoResultList = labelQuestionFeignClient.allQuestionLabel ().getResult ();
     
         return BeanUtil.copyToList (dtoResultList, LabelVO.class);

@@ -1,7 +1,6 @@
 package com.yixihan.yicode.question.web.controller.label;
 
 
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
@@ -29,12 +28,12 @@ public class LabelQuestionController implements LabelQuestionApi {
     private LabelQuestionService service;
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+    public ApiResult<List<LabelDtoResult>> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
         return ApiResult.create (service.addQuestionLabel (dtoReq));
     }
     
     @Override
-    public ApiResult<CommonDtoResult<Boolean>> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+    public ApiResult<List<LabelDtoResult>> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
         return ApiResult.create (service.delQuestionLabel (dtoReq));
     }
     

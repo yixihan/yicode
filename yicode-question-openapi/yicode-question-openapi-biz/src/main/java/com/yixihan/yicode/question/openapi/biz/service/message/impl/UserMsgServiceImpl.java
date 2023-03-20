@@ -5,8 +5,7 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.AddMessageReq;
 import com.yixihan.yicode.question.openapi.biz.feign.message.MessageFeignClient;
@@ -44,20 +43,18 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public void addMessage(AddMessageReq req) {
         // 参数校验
-        if (!userService.verifyUserId (req.getReceiveUseId ())) {
-            throw new BizException ("该用户不存在！");
-        }
-        if (Arrays.stream (MsgTypeEnums.values ()).noneMatch ((o) -> o.getType ().equals (req.getMessageType ()))) {
-            throw new BizException (BizCodeEnum.PARAMS_VALID_ERR);
-        }
+        Assert.isTrue (userService.verifyUserId (req.getReceiveUseId ()), BizCodeEnum.ACCOUNT_NOT_FOUND);
+        Assert.isFalse (Arrays.stream (MsgTypeEnums.values ()).noneMatch (o ->
+                o.getType ().equals (req.getMessageType ())));
         
         // 构建消息内容
         UserDtoResult user = userService.getUser ();
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
     
-        String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ().getData ();
+        String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
         String message;
-        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) || MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
+        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) ||
+                MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
             message = StrUtil.format (template, user.getUserName (), req.getSourceId ());
         } else {
             message = StrUtil.format (template, user.getUserName ());
@@ -69,12 +66,10 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setSendUserName (user.getUserName ());
         
         // 保存消息
-        CommonDtoResult<Boolean> dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
+        userMsgFeignClient.addMessage (dtoReq);
         
-        // 如果保存成功, 则发送消息给用户
-        if (dtoResult.getData ()) {
-            sendMessage (message);
-        }
+        // 保存成功, 发送消息给用户
+        sendMessage (message);
     }
     
     

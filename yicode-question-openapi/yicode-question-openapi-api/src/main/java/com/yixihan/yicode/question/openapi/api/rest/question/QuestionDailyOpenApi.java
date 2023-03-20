@@ -1,6 +1,5 @@
 package com.yixihan.yicode.question.openapi.api.rest.question;
 
-import com.yixihan.yicode.common.reset.vo.responce.CommonVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserDailyQuestionDetailReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDailyVO;
@@ -27,7 +26,7 @@ public interface QuestionDailyOpenApi {
     
     @ApiOperation("获取用户连续做每日一题的天数")
     @PostMapping(value = "/count", produces = "application/json")
-    JsonResponse<CommonVO<Integer>> dailyQuestionCount ();
+    JsonResponse<Integer> dailyQuestionCount ();
     
     @ApiOperation("查询用户每月每日一题情况")
     @PostMapping(value = "/query", produces = "application/json")

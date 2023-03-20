@@ -1,10 +1,13 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
-import com.yixihan.yicode.common.reset.dto.responce.CommonDtoResult;
+import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.util.Assert;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.biz.service.label.LabelService;
@@ -26,37 +29,43 @@ import java.util.List;
 public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements LabelService {
     
     @Override
-    public CommonDtoResult<Boolean> addLabel(AddLabelDtoReq dtoReq) {
+    public LabelDtoResult addLabel(AddLabelDtoReq dtoReq) {
         Label label = BeanUtil.toBean (dtoReq, Label.class);
     
-        int modify = baseMapper.insert (label);
+        // 删除
+        Assert.isTrue (save (label), BizCodeEnum.FAILED_TYPE_BUSINESS);
         
-        if (modify != 1) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+        return BeanUtil.toBean (label, LabelDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> delLabel(List<Long> labelIdList) {
-        int modify = baseMapper.deleteBatchIds (labelIdList);
-        
-        if (modify < 0) {
-            return new CommonDtoResult<> (Boolean.FALSE, BizCodeEnum.FAILED_TYPE_BUSINESS.getErrorMsg ());
-        }
-        return new CommonDtoResult<> (Boolean.TRUE);
+    public void delLabel(List<Long> labelIdList) {
+        Assert.isTrue (removeByIds (labelIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
     public List<LabelDtoResult> labelDetail(List<Long> labelIdList) {
-        List<Label> labelList = baseMapper.selectBatchIds (labelIdList);
+        List<Label> labelList = listByIds (labelIdList);
         
         return BeanUtil.copyToList (labelList, LabelDtoResult.class);
     }
     
     @Override
-    public CommonDtoResult<Boolean> verifyLabel(Long labelId) {
-        return new CommonDtoResult<> (baseMapper.selectCount (new QueryWrapper<Label> ()
-                .eq (Label.LABEL_ID, labelId)) > 0);
+    public PageDtoResult<LabelDtoResult> allLabel(PageDtoReq dtoReq) {
+        Page<Label> page = lambdaQuery ()
+                .orderByDesc (Label::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
+        
+        return PageUtil.pageToPageDtoResult (
+                page,
+                o -> BeanUtil.toBean (o, LabelDtoResult.class)
+        );
+    }
+    
+    @Override
+    public Boolean verifyLabel(Long labelId) {
+        return lambdaQuery ()
+                .eq (Label::getLabelId, labelId)
+                .count () > 0;
     }
 }

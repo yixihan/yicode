@@ -1,13 +1,13 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
@@ -54,23 +54,25 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     
         // 生成当月 redis key
         Date nowTime = new Date ();
-        String yearMonth = DateUtil.format (nowTime, "yyyy-MM");
+        String yearMonth = DateUtil.format (nowTime, DatePattern.NORM_MONTH_PATTERN);
         
         // 获取当月每日一题生成情况
         String jsonStr = Optional.ofNullable (redisTemplate.opsForHash ().get (DAILY_QUESTION_KEY, yearMonth))
-                .orElse ("").toString ();
+                .orElse ("")
+                .toString ();
         List<QuestionDailyDtoResult> array = StrUtil.isBlank (jsonStr) ?
                 new ArrayList<> () :
                 JSONUtil.parseArray (jsonStr).toList (QuestionDailyDtoResult.class);
         
         // 如果当天的每日一题已被创建, 则直接返回
-        if (array.stream ().map (QuestionDailyDtoResult::getCreateTime).anyMatch ((o) ->
+        if (array.stream ().map (QuestionDailyDtoResult::getCreateTime).anyMatch (o ->
                 DateUtil.betweenDay (o, nowTime, Boolean.TRUE) == NumConstant.NUM_0)) {
             return;
         }
         
         // 获取当月每日一题的问题 ID
-        Set<Long> questionIdSet = array.stream ()
+        Set<Long> questionIdSet = array
+                .stream ()
                 .map (QuestionDailyDtoResult::getQuestionId)
                 .collect (Collectors.toSet ());
     
@@ -80,10 +82,11 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
             // 生成随机数
             int random = RandomUtil.randomInt (count + 1);
     
-            dailyQuestionId = questionService.query ()
-                    .select (Question.QUESTION_ID)
+            dailyQuestionId = questionService.lambdaQuery ()
+                    .select (Question::getQuestionId)
                     .last ("limit " + random + ", 1")
-                    .one ().getQuestionId ();
+                    .one ()
+                    .getQuestionId ();
         } while (questionIdSet.contains (dailyQuestionId));
         
         // 存入数据库
@@ -106,9 +109,10 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
         // 获取起始时间和终止时间
         DateTime startMonth = DateUtil.beginOfMonth (month);
         DateTime endMonth = DateUtil.endOfMinute (month);
-        
-        List<QuestionDaily> questionDailyList = baseMapper.selectList (new QueryWrapper<QuestionDaily> ()
-                .between (QuestionDaily.CREATE_TIME, startMonth, endMonth));
+        List<QuestionDaily> questionDailyList = lambdaQuery ()
+                .between (QuestionDaily::getCreateTime, startMonth, endMonth)
+                .orderByDesc (QuestionDaily::getCreateTime)
+                .list ();
         
         return BeanUtil.copyToList (questionDailyList, QuestionDailyDtoResult.class);
     }

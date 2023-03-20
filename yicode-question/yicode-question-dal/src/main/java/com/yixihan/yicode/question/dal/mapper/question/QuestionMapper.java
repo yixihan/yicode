@@ -27,6 +27,12 @@ import java.util.Map;
 @Mapper
 public interface QuestionMapper extends BaseMapper<Question> {
     
+    /**
+     * 获取问题详情
+     *
+     * @param questionId 问题 id
+     * @return {@link QuestionDetailDtoResult}
+     */
     QuestionDetailDtoResult questionDetail (@Param ("questionId") Long questionId);
     
     /**
@@ -34,6 +40,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
      *
      * @param dtoReq 请求参数
      * @param page 分页参数
+     * @return {@link QuestionDtoResult}
      */
     Page<QuestionDtoResult> queryQuestion(@Param ("params") QueryQuestionDtoReq dtoReq,
                                           @Param ("page") Page<QuestionDtoResult> page);

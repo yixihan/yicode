@@ -14,28 +14,39 @@ import java.util.List;
 public interface UserService {
     
     /**
+     * 获取登录用户用户 id
+     *
+     * @return 用户 id
+     */
+    Long getUserId();
+    
+    /**
      * 获取登录用户信息
      *
+     * @return {@link UserDtoResult}
      */
-    UserDtoResult getUser ();
+    UserDtoResult getUser();
     
     /**
      * 获取指定 ID 用户信息
      *
      * @param userId 用户 ID
+     * @return {@link UserDtoResult}
      */
-    UserDtoResult getUser (Long userId);
+    UserDtoResult getUser(Long userId);
     
     /**
      * 获取用户通用信息 (用户 ID, 用户名, 用户头像)
      *
      * @param userIdList 用户 ID
+     * @return {@link UserCommonDtoResult}
      */
-    List<UserCommonDtoResult> getUserCommonInfo (List<Long> userIdList);
+    List<UserCommonDtoResult> getUserCommonInfo(List<Long> userIdList);
     
     /**
      * 校验用户 ID 是否存在
      *
+     * @param userId 用户 id
      * @return 存在 : true | 不存在 : false
      */
     Boolean verifyUserId(Long userId);
