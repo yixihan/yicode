@@ -50,7 +50,7 @@ public class SwaggerConfig {
         
         return new ApiInfoBuilder ()
                 // 设置标题
-                .title ("yicode - swagger 接口文档")
+                .title ("yicode-user - swagger 接口文档")
                 // 设置描述
                 .description ("yicode")
                 // 设置作者信息
