@@ -76,14 +76,6 @@ spring:
             enable:
               true
 
-
-# feign
-feign:
-  client:
-    yicode-user:
-      name: yicode-user
-
-
 management:
   endpoints:
     web:

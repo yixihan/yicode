@@ -28,9 +28,6 @@ feign:
         connect-timeout: 30000
         read-timeout: 30000
 
-logging:
-  level:
-    com.yixihan.yicode.thirdpart.openapi.biz.feign: debug
 
 management:
   endpoints:
