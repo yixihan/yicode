@@ -41,7 +41,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
     
     @Override
     @Transactional(rollbackFor = BizException.class)
-    public List<CollectionDtoResult> addCollection(ModifyCollectionDtoReq dtoReq) {
+    public void addCollection(ModifyCollectionDtoReq dtoReq) {
         // 校验是否有操作权限
         Assert.isFalse (Boolean.TRUE.equals (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())),
                 new BizException ("该收藏夹不存在或您无权进行操作!"));
@@ -57,20 +57,16 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         // 收藏内容
         UserCollection collection = BeanUtil.toBean (dtoReq, UserCollection.class);
         Assert.isTrue (save (collection), BizCodeEnum.FAILED_TYPE_BUSINESS);
-    
-        return collectionsDetailList (dtoReq.getFavoriteId ());
     }
 
     @Override
     @Transactional(rollbackFor = BizException.class)
-    public List<CollectionDtoResult> delCollection(ModifyCollectionDtoReq dtoReq) {
+    public void delCollection(ModifyCollectionDtoReq dtoReq) {
         Assert.isFalse (Boolean.TRUE.equals (verifyFavorite (dtoReq.getUserId (), dtoReq.getFavoriteId ())),
                 new BizException ("该收藏夹不存在或您无权进行操作!"));
         
         // 删除
         Assert.isTrue (removeById (dtoReq.getCollectionId ()), BizCodeEnum.FAILED_TYPE_BUSINESS);
-        
-        return collectionsDetailList (dtoReq.getFavoriteId ());
     }
 
     @Override

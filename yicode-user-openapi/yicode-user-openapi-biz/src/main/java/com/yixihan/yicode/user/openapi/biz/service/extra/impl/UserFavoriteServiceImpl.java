@@ -8,17 +8,11 @@ import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
-import com.yixihan.yicode.user.api.dto.request.extra.AddFavoriteDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.CollectionQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.FavoriteQueryDtoReq;
-import com.yixihan.yicode.user.api.dto.request.extra.ModifyFavoriteDtoReq;
+import com.yixihan.yicode.user.api.dto.request.extra.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.CollectionDtoResult;
 import com.yixihan.yicode.user.api.dto.response.extra.FavoriteDtoResult;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.AddFavoriteReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.CollectionQueryReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.FavoriteQueryReq;
-import com.yixihan.yicode.user.openapi.api.vo.request.extra.ModifyFavoriteReq;
+import com.yixihan.yicode.user.openapi.api.vo.request.extra.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.CollectionVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.extra.FavoriteVO;
 import com.yixihan.yicode.user.openapi.biz.feign.question.note.NoteFeignClient;
@@ -145,5 +139,13 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
                 dtoResult,
                 o -> BeanUtil.toBean (o, CollectionVO.class)
         );
+    }
+    
+    @Override
+    public void cancel(ModifyCollectionReq req) {
+        ModifyCollectionDtoReq dtoReq = BeanUtil.toBean (req, ModifyCollectionDtoReq.class);
+        dtoReq.setUserId (userService.getUserId ());
+        
+        collectionFeignClient.delCollection (dtoReq);
     }
 }

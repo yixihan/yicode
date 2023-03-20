@@ -23,17 +23,15 @@ public interface UserCollectionService extends IService<UserCollection> {
      * 收藏内容
      *
      * @param dtoReq 请求参数
-     * @return {@link CollectionDtoResult}
      */
-    List<CollectionDtoResult> addCollection(ModifyCollectionDtoReq dtoReq);
+    void addCollection(ModifyCollectionDtoReq dtoReq);
 
     /**
      * 取消收藏内容
      *
      * @param dtoReq 请求参数
-     * @return {@link CollectionDtoResult}
      */
-    List<CollectionDtoResult> delCollection(ModifyCollectionDtoReq dtoReq);
+    void delCollection(ModifyCollectionDtoReq dtoReq);
 
     /**
      * 获取收藏夹内容-分页查询

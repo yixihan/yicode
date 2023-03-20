@@ -30,13 +30,13 @@ public class UserCollectionController implements UserCollectionApi {
     private UserCollectionService service;
 
     @Override
-    public ApiResult<List<CollectionDtoResult>> addCollection(ModifyCollectionDtoReq dtoReq) {
-        return ApiResult.create (service.addCollection (dtoReq));
+    public void addCollection(ModifyCollectionDtoReq dtoReq) {
+        service.addCollection (dtoReq);
     }
 
     @Override
-    public ApiResult<List<CollectionDtoResult>> delCollection(ModifyCollectionDtoReq dtoReq) {
-        return ApiResult.create (service.delCollection (dtoReq));
+    public void delCollection(ModifyCollectionDtoReq dtoReq) {
+        service.delCollection (dtoReq);
     }
 
     @Override

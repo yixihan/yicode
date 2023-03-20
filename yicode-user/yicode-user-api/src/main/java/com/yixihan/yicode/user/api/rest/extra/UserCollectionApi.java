@@ -28,11 +28,11 @@ public interface UserCollectionApi {
 
     @ApiOperation ("收藏内容")
     @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<List<CollectionDtoResult>> addCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
+    void addCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation ("取消收藏内容")
     @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<List<CollectionDtoResult>> delCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
+    void delCollection (@RequestBody ModifyCollectionDtoReq dtoReq);
 
     @ApiOperation("获取收藏夹内容-分页查询")
     @PostMapping(value = "/detail/page", produces = "application/json")

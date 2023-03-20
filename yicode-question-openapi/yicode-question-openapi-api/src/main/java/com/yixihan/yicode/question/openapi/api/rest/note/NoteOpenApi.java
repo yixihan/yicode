@@ -41,11 +41,11 @@ public interface NoteOpenApi {
     @PostMapping(value = "/like", produces = "application/json")
     void likeNote (@RequestBody LikeReq req);
     
-    @ApiOperation("收藏问题")
+    @ApiOperation("收藏题解")
     @PostMapping(value = "/collection", produces = "application/json")
     void collectionNote(@RequestBody ModifyCollectionReq req);
     
-    @ApiOperation("取消收藏问题")
+    @ApiOperation("取消收藏题解")
     @DeleteMapping(value = "/collection/cancel", produces = "application/json")
     void cancelCollectionNote(@RequestBody ModifyCollectionReq req);
     
