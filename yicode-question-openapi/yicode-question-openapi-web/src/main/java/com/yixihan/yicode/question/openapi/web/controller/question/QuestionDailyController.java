@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 每日一题 前端控制器
@@ -26,7 +27,7 @@ public class QuestionDailyController implements QuestionDailyOpenApi {
     private QuestionDailyService service;
     
     @Override
-    public JsonResponse<List<QuestionDailyVO>> dailyQuestionDetail(String month) {
+    public JsonResponse<Map<String, QuestionDailyVO>> dailyQuestionDetail(String month) {
         return JsonResponse.ok (service.dailyQuestionDetail (month));
     }
     

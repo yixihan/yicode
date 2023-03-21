@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 每日一题 OpenApi
@@ -22,7 +23,7 @@ public interface QuestionDailyOpenApi {
     
     @ApiOperation("获取当月每日一题详情")
     @GetMapping(value = "/detail", produces = "application/json")
-    JsonResponse<List<QuestionDailyVO>> dailyQuestionDetail (@RequestParam("month") String month);
+    JsonResponse<Map<String, QuestionDailyVO>> dailyQuestionDetail (@RequestParam("month") String month);
     
     @ApiOperation("获取用户连续做每日一题的天数")
     @PostMapping(value = "/count", produces = "application/json")

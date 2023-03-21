@@ -5,6 +5,7 @@ import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionDail
 import com.yixihan.yicode.question.openapi.api.vo.response.question.UserDailyQuestionVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 每日一题 服务类
@@ -20,7 +21,7 @@ public interface QuestionDailyService {
      * @param month 月份
      * @return {@link QuestionDailyVO}
      */
-    List<QuestionDailyVO> dailyQuestionDetail(String month);
+    Map<String, QuestionDailyVO> dailyQuestionDetail(String month);
     
     /**
      * 获取用户连续做每日一题的天数

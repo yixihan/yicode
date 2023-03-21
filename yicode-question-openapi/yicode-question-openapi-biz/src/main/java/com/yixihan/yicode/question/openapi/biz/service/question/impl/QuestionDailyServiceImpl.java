@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 每日一题 服务实现类
@@ -41,14 +44,19 @@ public class QuestionDailyServiceImpl implements QuestionDailyService {
     private UserService userService;
     
     @Override
-    public List<QuestionDailyVO> dailyQuestionDetail(String month) {
+    public Map<String, QuestionDailyVO> dailyQuestionDetail(String month) {
         Date date =StrUtil.isBlank (month) ?
                 new Date () :
                 DateUtil.parse (month, DatePattern.NORM_MONTH_PATTERN);
     
         List<QuestionDailyDtoResult> dtoResultList = questionDailyFeignClient.dailyQuestionDetail (date).getResult ();
         
-        return BeanUtil.copyToList (dtoResultList, QuestionDailyVO.class);
+        return BeanUtil.copyToList (dtoResultList, QuestionDailyVO.class).stream ()
+                .collect (Collectors.toMap (
+                        o -> DateUtil.format (o.getCreateTime (), DatePattern.NORM_DATE_PATTERN),
+                        Function.identity (),
+                        (k1, k2) -> k1)
+                );
     }
     
     @Override
