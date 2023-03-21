@@ -66,7 +66,13 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
                 new BizException ("该收藏夹不存在或您无权进行操作!"));
         
         // 删除
-        Assert.isTrue (removeById (dtoReq.getCollectionId ()), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        Long id = lambdaQuery ()
+                .select (UserCollection::getId)
+                .eq (UserCollection::getFavoriteId, dtoReq.getFavoriteId ())
+                .eq (UserCollection::getCollectionId, dtoReq.getCollectionId ())
+                .one ()
+                .getId ();
+        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
 
     @Override
