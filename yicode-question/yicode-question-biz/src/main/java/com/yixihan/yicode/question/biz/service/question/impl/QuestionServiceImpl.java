@@ -12,6 +12,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
@@ -64,7 +65,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // 更新
         Assert.isTrue (updateById (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
-        return questionDetail (dtoReq.getQuestionId ());
+        QuestionDetailDtoReq detailDtoReq = new QuestionDetailDtoReq ();
+        detailDtoReq.setQuestionId (dtoReq.getQuestionId ());
+        return questionDetail (detailDtoReq);
     }
     
     @Override
@@ -82,8 +85,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
     
     @Override
-    public QuestionDetailDtoResult questionDetail(Long questionId) {
-        QuestionDetailDtoResult question = Optional.ofNullable (baseMapper.questionDetail (questionId))
+    public QuestionDetailDtoResult questionDetail(QuestionDetailDtoReq dtoReq) {
+        QuestionDetailDtoResult question = Optional.ofNullable (baseMapper.questionDetail (dtoReq))
                 .orElse (new QuestionDetailDtoResult ());
         
         return BeanUtil.toBean (question, QuestionDetailDtoResult.class);

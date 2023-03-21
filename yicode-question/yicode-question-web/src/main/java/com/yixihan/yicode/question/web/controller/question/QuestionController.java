@@ -7,6 +7,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
@@ -57,8 +58,8 @@ public class QuestionController implements QuestionApi {
     }
     
     @Override
-    public ApiResult<QuestionDetailDtoResult> questionDetail(Long questionId) {
-        return ApiResult.create (service.questionDetail (questionId));
+    public ApiResult<QuestionDetailDtoResult> questionDetail(QuestionDetailDtoReq dtoReq) {
+        return ApiResult.create (service.questionDetail (dtoReq));
     }
     
     @Override

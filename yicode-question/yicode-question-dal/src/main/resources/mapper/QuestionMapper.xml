@@ -133,12 +133,30 @@
             q.`success_count`,
             q.`question_desc`,
             if(q.`success_count` = 0, 0, q.`success_count` / q.`commit_count` * 100) as passRate,
+            <if test="params.userId != null">
+                if(qa.`status` > 0, true, false) as `status`,
+            </if>
             q.`create_time`
         from
             `question` q
+        <if test="params.userId != null">
+            left join (
+                select
+                    `question_id`,
+                    sum(if(`answer_flag`='AC', 1, 0)) as `status`
+                from
+                    `question_answer`
+                where
+                    `del_flag` = 0
+                    and `user_id` = ${params.userId}
+                group by
+                    `question_id`
+            ) as qa
+            on qa.`question_id` = q.`question_id`
+        </if>
         <where>
-            and del_flag = 0
-            and question_id = #{questionId}
+            and q.`del_flag` = 0
+            and q.`question_id` = #{params.questionId}
         </where>
     </select>
 

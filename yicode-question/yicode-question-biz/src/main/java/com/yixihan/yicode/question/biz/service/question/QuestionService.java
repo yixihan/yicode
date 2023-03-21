@@ -6,6 +6,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
@@ -59,10 +60,10 @@ public interface QuestionService extends IService<Question> {
     /**
      * 问题明细
      *
-     * @param questionId 问题 ID
+     * @param dtoReq 请求参数
      * @return {@link QuestionDetailDtoResult}
      */
-    QuestionDetailDtoResult questionDetail(Long questionId);
+    QuestionDetailDtoResult questionDetail(QuestionDetailDtoReq dtoReq);
     
     /**
      * 搜索问题

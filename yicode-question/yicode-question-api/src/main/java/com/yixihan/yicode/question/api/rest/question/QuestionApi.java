@@ -6,6 +6,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.admin.AdminDataDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.admin.BrokenDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
@@ -48,7 +49,7 @@ public interface QuestionApi {
     
     @ApiOperation("问题明细")
     @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<QuestionDetailDtoResult> questionDetail(@RequestBody Long questionId);
+    ApiResult<QuestionDetailDtoResult> questionDetail(@RequestBody QuestionDetailDtoReq dtoReq);
     
     @ApiOperation("搜索问题")
     @PostMapping(value = "/query", produces = "application/json")

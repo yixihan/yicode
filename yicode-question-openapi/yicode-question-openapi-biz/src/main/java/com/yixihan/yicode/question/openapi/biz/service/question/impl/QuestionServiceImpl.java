@@ -14,6 +14,7 @@ import com.yixihan.yicode.question.api.dto.request.LikeDtoReq;
 import com.yixihan.yicode.question.api.dto.request.label.ModifyLabelQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QuestionDetailDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDetailDtoResult;
@@ -223,7 +224,10 @@ public class QuestionServiceImpl implements QuestionService {
         Assert.isTrue (questionFeignClient.verifyQuestion (questionId).getResult ());
         
         // 获取问题明细
-        QuestionDetailDtoResult dtoResult = questionFeignClient.questionDetail (questionId).getResult ();
+        QuestionDetailDtoReq dtoReq = new QuestionDetailDtoReq ();
+        dtoReq.setQuestionId (questionId);
+        dtoReq.setUserId (userService.getUserId ());
+        QuestionDetailDtoResult dtoResult = questionFeignClient.questionDetail (dtoReq).getResult ();
         dtoResult.setQuestionDifficulty (QuestionDifficultyTypeEnums.valueOf (dtoResult.getQuestionDifficulty ()).getDescription ());
     
         return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
