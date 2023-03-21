@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.openapi.biz.service.user.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.constant.AuthConstant;
 import com.yixihan.yicode.question.openapi.biz.feign.user.base.UserFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserInfoFeignClient;
@@ -39,8 +40,12 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public Long getUserId() {
-        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER)
-                .substring (AuthConstant.TOKEN_SUB_INDEX);
+        String token = request.getHeader (AuthConstant.JWT_TOKEN_HEADER);
+        
+        if (StrUtil.isBlank (token)) {
+            return null;
+        }
+        token = token.substring (AuthConstant.TOKEN_SUB_INDEX);
         
         return userFeignClient.getUserIdByToken (token).getResult ();
     }

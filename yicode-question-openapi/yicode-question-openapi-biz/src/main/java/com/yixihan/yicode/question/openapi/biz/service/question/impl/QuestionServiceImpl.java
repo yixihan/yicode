@@ -232,7 +232,7 @@ public class QuestionServiceImpl implements QuestionService {
     public PageVO<QuestionVO> queryQuestion(QueryQuestionReq req) {
         // 构建请求 body
         QueryQuestionDtoReq dtoReq = BeanUtil.toBean (req, QueryQuestionDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userService.getUserId ());
         
         // 搜索问题
         PageDtoResult<QuestionDtoResult> dtoResult = questionFeignClient.queryQuestion (dtoReq).getResult ();

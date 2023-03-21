@@ -32,13 +32,32 @@
         q.`note_count`,
         q.`commit_count`,
         q.`success_count`,
-        if(q.`success_count` = 0, 0, q.`success_count` / q.`commit_count` * 100) as passRate,
+        if(q.`success_count` = 0, 0, round(q.`success_count` / q.`commit_count`, 4) * 100) as passRate,
+        <if test="params.userId != null">
+            if(qa.`status` > 0, true, false) as `status`,
+        </if>
         q.`create_time`
     from
         `question` q
     <if test="params.label != null and params.label.size () > 0">
         left join `label_question` lq
-            on q.`question_id` = lq.`question_id`
+            on lq.`del_flag` = 0
+                   and q.`question_id` = lq.`question_id`
+    </if>
+    <if test="params.userId != null">
+        left join (
+            select
+                `question_id`,
+                sum(if(`answer_flag`='AC', 1, 0)) as `status`
+            from
+                `question_answer`
+            where
+                `del_flag` = 0
+                and `user_id` = ${params.userId}
+            group by
+                `question_id`
+            ) as qa
+            on qa.`question_id` = q.`question_id`
     </if>
     <where>
         and q.`del_flag` = 0
@@ -46,7 +65,6 @@
             and q.`question_name` like concat('%', #{params.questionName}, '%')
         </if>
         <if test="params.label != null and params.label.size () > 0">
-            and lq.`del_flag` = 0
             <foreach collection="params.label" item="item"
                      open="and lq.`label_id` in (" separator="," close=")">
                 #{item}
@@ -55,7 +73,7 @@
         <if test="params.difficulty != null and params.difficulty != ''">
             and q.`question_difficulty` = #{params.difficulty}
         </if>
-        <if test="params.status != null and params.status != ''">
+        <if test="params.userId != null and params.status != null and params.status != ''">
             <if test="params.status == 'UN_DO'">
                 and q.`question_id` not in (<include refid="userAnswer"/>)
             </if>
