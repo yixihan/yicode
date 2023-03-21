@@ -108,7 +108,7 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     public List<QuestionDailyDtoResult> dailyQuestionDetail(Date month) {
         // 获取起始时间和终止时间
         DateTime startMonth = DateUtil.beginOfMonth (month);
-        DateTime endMonth = DateUtil.endOfMinute (month);
+        DateTime endMonth = DateUtil.endOfMonth (month);
         List<QuestionDaily> questionDailyList = lambdaQuery ()
                 .between (QuestionDaily::getCreateTime, startMonth, endMonth)
                 .orderByDesc (QuestionDaily::getCreateTime)
