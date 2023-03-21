@@ -43,7 +43,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
         // 保存
         Assert.isTrue (save (role), BizCodeEnum.FAILED_TYPE_BUSINESS);
-
+    
         return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
@@ -71,7 +71,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = getById (roleId);
     
         Assert.notNull (role, new BizException ("没有该角色"));
-        
+    
         return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
@@ -91,7 +91,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
                 .list ();
         roleList = CollUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
-        
+    
         return BeanUtil.copyToList (roleList, RoleDtoResult.class);
     }
     
@@ -100,7 +100,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Page<Role> page = lambdaQuery ()
                 .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
                 .page (PageUtil.toPage (dtoReq));
-    
+        
         return PageUtil.pageToPageDtoResult (
                 page,
                 o -> BeanUtil.toBean (o, RoleDtoResult.class)

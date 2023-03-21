@@ -1,6 +1,6 @@
 package com.yixihan.yicode.question.openapi.biz.service.question;
 
-import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRunVO;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
@@ -29,5 +29,5 @@ public interface SseEmitterService {
      *
      * @param result 代码运行结果
      */
-    void sendMsgToClient(CodeRunDtoResult result);
+    void sendMsgToClient(CodeRunVO result);
 }

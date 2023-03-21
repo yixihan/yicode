@@ -29,10 +29,12 @@ import java.util.List;
 public interface RoleOpenApi {
     
     @ApiOperation ("用户添加角色")
+    @RoleAccess(value = RoleEnums.SUPER_ADMIN)
     @PostMapping(value = "/user/add", produces = "application/json")
     JsonResponse<List<RoleVO>> addUserRole (@RequestBody ModifyUserRoleReq req);
     
     @ApiOperation ("用户删除角色")
+    @RoleAccess(value = RoleEnums.SUPER_ADMIN)
     @DeleteMapping(value = "/user/del", produces = "application/json")
     JsonResponse<List<RoleVO>> delUserRole (@RequestBody ModifyUserRoleReq req);
     
