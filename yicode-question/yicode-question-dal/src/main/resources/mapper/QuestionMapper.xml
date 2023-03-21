@@ -162,15 +162,17 @@
 
     <select id="commitData"
             resultType="com.yixihan.yicode.question.api.dto.response.admin.CommitDataDtoResult">
-        select
-            count(*) as commitCount,
-            sum(if(answer_flag = 'AC', 1, 0)) as commitSuccessCount,
-            sum(if(q.question_difficulty = 'EASY', 1, 0)) as commitEasyCount,
-            sum(if(q.question_difficulty = 'EASY' and answer_flag = 'AC', 1, 0)) as commitSuccessEasyCount,
-            sum(if(q.question_difficulty = 'MEDIUM', 1, 0)) as commitMediumCount,
-            sum(if(q.question_difficulty = 'MEDIUM' and answer_flag = 'AC', 1, 0)) as commitSuccessMediumCount,
-            sum(if(q.question_difficulty = 'HARD', 1, 0)) as commitHardCount,
-            sum(if(q.question_difficulty = 'HARD' and answer_flag = 'AC', 1, 0)) as commitSuccessHardCount
+        select count(*)                                                                          as commitCount,
+               ifnull(sum(if(answer_flag = 'AC', 1, 0)), 0)                                      as commitSuccessCount,
+               ifnull(sum(if(q.question_difficulty = 'EASY', 1, 0)), 0)                          as commitEasyCount,
+               ifnull(sum(if(q.question_difficulty = 'EASY' and answer_flag = 'AC', 1, 0)),
+                      0)                                                                         as commitSuccessEasyCount,
+               ifnull(sum(if(q.question_difficulty = 'MEDIUM', 1, 0)), 0)                        as commitMediumCount,
+               ifnull(sum(if(q.question_difficulty = 'MEDIUM' and answer_flag = 'AC', 1, 0)),
+                      0)                                                                         as commitSuccessMediumCount,
+               ifnull(sum(if(q.question_difficulty = 'HARD', 1, 0)), 0)                          as commitHardCount,
+               ifnull(sum(if(q.question_difficulty = 'HARD' and answer_flag = 'AC', 1, 0)),
+                      0)                                                                         as commitSuccessHardCount
         from
             `question_answer` as qa
         left join
@@ -185,7 +187,7 @@
         select
             date_format(create_time, '%Y-%m') as month,
             count(*) as commitCount,
-            sum(if(answer_flag = 'AC', 1, 0)) as commitSuccessCount
+            ifnull(sum(if(answer_flag = 'AC', 1, 0)), 0) as commitSuccessCount
         from
             `question_answer`
         where
@@ -255,9 +257,9 @@
             resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionCountDtoResult">
         select
             count(*) as question,
-            sum(if(question_difficulty = 'EASY', 1, 0)) as easyQuestion,
-            sum(if(question_difficulty = 'MEDIUM', 1, 0)) as mediumQuestion,
-            sum(if(question_difficulty = 'HARD', 1, 0)) as hardQuestion
+            ifnull(sum(if(question_difficulty = 'EASY', 1, 0)), 0)   as easyQuestion,
+            ifnull(sum(if(question_difficulty = 'MEDIUM', 1, 0)), 0) as mediumQuestion,
+            ifnull(sum(if(question_difficulty = 'HARD', 1, 0)), 0)   as hardQuestion
         from
             question
         where
