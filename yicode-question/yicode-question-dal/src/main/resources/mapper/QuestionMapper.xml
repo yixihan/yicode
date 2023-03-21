@@ -220,8 +220,8 @@
         select
             count(*) as question,
             sum(if(question_difficulty = 'EASY', 1, 0)) as easyQuestion,
-            sum(if(question_difficulty = 'MEDIUM', 1, 0)) as easyQuestion,
-            sum(if(question_difficulty = 'HARD', 1, 0)) as easyQuestion
+            sum(if(question_difficulty = 'MEDIUM', 1, 0)) as mediumQuestion,
+            sum(if(question_difficulty = 'HARD', 1, 0)) as hardQuestion
         from
             question
         where

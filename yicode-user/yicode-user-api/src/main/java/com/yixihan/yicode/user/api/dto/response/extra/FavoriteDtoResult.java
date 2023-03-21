@@ -41,6 +41,9 @@ public class FavoriteDtoResult {
     @ApiModelProperty(value = "收藏数量")
     private Integer favoriteCount;
     
+    @ApiModelProperty(value = "收藏夹封面")
+    private String favoriteBg;
+    
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
