@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
@@ -43,7 +44,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
         // 保存
         Assert.isTrue (save (role), BizCodeEnum.FAILED_TYPE_BUSINESS);
-
+        // 处理 roleName
+        dealRoleEnums (CollUtil.toList (role));
+    
         return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
@@ -71,7 +74,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = getById (roleId);
     
         Assert.notNull (role, new BizException ("没有该角色"));
-        
+        // 处理 roleName
+        dealRoleEnums (CollUtil.toList (role));
+    
         return BeanUtil.toBean (role, RoleDtoResult.class);
     }
     
@@ -92,6 +97,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .list ();
         roleList = CollUtil.isEmpty (roleList) ? Collections.emptyList () : roleList;
         
+        // 处理 roleName
+        dealRoleEnums (roleList);
+    
         return BeanUtil.copyToList (roleList, RoleDtoResult.class);
     }
     
@@ -100,10 +108,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Page<Role> page = lambdaQuery ()
                 .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
                 .page (PageUtil.toPage (dtoReq));
-    
+        
+        // 处理 roleName
+        dealRoleEnums (page.getRecords ());
+        
         return PageUtil.pageToPageDtoResult (
                 page,
                 o -> BeanUtil.toBean (o, RoleDtoResult.class)
+        );
+    }
+    
+    private void dealRoleEnums (List<Role> roleList) {
+        roleList.forEach (item ->
+            item.setRoleName (RoleEnums.valueOf (item.getRoleName ()).getRoleDesc ())
         );
     }
 }

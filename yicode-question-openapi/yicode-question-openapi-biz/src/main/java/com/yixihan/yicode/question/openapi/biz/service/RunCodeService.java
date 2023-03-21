@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.openapi.biz.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
@@ -20,6 +21,7 @@ import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResu
 import com.yixihan.yicode.question.api.dto.response.question.QuestionDailyDtoResult;
 import com.yixihan.yicode.question.openapi.api.prop.CodeJudgeProp;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRunVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelQuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelUserFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionAnswerFeignClient;
@@ -108,7 +110,8 @@ public class RunCodeService {
             CodeRunDtoResult result = codeRunFeignClient.runCode (dtoReq).getResult ();
     
             // 推送给前端
-            sseEmitterService.sendMsgToClient (result);
+            CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
+            sseEmitterService.sendMsgToClient (vo);
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.error ("出现异常", e);
@@ -140,7 +143,9 @@ public class RunCodeService {
             status = judgeCode (result, questionCase);
             
             // 推送给前端
-            sseEmitterService.sendMsgToClient (result);
+            CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
+            vo.setStatus (status);
+            sseEmitterService.sendMsgToClient (vo);
             
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
@@ -162,7 +167,9 @@ public class RunCodeService {
             // 超时
             status = CodeAnswerEnums.TLE;
             // 推送给前端
-            sseEmitterService.sendMsgToClient (result);
+            CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
+            vo.setStatus (status);
+            sseEmitterService.sendMsgToClient (vo);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {
@@ -175,7 +182,9 @@ public class RunCodeService {
             // 系统内部错误
             status = CodeAnswerEnums.SE;
             // 推送给前端
-            sseEmitterService.sendMsgToClient (result);
+            CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
+            vo.setStatus (status);
+            sseEmitterService.sendMsgToClient (vo);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
             try {

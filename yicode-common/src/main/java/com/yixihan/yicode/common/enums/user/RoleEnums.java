@@ -16,18 +16,19 @@ public enum RoleEnums {
     /**
      * 超级管理员
      */
-    SUPER_ADMIN(1L, "超级管理员"),
+    SUPER_ADMIN("SUPER_ADMIN", 1L, "超级管理员"),
 
     /**
      * 管理员
      */
-    ADMIN(2L, "管理员"),
+    ADMIN("ADMIN", 2L, "管理员"),
 
     /**
      * 用户
      */
-    USER(3L, "用户");
+    USER("USER", 3L, "用户");
 
+    private final String roleName;
 
     /**
      * 角色 id
@@ -37,6 +38,6 @@ public enum RoleEnums {
     /**
      * 角色名
      */
-    private final String roleName;
+    private final String roleDesc;
 
 }

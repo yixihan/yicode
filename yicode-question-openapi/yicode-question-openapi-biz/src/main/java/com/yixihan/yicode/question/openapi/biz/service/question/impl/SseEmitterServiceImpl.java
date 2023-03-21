@@ -3,9 +3,9 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.constant.SseEmitterConstant;
 import com.yixihan.yicode.common.exception.BizException;
+import com.yixihan.yicode.question.openapi.api.vo.response.question.CodeRunVO;
 import com.yixihan.yicode.question.openapi.biz.service.question.SseEmitterService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
-import com.yixihan.yicode.run.api.dto.response.CodeRunDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     }
     
     @Override
-    public void sendMsgToClient(CodeRunDtoResult result) {
+    public void sendMsgToClient(CodeRunVO result) {
         Long userId = userService.getUserId ();
         if (CollectionUtil.isEmpty(SSE_CACHE)) {
             return;
@@ -86,7 +86,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      * @param userId 用户 ID
      * @param message 信息明细
      */
-    private void sendMsgToClientByClientId(Long userId, CodeRunDtoResult message) {
+    private void sendMsgToClientByClientId(Long userId, CodeRunVO message) {
         SseEmitter sseEmitter = SSE_CACHE.get (userId);
     
         SseEmitter.SseEventBuilder sendData = SseEmitter.event()

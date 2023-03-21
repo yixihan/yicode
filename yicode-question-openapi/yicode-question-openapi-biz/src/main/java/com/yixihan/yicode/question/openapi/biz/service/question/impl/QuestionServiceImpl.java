@@ -224,6 +224,7 @@ public class QuestionServiceImpl implements QuestionService {
         
         // 获取问题明细
         QuestionDetailDtoResult dtoResult = questionFeignClient.questionDetail (questionId).getResult ();
+        dtoResult.setQuestionDifficulty (QuestionDifficultyTypeEnums.valueOf (dtoResult.getQuestionDifficulty ()).getDescription ());
     
         return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
     }
@@ -236,6 +237,9 @@ public class QuestionServiceImpl implements QuestionService {
         
         // 搜索问题
         PageDtoResult<QuestionDtoResult> dtoResult = questionFeignClient.queryQuestion (dtoReq).getResult ();
+        dtoResult.getRecords ().forEach (o ->
+            o.setQuestionDifficulty (QuestionDifficultyTypeEnums.valueOf (o.getQuestionDifficulty ()).getDescription ())
+        );
         
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
