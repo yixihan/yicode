@@ -8,6 +8,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyQuestionListReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.admin.QueryQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.QuestionListVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
@@ -125,9 +126,8 @@ public class QuestionListServiceImpl implements QuestionListService {
     }
     
     @Override
-    public PageVO<QuestionVO> questionPage(Long id) {
-        CollectionQueryDtoReq dtoReq = new CollectionQueryDtoReq ();
-        dtoReq.setFavoriteId (id);
+    public PageVO<QuestionVO> questionPage(QueryQuestionListReq req) {
+        CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();
     
         return PageVOUtil.pageDtoToPageVO (

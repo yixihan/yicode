@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyQuestionListReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.admin.QueryQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.QuestionListVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import io.swagger.annotations.Api;
@@ -56,5 +57,5 @@ public interface QuestionListOpenApi {
     
     @ApiOperation ("查看题单题目内容")
     @PostMapping(value = "/question/page", produces = "application/json")
-    JsonResponse<PageVO<QuestionVO>> questionPage (@RequestParam("id") Long id);
+    JsonResponse<PageVO<QuestionVO>> questionPage (@RequestBody QueryQuestionListReq req);
 }

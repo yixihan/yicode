@@ -6,6 +6,7 @@ import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.admin.QuestionListOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyQuestionListReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.admin.QueryQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.QuestionListVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
 import com.yixihan.yicode.question.openapi.biz.service.admin.QuestionListService;
@@ -64,7 +65,7 @@ public class QuestionListController implements QuestionListOpenApi {
     }
     
     @Override
-    public JsonResponse<PageVO<QuestionVO>> questionPage(Long id) {
-        return JsonResponse.ok (service.questionPage (id));
+    public JsonResponse<PageVO<QuestionVO>> questionPage(QueryQuestionListReq req) {
+        return JsonResponse.ok (service.questionPage (req));
     }
 }

@@ -4,6 +4,7 @@ import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyQuestionListReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.admin.QueryQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.CollectionVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.QuestionListVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
@@ -74,8 +75,8 @@ public interface QuestionListService {
     /**
      * 查看题单题目内容
      *
-     * @param id 题单 id
+     * @param req 请求参数
      * @return {@link QuestionVO}
      */
-    PageVO<QuestionVO> questionPage(Long id);
+    PageVO<QuestionVO> questionPage(QueryQuestionListReq req);
 }
