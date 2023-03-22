@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
@@ -184,6 +185,21 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public CommitDataDtoResult commitData(AdminDataDtoReq dtoReq) {
         return baseMapper.commitData (dtoReq);
+    }
+    
+    @Override
+    public QuestionDetailDtoResult randomQuestion() {
+        // 获取问题总数
+        int count = count ();
+        
+        // 生成随机数
+        int randomInt = RandomUtil.randomInt (count);
+        
+        Question question = lambdaQuery ()
+                .last ("limit" + randomInt + ", " + randomInt + 1)
+                .one ();
+        
+        return BeanUtil.toBean (question, QuestionDetailDtoResult.class);
     }
     
     @Override

@@ -88,6 +88,11 @@ public class QuestionController implements QuestionApi {
     }
     
     @Override
+    public ApiResult<QuestionDetailDtoResult> randomQuestion() {
+        return ApiResult.create (service.randomQuestion ());
+    }
+    
+    @Override
     public ApiResult<QuestionCountDtoResult> questionCount() {
         return ApiResult.create (service.questionCount ());
     }

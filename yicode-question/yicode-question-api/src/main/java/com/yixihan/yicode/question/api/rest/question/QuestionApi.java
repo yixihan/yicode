@@ -59,17 +59,21 @@ public interface QuestionApi {
     @PostMapping(value = "/verify", produces = "application/json")
     ApiResult<Boolean> verifyQuestion(@RequestBody Long questionId);
     
-    @ApiOperation ("获取问题名字")
+    @ApiOperation("获取问题名字")
     @PostMapping(value = "/detail/name", produces = "application/json")
     ApiResult<Map<Long, String>> questionName(@RequestBody List<Long> questionIdList);
     
     @ApiOperation("管理中心-查看网址数据")
     @PostMapping(value = "/broken/data", produces = "application/json")
-    ApiResult<Map<String, BrokenDataDtoResult>> brokenData (@RequestBody AdminDataDtoReq dtoReq);
+    ApiResult<Map<String, BrokenDataDtoResult>> brokenData(@RequestBody AdminDataDtoReq dtoReq);
     
     @ApiOperation("管理中心-代码提交数据")
     @PostMapping(value = "/commit/data", produces = "application/json")
-    ApiResult<CommitDataDtoResult> commitData (@RequestBody AdminDataDtoReq dtoReq);
+    ApiResult<CommitDataDtoResult> commitData(@RequestBody AdminDataDtoReq dtoReq);
+    
+    @ApiOperation("随机一题")
+    @PostMapping(value = "/detail/random", produces = "application/json")
+    ApiResult<QuestionDetailDtoResult> randomQuestion();
     
     @ApiOperation("获取题目数量")
     @PostMapping(value = "/all/count", produces = "application/json")

@@ -83,6 +83,11 @@ public class QuestionController implements QuestionOpenApi {
     }
     
     @Override
+    public JsonResponse<QuestionDetailVO> randomQuestion() {
+        return JsonResponse.ok (service.randomQuestion ());
+    }
+    
+    @Override
     public JsonResponse<QuestionCountVO> questionCount() {
         return JsonResponse.ok (service.questionCount ());
     }
