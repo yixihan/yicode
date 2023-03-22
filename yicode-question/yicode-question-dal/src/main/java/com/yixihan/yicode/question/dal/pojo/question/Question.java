@@ -30,7 +30,7 @@ public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "问题 id")
-    @TableId(value = "question_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "question_id", type = IdType.AUTO)
     private Long questionId;
 
     @ApiModelProperty(value = "问题题目")

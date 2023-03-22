@@ -30,7 +30,7 @@ public class Note implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "题解 id")
-    @TableId(value = "note_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "note_id", type = IdType.AUTO)
     private Long noteId;
     @ApiModelProperty(value = "问题 id")
     private Long questionId;

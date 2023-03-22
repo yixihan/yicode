@@ -30,7 +30,7 @@ public class CommentRoot implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "父评论 id")
-    @TableId(value = "root_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "root_id", type = IdType.AUTO)
     private Long rootId;
 
     @ApiModelProperty(value = "评论内容 id")

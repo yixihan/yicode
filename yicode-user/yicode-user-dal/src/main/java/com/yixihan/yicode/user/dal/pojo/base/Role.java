@@ -29,7 +29,7 @@ public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "角色 id")
-    @TableId(value = "role_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "role_id", type = IdType.AUTO)
     private Long roleId;
 
     @ApiModelProperty(value = "角色名")

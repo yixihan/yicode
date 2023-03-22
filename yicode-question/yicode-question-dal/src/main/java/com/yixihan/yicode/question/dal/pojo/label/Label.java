@@ -30,7 +30,7 @@ public class Label implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "标签 id")
-    @TableId(value = "label_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "label_id", type = IdType.AUTO)
     private Long labelId;
 
     @ApiModelProperty(value = "标签名")

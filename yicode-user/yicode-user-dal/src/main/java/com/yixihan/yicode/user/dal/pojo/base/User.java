@@ -29,7 +29,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "用户 id")
-    @TableId(value = "user_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
 
     @ApiModelProperty(value = "用户名")

@@ -30,7 +30,7 @@ public class CommentReply implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @ApiModelProperty(value = "子评论 id")
-    @TableId(value = "reply_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "reply_id", type = IdType.AUTO)
     private Long replyId;
 
     @ApiModelProperty(value = "父评论 id")
