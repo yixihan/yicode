@@ -196,7 +196,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         int randomInt = RandomUtil.randomInt (count);
         
         Question question = lambdaQuery ()
-                .last ("limit " + randomInt + ", " + randomInt + 1)
+                .last ("limit " + randomInt + ", 1")
                 .one ();
         
         return BeanUtil.toBean (question, QuestionDetailDtoResult.class);
