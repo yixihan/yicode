@@ -252,6 +252,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
     
     @Override
+    public QuestionDetailVO randomQuestion() {
+        QuestionDetailDtoResult dtoResult = questionFeignClient.randomQuestion ().getResult ();
+        dtoResult.setQuestionDifficulty (QuestionDifficultyTypeEnums.valueOf (dtoResult.getQuestionDifficulty ()).getDescription ());
+    
+        return BeanUtil.toBean (dtoResult, QuestionDetailVO.class);
+    }
+    
+    @Override
     public QuestionCountVO questionCount() {
         QuestionCountDtoResult dtoResult = questionFeignClient.questionCount ().getResult ();
         

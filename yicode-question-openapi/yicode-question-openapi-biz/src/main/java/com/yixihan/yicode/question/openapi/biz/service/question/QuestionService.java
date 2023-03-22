@@ -98,6 +98,13 @@ public interface QuestionService {
     PageVO<QuestionVO> queryQuestion(QueryQuestionReq req);
     
     /**
+     * 随机一题
+     *
+     * @return {@link QuestionDetailVO}
+     */
+    QuestionDetailVO randomQuestion();
+    
+    /**
      * 获取题目数量
      *
      * @return {@link QuestionCountVO}

@@ -138,6 +138,13 @@ public interface QuestionService extends IService<Question> {
     CommitDataDtoResult commitData(AdminDataDtoReq dtoReq);
     
     /**
+     * 随机一题
+     *
+     * @return {@link QuestionDetailDtoResult}
+     */
+    QuestionDetailDtoResult randomQuestion();
+    
+    /**
      * 获取问题数量
      *
      * @return {@link QuestionCountDtoResult}

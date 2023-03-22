@@ -74,6 +74,10 @@ public interface QuestionOpenApi {
     @PostMapping(value = "/query", produces = "application/json")
     JsonResponse<PageVO<QuestionVO>> queryQuestion(@RequestBody QueryQuestionReq req);
     
+    @ApiOperation("随机一题")
+    @GetMapping(value = "/detail/random", produces = "application/json")
+    JsonResponse<QuestionDetailVO> randomQuestion();
+    
     @ApiOperation("获取题目数量")
     @GetMapping(value = "/all/count", produces = "application/json")
     JsonResponse<QuestionCountVO> questionCount();
