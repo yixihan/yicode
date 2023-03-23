@@ -80,7 +80,7 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
         Long dailyQuestionId;
         do {
             // 生成随机数
-            int random = RandomUtil.randomInt (count + 1);
+            int random = RandomUtil.randomInt (count);
     
             dailyQuestionId = questionService.lambdaQuery ()
                     .select (Question::getQuestionId)

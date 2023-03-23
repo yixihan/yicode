@@ -2,7 +2,6 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
@@ -43,7 +42,7 @@ public class QuestionCaseServiceImpl implements QuestionCaseService {
         // 构建请求 body
         ModifyQuestionCaseDtoReq dtoReq = BeanUtil.toBean (req, ModifyQuestionCaseDtoReq.class);
         // 默认不启用
-        dtoReq.setEnable (NumConstant.NUM_0);
+        dtoReq.setEnable (Boolean.FALSE);
         
         // 添加测试用例
         QuestionCaseDtoResult dtoResult = questionCaseFeignClient.addQuestionCase (dtoReq).getResult ();
