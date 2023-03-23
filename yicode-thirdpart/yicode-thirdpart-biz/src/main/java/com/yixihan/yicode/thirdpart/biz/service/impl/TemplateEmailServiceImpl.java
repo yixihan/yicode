@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.thirdpart.biz.service.TemplateEmailService;
 import com.yixihan.yicode.thirdpart.dal.mapper.TemplateEmailMapper;
 import com.yixihan.yicode.thirdpart.dal.pojo.TemplateEmail;
+import com.yixihan.yicode.thirdpart.dal.pojo.TemplateSms;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -46,20 +47,32 @@ public class TemplateEmailServiceImpl extends ServiceImpl<TemplateEmailMapper, T
     }
     
     @Override
-    public String getEmailContent(Long id) {
+    public String getEmailContent(String templateName) {
         String template;
         try {
             String jsonStr = JSONUtil.toJsonStr (redisTemplate.opsForValue ().get (EMAIL_TEMPLATE_KEY));
             template = JSONUtil.parseArray (jsonStr)
                     .toList (TemplateEmail.class)
                     .stream ()
-                    .filter (o -> o.getId ().equals (id))
+                    .filter (o -> o.getTemplateName ().equals (templateName))
                     .findFirst ()
-                    .orElse (baseMapper.selectById (id))
+                    .orElse (getTemplateByName (templateName))
                     .getTemplateContent ();
         } catch (Exception e) {
-            template = baseMapper.selectById (id).getTemplateContent ();
+            template = getTemplateByName (templateName).getTemplateContent ();
         }
         return template;
+    }
+    
+    /**
+     * 通过模板名获取模板
+     *
+     * @param templateName 模板名
+     * @return {@link TemplateSms}
+     */
+    private TemplateEmail getTemplateByName (String templateName) {
+        return lambdaQuery ()
+                .eq (TemplateEmail::getTemplateName, templateName)
+                .one ();
     }
 }

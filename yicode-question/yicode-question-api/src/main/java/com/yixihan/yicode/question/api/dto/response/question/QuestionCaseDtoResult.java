@@ -28,7 +28,7 @@ public class QuestionCaseDtoResult {
     private Long questionId;
     
     @ApiModelProperty(value = "是否启用")
-    private Integer enable;
+    private Boolean enable;
     
     @ApiModelProperty(value = "测试用例参数")
     private String caseParams;

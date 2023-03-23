@@ -51,7 +51,7 @@ public class SMSServiceImpl implements SMSService {
         SMSTemplateEnums smsType = SMSTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getMobile (), smsType);
         String code = codeService.getCode(keyName);
-        String templateId = templateSmsService.getSMSTemplateId (smsType.getId ());
+        String templateId = templateSmsService.getSMSTemplateId (smsType.getName ());
 
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户 secretId，secretKey,此处还需注意密钥对的保密

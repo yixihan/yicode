@@ -49,7 +49,7 @@ public class QuestionAnswerDtoResult {
     private Integer answerTimeConsume;
     
     @ApiModelProperty(value = "内存消耗")
-    private Integer answerMemoryConsume;
+    private Double answerMemoryConsume;
     
     @ApiModelProperty(value = "备注")
     private String answerNote;

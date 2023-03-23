@@ -3,6 +3,7 @@ package com.yixihan.yicode.question.openapi.biz.service.message.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.Assert;
@@ -14,6 +15,7 @@ import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
+import com.yixihan.yicode.user.api.dto.response.msg.MessageDetailDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -52,13 +54,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
     
         String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
-        String message;
-        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) ||
-                MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
-            message = StrUtil.format (template, user.getUserName (), req.getSourceId ());
-        } else {
-            message = StrUtil.format (template, user.getUserName ());
-        }
+        String message = StrUtil.format (template, user.getUserName ());
     
         // 构建请求 body
         dtoReq.setMsg (message);
@@ -66,10 +62,10 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setSendUserName (user.getUserName ());
         
         // 保存消息
-        userMsgFeignClient.addMessage (dtoReq);
-        
+        MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
+    
         // 保存成功, 发送消息给用户
-        sendMessage (message);
+        sendMessage (JSONUtil.toJsonStr (dtoResult));
     }
     
     

@@ -14,11 +14,11 @@ import com.yixihan.yicode.thirdpart.dal.pojo.TemplateSms;
 public interface TemplateSmsService extends IService<TemplateSms> {
 
     /**
-     * 根据 id 获取 模板id
+     * 根据模板名获取 模板id
      *
-     * @param id 模板 id
+     * @param templateName 模板名
      * @return 模板内容
      */
-    String getSMSTemplateId (Long id);
+    String getSMSTemplateId (String templateName);
 
 }

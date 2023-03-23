@@ -40,26 +40,39 @@ public class TemplateSmsServiceImpl extends ServiceImpl<TemplateSmsMapper, Templ
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * ?")
     public void initMessageTemplate() {
-        List<TemplateSms> templateList = baseMapper.selectList (null);
+        List<TemplateSms> templateList = list ();
         JSONArray array = JSONUtil.createArray ();
         array.addAll (templateList);
         redisTemplate.opsForValue ().set (SMS_TEMPLATE_KEY, array);
     }
     
     @Override
-    public String getSMSTemplateId(Long id) {
+    public String getSMSTemplateId(String templateName) {
         String template;
         try {
             String jsonStr = JSONUtil.toJsonStr (redisTemplate.opsForValue ().get (SMS_TEMPLATE_KEY));
             template = JSONUtil.parseArray (jsonStr)
                     .toList (TemplateSms.class)
                     .stream ()
-                    .filter (o -> o.getId ().equals (id)).findFirst ()
-                    .orElse (baseMapper.selectById (id))
+                    .filter (o -> o.getTemplateName ().equals (templateName))
+                    .findFirst ()
+                    .orElse (getTemplateByName (templateName))
                     .getTemplateId ();
         } catch (Exception e) {
-            template = baseMapper.selectById (id).getTemplateId ();
+            template = getTemplateByName (templateName).getTemplateId ();
         }
         return template;
+    }
+    
+    /**
+     * 通过模板名获取模板
+     *
+     * @param templateName 模板名
+     * @return {@link TemplateSms}
+     */
+    private TemplateSms getTemplateByName (String templateName) {
+        return lambdaQuery ()
+                .eq (TemplateSms::getTemplateName, templateName)
+                .one ();
     }
 }

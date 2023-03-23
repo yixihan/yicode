@@ -3,7 +3,6 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
@@ -64,7 +63,7 @@ public class QuestionCaseServiceImpl extends ServiceImpl<QuestionCaseMapper, Que
     public List<QuestionCaseDtoResult> allQuestionCase(Long questionId) {
         List<QuestionCase> questionCaseList = lambdaQuery ()
                 .eq (QuestionCase::getQuestionId, questionId)
-                .eq (QuestionCase::getEnable, NumConstant.NUM_1)
+                .eq (QuestionCase::getEnable, Boolean.TRUE)
                 .orderByDesc (QuestionCase::getCreateTime)
                 .list ();
         questionCaseList = CollectionUtil.isEmpty (questionCaseList) ? Collections.emptyList () : questionCaseList;

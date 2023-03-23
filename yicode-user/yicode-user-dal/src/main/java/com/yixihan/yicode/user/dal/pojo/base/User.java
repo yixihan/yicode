@@ -31,59 +31,57 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户 id")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
-
+    
     @ApiModelProperty(value = "用户名")
     private String userName;
-
+    
     @ApiModelProperty(value = "用户密码")
     private String userPassword;
-
+    
     @ApiModelProperty(value = "用户手机号")
     private String userMobile;
-
+    
     @ApiModelProperty(value = "用户邮箱")
     private String userEmail;
-
+    
     @ApiModelProperty(value = "注册方式")
     private String registerType;
-
+    
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
+    
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
+    
     @ApiModelProperty(value = "乐观锁")
     @Version
     private Integer version;
-
+    
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer delFlag;
-
-
-    public static final String ID = "id";
-
+    
+    
     public static final String USER_ID = "user_id";
-
+    
     public static final String USER_NAME = "user_name";
-
+    
     public static final String USER_PASSWORD = "user_password";
-
+    
     public static final String USER_MOBILE = "user_mobile";
-
+    
     public static final String USER_EMAIL = "user_email";
-
+    
     public static final String REGISTER_TYPE = "register_type";
-
+    
     public static final String CREATE_TIME = "create_time";
-
+    
     public static final String UPDATE_TIME = "update_time";
-
+    
     public static final String VERSION = "version";
-
+    
     public static final String DEL_FLAG = "del_flag";
 
 }

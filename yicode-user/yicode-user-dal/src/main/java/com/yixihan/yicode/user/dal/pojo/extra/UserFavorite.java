@@ -32,58 +32,57 @@ public class UserFavorite implements Serializable {
     @ApiModelProperty(value = "收藏夹 id")
     @TableId(value = "favorite_id", type = IdType.AUTO)
     private Long favoriteId;
-
+    
     @ApiModelProperty(value = "用户 id")
     private Long userId;
-
-    @ApiModelProperty(value = "收藏类型(QUESTION : 问题, NOTE : 题解)")
+    
+    @ApiModelProperty(value = "收藏类型(QUESTION:问题, NOTE:题解)")
     private String favoriteType;
-
+    
     @ApiModelProperty(value = "收藏夹名")
     private String favoriteName;
     
     @ApiModelProperty(value = "收藏夹封面")
     private String favoriteBg;
-
+    
     @ApiModelProperty(value = "收藏数量")
     private Integer favoriteCount;
-
+    
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
+    
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
+    
     @ApiModelProperty(value = "乐观锁")
     @Version
     private Integer version;
-
+    
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer delFlag;
-
-
-    public static final String ID = "id";
-
+    
+    
     public static final String FAVORITE_ID = "favorite_id";
     
     public static final String USER_ID = "user_id";
-
+    
     public static final String FAVORITE_TYPE = "favorite_type";
-
+    
     public static final String FAVORITE_NAME = "favorite_name";
+    
     public static final String FAVORITE_BG = "favorite_bg";
-
+    
     public static final String FAVORITE_COUNT = "favorite_count";
-
+    
     public static final String CREATE_TIME = "create_time";
-
+    
     public static final String UPDATE_TIME = "update_time";
-
+    
     public static final String VERSION = "version";
-
+    
     public static final String DEL_FLAG = "del_flag";
 
 }

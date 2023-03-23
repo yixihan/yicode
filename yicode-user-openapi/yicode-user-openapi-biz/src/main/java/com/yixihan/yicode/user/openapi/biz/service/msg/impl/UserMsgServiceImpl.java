@@ -72,13 +72,8 @@ public class UserMsgServiceImpl implements UserMsgService {
         
         // 填充消息
         String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
-        String message;
-        if (MsgTypeEnums.LIKE.getType ().equals (req.getMessageType ()) ||
-                MsgTypeEnums.REPLY.getType ().equals (req.getMessageType ())) {
-            message = StrUtil.format (template, user.getUserName (), req.getSourceId ());
-        } else {
-            message = StrUtil.format (template, user.getUserName ());
-        }
+        String message = StrUtil.format (template, user.getUserName ());
+        
         
         // 保存消息
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
@@ -88,7 +83,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
         
         // 发送消息
-        sendMessage (message);
+        sendMessage (JSONUtil.toJsonStr (dtoResult));
         return BeanUtil.toBean (dtoResult, MessageDetailVO.class);
     }
     

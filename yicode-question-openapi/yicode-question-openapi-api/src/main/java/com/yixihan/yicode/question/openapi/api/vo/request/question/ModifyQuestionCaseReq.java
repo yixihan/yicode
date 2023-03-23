@@ -24,8 +24,8 @@ public class ModifyQuestionCaseReq {
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
     
-    @ApiModelProperty(value = "是否启用(0:不启用, 1:启用)")
-    private Integer enable;
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enable;
     
     @ApiModelProperty(value = "测试用例参数")
     private String caseParams;

@@ -31,39 +31,37 @@ public class Role implements Serializable {
     @ApiModelProperty(value = "角色 id")
     @TableId(value = "role_id", type = IdType.AUTO)
     private Long roleId;
-
+    
     @ApiModelProperty(value = "角色名")
     private String roleName;
-
+    
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
+    
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
+    
     @ApiModelProperty(value = "乐观锁")
     @Version
     private Integer version;
-
+    
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer delFlag;
-
-
-    public static final String ID = "id";
-
+    
+    
     public static final String ROLE_ID = "role_id";
-
+    
     public static final String ROLE_NAME = "role_name";
-
+    
     public static final String CREATE_TIME = "create_time";
-
+    
     public static final String UPDATE_TIME = "update_time";
-
+    
     public static final String VERSION = "version";
-
+    
     public static final String DEL_FLAG = "del_flag";
 
 }

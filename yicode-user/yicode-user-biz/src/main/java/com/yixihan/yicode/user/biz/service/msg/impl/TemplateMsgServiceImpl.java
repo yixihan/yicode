@@ -2,7 +2,6 @@ package com.yixihan.yicode.user.biz.service.msg.impl;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.user.biz.service.msg.TemplateMsgService;
 import com.yixihan.yicode.user.dal.mapper.msg.TemplateMsgMapper;
@@ -49,8 +48,6 @@ public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, Templ
     @Override
     public String getMessageTemplate(String templateId) {
         String template;
-        QueryWrapper<TemplateMsg> wrapper = new QueryWrapper<TemplateMsg> ()
-                .eq (TemplateMsg.TEMPLATE_ID, templateId);
         try {
             String jsonStr = JSONUtil.toJsonStr (redisTemplate.opsForValue ().get (MESSAGE_TEMPLATE_KEY));
             template = JSONUtil.parseArray (jsonStr)
@@ -58,11 +55,23 @@ public class TemplateMsgServiceImpl extends ServiceImpl<TemplateMsgMapper, Templ
                     .stream ()
                     .filter (o -> o.getTemplateId ().equals (templateId))
                     .findFirst ()
-                    .orElse (baseMapper.selectOne (wrapper))
+                    .orElse (getTemplateById(templateId))
                     .getTemplateContent ();
         } catch (Exception e) {
-            template = baseMapper.selectOne (wrapper).getTemplateContent ();
+            template = getTemplateById(templateId).getTemplateContent ();
         }
         return template;
+    }
+    
+    /**
+     * 通过模板 id 获取模板
+     *
+     * @param templateId 模板 id
+     * @return {@link TemplateMsg}
+     */
+    private TemplateMsg getTemplateById (String templateId) {
+        return lambdaQuery ()
+                .eq (TemplateMsg::getTemplateId, templateId)
+                .one ();
     }
 }

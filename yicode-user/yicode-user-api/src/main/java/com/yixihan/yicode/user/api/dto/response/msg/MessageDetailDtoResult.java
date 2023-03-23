@@ -21,6 +21,9 @@ import java.util.Date;
 @ApiModel("消息明细-dtoResult")
 public class MessageDetailDtoResult {
     
+    @ApiModelProperty(value = "主键 id")
+    private Long id;
+    
     @ApiModelProperty(value = "发送者 id")
     private Long sendUserId;
     
@@ -32,6 +35,9 @@ public class MessageDetailDtoResult {
     
     @ApiModelProperty(value = "消息内容")
     private String msg;
+    
+    @ApiModelProperty(value = "是否已读")
+    private Boolean finish;
     
     @ApiModelProperty(value = "发送时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

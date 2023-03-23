@@ -48,7 +48,7 @@ public class EmailSendServiceImpl implements EmailSendService {
     public void send(EmailSendDtoReq dtoReq) {
         EmailTemplateEnums emailType = EmailTemplateEnums.valueOf (dtoReq.getType ());
         String keyName = getRedisKey (dtoReq.getEmail (), emailType);
-        String emailContent = templateEmailService.getEmailContent (emailType.getId ());
+        String emailContent = templateEmailService.getEmailContent (emailType.getName ());
 
         try {
             String code = codeService.getCode(keyName);

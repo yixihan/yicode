@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.Assert;
@@ -52,7 +51,7 @@ public class UserMsgServiceImpl extends ServiceImpl<UserMsgMapper, UserMsg> impl
                 .in (CollUtil.isNotEmpty (dtoReq.getMessageIdList ()),
                         UserMsg::getId, dtoReq.getMessageIdList ())
                 .set (CollUtil.isNotEmpty (dtoReq.getMessageIdList ()),
-                        UserMsg::getFinish, NumConstant.NUM_1)
+                        UserMsg::getFinish, Boolean.TRUE)
                 .update ();
     
         Assert.isTrue (modify, BizCodeEnum.FAILED_TYPE_INTERNAL);
@@ -75,7 +74,7 @@ public class UserMsgServiceImpl extends ServiceImpl<UserMsgMapper, UserMsg> impl
     public Integer unReadMessageCount(Long userId) {
         return lambdaQuery ()
                 .eq (UserMsg::getReceiveUseId, userId)
-                .eq (UserMsg::getFinish, NumConstant.NUM_0)
+                .eq (UserMsg::getFinish, Boolean.FALSE)
                 .count ();
     }
     

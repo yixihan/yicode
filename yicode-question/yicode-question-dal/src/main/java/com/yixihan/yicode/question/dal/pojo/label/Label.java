@@ -32,39 +32,37 @@ public class Label implements Serializable {
     @ApiModelProperty(value = "标签 id")
     @TableId(value = "label_id", type = IdType.AUTO)
     private Long labelId;
-
+    
     @ApiModelProperty(value = "标签名")
     private String labelName;
-
+    
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
+    
     @ApiModelProperty(value = "修改时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
+    
     @ApiModelProperty(value = "乐观锁")
     @Version
     private Integer version;
-
+    
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer delFlag;
-
-
-    public static final String ID = "id";
-
+    
+    
     public static final String LABEL_ID = "label_id";
-
+    
     public static final String LABEL_NAME = "label_name";
-
+    
     public static final String CREATE_TIME = "create_time";
-
+    
     public static final String UPDATE_TIME = "update_time";
-
+    
     public static final String VERSION = "version";
-
+    
     public static final String DEL_FLAG = "del_flag";
 
 }
