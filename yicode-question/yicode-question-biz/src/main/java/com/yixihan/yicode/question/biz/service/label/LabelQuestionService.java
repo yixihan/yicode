@@ -44,7 +44,8 @@ public interface LabelQuestionService extends IService<LabelQuestion> {
     /**
      * 获取问题的所有标签
      *
+     * @param labelName 标签名
      * @return {@link LabelDtoResult}
      */
-    List<LabelDtoResult> allQuestionLabel();
+    List<LabelDtoResult> allQuestionLabel(String labelName);
 }

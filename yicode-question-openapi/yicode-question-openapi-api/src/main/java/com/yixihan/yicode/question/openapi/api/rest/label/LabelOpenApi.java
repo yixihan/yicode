@@ -47,10 +47,10 @@ public interface LabelOpenApi {
     
     @ApiOperation("全部题解标签")
     @GetMapping(value = "/all/note", produces = "application/json")
-    JsonResponse<List<LabelVO>> allNoteLabel();
+    JsonResponse<List<LabelVO>> allNoteLabel(@RequestParam("labelName") String labelName);
     
     @ApiOperation("全部问题标签")
     @GetMapping(value = "/all/question", produces = "application/json")
-    JsonResponse<List<LabelVO>> allLabel();
+    JsonResponse<List<LabelVO>> allLabel(@RequestParam("labelName") String labelName);
     
 }

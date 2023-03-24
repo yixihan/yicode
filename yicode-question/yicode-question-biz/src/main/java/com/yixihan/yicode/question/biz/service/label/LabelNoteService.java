@@ -44,7 +44,8 @@ public interface LabelNoteService extends IService<LabelNote> {
     /**
      * 获取所有题解的标签
      *
+     * @param labelName 标签名
      * @return {@link LabelDtoResult}
      */
-    List<LabelDtoResult> allNoteLabel();
+    List<LabelDtoResult> allNoteLabel(String labelName);
 }

@@ -43,7 +43,7 @@ public class LabelQuestionController implements LabelQuestionApi {
     }
     
     @Override
-    public ApiResult<List<LabelDtoResult>> allQuestionLabel() {
-        return ApiResult.create (service.allQuestionLabel ());
+    public ApiResult<List<LabelDtoResult>> allQuestionLabel(String labelName) {
+        return ApiResult.create (service.allQuestionLabel (labelName));
     }
 }

@@ -57,12 +57,12 @@ public class LabelController implements LabelOpenApi {
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> allNoteLabel() {
-        return JsonResponse.ok (service.allNoteLabel ());
+    public JsonResponse<List<LabelVO>> allNoteLabel(String labelName) {
+        return JsonResponse.ok (service.allNoteLabel (labelName));
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> allLabel() {
-        return JsonResponse.ok (service.allQuestionLabel ());
+    public JsonResponse<List<LabelVO>> allLabel(String labelName) {
+        return JsonResponse.ok (service.allQuestionLabel (labelName));
     }
 }

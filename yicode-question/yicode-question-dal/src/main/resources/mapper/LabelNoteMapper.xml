@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.label.LabelNoteMapper">
 
+    <select id="allNoteLabel" resultType="com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult">
+        select
+            l.label_id as labelId,
+            l.label_name as labelName,
+            l.create_time as createTime,
+            l.update_time as updateTime,
+            l.version as version,
+            l.del_flag as delFlag
+        from
+            label_question as lq
+        left join
+            label as l on l.label_id = lq.label_id
+        where
+            lq.del_flag = 0
+            and l.del_flag = 0
+            and l.label_name like concat('%', #{labelName}, '%')
+        order by
+            lq.create_time
+    </select>
 </mapper>

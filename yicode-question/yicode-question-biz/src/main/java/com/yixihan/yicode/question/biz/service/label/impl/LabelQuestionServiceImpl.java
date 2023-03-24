@@ -76,15 +76,7 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     }
     
     @Override
-    public List<LabelDtoResult> allQuestionLabel() {
-        // 获取标签 id
-        List<Long> labelIdList = lambdaQuery ()
-                .orderByDesc (LabelQuestion::getCreateTime)
-                .list ()
-                .stream ()
-                .map (LabelQuestion::getLabelId)
-                .collect (Collectors.toList ());
-    
-        return labelService.labelDetail (labelIdList);
+    public List<LabelDtoResult> allQuestionLabel(String labelName) {
+        return baseMapper.allQuestionLabel (labelName);
     }
 }

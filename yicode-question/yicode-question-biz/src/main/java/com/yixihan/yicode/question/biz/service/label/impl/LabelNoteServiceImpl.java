@@ -75,14 +75,7 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     }
     
     @Override
-    public List<LabelDtoResult> allNoteLabel() {
-        List<Long> labelIdList = lambdaQuery ()
-                .orderByDesc (LabelNote::getCreateTime)
-                .list ()
-                .stream ()
-                .map (LabelNote::getLabelId)
-                .collect (Collectors.toList ());
-    
-        return labelService.labelDetail (labelIdList);
+    public List<LabelDtoResult> allNoteLabel(String labelName) {
+        return baseMapper.allNoteLabel (labelName);
     }
 }

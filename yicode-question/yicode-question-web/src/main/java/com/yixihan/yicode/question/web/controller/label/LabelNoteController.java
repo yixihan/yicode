@@ -43,7 +43,7 @@ public class LabelNoteController implements LabelNoteApi {
     }
     
     @Override
-    public ApiResult<List<LabelDtoResult>> allNoteLabel() {
-        return ApiResult.create (service.allNoteLabel ());
+    public ApiResult<List<LabelDtoResult>> allNoteLabel(String labelName) {
+        return ApiResult.create (service.allNoteLabel (labelName));
     }
 }

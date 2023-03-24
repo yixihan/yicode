@@ -64,13 +64,17 @@ public interface LabelService {
     
     /**
      * 获取所有题解标签
+     *
+     * @param labelName 标签名
      * @return {@link LabelVO}
      */
-    List<LabelVO> allNoteLabel();
+    List<LabelVO> allNoteLabel(String labelName);
     
     /**
      * 获取所有问题标签
+     *
+     * @param labelName 标签名
      * @return {@link LabelVO}
      */
-    List<LabelVO> allQuestionLabel();
+    List<LabelVO> allQuestionLabel(String labelName);
 }
