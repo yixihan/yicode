@@ -5,14 +5,14 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.QueryLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.QueryLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.label.LabelNoteFeignClient;
@@ -113,8 +113,8 @@ public class LabelServiceImpl implements LabelService {
     }
     
     @Override
-    public PageVO<LabelVO> allLabel(PageReq req) {
-        PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
+    public PageVO<LabelVO> allLabel(QueryLabelReq req) {
+        QueryLabelDtoReq dtoReq = BeanUtil.toBean (req, QueryLabelDtoReq.class);
         PageDtoResult<LabelDtoResult> dtoResult = labelFeignClient.allLabel (dtoReq).getResult ();
         
         return PageVOUtil.pageDtoToPageVO (

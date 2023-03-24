@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.openapi.api.rest.label;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.QueryLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +43,7 @@ public interface LabelOpenApi {
     
     @ApiOperation("获取全部标签")
     @PostMapping(value = "/all", produces = "application/json")
-    JsonResponse<PageVO<LabelVO>> allLabel(@RequestBody PageReq req);
+    JsonResponse<PageVO<LabelVO>> allLabel(@RequestBody QueryLabelReq req);
     
     @ApiOperation("全部题解标签")
     @GetMapping(value = "/all/note", produces = "application/json")

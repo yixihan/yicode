@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.biz.service.label;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.QueryLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.dal.pojo.label.Label;
 
@@ -48,7 +48,7 @@ public interface LabelService extends IService<Label> {
      * @param dtoReq 请求参数
      * @return {@link LabelDtoResult}
      */
-    PageDtoResult<LabelDtoResult> allLabel(PageDtoReq dtoReq);
+    PageDtoResult<LabelDtoResult> allLabel(QueryLabelDtoReq dtoReq);
     
     /**
      * 校验标签

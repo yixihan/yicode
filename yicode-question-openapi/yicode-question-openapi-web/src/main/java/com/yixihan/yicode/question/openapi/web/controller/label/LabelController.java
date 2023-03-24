@@ -1,10 +1,10 @@
 package com.yixihan.yicode.question.openapi.web.controller.label;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.label.LabelOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.QueryLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 import com.yixihan.yicode.question.openapi.biz.service.label.LabelService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +52,7 @@ public class LabelController implements LabelOpenApi {
     }
     
     @Override
-    public JsonResponse<PageVO<LabelVO>> allLabel(PageReq req) {
+    public JsonResponse<PageVO<LabelVO>> allLabel(QueryLabelReq req) {
         return JsonResponse.ok (service.allLabel (req));
     }
     

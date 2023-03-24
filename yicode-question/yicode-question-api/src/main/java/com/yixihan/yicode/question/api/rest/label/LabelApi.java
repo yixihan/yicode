@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.api.rest.label;
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.QueryLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,7 @@ public interface LabelApi {
     
     @ApiOperation("获取全部标签")
     @PostMapping(value = "/all", produces = "application/json")
-    ApiResult<PageDtoResult<LabelDtoResult>> allLabel(@RequestBody PageDtoReq dtoReq);
+    ApiResult<PageDtoResult<LabelDtoResult>> allLabel(@RequestBody QueryLabelDtoReq dtoReq);
     
     
     @ApiOperation("校验标签")

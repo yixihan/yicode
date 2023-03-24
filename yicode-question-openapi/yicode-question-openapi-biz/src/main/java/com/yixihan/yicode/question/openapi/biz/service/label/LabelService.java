@@ -1,8 +1,8 @@
 package com.yixihan.yicode.question.openapi.biz.service.label;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.openapi.api.vo.request.label.AddLabelReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.label.QueryLabelReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.label.LabelVO;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public interface LabelService {
      * @param req 请求参数
      * @return {@link LabelVO}
      */
-    PageVO<LabelVO> allLabel(PageReq req);
+    PageVO<LabelVO> allLabel(QueryLabelReq req);
     
     /**
      * 获取所有题解标签

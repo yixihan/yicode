@@ -1,10 +1,10 @@
 package com.yixihan.yicode.question.web.controller.label;
 
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.label.AddLabelDtoReq;
+import com.yixihan.yicode.question.api.dto.request.label.QueryLabelDtoReq;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.api.rest.label.LabelApi;
 import com.yixihan.yicode.question.biz.service.label.LabelService;
@@ -45,7 +45,7 @@ public class LabelController implements LabelApi {
     }
     
     @Override
-    public ApiResult<PageDtoResult<LabelDtoResult>> allLabel(PageDtoReq dtoReq) {
+    public ApiResult<PageDtoResult<LabelDtoResult>> allLabel(QueryLabelDtoReq dtoReq) {
         return ApiResult.create (service.allLabel (dtoReq));
     }
     
