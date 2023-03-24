@@ -193,33 +193,46 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
                 .count ());
         
         // 计算百分比数值
-        BigDecimal acceptedCommitRate = NumberUtil.mul (NumberUtil.div (
-                NumberUtil.toBigDecimal (acceptedCommitCount),
-                NumberUtil.toBigDecimal (commitCount),
-                4,
-                RoundingMode.HALF_UP), 100);
-        BigDecimal acceptedQuestionRate = NumberUtil.mul (NumberUtil.div (
-                NumberUtil.toBigDecimal (acceptedQuestion.get ()),
-                NumberUtil.toBigDecimal (questionNumber.getQuestionCount ()),
-                4,
-                RoundingMode.HALF_UP), 100);
-        BigDecimal acceptedHardQuestionRate = NumberUtil.mul (NumberUtil.div (
-                NumberUtil.toBigDecimal (acceptedHardQuestion.get ()),
-                NumberUtil.toBigDecimal (questionNumber.getHardQuestionCount ()),
-                4,
-                RoundingMode.HALF_UP), 100);
-        
-        BigDecimal acceptedMediumQuestionRate = NumberUtil.mul (NumberUtil.div (
-                NumberUtil.toBigDecimal (acceptedMediumQuestion.get ()),
-                NumberUtil.toBigDecimal (questionNumber.getMediumQuestionCount ()),
-                4,
-                RoundingMode.HALF_UP), 100);
-        BigDecimal acceptedEasyQuestionRate = NumberUtil.mul (NumberUtil.div (
-                NumberUtil.toBigDecimal (acceptedEasyQuestion.get ()),
-                NumberUtil.toBigDecimal (questionNumber.getEasyQuestionCount ()),
-                4,
-                RoundingMode.HALF_UP), 100);
-        
+        BigDecimal acceptedCommitRate = BigDecimal.ZERO;
+        BigDecimal acceptedQuestionRate = BigDecimal.ZERO;
+        BigDecimal acceptedHardQuestionRate = BigDecimal.ZERO;
+        BigDecimal acceptedMediumQuestionRate = BigDecimal.ZERO;
+        BigDecimal acceptedEasyQuestionRate = BigDecimal.ZERO;
+        if (acceptedCommitCount != 0) {
+            acceptedCommitRate = NumberUtil.mul (NumberUtil.div (
+                    NumberUtil.toBigDecimal (acceptedCommitCount),
+                    NumberUtil.toBigDecimal (commitCount),
+                    4,
+                    RoundingMode.HALF_UP), 100);
+        }
+        if (acceptedQuestion.get () != 0) {
+            acceptedQuestionRate = NumberUtil.mul (NumberUtil.div (
+                    NumberUtil.toBigDecimal (acceptedQuestion.get ()),
+                    NumberUtil.toBigDecimal (questionNumber.getQuestionCount ()),
+                    4,
+                    RoundingMode.HALF_UP), 100);
+        }
+        if (acceptedHardQuestion.get () != 0) {
+            acceptedHardQuestionRate = NumberUtil.mul (NumberUtil.div (
+                    NumberUtil.toBigDecimal (acceptedHardQuestion.get ()),
+                    NumberUtil.toBigDecimal (questionNumber.getHardQuestionCount ()),
+                    4,
+                    RoundingMode.HALF_UP), 100);
+        }
+        if (acceptedMediumQuestion.get () != 0) {
+            acceptedMediumQuestionRate = NumberUtil.mul (NumberUtil.div (
+                    NumberUtil.toBigDecimal (acceptedMediumQuestion.get ()),
+                    NumberUtil.toBigDecimal (questionNumber.getMediumQuestionCount ()),
+                    4,
+                    RoundingMode.HALF_UP), 100);
+        }
+        if (acceptedEasyQuestion.get () != 0) {
+            acceptedEasyQuestionRate = NumberUtil.mul (NumberUtil.div (
+                    NumberUtil.toBigDecimal (acceptedEasyQuestion.get ()),
+                    NumberUtil.toBigDecimal (questionNumber.getEasyQuestionCount ()),
+                    4,
+                    RoundingMode.HALF_UP), 100);
+        }
         return new CodeRateDtoResult (
                 acceptedQuestion.get (),
                 acceptedHardQuestion.get (),
