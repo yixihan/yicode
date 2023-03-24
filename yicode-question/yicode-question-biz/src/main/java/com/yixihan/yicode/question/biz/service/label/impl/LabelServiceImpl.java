@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,6 +17,7 @@ import com.yixihan.yicode.question.dal.mapper.label.LabelMapper;
 import com.yixihan.yicode.question.dal.pojo.label.Label;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,6 +48,10 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
     
     @Override
     public List<LabelDtoResult> labelDetail(List<Long> labelIdList) {
+        if (CollUtil.isEmpty (labelIdList)) {
+            return Collections.emptyList ();
+        }
+        
         List<Label> labelList = listByIds (labelIdList);
         
         return BeanUtil.copyToList (labelList, LabelDtoResult.class);
