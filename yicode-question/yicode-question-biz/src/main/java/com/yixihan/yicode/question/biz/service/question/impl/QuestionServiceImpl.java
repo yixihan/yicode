@@ -43,6 +43,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public QuestionDetailDtoResult addQuestion(ModifyQuestionDtoReq dtoReq) {
         Question question = BeanUtil.toBean (dtoReq, Question.class);
+        question.setEnable (Boolean.FALSE);
     
         // 保存
         Assert.isTrue (save (question), BizCodeEnum.FAILED_TYPE_BUSINESS);
@@ -108,6 +109,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public Boolean verifyQuestion(Long questionId) {
         return lambdaQuery ()
                 .eq (Question::getQuestionId, questionId)
+                .eq (Question::getEnable, Boolean.TRUE)
                 .count () > 0;
     }
     
@@ -190,12 +192,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public QuestionDetailDtoResult randomQuestion() {
         // 获取问题总数
-        int count = count ();
+        int count = lambdaQuery ()
+                .eq (Question::getEnable, Boolean.TRUE)
+                .count ();
         
         // 生成随机数
         int randomInt = RandomUtil.randomInt (count);
         
         Question question = lambdaQuery ()
+                .eq (Question::getEnable, Boolean.TRUE)
                 .last ("limit " + randomInt + ", 1")
                 .one ();
         

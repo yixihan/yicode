@@ -29,4 +29,7 @@ public class ModifyQuestionReq {
     
     @ApiModelProperty(value = "问题难度")
     private String questionDifficulty;
+    
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enable;
 }

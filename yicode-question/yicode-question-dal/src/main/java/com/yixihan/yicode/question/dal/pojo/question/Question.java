@@ -57,6 +57,9 @@ public class Question implements Serializable {
     @ApiModelProperty(value = "问题通过数")
     private Integer successCount;
     
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enable;
+    
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;

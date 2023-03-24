@@ -50,7 +50,9 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     @Scheduled(cron = "0 0 0 * * ?")
     public void addDailyQuestion() {
         // 获取题目总数
-        int count = questionService.count ();
+        int count = questionService.lambdaQuery ()
+                .eq (Question::getEnable, Boolean.TRUE)
+                .count ();
     
         // 生成当月 redis key
         Date nowTime = new Date ();
@@ -84,6 +86,7 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
     
             dailyQuestionId = questionService.lambdaQuery ()
                     .select (Question::getQuestionId)
+                    .eq (Question::getEnable, Boolean.TRUE)
                     .last ("limit " + random + ", 1")
                     .one ()
                     .getQuestionId ();

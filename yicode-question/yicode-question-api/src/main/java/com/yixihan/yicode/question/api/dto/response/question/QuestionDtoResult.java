@@ -49,6 +49,9 @@ public class QuestionDtoResult {
     @ApiModelProperty(value = "通过率")
     private BigDecimal passRate;
     
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enable;
+    
     @ApiModelProperty(value = "题目状态")
     private Boolean status;
     

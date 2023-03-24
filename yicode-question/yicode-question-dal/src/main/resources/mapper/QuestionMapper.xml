@@ -61,6 +61,7 @@
     </if>
     <where>
         and q.`del_flag` = 0
+        and q.`enable` = 1
         <if test="params.questionName != null and params.questionName != ''">
             and q.`question_name` like concat('%', #{params.questionName}, '%')
         </if>
@@ -156,6 +157,7 @@
         </if>
         <where>
             and q.`del_flag` = 0
+            and q.`enable` = 1
             and q.`question_id` = #{params.questionId}
         </where>
     </select>
@@ -179,6 +181,7 @@
             `question` q on qa.question_id = q.question_id and q.del_flag = 0
         where
             qa.del_flag = 0
+            and q.`enable` = 1
             and qa.create_time between #{params.startDate} and #{params.endDate}
     </select>
 
@@ -264,5 +267,6 @@
             question
         where
             del_flag = 0
+            and `enable` = 1
     </select>
 </mapper>
