@@ -12,16 +12,16 @@
             l.version as version,
             l.del_flag as delFlag
         from
-            label_note as ln
+            label_question as lq
                 left join
-            label as l on l.label_id = ln.label_id
+            label as l on l.label_id = lq.label_id
         where
-            ln.del_flag = 0
+            lq.del_flag = 0
           and l.del_flag = 0
           <if test="labelName != null and labelName != ''">
               and l.label_name like concat('%', #{labelName}, '%')
           </if>
         order by
-            ln.create_time
+            lq.create_time
     </select>
 </mapper>
