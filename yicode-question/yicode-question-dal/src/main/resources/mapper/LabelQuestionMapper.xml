@@ -18,7 +18,9 @@
         where
             ln.del_flag = 0
           and l.del_flag = 0
-          and l.label_name like concat('%', #{labelName}, '%')
+          <if test="labelName != null and labelName != ''">
+              and l.label_name like concat('%', #{labelName}, '%')
+          </if>
         order by
             ln.create_time
     </select>
