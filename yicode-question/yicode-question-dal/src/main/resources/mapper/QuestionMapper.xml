@@ -11,7 +11,7 @@
             and `user_id` = #{params.userId}
             and `del_flag` = 0
             <if test="params.status != null and params.status != '' and params.status != 'UN_DO'">
-                <if test="params.status != 'UN_ACCESS'">
+                <if test="params.status == 'UN_ACCESS'">
                     and `answer_flag` != 'AC'
                 </if>
                 <if test="params.status == 'ACCESS'">
