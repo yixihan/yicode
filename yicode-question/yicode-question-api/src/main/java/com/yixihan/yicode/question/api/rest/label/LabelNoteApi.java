@@ -35,5 +35,5 @@ public interface LabelNoteApi {
     
     @ApiOperation ("获取所有题解的标签")
     @PostMapping(value = "/all", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> allNoteLabel (@RequestBody String labelName);
+    ApiResult<List<LabelDtoResult>> allNoteLabel (@RequestBody(required = false) String labelName);
 }
