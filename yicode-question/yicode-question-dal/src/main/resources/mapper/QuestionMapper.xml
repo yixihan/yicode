@@ -14,7 +14,7 @@
                 <if test="params.status != 'UN_ACCESS'">
                     and `answer_flag` != 'AC'
                 </if>
-                <if test="params.status != 'ACCESS'">
+                <if test="params.status == 'ACCESS'">
                     and `answer_flag` = 'AC'
                 </if>
             </if>
