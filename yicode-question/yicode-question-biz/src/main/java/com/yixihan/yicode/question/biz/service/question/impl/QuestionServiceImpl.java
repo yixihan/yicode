@@ -1,9 +1,13 @@
 package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yixihan.yicode.common.constant.NumConstant;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -168,7 +172,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         Map<String, BrokenDataDtoResult> noteData = baseMapper.brokenNoteData (dtoReq);
         Map<String, BrokenDataDtoResult> userData = baseMapper.brokenUserData (dtoReq);
         
-    
+        // 填充有效数据
         dtoResult.forEach ((k, v) -> {
             // 评论数
             v.setCommentCount (commentRootData.getOrDefault (k, new BrokenDataDtoResult ()).getCommentCount () +
@@ -180,6 +184,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             // 用户数
             v.setUserCount (userData.getOrDefault (k, new BrokenDataDtoResult ()).getUserCount ());
         });
+        
+        // 填充默认数据
+        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), DatePattern.NORM_MONTH_PATTERN);
+        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), DatePattern.NORM_MONTH_PATTERN);
+    
+        while (DateUtil.compare (startDate, endDate) < 0) {
+            String key = DateUtil.format (startDate, DatePattern.NORM_MONTH_PATTERN);
+            if (!dtoResult.containsKey (key)) {
+                BrokenDataDtoResult defaultData = new BrokenDataDtoResult ();
+                defaultData.setMonth (key);
+                dtoResult.put (key, defaultData);
+            }
+            startDate = DateUtil.offsetMonth (startDate, NumConstant.NUM_1);
+        }
         
         return dtoResult;
     }
