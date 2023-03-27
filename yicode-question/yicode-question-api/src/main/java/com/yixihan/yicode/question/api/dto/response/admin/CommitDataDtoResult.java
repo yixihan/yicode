@@ -30,16 +30,16 @@ public class CommitDataDtoResult {
     @ApiModelProperty(value = "简单题提交通过数")
     private Integer commitSuccessEasyCount;
     
-    @ApiModelProperty(value = "简单题代码提交数")
+    @ApiModelProperty(value = "中等题代码提交数")
     private Integer commitMediumCount;
     
-    @ApiModelProperty(value = "简单题提交通过数")
+    @ApiModelProperty(value = "中等题提交通过数")
     private Integer commitSuccessMediumCount;
     
-    @ApiModelProperty(value = "简单题代码提交数")
+    @ApiModelProperty(value = "困难题代码提交数")
     private Integer commitHardCount;
     
-    @ApiModelProperty(value = "简单题提交通过数")
+    @ApiModelProperty(value = "困难题提交通过数")
     private Integer commitSuccessHardCount;
     
 }

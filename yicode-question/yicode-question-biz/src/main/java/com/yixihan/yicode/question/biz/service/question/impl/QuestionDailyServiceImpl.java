@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.yixihan.yicode.common.constant.RedisKeyConstant.DAILY_QUESTION_KEY;
@@ -63,12 +66,18 @@ public class QuestionDailyServiceImpl extends ServiceImpl<QuestionDailyMapper, Q
                 .orElse ("")
                 .toString ();
         List<QuestionDailyDtoResult> array = StrUtil.isBlank (jsonStr) ?
-                new ArrayList<> () :
+                dailyQuestionDetail (nowTime) :
                 JSONUtil.parseArray (jsonStr).toList (QuestionDailyDtoResult.class);
         
         // 如果当天的每日一题已被创建, 则直接返回
         if (array.stream ().map (QuestionDailyDtoResult::getCreateTime).anyMatch (o ->
                 DateUtil.betweenDay (o, nowTime, Boolean.TRUE) == NumConstant.NUM_0)) {
+            // 构建 jsonArray
+            JSONArray jsonArray = JSONUtil.createArray ();
+            jsonArray.addAll (array);
+    
+            // 加入 redis
+            redisTemplate.opsForHash ().put (DAILY_QUESTION_KEY, yearMonth, JSONUtil.toJsonStr (jsonArray));
             return;
         }
         
