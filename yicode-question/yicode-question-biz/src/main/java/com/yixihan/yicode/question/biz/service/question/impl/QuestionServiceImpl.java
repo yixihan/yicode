@@ -189,7 +189,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), DatePattern.NORM_MONTH_PATTERN);
         DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), DatePattern.NORM_MONTH_PATTERN);
     
-        while (DateUtil.compare (startDate, endDate) < 0) {
+        while (DateUtil.compare (startDate, endDate) <= 0) {
             String key = DateUtil.format (startDate, DatePattern.NORM_MONTH_PATTERN);
             if (!dtoResult.containsKey (key)) {
                 BrokenDataDtoResult defaultData = new BrokenDataDtoResult ();
