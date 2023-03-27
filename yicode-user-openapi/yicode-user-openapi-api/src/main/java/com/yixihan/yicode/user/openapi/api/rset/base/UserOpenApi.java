@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.openapi.api.rset.base;
 
 import com.yixihan.yicode.common.enums.user.RoleEnums;
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.common.valid.RoleAccess;
@@ -31,8 +30,8 @@ public interface UserOpenApi {
     
     @ApiOperation ("获取用户列表")
     @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
-    @GetMapping(value = "/detail/list", produces = "application/json")
-    JsonResponse<PageVO<UserDetailInfoVO>> getUserList(@RequestBody PageReq req);
+    @PostMapping(value = "/detail/list", produces = "application/json")
+    JsonResponse<PageVO<UserDetailInfoVO>> getUserList(@RequestBody QueryUserReq req);
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")

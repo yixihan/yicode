@@ -1,6 +1,5 @@
 package com.yixihan.yicode.user.api.rest.base;
 
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
@@ -60,7 +59,7 @@ public interface UserApi {
     
     @ApiOperation ("获取用户 id 列表-分页查询")
     @GetMapping(value = "/detail/page", produces = "application/json")
-    ApiResult<PageDtoResult<Long>> getUserList(@RequestBody PageDtoReq dtoReq);
+    ApiResult<PageDtoResult<Long>> getUserList(@RequestBody QueryUserDtoReq dtoReq);
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")

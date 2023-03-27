@@ -13,7 +13,6 @@ import com.yixihan.yicode.common.enums.thirdpart.sms.VerificationCodeEnums;
 import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
@@ -134,9 +133,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
     
     @Override
-    public PageDtoResult<Long> getUserList(PageDtoReq dtoReq) {
+    public PageDtoResult<Long> getUserList(QueryUserDtoReq dtoReq) {
         Page<User> page = lambdaQuery ()
                 .select (User::getUserId)
+                .eq (dtoReq.getUserId () != null, User::getUserId, dtoReq.getUserId ())
+                .eq (StrUtil.isNotBlank (dtoReq.getUserName ()), User::getUserName, dtoReq.getUserName ())
+                .eq (StrUtil.isNotBlank (dtoReq.getUserMobile ()), User::getUserMobile, dtoReq.getUserMobile ())
+                .eq (StrUtil.isNotBlank (dtoReq.getUserEmail ()), User::getUserEmail, dtoReq.getUserEmail ())
                 .orderByAsc (User::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         

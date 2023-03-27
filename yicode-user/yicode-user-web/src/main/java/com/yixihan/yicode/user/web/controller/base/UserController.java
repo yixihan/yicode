@@ -1,7 +1,5 @@
 package com.yixihan.yicode.user.web.controller.base;
 
-
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
@@ -71,7 +69,7 @@ public class UserController implements UserApi {
     }
     
     @Override
-    public ApiResult<PageDtoResult<Long>> getUserList(PageDtoReq dtoReq) {
+    public ApiResult<PageDtoResult<Long>> getUserList(QueryUserDtoReq dtoReq) {
         return ApiResult.create (service.getUserList (dtoReq));
     }
     
