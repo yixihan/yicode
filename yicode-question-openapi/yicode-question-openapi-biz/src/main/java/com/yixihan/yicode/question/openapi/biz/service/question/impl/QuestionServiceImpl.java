@@ -238,6 +238,7 @@ public class QuestionServiceImpl implements QuestionService {
         // 构建请求 body
         QueryQuestionDtoReq dtoReq = BeanUtil.toBean (req, QueryQuestionDtoReq.class);
         dtoReq.setUserId (userService.getUserId ());
+        log.info ("搜索问题, dtoReq : {}", dtoReq);
         
         // 搜索问题
         PageDtoResult<QuestionDtoResult> dtoResult = questionFeignClient.queryQuestion (dtoReq).getResult ();
