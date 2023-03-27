@@ -135,7 +135,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public PageDtoResult<UserDtoResult> getUserList(QueryUserDtoReq dtoReq) {
         Page<User> page = lambdaQuery ()
-                .select (User::getUserId)
                 .eq (dtoReq.getUserId () != null, User::getUserId, dtoReq.getUserId ())
                 .eq (StrUtil.isNotBlank (dtoReq.getUserName ()), User::getUserName, dtoReq.getUserName ())
                 .eq (StrUtil.isNotBlank (dtoReq.getUserMobile ()), User::getUserMobile, dtoReq.getUserMobile ())
