@@ -7,7 +7,6 @@ import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +57,7 @@ public interface UserApi {
     ApiResult<List<UserCommonDtoResult>> getUserCommonInfo (@RequestBody List<Long> userIdList);
     
     @ApiOperation ("获取用户 id 列表-分页查询")
-    @GetMapping(value = "/detail/page", produces = "application/json")
+    @PostMapping(value = "/detail/page", produces = "application/json")
     ApiResult<PageDtoResult<Long>> getUserList(@RequestBody QueryUserDtoReq dtoReq);
 
     @ApiOperation ("用户注册")
