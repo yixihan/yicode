@@ -69,7 +69,7 @@ public class UserController implements UserApi {
     }
     
     @Override
-    public ApiResult<PageDtoResult<Long>> getUserList(QueryUserDtoReq dtoReq) {
+    public ApiResult<PageDtoResult<UserDtoResult>> getUserList(QueryUserDtoReq dtoReq) {
         return ApiResult.create (service.getUserList (dtoReq));
     }
     

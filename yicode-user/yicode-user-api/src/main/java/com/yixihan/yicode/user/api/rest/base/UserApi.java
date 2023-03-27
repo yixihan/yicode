@@ -58,7 +58,7 @@ public interface UserApi {
     
     @ApiOperation ("获取用户 id 列表-分页查询")
     @PostMapping(value = "/detail/page", produces = "application/json")
-    ApiResult<PageDtoResult<Long>> getUserList(@RequestBody QueryUserDtoReq dtoReq);
+    ApiResult<PageDtoResult<UserDtoResult>> getUserList(@RequestBody QueryUserDtoReq dtoReq);
 
     @ApiOperation ("用户注册")
     @PostMapping(value = "/register", produces = "application/json")

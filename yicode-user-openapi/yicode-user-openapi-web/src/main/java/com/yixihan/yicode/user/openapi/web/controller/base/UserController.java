@@ -5,6 +5,7 @@ import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.user.openapi.api.rset.base.UserOpenApi;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class UserController implements UserOpenApi {
     }
     
     @Override
-    public JsonResponse<PageVO<UserDetailInfoVO>> getUserList(QueryUserReq req) {
+    public JsonResponse<PageVO<UserVO>> getUserList(QueryUserReq req) {
         return JsonResponse.ok (service.getUserList (req));
     }
     

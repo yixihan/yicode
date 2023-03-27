@@ -133,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
     
     @Override
-    public PageDtoResult<Long> getUserList(QueryUserDtoReq dtoReq) {
+    public PageDtoResult<UserDtoResult> getUserList(QueryUserDtoReq dtoReq) {
         Page<User> page = lambdaQuery ()
                 .select (User::getUserId)
                 .eq (dtoReq.getUserId () != null, User::getUserId, dtoReq.getUserId ())
@@ -143,7 +143,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .orderByAsc (User::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         
-        return PageUtil.pageToPageDtoResult (page, User::getUserId);
+        return PageUtil.pageToPageDtoResult (
+                page,
+                o -> BeanUtil.toBean (o, UserDtoResult.class)
+        );
     }
     
     @Override

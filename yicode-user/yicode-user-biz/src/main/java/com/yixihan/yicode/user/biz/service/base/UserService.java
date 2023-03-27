@@ -80,9 +80,9 @@ public interface UserService extends IService<User> {
      * 获取用户 id 列表-分页查询
      *
      * @param dtoReq 请求参数
-     * @return 用户 id
+     * @return {@link UserDtoResult}
      */
-    PageDtoResult<Long> getUserList(QueryUserDtoReq dtoReq);
+    PageDtoResult<UserDtoResult> getUserList(QueryUserDtoReq dtoReq);
     
     /**
      * 获取用户常用信息

@@ -119,16 +119,14 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public PageVO<UserDetailInfoVO> getUserList(QueryUserReq req) {
+    public PageVO<UserVO> getUserList(QueryUserReq req) {
         QueryUserDtoReq dtoReq = BeanUtil.toBean (req, QueryUserDtoReq.class);
-        PageDtoResult<Long> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
-        PageVO<Long> userIdPage = PageVOUtil.pageDtoToPageVO (dtoResult, o -> o);
-        PageVO<UserDetailInfoVO> pageVO = PageVOUtil.convertPageVO (userIdPage, o -> null);
-        userIdPage.getRecords ().parallelStream ().forEach (userId ->
-                pageVO.getRecords ().add (getUserDetailInfo (userId))
-        );
+        PageDtoResult<UserDtoResult> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
         
-        return pageVO;
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                o -> BeanUtil.toBean (o, UserVO.class)
+        );
     }
     
     @Override
