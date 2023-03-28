@@ -1,8 +1,10 @@
 package com.yixihan.yicode.question.web.controller.question;
 
 
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.api.rest.question.QuestionCaseApi;
 import com.yixihan.yicode.question.biz.service.question.QuestionCaseService;
@@ -43,8 +45,13 @@ public class QuestionCaseController implements QuestionCaseApi {
     }
     
     @Override
-    public ApiResult<List<QuestionCaseDtoResult>> allQuestionCase(Long questionId) {
-        return ApiResult.create (service.allQuestionCase (questionId));
+    public ApiResult<List<QuestionCaseDtoResult>> allQuestionCaseList(Long questionId) {
+        return ApiResult.create (service.allQuestionCaseList (questionId));
+    }
+    
+    @Override
+    public ApiResult<PageDtoResult<QuestionCaseDtoResult>> allQuestionCasePage(QueryQuestionCaseDtoReq dtoReq) {
+        return ApiResult.create (service.allQuestionCasePage (dtoReq));
     }
     
     @Override

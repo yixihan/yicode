@@ -1,15 +1,16 @@
 package com.yixihan.yicode.question.openapi.web.controller.question;
 
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionCaseOpenApi;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionCaseReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCaseVO;
 import com.yixihan.yicode.question.openapi.biz.service.question.QuestionCaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 问题测试用例管理 前端控制器
@@ -40,7 +41,7 @@ public class QuestionCaseController implements QuestionCaseOpenApi {
     }
     
     @Override
-    public JsonResponse<List<QuestionCaseVO>> allQuestionCase(Long questionId) {
-        return JsonResponse.ok (service.allQuestionCase (questionId));
+    public JsonResponse<PageVO<QuestionCaseVO>> allQuestionCase(QueryQuestionCaseReq req) {
+        return JsonResponse.ok (service.allQuestionCase (req));
     }
 }

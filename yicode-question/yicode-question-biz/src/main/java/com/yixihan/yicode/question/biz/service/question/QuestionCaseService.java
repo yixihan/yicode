@@ -1,7 +1,9 @@
 package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.dal.pojo.question.QuestionCase;
 
@@ -41,12 +43,20 @@ public interface QuestionCaseService extends IService<QuestionCase> {
     void delQuestionCase(Long id);
     
     /**
-     * 获取测试用例
+     * 获取测试用例-列表
      *
      * @param questionId 问题 ID
      * @return {@link QuestionCaseDtoResult}
      */
-    List<QuestionCaseDtoResult> allQuestionCase(Long questionId);
+    List<QuestionCaseDtoResult> allQuestionCaseList(Long questionId);
+    
+    /**
+     * 获取测试用例-分页
+     *
+     * @param dtoReq 请求参数
+     * @return {@link QuestionCaseDtoResult}
+     */
+    PageDtoResult<QuestionCaseDtoResult> allQuestionCasePage(QueryQuestionCaseDtoReq dtoReq);
     
     /**
      * 校验测试用例

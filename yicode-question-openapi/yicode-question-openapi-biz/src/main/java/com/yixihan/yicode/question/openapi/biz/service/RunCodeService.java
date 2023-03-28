@@ -127,7 +127,7 @@ public class RunCodeService {
         CodeReq req = JSONUtil.toBean (new String (message.getBody ()), CodeReq.class);
         try {
             // 获取测试用例
-            List<QuestionCaseDtoResult> questionCase = questionCaseFeignClient.allQuestionCase (req.getQuestionId ()).getResult ();
+            List<QuestionCaseDtoResult> questionCase = questionCaseFeignClient.allQuestionCaseList (req.getQuestionId ()).getResult ();
     
             // 构建请求 body
             CodeRunDtoReq dtoReq = new CodeRunDtoReq ();

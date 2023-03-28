@@ -2,10 +2,14 @@ package com.yixihan.yicode.question.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.Assert;
+import com.yixihan.yicode.common.util.PageUtil;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.biz.service.question.QuestionCaseService;
 import com.yixihan.yicode.question.dal.mapper.question.QuestionCaseMapper;
@@ -60,7 +64,7 @@ public class QuestionCaseServiceImpl extends ServiceImpl<QuestionCaseMapper, Que
     }
     
     @Override
-    public List<QuestionCaseDtoResult> allQuestionCase(Long questionId) {
+    public List<QuestionCaseDtoResult> allQuestionCaseList(Long questionId) {
         List<QuestionCase> questionCaseList = lambdaQuery ()
                 .eq (QuestionCase::getQuestionId, questionId)
                 .eq (QuestionCase::getEnable, Boolean.TRUE)
@@ -69,6 +73,20 @@ public class QuestionCaseServiceImpl extends ServiceImpl<QuestionCaseMapper, Que
         questionCaseList = CollectionUtil.isEmpty (questionCaseList) ? Collections.emptyList () : questionCaseList;
         
         return BeanUtil.copyToList (questionCaseList, QuestionCaseDtoResult.class);
+    }
+    
+    @Override
+    public PageDtoResult<QuestionCaseDtoResult> allQuestionCasePage(QueryQuestionCaseDtoReq dtoReq) {
+        Page<QuestionCase> page = lambdaQuery ()
+                .eq (QuestionCase::getQuestionId, dtoReq.getQuestionId ())
+                .eq (QuestionCase::getEnable, Boolean.TRUE)
+                .orderByDesc (QuestionCase::getCreateTime)
+                .page (PageUtil.toPage (dtoReq));
+        
+        return PageUtil.pageToPageDtoResult (
+                page,
+                o -> BeanUtil.toBean (o, QuestionCaseDtoResult.class)
+        );
     }
     
     @Override

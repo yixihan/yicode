@@ -1,7 +1,9 @@
 package com.yixihan.yicode.question.api.rest.question;
 
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,9 +36,12 @@ public interface QuestionCaseApi {
     void delQuestionCase (@RequestBody Long id);
     
     @ApiOperation("获取测试用例")
-    @PostMapping(value = "/detail", produces = "application/json")
-    ApiResult<List<QuestionCaseDtoResult>> allQuestionCase (@RequestBody Long questionId);
+    @PostMapping(value = "/detail/list", produces = "application/json")
+    ApiResult<List<QuestionCaseDtoResult>> allQuestionCaseList(@RequestBody Long questionId);
     
+    @ApiOperation("获取测试用例")
+    @PostMapping(value = "/detail/page", produces = "application/json")
+    ApiResult<PageDtoResult<QuestionCaseDtoResult>> allQuestionCasePage (@RequestBody QueryQuestionCaseDtoReq dtoReq);
     
     @ApiOperation("校验测试用例")
     @PostMapping(value = "/verify", produces = "application/json")

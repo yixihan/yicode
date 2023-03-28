@@ -1,9 +1,9 @@
 package com.yixihan.yicode.question.openapi.biz.service.question;
 
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionCaseReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCaseVO;
-
-import java.util.List;
 
 /**
  * 问题测试用例管理 服务类
@@ -39,8 +39,8 @@ public interface QuestionCaseService {
     /**
      * 获取问题测试用例
      *
-     * @param questionId 请求参数
+     * @param req 请求参数
      * @return {@link QuestionCaseVO}
      */
-    List<QuestionCaseVO> allQuestionCase(Long questionId);
+    PageVO<QuestionCaseVO> allQuestionCase(QueryQuestionCaseReq req);
 }

@@ -2,10 +2,15 @@ package com.yixihan.yicode.question.openapi.biz.service.question.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
+import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.Assert;
+import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.api.dto.request.question.ModifyQuestionCaseDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.QueryQuestionCaseDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionCaseDtoResult;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.ModifyQuestionCaseReq;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.QueryQuestionCaseReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionCaseVO;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionCaseFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
@@ -14,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 问题测试用例管理 服务类
@@ -77,13 +81,17 @@ public class QuestionCaseServiceImpl implements QuestionCaseService {
     }
     
     @Override
-    public List<QuestionCaseVO> allQuestionCase(Long questionId) {
+    public PageVO<QuestionCaseVO> allQuestionCase(QueryQuestionCaseReq req) {
         // 参数校验
-        Assert.isTrue (questionFeignClient.verifyQuestion (questionId).getResult ());
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
         
         // 获取测试用例
-        List<QuestionCaseDtoResult> dtoResultList = questionCaseFeignClient.allQuestionCase (questionId).getResult ();
+        QueryQuestionCaseDtoReq dtoReq = BeanUtil.toBean (req, QueryQuestionCaseDtoReq.class);
+        PageDtoResult<QuestionCaseDtoResult> dtoResultList = questionCaseFeignClient.allQuestionCasePage (dtoReq).getResult ();
         
-        return BeanUtil.copyToList (dtoResultList, QuestionCaseVO.class);
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResultList,
+                o -> BeanUtil.toBean (o, QuestionCaseVO.class)
+        );
     }
 }
