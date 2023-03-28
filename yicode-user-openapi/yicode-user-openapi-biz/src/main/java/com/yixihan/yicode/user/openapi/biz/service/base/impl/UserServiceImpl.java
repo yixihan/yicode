@@ -9,9 +9,7 @@ import com.yixihan.yicode.common.enums.user.LoginTypeEnums;
 import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
@@ -121,16 +119,14 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public PageVO<UserDetailInfoVO> getUserList(PageReq req) {
-        PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
-        PageDtoResult<Long> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
-        PageVO<Long> userIdPage = PageVOUtil.pageDtoToPageVO (dtoResult, o -> o);
-        PageVO<UserDetailInfoVO> pageVO = PageVOUtil.convertPageVO (userIdPage, o -> null);
-        userIdPage.getRecords ().parallelStream ().forEach (userId ->
-                pageVO.getRecords ().add (getUserDetailInfo (userId))
-        );
+    public PageVO<UserVO> getUserList(QueryUserReq req) {
+        QueryUserDtoReq dtoReq = BeanUtil.toBean (req, QueryUserDtoReq.class);
+        PageDtoResult<UserDtoResult> dtoResult = userFeignClient.getUserList (dtoReq).getResult ();
         
-        return pageVO;
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                o -> BeanUtil.toBean (o, UserVO.class)
+        );
     }
     
     @Override

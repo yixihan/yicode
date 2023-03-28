@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.biz.service.base;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.user.api.dto.request.base.*;
 import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
@@ -81,9 +80,9 @@ public interface UserService extends IService<User> {
      * 获取用户 id 列表-分页查询
      *
      * @param dtoReq 请求参数
-     * @return 用户 id
+     * @return {@link UserDtoResult}
      */
-    PageDtoResult<Long> getUserList(PageDtoReq dtoReq);
+    PageDtoResult<UserDtoResult> getUserList(QueryUserDtoReq dtoReq);
     
     /**
      * 获取用户常用信息

@@ -1,10 +1,10 @@
 package com.yixihan.yicode.user.openapi.biz.service.base;
 
-import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.base.*;
 import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserVO;
 
 /**
  * 用户 服务类
@@ -57,7 +57,7 @@ public interface UserService {
      * @param req 请求参数
      * @return {@link UserDetailInfoVO}
      */
-    PageVO<UserDetailInfoVO> getUserList(PageReq req);
+    PageVO<UserVO> getUserList(QueryUserReq req);
     
     /**
      * 用户注册
