@@ -126,6 +126,13 @@ public class QuestionListServiceImpl implements QuestionListService {
     }
     
     @Override
+    public QuestionListVO questionListDetail(Long id) {
+        FavoriteDtoResult dtoResult = favoriteFeignClient.getFavoriteDetail (id).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionListVO.class);
+    }
+    
+    @Override
     public PageVO<QuestionVO> questionPage(QueryQuestionListReq req) {
         CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();

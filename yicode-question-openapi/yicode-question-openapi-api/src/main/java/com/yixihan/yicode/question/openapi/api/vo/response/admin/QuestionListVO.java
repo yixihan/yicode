@@ -24,10 +24,10 @@ public class QuestionListVO {
     @ApiModelProperty(value = "题单")
     private Long favoriteId;
     
-    @ApiModelProperty(value = "收藏夹名")
+    @ApiModelProperty(value = "题单类型")
     private String favoriteType;
     
-    @ApiModelProperty(value = "收藏数量")
+    @ApiModelProperty(value = "题单名")
     private String favoriteName;
     
     @ApiModelProperty(value = "收藏夹封面")

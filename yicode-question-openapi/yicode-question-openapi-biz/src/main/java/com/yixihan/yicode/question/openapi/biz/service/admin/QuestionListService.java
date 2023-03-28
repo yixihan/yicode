@@ -73,6 +73,14 @@ public interface QuestionListService {
     List<QuestionListVO> questionListList();
     
     /**
+     * 查看题单明细
+     *
+     * @param id 题单 id
+     * @return {@link QuestionListVO}
+     */
+    QuestionListVO questionListDetail(Long id);
+    
+    /**
      * 查看题单题目内容
      *
      * @param req 请求参数
