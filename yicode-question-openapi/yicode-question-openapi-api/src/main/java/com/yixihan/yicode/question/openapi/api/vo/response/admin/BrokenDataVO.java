@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 网址数据-vo
+ * 网址活跃数据-vo
  *
  * @author yixihan
  * @date 2023/3/3 21:57
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("网址数据-vo")
+@ApiModel("网址活跃数据-vo")
 public class BrokenDataVO {
     
     @ApiModelProperty(value = "月份[yyyy-MM]")

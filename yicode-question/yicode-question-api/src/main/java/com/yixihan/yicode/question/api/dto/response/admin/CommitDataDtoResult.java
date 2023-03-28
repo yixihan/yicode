@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 网址数据-dtoResult
+ * 网址代码提交数据-dtoResult
  *
  * @author yixihan
  * @date 2023/3/3 21:57
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("网址数据-dtoResult")
+@ApiModel("网址代码提交数据-dtoResult")
 public class CommitDataDtoResult {
     
     @ApiModelProperty(value = "代码提交数")
