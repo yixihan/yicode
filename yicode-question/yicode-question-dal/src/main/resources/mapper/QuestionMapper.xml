@@ -25,18 +25,18 @@
             resultType="com.yixihan.yicode.question.api.dto.response.question.QuestionDtoResult">
     select
         q.`question_id`,
-        q.`question_name`,
-        q.`question_difficulty`,
-        q.`like_count`,
-        q.`comment_count`,
-        q.`note_count`,
-        q.`commit_count`,
-        q.`success_count`,
+        any_value(q.`question_name`)                                                       as questionName,
+        any_value(q.`question_difficulty`)                                                 as questionDifficulty,
+        any_value(q.`like_count`)                                                          as likeCount,
+        any_value(q.`comment_count`)                                                       as commentCount,
+        any_value(q.`note_count`)                                                          as noteCount,
+        any_value(q.`commit_count`)                                                        as commitCount,
+        any_value(q.`success_count`)                                                       as successCount,
         if(q.`success_count` = 0, 0, round(q.`success_count` / q.`commit_count`, 4) * 100) as passRate,
         <if test="params.userId != null">
-            if(qa.`status` > 0, true, false) as `status`,
+            if(qa.`status` > 0, true, false)                                               as `status`,
         </if>
-        q.`create_time`
+        any_value(q.`create_time`)                                                         as create_time
     from
         `question` q
     <if test="params.label != null and params.label.size () > 0">
@@ -83,30 +83,31 @@
             </if>
         </if>
     </where>
+    group by q.`question_id`
     order by
     <choose>
         <when test="params.nameSort != null">
             <if test="params.nameSort">
-                q.`question_name` desc,
+                questionName desc,
             </if>
             <if test="!params.nameSort">
-                q.`question_name`,
+                questionName,
             </if>
         </when>
         <when test="params.noteSort != null">
             <if test="params.noteSort">
-                q.`note_count` desc,
+                noteCount desc,
             </if>
             <if test="!params.noteSort">
-                q.`note_count`,
+                noteCount,
             </if>
         </when>
         <when test="params.difficultySort != null">
             <if test="params.difficultySort">
-                field (q.`question_difficulty`, 'HARD', 'MEDIUM', 'EASY') desc,
+                field (questionDifficulty, 'EASY', 'MEDIUM', 'HARD') desc,
             </if>
             <if test="!params.difficultySort">
-                field (q.`question_difficulty`, 'HARD', 'MEDIUM', 'EASY'),
+                field (questionDifficulty, 'EASY', 'MEDIUM', 'HARD'),
             </if>
         </when>
         <when test="params.passSort != null">
