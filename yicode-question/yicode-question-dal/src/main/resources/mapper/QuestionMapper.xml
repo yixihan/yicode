@@ -13,6 +13,16 @@
             <if test="params.status != null and params.status != '' and params.status != 'UN_DO'">
                 <if test="params.status == 'UN_ACCESS'">
                     and `answer_flag` != 'AC'
+                    and question_id not in (
+                        select
+                            question_id
+                        from
+                            question_answer
+                        where
+                            del_flag = 0
+                            and user_id = #{params.userId}
+                            and answer_flag = 'AC'
+                    )
                 </if>
                 <if test="params.status == 'ACCESS'">
                     and `answer_flag` = 'AC'
