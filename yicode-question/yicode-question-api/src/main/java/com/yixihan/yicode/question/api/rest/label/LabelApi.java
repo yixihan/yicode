@@ -39,6 +39,10 @@ public interface LabelApi {
     @PostMapping(value = "/all", produces = "application/json")
     ApiResult<PageDtoResult<LabelDtoResult>> allLabel(@RequestBody QueryLabelDtoReq dtoReq);
     
+    @ApiOperation ("获取所有标签")
+    @PostMapping(value = "/all/list", produces = "application/json")
+    ApiResult<List<LabelDtoResult>> allLabelList (@RequestBody(required = false) String labelName);
+    
     
     @ApiOperation("校验标签")
     @PostMapping(value = "/verify", produces = "application/json")

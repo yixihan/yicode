@@ -51,6 +51,14 @@ public interface LabelService extends IService<Label> {
     PageDtoResult<LabelDtoResult> allLabel(QueryLabelDtoReq dtoReq);
     
     /**
+     * 获取所有标签
+     *
+     * @param labelName 标签名
+     * @return {@link LabelDtoResult}
+     */
+    List<LabelDtoResult> allLabelList(String labelName);
+    
+    /**
      * 校验标签
      *
      * @param labelId 标签 ID

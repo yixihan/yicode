@@ -144,7 +144,7 @@
             q.`commit_count`,
             q.`success_count`,
             q.`question_desc`,
-            if(q.`success_count` = 0, 0, q.`success_count` / q.`commit_count` * 100) as passRate,
+            if(q.`success_count` = 0, 0, round(q.`success_count` / q.`commit_count`, 4) * 100) as passRate,
             <if test="params.userId != null">
                 if(qa.`status` > 0, true, false) as `status`,
             </if>

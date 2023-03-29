@@ -71,6 +71,16 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
     }
     
     @Override
+    public List<LabelDtoResult> allLabelList(String labelName) {
+        List<Label> labelList = lambdaQuery ()
+                .like (StrUtil.isNotBlank (labelName), Label::getLabelName, labelName)
+                .orderByDesc (Label::getCreateTime)
+                .list ();
+    
+        return BeanUtil.copyToList (labelList, LabelDtoResult.class);
+    }
+    
+    @Override
     public Boolean verifyLabel(Long labelId) {
         return lambdaQuery ()
                 .eq (Label::getLabelId, labelId)

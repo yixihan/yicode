@@ -50,6 +50,11 @@ public class LabelController implements LabelApi {
     }
     
     @Override
+    public ApiResult<List<LabelDtoResult>> allLabelList(String labelName) {
+        return ApiResult.create (service.allLabelList (labelName));
+    }
+    
+    @Override
     public ApiResult<Boolean> verifyLabel(Long labelId) {
         return ApiResult.create (service.verifyLabel (labelId));
     }

@@ -124,6 +124,13 @@ public class LabelServiceImpl implements LabelService {
     }
     
     @Override
+    public List<LabelVO> allLabelList(String labelName) {
+        List<LabelDtoResult> dtoResultList = labelFeignClient.allLabelList (labelName).getResult ();
+    
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
+    }
+    
+    @Override
     public List<LabelVO> allNoteLabel(String labelName) {
         List<LabelDtoResult> dtoResultList = labelNoteFeignClient.allNoteLabel (labelName).getResult ();
     

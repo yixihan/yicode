@@ -63,6 +63,14 @@ public interface LabelService {
     PageVO<LabelVO> allLabel(QueryLabelReq req);
     
     /**
+     * 获取所有标签
+     *
+     * @param labelName 标签名
+     * @return {@link LabelVO}
+     */
+    List<LabelVO> allLabelList(String labelName);
+    
+    /**
      * 获取所有题解标签
      *
      * @param labelName 标签名

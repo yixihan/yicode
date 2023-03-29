@@ -45,6 +45,10 @@ public interface LabelOpenApi {
     @PostMapping(value = "/all", produces = "application/json")
     JsonResponse<PageVO<LabelVO>> allLabel(@RequestBody QueryLabelReq req);
     
+    @ApiOperation("全部标签")
+    @GetMapping(value = "/all/list", produces = "application/json")
+    JsonResponse<List<LabelVO>> allLabelList(@RequestParam("labelName") String labelName);
+    
     @ApiOperation("全部题解标签")
     @GetMapping(value = "/all/note", produces = "application/json")
     JsonResponse<List<LabelVO>> allNoteLabel(@RequestParam("labelName") String labelName);
