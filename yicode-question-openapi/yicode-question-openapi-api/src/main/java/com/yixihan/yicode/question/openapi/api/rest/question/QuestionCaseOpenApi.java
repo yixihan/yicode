@@ -33,6 +33,6 @@ public interface QuestionCaseOpenApi {
     
     @ApiOperation("获取测试用例")
     @PostMapping(value = "/detail", produces = "application/json")
-    JsonResponse<PageVO<QuestionCaseVO>> allQuestionCase (@RequestParam QueryQuestionCaseReq req);
+    JsonResponse<PageVO<QuestionCaseVO>> allQuestionCase (@RequestBody QueryQuestionCaseReq req);
 
 }
