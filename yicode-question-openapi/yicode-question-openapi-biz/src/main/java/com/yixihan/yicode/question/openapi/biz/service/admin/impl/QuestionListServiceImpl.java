@@ -5,12 +5,14 @@ import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.reset.vo.request.PageReq;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
+import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyListQuestionReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.ModifyQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.admin.QueryQuestionListReq;
 import com.yixihan.yicode.question.openapi.api.vo.response.admin.QuestionListVO;
 import com.yixihan.yicode.question.openapi.api.vo.response.question.QuestionVO;
+import com.yixihan.yicode.question.openapi.biz.feign.question.question.QuestionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserCollectionFeignClient;
 import com.yixihan.yicode.question.openapi.biz.feign.user.extra.UserFavoriteFeignClient;
 import com.yixihan.yicode.question.openapi.biz.service.admin.QuestionListService;
@@ -42,6 +44,9 @@ public class QuestionListServiceImpl implements QuestionListService {
     
     @Resource
     private QuestionService questionService;
+    
+    @Resource
+    private QuestionFeignClient questionFeignClient;
     
     private static final Long USER_ID = 1L;
     
@@ -80,6 +85,8 @@ public class QuestionListServiceImpl implements QuestionListService {
     
     @Override
     public QuestionVO addListQuestion(ModifyListQuestionReq req) {
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
+        
         ModifyCollectionDtoReq dtoReq = new ModifyCollectionDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (req.getId ());
@@ -93,6 +100,8 @@ public class QuestionListServiceImpl implements QuestionListService {
     
     @Override
     public void delListQuestion(ModifyListQuestionReq req) {
+        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
+        
         ModifyCollectionDtoReq dtoReq = new ModifyCollectionDtoReq ();
         dtoReq.setUserId (USER_ID);
         dtoReq.setFavoriteId (req.getId ());
@@ -123,6 +132,13 @@ public class QuestionListServiceImpl implements QuestionListService {
         req.setSearchCount (Boolean.FALSE);
     
         return questionListPage (req).getRecords ();
+    }
+    
+    @Override
+    public QuestionListVO questionListDetail(Long id) {
+        FavoriteDtoResult dtoResult = favoriteFeignClient.getFavoriteDetail (id).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionListVO.class);
     }
     
     @Override

@@ -65,6 +65,11 @@ public class QuestionListController implements QuestionListOpenApi {
     }
     
     @Override
+    public JsonResponse<QuestionListVO> questionListDetail(Long id) {
+        return JsonResponse.ok (service.questionListDetail (id));
+    }
+    
+    @Override
     public JsonResponse<PageVO<QuestionVO>> questionPage(QueryQuestionListReq req) {
         return JsonResponse.ok (service.questionPage (req));
     }
