@@ -49,4 +49,7 @@ public class QueryQuestionDtoReq extends PageDtoReq {
     
     @ApiModelProperty(value = "按通过率排序")
     private Boolean passSort;
+    
+    @ApiModelProperty(value = "是否查看未启用题目")
+    private Boolean enable;
 }

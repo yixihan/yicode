@@ -79,7 +79,7 @@ public class QuestionCaseServiceImpl extends ServiceImpl<QuestionCaseMapper, Que
     public PageDtoResult<QuestionCaseDtoResult> allQuestionCasePage(QueryQuestionCaseDtoReq dtoReq) {
         Page<QuestionCase> page = lambdaQuery ()
                 .eq (QuestionCase::getQuestionId, dtoReq.getQuestionId ())
-                .eq (QuestionCase::getEnable, Boolean.TRUE)
+                .eq (QuestionCase::getEnable, dtoReq.getEnable ())
                 .orderByDesc (QuestionCase::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         

@@ -23,4 +23,7 @@ public class QueryQuestionCaseDtoReq extends PageDtoReq {
     
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
+    
+    @ApiModelProperty(value = "是否查看未启用测试用例")
+    private Boolean enable;
 }

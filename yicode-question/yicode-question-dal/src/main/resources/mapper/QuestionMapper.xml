@@ -71,7 +71,9 @@
     </if>
     <where>
         and q.`del_flag` = 0
-        and q.`enable` = 1
+        <if test="params.enable == null or !params.enable">
+            and q.`enable` = 1
+        </if>
         <if test="params.questionName != null and params.questionName != ''">
             and q.`question_name` like concat('%', #{params.questionName}, '%')
         </if>
