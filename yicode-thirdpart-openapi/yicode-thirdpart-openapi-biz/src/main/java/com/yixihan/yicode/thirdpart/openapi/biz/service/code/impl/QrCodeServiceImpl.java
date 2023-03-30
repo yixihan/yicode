@@ -28,7 +28,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String dir = System.getProperty ("user.dir");
             log.info ("dir : {}", dir);
             QrConfig config = QrConfig.create ()
-                    .setImg (dir + "/logo/logo.png")
+//                    .setImg (dir + "/logo/logo.png")
                     .setWidth (300)
                     .setHeight (300)
                     .setErrorCorrection (ErrorCorrectionLevel.H);
