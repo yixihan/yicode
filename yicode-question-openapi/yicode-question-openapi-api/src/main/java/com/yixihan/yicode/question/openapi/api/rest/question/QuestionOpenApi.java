@@ -58,7 +58,7 @@ public interface QuestionOpenApi {
     
     @ApiOperation("修改问题标签")
     @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
-    @DeleteMapping(value = "/label/modify", produces = "application/json")
+    @PostMapping(value = "/label/modify", produces = "application/json")
     JsonResponse<List<LabelVO>> modifyQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     
     @ApiOperation("问题明细")

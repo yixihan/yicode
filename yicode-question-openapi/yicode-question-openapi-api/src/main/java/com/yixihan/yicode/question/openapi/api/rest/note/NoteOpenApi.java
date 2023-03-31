@@ -50,7 +50,7 @@ public interface NoteOpenApi {
     void cancelCollectionNote(@RequestBody ModifyCollectionReq req);
     
     @ApiOperation("修改问题标签")
-    @DeleteMapping(value = "/label/modify", produces = "application/json")
+    @PostMapping(value = "/label/modify", produces = "application/json")
     JsonResponse<List<LabelVO>> modifyNoteLabel(@RequestBody ModifyLabelNoteReq req);
     
     @ApiOperation("查看题解")
