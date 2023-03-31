@@ -63,13 +63,8 @@ public class QuestionController implements QuestionOpenApi {
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> addQuestionLabel(ModifyLabelQuestionReq req) {
-        return JsonResponse.ok (service.addQuestionLabel (req));
-    }
-    
-    @Override
-    public JsonResponse<List<LabelVO>> delQuestionLabel(ModifyLabelQuestionReq req) {
-        return JsonResponse.ok (service.delQuestionLabel (req));
+    public JsonResponse<List<LabelVO>> modifyQuestionLabel(ModifyLabelQuestionReq req) {
+        return JsonResponse.ok (service.modifyQuestionLabel (req));
     }
     
     @Override

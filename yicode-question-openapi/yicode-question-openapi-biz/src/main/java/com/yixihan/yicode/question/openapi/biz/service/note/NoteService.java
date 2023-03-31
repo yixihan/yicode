@@ -63,20 +63,12 @@ public interface NoteService {
     void cancelCollectionNote(ModifyCollectionReq req);
     
     /**
-     * 添加题解标签
+     * 修改题解标签
      *
      * @param req 请求参数
      * @return {@link LabelVO}
      */
-    List<LabelVO> addNoteLabel(ModifyLabelNoteReq req);
-    
-    /**
-     * 删除题解标签
-     *
-     * @param req 请求参数
-     * @return {@link LabelVO}
-     */
-    List<LabelVO> delNoteLabel(ModifyLabelNoteReq req);
+    List<LabelVO> modifyNoteLabel(ModifyLabelNoteReq req);
     
     /**
      * 题解明细

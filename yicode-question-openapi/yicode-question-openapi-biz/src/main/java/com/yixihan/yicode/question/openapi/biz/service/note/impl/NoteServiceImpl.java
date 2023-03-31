@@ -208,31 +208,17 @@ public class NoteServiceImpl implements NoteService {
     }
     
     @Override
-    public List<LabelVO> addNoteLabel(ModifyLabelNoteReq req) {
+    public List<LabelVO> modifyNoteLabel(ModifyLabelNoteReq req) {
         // 校验参数
-        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
         Assert.isTrue (noteFeignClient.verifyNote (req.getNoteId ()).getResult ());
-    
+        req.getLabelIdList ().forEach (labelId ->
+                Assert.isTrue (labelFeignClient.verifyLabel (labelId).getResult ()));
+        
         // 构造请求 body
         ModifyLabelNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelNoteDtoReq.class);
         
         // 添加题解标签
-        List<LabelDtoResult> dtoResult = labelNoteFeignClient.addNoteLabel (dtoReq).getResult ();
-        
-        return BeanUtil.copyToList (dtoResult, LabelVO.class);
-    }
-    
-    @Override
-    public List<LabelVO> delNoteLabel(ModifyLabelNoteReq req) {
-        // 校验参数
-        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
-        Assert.isTrue (noteFeignClient.verifyNote (req.getNoteId ()).getResult ());
-    
-        // 构造请求 body
-        ModifyLabelNoteDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelNoteDtoReq.class);
-    
-        // 添加题解标签
-        List<LabelDtoResult> dtoResult = labelNoteFeignClient.delNoteLabel (dtoReq).getResult ();
+        List<LabelDtoResult> dtoResult = labelNoteFeignClient.modifyNoteLabel (dtoReq).getResult ();
         
         return BeanUtil.copyToList (dtoResult, LabelVO.class);
     }

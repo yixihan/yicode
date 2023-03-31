@@ -189,33 +189,17 @@ public class QuestionServiceImpl implements QuestionService {
     }
     
     @Override
-    public List<LabelVO> addQuestionLabel(ModifyLabelQuestionReq req) {
-        // 校验参数
-        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
+    public List<LabelVO> modifyQuestionLabel(ModifyLabelQuestionReq req) {
+        // 参数校验
         Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
-    
-        // 构造请求 body
-        ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
-    
-        // 添加题解标签
-        List<LabelDtoResult> dtoResult = labelQuestionFeignClient.addQuestionLabel (dtoReq).getResult ();
+        req.getLabelIdList ().forEach (labelId ->
+                Assert.isTrue (labelFeignClient.verifyLabel (labelId).getResult ()));
         
-        return BeanUtil.copyToList (dtoResult, LabelVO.class);
-    }
-    
-    @Override
-    public List<LabelVO> delQuestionLabel(ModifyLabelQuestionReq req) {
-        // 校验参数
-        Assert.isTrue (labelFeignClient.verifyLabel (req.getLabelId ()).getResult ());
-        Assert.isTrue (questionFeignClient.verifyQuestion (req.getQuestionId ()).getResult ());
-    
-        // 构造请求 body
         ModifyLabelQuestionDtoReq dtoReq = BeanUtil.toBean (req, ModifyLabelQuestionDtoReq.class);
-    
-        // 添加题解标签
-        List<LabelDtoResult> dtoResult = labelQuestionFeignClient.delQuestionLabel (dtoReq).getResult ();
         
-        return BeanUtil.copyToList (dtoResult, LabelVO.class);
+        List<LabelDtoResult> dtoResultList = labelQuestionFeignClient.modifyQuestionLabel (dtoReq).getResult ();
+        
+        return BeanUtil.copyToList (dtoResultList, LabelVO.class);
     }
     
     @Override

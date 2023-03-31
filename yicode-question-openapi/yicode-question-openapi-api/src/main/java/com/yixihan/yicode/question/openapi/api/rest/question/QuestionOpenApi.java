@@ -56,15 +56,10 @@ public interface QuestionOpenApi {
     @DeleteMapping(value = "/collection/cancel", produces = "application/json")
     void cancelCollectionQuestion(@RequestBody ModifyCollectionReq req);
     
-    @ApiOperation("添加问题标签")
+    @ApiOperation("修改问题标签")
     @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
-    @PostMapping(value = "/label/add", produces = "application/json")
-    JsonResponse<List<LabelVO>> addQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
-    
-    @ApiOperation("删除问题标签")
-    @RoleAccess(value = {RoleEnums.ADMIN, RoleEnums.SUPER_ADMIN})
-    @DeleteMapping(value = "/label/del", produces = "application/json")
-    JsonResponse<List<LabelVO>> delQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
+    @DeleteMapping(value = "/label/modify", produces = "application/json")
+    JsonResponse<List<LabelVO>> modifyQuestionLabel(@RequestBody ModifyLabelQuestionReq req);
     
     @ApiOperation("问题明细")
     @GetMapping(value = "/detail", produces = "application/json")

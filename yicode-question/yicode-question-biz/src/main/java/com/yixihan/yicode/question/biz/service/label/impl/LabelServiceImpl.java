@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
@@ -16,7 +17,9 @@ import com.yixihan.yicode.question.biz.service.label.LabelService;
 import com.yixihan.yicode.question.dal.mapper.label.LabelMapper;
 import com.yixihan.yicode.question.dal.pojo.label.Label;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +33,21 @@ import java.util.List;
  */
 @Service
 public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements LabelService {
+    
+    @Override
+    @Transactional(rollbackFor = BizException.class)
+    public void addLabelBatch(List<String> labelNameList) {
+        // 保存已有标签
+        List<Label> labelList = new ArrayList<> (labelNameList.size ());
+        
+        labelNameList.forEach (item -> {
+            Label label = new Label ();
+            label.setLabelName (item);
+            labelList.add (label);
+        });
+        
+        Assert.isTrue (saveBatch (labelList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+    }
     
     @Override
     public LabelDtoResult addLabel(AddLabelDtoReq dtoReq) {

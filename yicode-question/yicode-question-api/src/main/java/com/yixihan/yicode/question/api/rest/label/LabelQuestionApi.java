@@ -21,13 +21,9 @@ import java.util.List;
 @RequestMapping("/label/question")
 public interface LabelQuestionApi {
     
-    @ApiOperation("添加问题标签")
-    @PostMapping(value = "/add", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> addQuestionLabel (@RequestBody ModifyLabelQuestionDtoReq dtoReq);
-    
-    @ApiOperation ("删除问题标签")
-    @PostMapping(value = "/del", produces = "application/json")
-    ApiResult<List<LabelDtoResult>> delQuestionLabel (@RequestBody ModifyLabelQuestionDtoReq dtoReq);
+    @ApiOperation ("修改问题标签")
+    @PostMapping(value = "/modify", produces = "application/json")
+    ApiResult<List<LabelDtoResult>> modifyQuestionLabel (@RequestBody ModifyLabelQuestionDtoReq dtoReq);
     
     @ApiOperation ("问题标签明细")
     @PostMapping(value = "/detail", produces = "application/json")

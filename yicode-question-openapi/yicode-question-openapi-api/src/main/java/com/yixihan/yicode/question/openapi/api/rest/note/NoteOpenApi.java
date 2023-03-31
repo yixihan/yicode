@@ -49,13 +49,9 @@ public interface NoteOpenApi {
     @DeleteMapping(value = "/collection/cancel", produces = "application/json")
     void cancelCollectionNote(@RequestBody ModifyCollectionReq req);
     
-    @ApiOperation("添加题解标签")
-    @PostMapping(value = "/label/add", produces = "application/json")
-    JsonResponse<List<LabelVO>> addNoteLabel(@RequestBody ModifyLabelNoteReq req);
-    
-    @ApiOperation("删除题解标签")
-    @DeleteMapping(value = "/label/del", produces = "application/json")
-    JsonResponse<List<LabelVO>> delNoteLabel(@RequestBody ModifyLabelNoteReq req);
+    @ApiOperation("修改问题标签")
+    @DeleteMapping(value = "/label/modify", produces = "application/json")
+    JsonResponse<List<LabelVO>> modifyNoteLabel(@RequestBody ModifyLabelNoteReq req);
     
     @ApiOperation("查看题解")
     @GetMapping(value = "/detail", produces = "application/json")

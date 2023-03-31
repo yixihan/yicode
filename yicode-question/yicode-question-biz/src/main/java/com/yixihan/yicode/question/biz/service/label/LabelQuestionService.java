@@ -16,22 +16,14 @@ import java.util.List;
  * @since 2023-01-11
  */
 public interface LabelQuestionService extends IService<LabelQuestion> {
-    
+   
     /**
-     * 添加问题标签
+     * 修改问题标签
      *
      * @param dtoReq 请求参数
      * @return {@link LabelDtoResult}
      */
-    List<LabelDtoResult> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq);
-    
-    /**
-     * 删除问题标签
-     *
-     * @param dtoReq 请求参数
-     * @return {@link LabelDtoResult}
-     */
-    List<LabelDtoResult> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq);
+    List<LabelDtoResult> modifyQuestionLabel(ModifyLabelQuestionDtoReq dtoReq);
     
     /**
      * 获取问题标签

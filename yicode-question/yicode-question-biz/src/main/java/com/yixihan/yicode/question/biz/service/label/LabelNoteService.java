@@ -18,20 +18,13 @@ import java.util.List;
 public interface LabelNoteService extends IService<LabelNote> {
     
     /**
-     * 添加题解标签
+     * 修改题解标签
      *
      * @param dtoReq 请求参数
      * @return {@link LabelDtoResult}
      */
-    List<LabelDtoResult> addNoteLabel(ModifyLabelNoteDtoReq dtoReq);
+    List<LabelDtoResult> modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq);
     
-    /**
-     * 删除题解标签
-     *
-     * @param dtoReq 请求参数
-     * @return {@link LabelDtoResult}
-     */
-    List<LabelDtoResult> delNoteLabel(ModifyLabelNoteDtoReq dtoReq);
     
     /**
      * 获取题解标签

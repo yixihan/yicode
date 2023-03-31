@@ -61,13 +61,8 @@ public class NoteController implements NoteOpenApi {
     }
     
     @Override
-    public JsonResponse<List<LabelVO>> addNoteLabel(ModifyLabelNoteReq req) {
-        return JsonResponse.ok (service.addNoteLabel (req));
-    }
-    
-    @Override
-    public JsonResponse<List<LabelVO>> delNoteLabel(ModifyLabelNoteReq req) {
-        return JsonResponse.ok (service.delNoteLabel (req));
+    public JsonResponse<List<LabelVO>> modifyNoteLabel(ModifyLabelNoteReq req) {
+        return JsonResponse.ok (service.modifyNoteLabel (req));
     }
     
     @Override

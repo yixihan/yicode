@@ -28,13 +28,8 @@ public class LabelNoteController implements LabelNoteApi {
     private LabelNoteService service;
     
     @Override
-    public ApiResult<List<LabelDtoResult>> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        return ApiResult.create (service.addNoteLabel (dtoReq));
-    }
-    
-    @Override
-    public ApiResult<List<LabelDtoResult>> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        return ApiResult.create (service.delNoteLabel (dtoReq));
+    public ApiResult<List<LabelDtoResult>> modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+        return ApiResult.create (service.modifyNoteLabel (dtoReq));
     }
     
     @Override

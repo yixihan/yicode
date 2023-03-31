@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * 添加题解标签-dtoReq
+ * 修改题解标签-dtoReq
  *
  * @author yixihan
  * @date 2023/1/15 23:18
@@ -15,12 +17,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("添加题解标签-dtoReq")
+@ApiModel("修改题解标签-dtoReq")
 public class ModifyLabelNoteDtoReq {
-    
-    @ApiModelProperty(value = "标签 ID")
-    private Long labelId;
     
     @ApiModelProperty(value = "题解 ID")
     private Long noteId;
+    
+    @ApiModelProperty(value = "已有标签 ID")
+    private List<Long> labelIdList;
+    
+    @ApiModelProperty(value = "新建标签名字")
+    private List<String> labelNameList;
 }

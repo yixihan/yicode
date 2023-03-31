@@ -22,6 +22,13 @@ public interface LabelService extends IService<Label> {
     /**
      * 添加标签
      *
+     * @param labelNameList 请求参数
+     */
+    void addLabelBatch(List<String> labelNameList);
+    
+    /**
+     * 添加标签
+     *
      * @param dtoReq 请求参数
      * @return {@link LabelDtoResult}
      */

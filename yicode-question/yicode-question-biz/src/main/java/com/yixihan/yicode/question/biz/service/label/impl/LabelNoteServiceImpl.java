@@ -9,11 +9,12 @@ import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.biz.service.label.LabelNoteService;
 import com.yixihan.yicode.question.biz.service.label.LabelService;
 import com.yixihan.yicode.question.dal.mapper.label.LabelNoteMapper;
-import com.yixihan.yicode.question.dal.pojo.label.Label;
 import com.yixihan.yicode.question.dal.pojo.label.LabelNote;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,31 +33,24 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     private LabelService labelService;
     
     @Override
-    public List<LabelDtoResult> addNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        Label label = labelService.getById (dtoReq.getLabelId ());
+    @Transactional(rollbackFor = BizException.class)
+    public List<LabelDtoResult> modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+        // 保存已有标签
+        List<LabelNote> labelNoteList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
         
-        LabelNote labelNote = new LabelNote ();
-        labelNote.setLabelId (label.getLabelId ());
-        labelNote.setNoteId (dtoReq.getNoteId ());
-    
-        // 保存
-        Assert.isTrue (save (labelNote), BizCodeEnum.FAILED_TYPE_BUSINESS);
-    
-        return noteLabelDetail (dtoReq.getNoteId ());
-    }
-    
-    @Override
-    public List<LabelDtoResult> delNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        Long id = lambdaQuery ()
-                .select (LabelNote::getId)
-                .eq (LabelNote::getNoteId, dtoReq.getNoteId ())
-                .eq (LabelNote::getLabelId, dtoReq.getNoteId ())
-                .one ()
-                .getId ();
-        Assert.notNull (id, new BizException ("该标签不存在"));
+        dtoReq.getLabelIdList ().forEach (item -> {
+            LabelNote labelNote = new LabelNote ();
+            labelNote.setNoteId (dtoReq.getNoteId ());
+            labelNote.setLabelId (item);
+            labelNoteList.add (labelNote);
+        });
         
-        // 删除
-        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        Assert.isTrue (saveBatch (labelNoteList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
+        // 新建未有标签
+        labelService.addLabelBatch (dtoReq.getLabelNameList ());
+        
+        
         return noteLabelDetail (dtoReq.getNoteId ());
     }
     

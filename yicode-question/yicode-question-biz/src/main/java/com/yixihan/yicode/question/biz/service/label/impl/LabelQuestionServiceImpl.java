@@ -9,11 +9,12 @@ import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.question.biz.service.label.LabelQuestionService;
 import com.yixihan.yicode.question.biz.service.label.LabelService;
 import com.yixihan.yicode.question.dal.mapper.label.LabelQuestionMapper;
-import com.yixihan.yicode.question.dal.pojo.label.Label;
 import com.yixihan.yicode.question.dal.pojo.label.LabelQuestion;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,32 +33,24 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     private LabelService labelService;
     
     @Override
-    public List<LabelDtoResult> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        Label label = labelService.getById (dtoReq.getLabelId ());
-    
-        LabelQuestion labelQuestion = new LabelQuestion ();
-        labelQuestion.setLabelId (label.getLabelId ());
-        labelQuestion.setQuestionId (dtoReq.getQuestionId ());
-    
-        // 保存
-        Assert.isTrue (save (labelQuestion), BizCodeEnum.FAILED_TYPE_BUSINESS);
-    
-        return questionLabelDetail (dtoReq.getQuestionId ());
-    }
-    
-    @Override
-    public List<LabelDtoResult> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        Long id = lambdaQuery ()
-                .select (LabelQuestion::getId)
-                .eq (LabelQuestion::getQuestionId, dtoReq.getQuestionId ())
-                .eq (LabelQuestion::getLabelId, dtoReq.getLabelId ())
-                .one ()
-                .getId ();
-        Assert.notNull (id, new BizException ("该标签不存在"));
-    
-        // 删除
-        Assert.isTrue (removeById (id), BizCodeEnum.FAILED_TYPE_BUSINESS);
-    
+    @Transactional(rollbackFor = BizException.class)
+    public List<LabelDtoResult> modifyQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+        // 保存已有标签
+        List<LabelQuestion> labelQuestionList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
+        
+        dtoReq.getLabelIdList ().forEach (item -> {
+            LabelQuestion labelQuestion = new LabelQuestion ();
+            labelQuestion.setQuestionId (dtoReq.getQuestionId ());
+            labelQuestion.setLabelId (item);
+            labelQuestionList.add (labelQuestion);
+        });
+        
+        Assert.isTrue (saveBatch (labelQuestionList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
+        // 新建未有标签
+        labelService.addLabelBatch (dtoReq.getLabelNameList ());
+        
+        
         return questionLabelDetail (dtoReq.getQuestionId ());
     }
     

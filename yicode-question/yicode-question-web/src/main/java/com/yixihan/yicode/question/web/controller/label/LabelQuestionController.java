@@ -28,13 +28,8 @@ public class LabelQuestionController implements LabelQuestionApi {
     private LabelQuestionService service;
     
     @Override
-    public ApiResult<List<LabelDtoResult>> addQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        return ApiResult.create (service.addQuestionLabel (dtoReq));
-    }
-    
-    @Override
-    public ApiResult<List<LabelDtoResult>> delQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        return ApiResult.create (service.delQuestionLabel (dtoReq));
+    public ApiResult<List<LabelDtoResult>> modifyQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
+        return ApiResult.create (service.modifyQuestionLabel (dtoReq));
     }
     
     @Override

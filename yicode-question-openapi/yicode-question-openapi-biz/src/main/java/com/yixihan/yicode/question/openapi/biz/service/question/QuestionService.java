@@ -66,20 +66,12 @@ public interface QuestionService {
     void cancelCollectionQuestion(ModifyCollectionReq req);
     
     /**
-     * 添加题解标签
+     * 修改题解标签
      *
      * @param req 请求参数
      * @return {@link LabelVO}
      */
-    List<LabelVO> addQuestionLabel(ModifyLabelQuestionReq req);
-    
-    /**
-     * 删除题解标签
-     *
-     * @param req 请求参数
-     * @return {@link LabelVO}
-     */
-    List<LabelVO> delQuestionLabel(ModifyLabelQuestionReq req);
+    List<LabelVO> modifyQuestionLabel(ModifyLabelQuestionReq req);
     
     /**
      * 问题明细
