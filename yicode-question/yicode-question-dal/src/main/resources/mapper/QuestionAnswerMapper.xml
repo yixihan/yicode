@@ -25,11 +25,13 @@
             and q.del_flag = 0
             and qa.del_flag = 0
             and qa.user_id = #{params.userId}
-            <if test="params.accepted">
-                and qa.answer_flag = 'AC'
-            </if>
-            <if test="!params.accepted">
-                and qa.answer_flag != 'AC'
+            <if test="params.accepted != null">
+                <if test="params.accepted">
+                    and qa.answer_flag = 'AC'
+                </if>
+                <if test="!params.accepted">
+                    and qa.answer_flag != 'AC'
+                </if>
             </if>
             <if test="params.questionName != null and params.questionName != ''">
                 and q.question_name like concat ('%', #{params.questionName}, '%')
