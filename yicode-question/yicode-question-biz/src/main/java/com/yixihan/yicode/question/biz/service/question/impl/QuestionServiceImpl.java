@@ -113,7 +113,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public Boolean verifyQuestion(Long questionId) {
         return lambdaQuery ()
                 .eq (Question::getQuestionId, questionId)
-                .eq (Question::getEnable, Boolean.TRUE)
                 .count () > 0;
     }
     
