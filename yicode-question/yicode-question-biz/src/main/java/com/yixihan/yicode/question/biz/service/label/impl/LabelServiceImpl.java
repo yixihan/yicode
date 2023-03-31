@@ -37,7 +37,10 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
     @Override
     @Transactional(rollbackFor = BizException.class)
     public void addLabelBatch(List<String> labelNameList) {
-        // 保存已有标签
+        if (CollUtil.isEmpty (labelNameList)) {
+            return;
+        }
+        // 新建标签
         List<Label> labelList = new ArrayList<> (labelNameList.size ());
         
         labelNameList.forEach (item -> {
