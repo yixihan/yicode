@@ -172,7 +172,6 @@
         </if>
         <where>
             and q.`del_flag` = 0
-            and q.`enable` = 1
             and q.`question_id` = #{params.questionId}
         </where>
     </select>
