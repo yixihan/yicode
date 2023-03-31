@@ -114,13 +114,13 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
                 ));
         
         // 获取起始时间和截至时间
-        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), DatePattern.NORM_MONTH_PATTERN);
-        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), DatePattern.NORM_MONTH_PATTERN);
+        DateTime startDate = DateUtil.parse (dtoReq.getStartDate (), DatePattern.NORM_DATE_PATTERN);
+        DateTime endDate = DateUtil.parse (dtoReq.getEndDate (), DatePattern.NORM_DATE_PATTERN);
         
         List<CommitRecordDtoResult> list = new ArrayList<> ();
         
         while (DateUtil.compare (startDate, endDate) < 0) {
-            String date = DateUtil.format (startDate, DatePattern.NORM_MONTH_PATTERN);
+            String date = DateUtil.format (startDate, DatePattern.NORM_DATE_PATTERN);
             list.add (commitRecordDtoResults.getOrDefault (
                     startDate,
                     new CommitRecordDtoResult (date, 0))

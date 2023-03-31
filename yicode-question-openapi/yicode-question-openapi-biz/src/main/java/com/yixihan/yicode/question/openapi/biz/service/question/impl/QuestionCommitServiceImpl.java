@@ -135,13 +135,13 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     }
     
     @Override
-    public List<CommitRecordVO> codeCommitCount(String year) {
+    public List<CommitRecordVO> codeCommitCount(String month) {
         // 设置 endDate & startDate
-        Date endDate = StrUtil.isBlank (year) ?
+        Date endDate = StrUtil.isBlank (month) ?
                 DateUtil.endOfDay (new Date ()) :
-                DateUtil.endOfYear (DateUtil.parse (year, "yyyy"));
+                DateUtil.endOfMonth (DateUtil.parse (month, "yyyy-MM"));
         
-        Date startDate = DateUtil.beginOfDay (DateUtil.offsetDay (DateUtil.offsetMonth (endDate, -12), 1));
+        Date startDate = DateUtil.beginOfMonth (endDate);
         
     
         // 构建请求 body
