@@ -4,13 +4,13 @@
 
     <select id="allQuestionLabel"
             resultType="com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult">
-        select distinct
+        select
             l.label_id as labelId,
-            l.label_name as labelName,
-            l.create_time as createTime,
-            l.update_time as updateTime,
-            l.version as version,
-            l.del_flag as delFlag
+            any_value(l.label_name) as labelName,
+            any_value(l.create_time) as createTime,
+            any_value(l.update_time) as updateTime,
+            any_value(l.version) as version,
+            any_value(l.del_flag) as delFlag
         from
             label_question as lq
                 left join
@@ -21,7 +21,9 @@
           <if test="labelName != null and labelName != ''">
               and l.label_name like concat('%', #{labelName}, '%')
           </if>
+        group by
+            l.label_id
         order by
-            lq.create_time
+            createTime
     </select>
 </mapper>
