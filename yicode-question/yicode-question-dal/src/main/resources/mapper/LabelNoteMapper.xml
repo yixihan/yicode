@@ -3,7 +3,7 @@
 <mapper namespace="com.yixihan.yicode.question.dal.mapper.label.LabelNoteMapper">
 
     <select id="allNoteLabel" resultType="com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult">
-        select
+        select distinct
             l.label_id as labelId,
             l.label_name as labelName,
             l.create_time as createTime,
@@ -20,8 +20,6 @@
             <if test="labelName != null and labelName != ''">
                 and l.label_name like concat('%', #{labelName}, '%')
             </if>
-        group by
-            l.label_id
         order by
             ln.create_time
     </select>
