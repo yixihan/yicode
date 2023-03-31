@@ -62,7 +62,6 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
                 .orderByDesc (LabelNote::getCreateTime)
                 .list ()
                 .stream ()
-                .distinct ()
                 .map (LabelNote::getLabelId)
                 .collect (Collectors.toList ());
                 

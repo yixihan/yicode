@@ -62,7 +62,6 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
                 .orderByDesc (LabelQuestion::getCreateTime)
                 .list ()
                 .stream ()
-                .distinct ()
                 .map (LabelQuestion::getLabelId)
                 .collect (Collectors.toList ());
     

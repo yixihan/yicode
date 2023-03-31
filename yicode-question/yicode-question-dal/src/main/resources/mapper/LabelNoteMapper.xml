@@ -20,6 +20,8 @@
             <if test="labelName != null and labelName != ''">
                 and l.label_name like concat('%', #{labelName}, '%')
             </if>
+        group by
+            l.label_id
         order by
             ln.create_time
     </select>
