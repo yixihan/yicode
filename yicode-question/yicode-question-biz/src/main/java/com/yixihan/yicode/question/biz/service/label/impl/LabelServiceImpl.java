@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -36,9 +37,9 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
     
     @Override
     @Transactional(rollbackFor = BizException.class)
-    public void addLabelBatch(List<String> labelNameList) {
+    public List<Long> addLabelBatch(List<String> labelNameList) {
         if (CollUtil.isEmpty (labelNameList)) {
-            return;
+            return Collections.emptyList ();
         }
         // 新建标签
         List<Label> labelList = new ArrayList<> (labelNameList.size ());
@@ -50,6 +51,8 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
         });
         
         Assert.isTrue (saveBatch (labelList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
+        return labelList.stream ().map (Label::getLabelId).collect (Collectors.toList ());
     }
     
     @Override

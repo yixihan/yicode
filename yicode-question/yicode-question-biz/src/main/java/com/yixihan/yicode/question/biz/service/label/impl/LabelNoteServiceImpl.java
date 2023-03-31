@@ -35,7 +35,11 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     @Override
     @Transactional(rollbackFor = BizException.class)
     public List<LabelDtoResult> modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
-        // 保存已有标签
+        // 新建未有标签
+        List<Long> newLabelIdList = labelService.addLabelBatch (dtoReq.getLabelNameList ());
+        
+        // 保存标签
+        dtoReq.getLabelIdList ().addAll (newLabelIdList);
         List<LabelNote> labelNoteList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
         
         dtoReq.getLabelIdList ().forEach (item -> {
@@ -44,12 +48,8 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
             labelNote.setLabelId (item);
             labelNoteList.add (labelNote);
         });
-        
+    
         Assert.isTrue (saveBatch (labelNoteList), BizCodeEnum.FAILED_TYPE_BUSINESS);
-        
-        // 新建未有标签
-        labelService.addLabelBatch (dtoReq.getLabelNameList ());
-        
         
         return noteLabelDetail (dtoReq.getNoteId ());
     }
@@ -62,6 +62,7 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
                 .orderByDesc (LabelNote::getCreateTime)
                 .list ()
                 .stream ()
+                .distinct ()
                 .map (LabelNote::getLabelId)
                 .collect (Collectors.toList ());
                 

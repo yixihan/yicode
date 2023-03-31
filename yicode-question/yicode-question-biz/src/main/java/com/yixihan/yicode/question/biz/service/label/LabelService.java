@@ -23,8 +23,9 @@ public interface LabelService extends IService<Label> {
      * 添加标签
      *
      * @param labelNameList 请求参数
+     * @return 新建标签 id
      */
-    void addLabelBatch(List<String> labelNameList);
+    List<Long> addLabelBatch(List<String> labelNameList);
     
     /**
      * 添加标签

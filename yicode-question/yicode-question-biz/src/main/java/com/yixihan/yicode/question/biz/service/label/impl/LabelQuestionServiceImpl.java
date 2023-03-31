@@ -35,7 +35,11 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     @Override
     @Transactional(rollbackFor = BizException.class)
     public List<LabelDtoResult> modifyQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
-        // 保存已有标签
+        // 新建未有标签
+        List<Long> newLabelIdList = labelService.addLabelBatch (dtoReq.getLabelNameList ());
+    
+        // 保存标签
+        dtoReq.getLabelIdList ().addAll (newLabelIdList);
         List<LabelQuestion> labelQuestionList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
         
         dtoReq.getLabelIdList ().forEach (item -> {
@@ -46,10 +50,6 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
         });
         
         Assert.isTrue (saveBatch (labelQuestionList), BizCodeEnum.FAILED_TYPE_BUSINESS);
-        
-        // 新建未有标签
-        labelService.addLabelBatch (dtoReq.getLabelNameList ());
-        
         
         return questionLabelDetail (dtoReq.getQuestionId ());
     }
@@ -62,6 +62,7 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
                 .orderByDesc (LabelQuestion::getCreateTime)
                 .list ()
                 .stream ()
+                .distinct ()
                 .map (LabelQuestion::getLabelId)
                 .collect (Collectors.toList ());
     
