@@ -108,7 +108,7 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         // 日期-提交次数
         Map<DateTime, CommitRecordDtoResult> commitRecordDtoResults = baseMapper.codeCommitCount (dtoReq).stream ()
                 .collect (Collectors.toMap (
-                        o -> DateUtil.parse (o.getDate (), DatePattern.NORM_MONTH_PATTERN),
+                        o -> DateUtil.parse (o.getDate (), DatePattern.NORM_DATE_PATTERN),
                         Function.identity (),
                         (k1, k2) -> k1
                 ));
