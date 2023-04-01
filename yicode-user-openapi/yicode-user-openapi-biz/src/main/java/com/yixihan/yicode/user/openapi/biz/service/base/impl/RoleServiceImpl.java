@@ -1,7 +1,6 @@
 package com.yixihan.yicode.user.openapi.biz.service.base.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.yixihan.yicode.common.enums.user.RoleEnums;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.request.PageDtoReq;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
@@ -56,8 +55,6 @@ public class RoleServiceImpl implements RoleService {
         // 用户添加角色
         ModifyUserRoleDtoReq dtoReq = BeanUtil.toBean (req, ModifyUserRoleDtoReq.class);
         List<RoleDtoResult> dtoResults = userRoleFeignClient.addRole (dtoReq).getResult ();
-        // 处理 roleName
-        dealRoleEnums (dtoResults);
         return BeanUtil.copyToList (dtoResults, RoleVO.class);
     }
     
@@ -73,8 +70,6 @@ public class RoleServiceImpl implements RoleService {
         // 删除用户角色
         ModifyUserRoleDtoReq dtoReq = new ModifyUserRoleDtoReq (req.getUserId (), req.getRoleId ());
         List<RoleDtoResult> dtoResults = userRoleFeignClient.delRole (dtoReq).getResult ();
-        // 处理 roleName
-        dealRoleEnums (dtoResults);
         return BeanUtil.copyToList (dtoResults, RoleVO.class);
     }
     
@@ -82,8 +77,6 @@ public class RoleServiceImpl implements RoleService {
     public PageVO<RoleVO> getRolePage(PageReq req) {
         PageDtoReq dtoReq = BeanUtil.toBean (req, PageDtoReq.class);
         PageDtoResult<RoleDtoResult> dtoResult = roleFeignClient.rolePageDetail (dtoReq).getResult ();
-        // 处理 roleName
-        dealRoleEnums (dtoResult.getRecords ());
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
                 o -> BeanUtil.toBean (o, RoleVO.class)
@@ -94,20 +87,9 @@ public class RoleServiceImpl implements RoleService {
     public PageVO<RoleVO> getUserRolePage(UserRoleQueryReq req) {
         UserRoleQueryDtoReq dtoReq = BeanUtil.toBean (req, UserRoleQueryDtoReq.class);
         PageDtoResult<RoleDtoResult> dtoResult = userRoleFeignClient.getUserRolePage (dtoReq).getResult ();
-        // 处理 roleName
-        dealRoleEnums (dtoResult.getRecords ());
         return PageVOUtil.pageDtoToPageVO (
                 dtoResult,
                 o -> BeanUtil.toBean (o, RoleVO.class)
-        );
-    }
-    
-    /**
-     * 处理 roleName
-     */
-    private void dealRoleEnums (List<RoleDtoResult> roleList) {
-        roleList.forEach (item ->
-                item.setRoleName (RoleEnums.valueOf (item.getRoleName ()).getRoleDesc ())
         );
     }
 }

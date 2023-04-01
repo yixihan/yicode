@@ -5,7 +5,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yixihan.yicode.common.enums.user.UserSexTypeEnums;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
@@ -58,9 +57,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         
         Assert.notNull (info, BizCodeEnum.ACCOUNT_NOT_FOUND);
         
-        // 处理性别枚举类
-        dealSexEnums (CollUtil.toList (info));
-        
         return BeanUtil.toBean (info, UserInfoDtoResult.class);
     }
     
@@ -71,16 +67,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .orderByDesc (UserInfo::getCreateTime)
                 .list ();
         infoList = CollUtil.isEmpty (infoList) ? Collections.emptyList () : infoList;
-        
-        // 处理性别枚举类
-        dealSexEnums (infoList);
-        
+
         return BeanUtil.copyToList (infoList, UserInfoDtoResult.class);
-    }
-    
-    private void dealSexEnums (List<UserInfo> infoList) {
-        infoList.forEach (item ->
-                item.setUserSex (UserSexTypeEnums.valueOf (item.getUserSex ()).getDescription ())
-        );
     }
 }
