@@ -74,7 +74,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     public FavoriteVO modifyFavorite(ModifyFavoriteReq req) {
         Long userId = userService.getUser ().getUserId ();
         // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
-        Assert.isFalse (favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult (),
+        Assert.isTrue (favoriteFeignClient.verifyFavorite (req.getFavoriteId ()).getResult (),
                 new BizException ("收藏夹不存在!"));
         Assert.isTrue (StrUtil.isNotBlank (req.getFavoriteName ()),
                 new BizException ("收藏夹不能为空!"));
@@ -90,7 +90,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     @Override
     public void delFavorite(Long favoriteId) {
         // 校验收藏夹 ID
-        Assert.isFalse (favoriteFeignClient.verifyFavorite (favoriteId).getResult (),
+        Assert.isTrue (favoriteFeignClient.verifyFavorite (favoriteId).getResult (),
                 new BizException ("收藏夹不存在!"));
         
         // 删除收藏夹
