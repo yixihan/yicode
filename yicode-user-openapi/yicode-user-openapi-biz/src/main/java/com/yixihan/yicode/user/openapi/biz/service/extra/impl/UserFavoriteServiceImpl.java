@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.user.FavoriteTypeEnums;
 import com.yixihan.yicode.common.exception.BizException;
@@ -122,6 +123,13 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     
         PageDtoResult<CollectionDtoResult> dtoResult = collectionFeignClient.collectionsDetailPage (dtoReq).getResult ();
         FavoriteDtoResult favoriteDtoResult = favoriteFeignClient.getFavoriteDetail (req.getFavoriteId ()).getResult ();
+        
+        if (CollUtil.isEmpty (dtoResult.getRecords ())) {
+            return PageVOUtil.pageDtoToPageVO (
+                    dtoResult,
+                    o -> BeanUtil.toBean (o, CollectionVO.class)
+            );
+        }
     
         final Map<Long, String> nameMap;
         List<Long> collectionList = dtoResult.getRecords ().stream ().map (CollectionDtoResult::getCollectionId)
