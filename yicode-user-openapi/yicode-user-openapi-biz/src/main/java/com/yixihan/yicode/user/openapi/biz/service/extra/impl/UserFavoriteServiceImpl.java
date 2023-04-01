@@ -107,7 +107,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
         UserDtoResult user = userService.getUser (req.getUserId ());
         FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (req.getUserId () == null ? userService.getUserId () : req.getUserId ());
 
         PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
         dtoResult.getRecords ().parallelStream ().forEach (o -> o.setUserName (user.getUserName ()));
