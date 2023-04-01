@@ -54,14 +54,16 @@ public interface QuestionCommitService {
      * 获取用户提交代码次数记录
      *
      * @param month 年月 yyyy-MM
+     * @param userId 用户 id
      * @return month(yyyy-MM) - {@link QuestionAnswerDtoResult}
      */
-    List<CommitRecordVO> codeCommitCount(String month);
+    List<CommitRecordVO> codeCommitCount(String month, Long userId);
     
     /**
      * 获取用户做题进度
      *
+     * @param userId 用户 id
      * @return {@link CodeRateVO}
      */
-    CodeRateVO codeRate();
+    CodeRateVO codeRate(Long userId);
 }

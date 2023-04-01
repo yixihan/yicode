@@ -23,4 +23,7 @@ public class QuestionAnswerReq extends PageReq {
     
     @ApiModelProperty(value = "问题 id")
     private Long questionId;
+    
+    @ApiModelProperty(value = "用户 id")
+    private Long userId;
 }

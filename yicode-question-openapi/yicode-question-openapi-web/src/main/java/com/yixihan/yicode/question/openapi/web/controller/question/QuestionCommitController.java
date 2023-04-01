@@ -60,12 +60,12 @@ public class QuestionCommitController implements QuestionCommitOpenApi {
     }
     
     @Override
-    public JsonResponse<List<CommitRecordVO>> codeCommitCount(String month) {
-        return JsonResponse.ok (service.codeCommitCount (month));
+    public JsonResponse<List<CommitRecordVO>> codeCommitCount(String month, Long userId) {
+        return JsonResponse.ok (service.codeCommitCount (month, userId));
     }
     
     @Override
-    public JsonResponse<CodeRateVO> codeRate() {
-        return JsonResponse.ok (service.codeRate ());
+    public JsonResponse<CodeRateVO> codeRate(Long userId) {
+        return JsonResponse.ok (service.codeRate (userId));
     }
 }

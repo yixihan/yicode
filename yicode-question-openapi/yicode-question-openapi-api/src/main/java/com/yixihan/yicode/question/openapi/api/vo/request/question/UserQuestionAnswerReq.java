@@ -21,6 +21,9 @@ import lombok.NoArgsConstructor;
 @ApiModel("获取用户提交记录-req")
 public class UserQuestionAnswerReq extends PageReq {
     
+    @ApiModelProperty(value = "用户 id")
+    private Long userId;
+    
     @ApiModelProperty(value = "是否通过")
     private Boolean accepted;
     

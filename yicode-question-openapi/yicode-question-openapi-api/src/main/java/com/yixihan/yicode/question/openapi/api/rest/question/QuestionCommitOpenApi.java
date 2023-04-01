@@ -43,9 +43,10 @@ public interface QuestionCommitOpenApi {
     
     @ApiOperation("获取用户提交代码次数记录 (yyyy-MM)")
     @GetMapping(value = "/result/count", produces = "application/json")
-    JsonResponse<List<CommitRecordVO>> codeCommitCount(@RequestParam("month") String month);
+    JsonResponse<List<CommitRecordVO>> codeCommitCount(@RequestParam("month") String month,
+                                                       @RequestParam(value = "userId", required = false) Long userId);
     
     @ApiOperation("获取用户做题进度")
     @GetMapping(value = "/rate", produces = "application/json")
-    JsonResponse<CodeRateVO> codeRate();
+    JsonResponse<CodeRateVO> codeRate(@RequestParam(value = "userId", required = false) Long userId);
 }

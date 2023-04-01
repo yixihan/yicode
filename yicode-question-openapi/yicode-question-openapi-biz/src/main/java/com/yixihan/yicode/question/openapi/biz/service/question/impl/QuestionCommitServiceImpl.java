@@ -105,7 +105,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     public PageVO<QuestionAnswerVO> queryQuestionAnswer(QuestionAnswerReq req) {
         // 构造请求 body
         QuestionAnswerDtoReq dtoReq = BeanUtil.toBean (req, QuestionAnswerDtoReq.class);
-        dtoReq.setUserId (userService.getUserId ());
+        dtoReq.setUserId (req.getUserId () == null ? userService.getUserId () : req.getUserId ());
     
         // 获取单个问题提交记录
         PageDtoResult<QuestionAnswerDtoResult> dtoResult = questionAnswerFeignClient.queryQuestionAnswer (dtoReq).getResult ();
@@ -121,7 +121,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     public PageVO<QuestionAnswerVO> queryUserQuestionAnswer(UserQuestionAnswerReq req) {
         // 构造请求 body
         UserQuestionAnswerDtoReq dtoReq = BeanUtil.toBean (req, UserQuestionAnswerDtoReq.class);
-        dtoReq.setUserId (userService.getUserId ());
+        dtoReq.setUserId (req.getUserId () == null ? userService.getUserId () : req.getUserId ());
     
         // 获取用户问题提交记录
         PageDtoResult<QuestionAnswerDtoResult> dtoResult = questionAnswerFeignClient.queryUserQuestionAnswer (dtoReq)
@@ -135,7 +135,8 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     }
     
     @Override
-    public List<CommitRecordVO> codeCommitCount(String month) {
+    public List<CommitRecordVO> codeCommitCount(String month, Long userId) {
+        userId = userId == null ? userService.getUserId () : userId;
         // 设置 endDate & startDate
         Date endDate = StrUtil.isBlank (month) ?
                 DateUtil.endOfDay (new Date ()) :
@@ -146,7 +147,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     
         // 构建请求 body
         CodeCommitCountDtoReq dtoReq = new CodeCommitCountDtoReq ();
-        dtoReq.setUserId (userService.getUser ().getUserId ());
+        dtoReq.setUserId (userId);
         dtoReq.setEndDate (DateUtil.format (endDate, DatePattern.NORM_DATETIME_PATTERN));
         dtoReq.setStartDate (DateUtil.format (startDate, DatePattern.NORM_DATETIME_PATTERN));
         
@@ -157,8 +158,8 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     }
     
     @Override
-    public CodeRateVO codeRate() {
-        Long userId = userService.getUserId ();
+    public CodeRateVO codeRate(Long userId) {
+        userId = userId == null ? userService.getUserId () : userId;
     
         CodeRateDtoResult dtoResult = questionAnswerFeignClient.codeRate (userId).getResult ();
         
