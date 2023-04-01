@@ -69,7 +69,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     
     @Override
     public PageVO<FollowVO> getFollowList(FollowQueryReq req) {
-        FollowQueryDtoReq dtoReq = new FollowQueryDtoReq (req.getUserId ());
+        FollowQueryDtoReq dtoReq = BeanUtil.toBean (req, FollowQueryDtoReq.class);
         PageDtoResult<FollowDtoResult> dtoResult = followFeignClient.getFollowList (dtoReq).getResult ();
         
         return PageVOUtil.pageDtoToPageVO (
@@ -85,7 +85,7 @@ public class UserFollowServiceImpl implements UserFollowService {
     
     @Override
     public PageVO<FollowVO> getFanList(FollowQueryReq req) {
-        FollowQueryDtoReq dtoReq = new FollowQueryDtoReq (req.getUserId ());
+        FollowQueryDtoReq dtoReq = BeanUtil.toBean (req, FollowQueryDtoReq.class);
         PageDtoResult<FollowDtoResult> dtoResult = followFeignClient.getFanList (dtoReq).getResult ();
     
         return PageVOUtil.pageDtoToPageVO (
