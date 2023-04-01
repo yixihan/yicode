@@ -60,7 +60,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         // 校验收藏夹 ID & 收藏夹名 (不为空) & 收藏数量
         Assert.isTrue (StrUtil.isNotBlank (req.getFavoriteName ()),
                 new BizException ("收藏夹不能为空!"));
-        Assert.isTrue (Boolean.FALSE.equals (FavoriteTypeEnums.contains (req.getFavoriteType ())),
+        Assert.isTrue (Boolean.TRUE.equals (FavoriteTypeEnums.contains (req.getFavoriteType ())),
                 new BizException ("收藏夹类型错误!"));
         
         // 新增收藏夹
