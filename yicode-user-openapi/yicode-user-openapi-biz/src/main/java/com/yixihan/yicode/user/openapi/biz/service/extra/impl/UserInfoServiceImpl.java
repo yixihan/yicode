@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.openapi.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.question.api.dto.response.label.LabelDtoResult;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyUserInfoDtoReq;
@@ -119,10 +120,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<String> delWebSiteList = oldWebSiteList.stream ()
                 .filter (o -> !websiteList.contains (o))
                 .collect(Collectors.toList());
-    
-        // 新增
-        websiteFeignClient.addUserWebsite (new ModifyUserWebsiteDtoReq (userId, addWebSiteList));
-        // 删除
-        websiteFeignClient.delUserWebsite (new ModifyUserWebsiteDtoReq (userId, delWebSiteList));
+        
+        if (CollUtil.isNotEmpty (addWebSiteList)) {
+            // 新增
+            websiteFeignClient.addUserWebsite (new ModifyUserWebsiteDtoReq (userId, addWebSiteList));
+        }
+        
+        if (CollUtil.isNotEmpty (delWebSiteList)) {
+            // 删除
+            websiteFeignClient.delUserWebsite (new ModifyUserWebsiteDtoReq (userId, delWebSiteList));
+        }
     }
 }
