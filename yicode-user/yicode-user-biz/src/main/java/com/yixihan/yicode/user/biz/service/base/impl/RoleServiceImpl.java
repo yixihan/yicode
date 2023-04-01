@@ -87,6 +87,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     
     @Override
     public List<RoleDtoResult> getRoleList(List<Long> roleIdList) {
+        if (CollUtil.isEmpty (roleIdList)) {
+            return Collections.emptyList ();
+        }
         List<Role> roleList = lambdaQuery ()
                 .in (CollUtil.isNotEmpty (roleIdList), Role::getRoleId, roleIdList)
                 .list ();
