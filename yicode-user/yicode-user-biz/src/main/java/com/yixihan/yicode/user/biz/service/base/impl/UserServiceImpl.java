@@ -238,7 +238,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User::getUserEmail, null)
                 .set (User::getVersion, version + 1)
                 .eq (User::getUserId, userId)
-                .eq (User::getVersion, version + 1)
+                .eq (User::getVersion, version)
                 .update ();
     
         // 更新邮箱
@@ -261,7 +261,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set (User::getUserMobile, null)
                 .set (User::getVersion, version + 1)
                 .eq (User::getUserId, userId)
-                .eq (User::getVersion, version + 1)
+                .eq (User::getVersion, version)
                 .update ();
     
         // 更新手机号
