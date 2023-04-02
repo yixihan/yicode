@@ -233,11 +233,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     
     @Override
     public void unbindEmail(Long userId) {
-        User user = BeanUtil.toBean (getUserById (userId), User.class);
-        user.setUserEmail (null);
+        Integer version = getUserById (userId).getVersion ();
+        boolean modify = lambdaUpdate ()
+                .set (User::getUserEmail, null)
+                .set (User::getVersion, version + 1)
+                .eq (User::getUserId, userId)
+                .eq (User::getVersion, version + 1)
+                .update ();
     
         // 更新邮箱
-        Assert.isTrue (updateById (user), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        Assert.isTrue (modify, BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
@@ -251,11 +256,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     
     @Override
     public void unbindMobile(Long userId) {
-        User user = BeanUtil.toBean (getUserById (userId), User.class);
-        user.setUserMobile (null);
+        Integer version = getUserById (userId).getVersion ();
+        boolean modify = lambdaUpdate ()
+                .set (User::getUserMobile, null)
+                .set (User::getVersion, version + 1)
+                .eq (User::getUserId, userId)
+                .eq (User::getVersion, version + 1)
+                .update ();
     
         // 更新手机号
-        Assert.isTrue (updateById (user), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        Assert.isTrue (modify, BizCodeEnum.FAILED_TYPE_BUSINESS);
     }
     
     @Override
