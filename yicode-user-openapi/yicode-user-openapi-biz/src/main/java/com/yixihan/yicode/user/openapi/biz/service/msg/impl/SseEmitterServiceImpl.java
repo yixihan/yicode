@@ -87,6 +87,11 @@ public class SseEmitterServiceImpl implements SseEmitterService {
      */
     private void sendMsgToClientByClientId(Long userId, MessageDetailVO message) {
         SseEmitter sseEmitter = SSE_CACHE.get (userId);
+        
+        if (sseEmitter == null) {
+            log.info ("SseEmitterServiceImpl[sendMsgToClient] : 用户不在线, 取消推送消息");
+            return;
+        }
     
         SseEmitter.SseEventBuilder sendData = SseEmitter.event()
                 .id(SseEmitterConstant.TASK_RESULT)

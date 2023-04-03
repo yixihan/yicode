@@ -19,10 +19,10 @@ import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.MessageDetailDtoReq;
 import com.yixihan.yicode.user.api.dto.request.msg.ReadMessageDtoReq;
-import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
 import com.yixihan.yicode.user.api.dto.response.msg.MessageDetailDtoResult;
 import com.yixihan.yicode.user.openapi.api.vo.request.msg.AddMessageReq;
 import com.yixihan.yicode.user.openapi.api.vo.request.msg.ReadMessageReq;
+import com.yixihan.yicode.user.openapi.api.vo.response.base.UserDetailInfoVO;
 import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
 import com.yixihan.yicode.user.openapi.biz.feign.message.MessageFeignClient;
 import com.yixihan.yicode.user.openapi.biz.feign.user.msg.UserMsgFeignClient;
@@ -68,18 +68,19 @@ public class UserMsgServiceImpl implements UserMsgService {
         }
         
         // 获取用户信息
-        UserDtoResult user = userService.getUser ();
+        UserDetailInfoVO user = userService.getUserDetailInfo ();
         
         // 填充消息
         String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
-        String message = StrUtil.format (template, user.getUserName ());
+        String message = StrUtil.format (template, user.getUser ().getUserName ());
         
         
         // 保存消息
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
         dtoReq.setMsg (message);
-        dtoReq.setSendUserId (user.getUserId ());
-        dtoReq.setSendUserName (user.getUserName ());
+        dtoReq.setSendUserId (user.getUser ().getUserId ());
+        dtoReq.setSendUserName (user.getUser ().getUserName ());
+        dtoReq.setSendUserAvatar (user.getUserInfo ().getUserAvatar ());
         MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
         
         // 发送消息

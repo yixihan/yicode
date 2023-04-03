@@ -30,6 +30,9 @@ public class MessageDetailDtoResult {
     @ApiModelProperty(value = "发送者用户名")
     private String sendUserName;
     
+    @ApiModelProperty(value = "发送者用户头像")
+    private String sendUserAvatar;
+    
     @ApiModelProperty(value = "接收者 id")
     private Long receiveUseId;
     

@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.biz.service.message.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -14,7 +15,7 @@ import com.yixihan.yicode.question.openapi.biz.feign.user.msg.UserMsgFeignClient
 import com.yixihan.yicode.question.openapi.biz.service.message.UserMsgService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.msg.AddMessageDtoReq;
-import com.yixihan.yicode.user.api.dto.response.base.UserDtoResult;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import com.yixihan.yicode.user.api.dto.response.msg.MessageDetailDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -50,7 +51,7 @@ public class UserMsgServiceImpl implements UserMsgService {
                 o.getType ().equals (req.getMessageType ())));
         
         // 构建消息内容
-        UserDtoResult user = userService.getUser ();
+        UserCommonDtoResult user = userService.getUserCommonInfo (CollUtil.toList (userService.getUserId ())).get (0);
         AddMessageDtoReq dtoReq = BeanUtil.toBean (req, AddMessageDtoReq.class);
     
         String template = userMsgFeignClient.getMessageTemplate (req.getMessageType ()).getResult ();
@@ -60,6 +61,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setMsg (message);
         dtoReq.setSendUserId (user.getUserId ());
         dtoReq.setSendUserName (user.getUserName ());
+        dtoReq.setSendUserAvatar (user.getUserAvatar ());
         
         // 保存消息
         MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();

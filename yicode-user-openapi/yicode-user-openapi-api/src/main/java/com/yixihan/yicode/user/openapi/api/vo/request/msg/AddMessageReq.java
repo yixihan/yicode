@@ -24,7 +24,7 @@ public class AddMessageReq {
     @ApiModelProperty(value = "消息类型")
     private String messageType;
     
-    @ApiModelProperty(value = "c")
+    @ApiModelProperty(value = "接收者用户 id")
     private Long receiveUseId;
     
 }
