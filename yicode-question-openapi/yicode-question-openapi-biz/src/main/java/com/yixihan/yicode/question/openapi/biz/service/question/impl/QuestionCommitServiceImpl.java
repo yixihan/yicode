@@ -138,9 +138,11 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
     public List<CommitRecordVO> codeCommitCount(String month, Long userId) {
         userId = userId == null ? userService.getUserId () : userId;
         // 设置 endDate & startDate
-        Date endDate = StrUtil.isBlank (month) ?
-                DateUtil.endOfDay (new Date ()) :
-                DateUtil.endOfMonth (DateUtil.parse (month, "yyyy-MM"));
+        Date nowTime = new Date ();
+        Date endDate = StrUtil.isNotBlank (month) &&
+                DateUtil.isSameMonth (nowTime, DateUtil.parse (month, "yyyy-MM")) ?
+                DateUtil.endOfMonth (DateUtil.parse (month, "yyyy-MM")) :
+                DateUtil.endOfDay (nowTime);
         
         Date startDate = DateUtil.beginOfMonth (endDate);
         
