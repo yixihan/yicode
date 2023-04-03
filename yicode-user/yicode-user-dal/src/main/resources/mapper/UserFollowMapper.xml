@@ -39,10 +39,10 @@
                                                on b.del_flag = 0 and a.user_id = b.follow_user_id and
                                                   a.follow_user_id = b.user_id
                             where a.`del_flag` = 0
-                              and a.`follow_user_id` = #{params.userId}
+                              and a.`follow_user_id` = ${params.userId}
                               and b.`user_id` is not null
                             group by a.user_id) as b on a.user_id = b.mutual
         where `del_flag` = 0
-          and `follow_user_id` = #{params.userId}
+          and `follow_user_id` = ${params.userId}
     </select>
 </mapper>
