@@ -24,7 +24,4 @@ public interface UserFollowMapper extends BaseMapper<UserFollow> {
     
     Page<FollowDtoResult> getFanList(@Param ("params") FollowQueryDtoReq params,
                                      @Param ("page")Page<FollowDtoResult> page);
-    
-    
-
 }
