@@ -39,6 +39,9 @@ public class FollowVO {
     @ApiModelProperty(value = "关注人用户头像")
     private String followUserAvatar;
     
+    @ApiModelProperty(value = "是否互关")
+    private Boolean flag;
+    
     @ApiModelProperty(value = "关注时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;

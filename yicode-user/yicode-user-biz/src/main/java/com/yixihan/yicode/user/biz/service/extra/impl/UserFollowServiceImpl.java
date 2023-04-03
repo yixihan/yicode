@@ -65,10 +65,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
     @Override
     public PageDtoResult<FollowDtoResult> getFollowList(FollowQueryDtoReq dtoReq) {
-        Page<UserFollow> values = lambdaQuery ()
-                .eq (UserFollow::getUserId, dtoReq.getUserId ())
-                .orderByDesc (UserFollow::getCreateTime)
-                .page (PageUtil.toPage (dtoReq));
+        Page<FollowDtoResult> values = baseMapper.getFollowList (dtoReq, PageUtil.toPage (dtoReq));
     
         return setUserCommonInfo (values);
     }
@@ -82,10 +79,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     
     @Override
     public PageDtoResult<FollowDtoResult> getFanList(FollowQueryDtoReq dtoReq) {
-        Page<UserFollow> values = lambdaQuery ()
-                .eq (UserFollow::getFollowUserId, dtoReq.getUserId ())
-                .orderByDesc (UserFollow::getCreateTime)
-                .page (PageUtil.toPage (dtoReq));
+        Page<FollowDtoResult> values = baseMapper.getFanList (dtoReq, PageUtil.toPage (dtoReq));
     
         return setUserCommonInfo (values);
     }
@@ -96,7 +90,10 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
      * @param values Page values
      * @return PageDtoResult values
      */
-    private PageDtoResult<FollowDtoResult> setUserCommonInfo(Page<UserFollow> values) {
+    private PageDtoResult<FollowDtoResult> setUserCommonInfo(Page<FollowDtoResult> values) {
+        // 转为 PageDtoResult 格式
+        PageDtoResult<FollowDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (values);
+        
         // 获取用户 id 列表
         List<Long> userIdList = values.getRecords ()
                 .stream ()
@@ -111,12 +108,6 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                         UserCommonDtoResult::getUserId,
                         Function.identity (),
                         (key1, key2) -> key1));
-        
-        // 转为 PageDtoResult 格式
-        PageDtoResult<FollowDtoResult> pageDtoResult = PageUtil.pageToPageDtoResult (
-                values,
-                o -> BeanUtil.toBean (o, FollowDtoResult.class)
-        );
         
         // 设置用户名+用户头像
         pageDtoResult.getRecords ().parallelStream ().forEach (item -> {

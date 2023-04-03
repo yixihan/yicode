@@ -2,4 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yixihan.yicode.user.dal.mapper.extra.UserFollowMapper">
 
+    <select id="getFollowList" resultType="com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult">
+        select a.`user_id`,
+               a.`follow_user_id`,
+               a.`create_time`,
+               a.`update_time`,
+               a.`version`,
+               a.`del_flag`,
+               if(b.mutual is not null, true, false) as flag
+        from `user_follow` as a
+                 left join (select a.follow_user_id as mutual
+                            from `user_follow` as a
+                                     left join `user_follow` as b
+                                               on b.del_flag = 0 and a.user_id = b.follow_user_id and
+                                                  a.follow_user_id = b.user_id
+                            where a.`del_flag` = 0
+                              and a.`user_id` = #{params.userId}
+                              and b.`user_id` is not null
+                            group by a.follow_user_id) as b on a.follow_user_id = b.mutual
+        where `del_flag` = 0
+          and `user_id` = #{params.userId}
+    </select>
+
+    <select id="getFanList" resultType="com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult">
+        select a.`user_id`,
+               a.`follow_user_id`,
+               a.`create_time`,
+               a.`update_time`,
+               a.`version`,
+               a.`del_flag`,
+               b.mutual is not null as flag
+        from `user_follow` as a
+                 left join (select a.user_id as mutual
+                            from `user_follow` as a
+                                     left join `user_follow` as b
+                                               on b.del_flag = 0 and a.user_id = b.follow_user_id and
+                                                  a.follow_user_id = b.user_id
+                            where a.`del_flag` = 0
+                              and a.`follow_user_id` = #{params.userId}
+                              and b.`user_id` is not null
+                            group by a.user_id) as b on a.user_id = b.mutual
+        where `del_flag` = 0
+          and `follow_user_id` = #{params.userId}
+    </select>
 </mapper>

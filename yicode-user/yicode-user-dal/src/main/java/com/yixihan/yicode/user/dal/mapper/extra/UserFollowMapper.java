@@ -1,8 +1,12 @@
 package com.yixihan.yicode.user.dal.mapper.extra;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixihan.yicode.user.api.dto.request.extra.FollowQueryDtoReq;
+import com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult;
 import com.yixihan.yicode.user.dal.pojo.extra.UserFollow;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,5 +18,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserFollowMapper extends BaseMapper<UserFollow> {
+    
+    Page<FollowDtoResult> getFollowList(@Param ("params") FollowQueryDtoReq dtoReq,
+                                        @Param ("page")Page<FollowDtoResult> page);
+    
+    Page<FollowDtoResult> getFanList(@Param ("params") FollowQueryDtoReq dtoReq,
+                                     @Param ("page")Page<FollowDtoResult> page);
+    
+    
 
 }
