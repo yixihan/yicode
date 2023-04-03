@@ -17,11 +17,11 @@
                                                on b.del_flag = 0 and a.user_id = b.follow_user_id and
                                                   a.follow_user_id = b.user_id
                             where a.`del_flag` = 0
-                              and a.`user_id` = #{params.userId}
+                              and a.`user_id` = ${params.userId}
                               and b.`user_id` is not null
                             group by a.follow_user_id) as b on a.follow_user_id = b.mutual
         where `del_flag` = 0
-          and `user_id` = #{params.userId}
+          and `user_id` = ${params.userId}
     </select>
 
     <select id="getFanList" resultType="com.yixihan.yicode.user.api.dto.response.extra.FollowDtoResult">

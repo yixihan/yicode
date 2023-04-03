@@ -19,10 +19,10 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserFollowMapper extends BaseMapper<UserFollow> {
     
-    Page<FollowDtoResult> getFollowList(@Param ("params") FollowQueryDtoReq dtoReq,
+    Page<FollowDtoResult> getFollowList(@Param ("params") FollowQueryDtoReq params,
                                         @Param ("page")Page<FollowDtoResult> page);
     
-    Page<FollowDtoResult> getFanList(@Param ("params") FollowQueryDtoReq dtoReq,
+    Page<FollowDtoResult> getFanList(@Param ("params") FollowQueryDtoReq params,
                                      @Param ("page")Page<FollowDtoResult> page);
     
     
