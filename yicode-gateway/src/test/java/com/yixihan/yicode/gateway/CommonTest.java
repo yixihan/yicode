@@ -1,6 +1,5 @@
 package com.yixihan.yicode.gateway;
 
-import cn.hutool.core.lang.Assert;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;

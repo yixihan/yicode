@@ -61,11 +61,11 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setMsg (message);
         dtoReq.setSendUserId (user.getUserId ());
         dtoReq.setSendUserName (user.getUserName ());
-        dtoReq.setSendUserAvatar (user.getUserAvatar ());
         
         // 保存消息
         MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
-    
+        dtoResult.setSendUserAvatar (user.getUserAvatar ());
+        
         // 保存成功, 发送消息给用户
         sendMessage (JSONUtil.toJsonStr (dtoResult));
     }

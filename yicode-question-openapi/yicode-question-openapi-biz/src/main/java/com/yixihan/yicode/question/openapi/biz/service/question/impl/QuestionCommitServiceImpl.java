@@ -140,7 +140,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         // 设置 endDate & startDate
         Date nowTime = new Date ();
         Date endDate = StrUtil.isNotBlank (month) &&
-                DateUtil.isSameMonth (nowTime, DateUtil.parse (month, "yyyy-MM")) ?
+                !DateUtil.isSameMonth (nowTime, DateUtil.parse (month, "yyyy-MM")) ?
                 DateUtil.endOfMonth (DateUtil.parse (month, "yyyy-MM")) :
                 DateUtil.endOfDay (nowTime);
         

@@ -80,8 +80,8 @@ public class UserMsgServiceImpl implements UserMsgService {
         dtoReq.setMsg (message);
         dtoReq.setSendUserId (user.getUser ().getUserId ());
         dtoReq.setSendUserName (user.getUser ().getUserName ());
-        dtoReq.setSendUserAvatar (user.getUserInfo ().getUserAvatar ());
         MessageDetailDtoResult dtoResult = userMsgFeignClient.addMessage (dtoReq).getResult ();
+        dtoResult.setSendUserAvatar (user.getUserInfo ().getUserAvatar ());
         
         // 发送消息
         sendMessage (JSONUtil.toJsonStr (dtoResult));
