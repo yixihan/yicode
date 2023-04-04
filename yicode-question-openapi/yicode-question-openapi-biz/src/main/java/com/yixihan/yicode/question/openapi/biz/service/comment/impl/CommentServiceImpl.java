@@ -1,6 +1,7 @@
 package com.yixihan.yicode.question.openapi.biz.service.comment.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
@@ -242,7 +243,7 @@ public class CommentServiceImpl implements CommentService {
                 
         );
         
-        if (CollectionUtil.isEmpty (pageVO.getRecords ())) {
+        if (CollUtil.isEmpty (pageVO.getRecords ())) {
             return pageVO;
         }
         
@@ -252,8 +253,13 @@ public class CommentServiceImpl implements CommentService {
                 .collect (Collectors.toList ());
         userIdList.addAll (pageVO.getRecords ().stream ()
                 .map (RootCommentDetailVO::getSonCommentDetailList)
-                .flatMap (o -> o.stream ()
-                        .flatMap (item -> Stream.of (item.getUserId (), item.getReplyUserId ())))
+                .flatMap (o -> {
+                    if (CollUtil.isNotEmpty (o)) {
+                        return o.stream ()
+                                .flatMap (item -> Stream.of (item.getUserId (), item.getReplyUserId ()));
+                    }
+                    return null;
+                })
                 .collect(Collectors.toList()));
         Map<Long, UserCommonDtoResult> commonInfoMap = userService.getUserCommonInfo (userIdList).stream ()
                 .collect (Collectors.toMap (
@@ -292,7 +298,7 @@ public class CommentServiceImpl implements CommentService {
                 o -> BeanUtil.toBean (o, SonCommentDetailVO.class)
         );
     
-        if (CollectionUtil.isEmpty (pageVO.getRecords ())) {
+        if (CollUtil.isEmpty (pageVO.getRecords ())) {
             return pageVO;
         }
     
