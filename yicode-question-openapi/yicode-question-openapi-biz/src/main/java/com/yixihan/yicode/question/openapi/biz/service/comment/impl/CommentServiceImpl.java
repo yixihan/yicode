@@ -272,12 +272,14 @@ public class CommentServiceImpl implements CommentService {
             UserCommonDtoResult rootUser = commonInfoMap.get (root.getUserId ());
             root.setUserName (rootUser.getUserName ());
             root.setUserAvatar (rootUser.getUserAvatar ());
-            root.getSonCommentDetailList ().parallelStream ().forEach (son -> {
-                UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
-                son.setUserName (sunCommentUser.getUserName ());
-                UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
-                son.setReplyUserName (sunReplyUser.getUserName ());
-            });
+            if (CollUtil.isNotEmpty (root.getSonCommentDetailList ())) {
+                root.getSonCommentDetailList ().parallelStream ().forEach (son -> {
+                    UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
+                    son.setUserName (sunCommentUser.getUserName ());
+                    UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
+                    son.setReplyUserName (sunReplyUser.getUserName ());
+                });
+            }
         });
         return pageVO;
     }

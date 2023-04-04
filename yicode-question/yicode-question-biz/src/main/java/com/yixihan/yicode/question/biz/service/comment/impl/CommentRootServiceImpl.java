@@ -173,7 +173,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         
             // 设置父评论的子评论
             pageDtoResult.getRecords ().parallelStream ().forEach (o ->
-                    o.setSonCommentDetailList (sonCommentDetail.get (o.getRootId ())));
+                    o.setSonCommentDetailList (sonCommentDetail.getOrDefault (o.getRootId (), Collections.emptyList ())));
         }
         return pageDtoResult;
     }
