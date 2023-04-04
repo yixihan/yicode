@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * 添加子评论-req
+ * 搜索父评论-req
  *
  * @author yixihan
  * @date 2023/1/13 16:59
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("添加子评论-req")
+@ApiModel("搜索父评论-req")
 public class RootCommentDetailReq extends PageReq {
     
     @ApiModelProperty(value = "评论内容 id")
