@@ -113,7 +113,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     public Boolean verifyFavoriteType(VerifyFavoriteTypeDtoReq dtoReq) {
         return lambdaQuery ()
                 .eq (UserFavorite::getFavoriteId, dtoReq.getFavoriteId ())
-                .eq (UserFavorite::getFavoriteType, dtoReq.getFavoriteId ())
+                .eq (UserFavorite::getFavoriteType, dtoReq.getFavoriteType ())
                 .count () > 0;
     }
 }
