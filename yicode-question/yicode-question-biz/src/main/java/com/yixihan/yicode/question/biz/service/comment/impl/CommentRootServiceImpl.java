@@ -152,6 +152,8 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         Page<CommentRoot> page = lambdaQuery ()
                 .eq (CommentRoot::getAnswerType, dtoReq.getAnswerType ())
                 .eq (CommentRoot::getAnswerId, dtoReq.getAnswerId ())
+                .orderByDesc (CommentRoot::getLikeCount)
+                .orderByDesc (CommentRoot::getReplyCount)
                 .orderByDesc (CommentRoot::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         
@@ -183,7 +185,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         // 获取子评论, 以分页的形式
         Page<CommentReply> page = commentReplyService.lambdaQuery ()
                 .eq (CommentReply::getRootId, dtoReq.getRootId ())
-                .orderByDesc (CommentReply::getCreateTime)
+                .orderByAsc (CommentReply::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         
         return PageUtil.pageToPageDtoResult (
@@ -254,7 +256,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
         }
         return commentReplyService.lambdaQuery ()
                 .in (CommentReply::getRootId, rootCommentIdList)
-                .orderByDesc (CommentReply::getCreateTime)
+                .orderByAsc (CommentReply::getCreateTime)
                 .list ()
                 .stream()
                 .map (o -> BeanUtil.toBean (o, SonCommentDetailDtoResult.class))
