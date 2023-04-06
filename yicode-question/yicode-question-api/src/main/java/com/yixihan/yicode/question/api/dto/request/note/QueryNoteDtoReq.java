@@ -23,6 +23,9 @@ import java.util.List;
 @ApiModel("搜索题解-dtoReq")
 public class QueryNoteDtoReq extends PageDtoReq {
     
+    @ApiModelProperty(value = "问题 id")
+    private Long questionId;
+    
     @ApiModelProperty(value = "题解标题")
     private String noteName;
     

@@ -21,8 +21,9 @@
         </if>
         <where>
             and n.`del_flag` = 0
+            and n.`question_id` = #{params.questionId}
             <if test="params.noteName != null and params.noteName != ''">
-                and n.`note_name` like #{noteName}
+                and n.`note_name` like concat('%', #{noteName}, '%')
             </if>
             <if test="params.labelIdList != null and params.labelIdList.size () > 0">
                 <foreach collection="params.labelIdList" item="item"
