@@ -4,6 +4,7 @@ import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
 import com.yixihan.yicode.question.openapi.api.rest.question.QuestionCommitOpenApi;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.AddQuestionNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
@@ -47,6 +48,11 @@ public class QuestionCommitController implements QuestionCommitOpenApi {
     )
     public void commit(CodeReq req) {
         service.commit (req);
+    }
+    
+    @Override
+    public JsonResponse<QuestionAnswerVO> addQuestionAnswerNote(AddQuestionNoteReq req) {
+        return JsonResponse.ok (service.addQuestionAnswerNote (req));
     }
     
     @Override

@@ -2,10 +2,7 @@ package com.yixihan.yicode.question.biz.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
-import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.*;
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
@@ -38,6 +35,14 @@ public interface QuestionAnswerService extends IService<QuestionAnswer> {
      * @return {@link QuestionAnswerDtoResult}
      */
     QuestionAnswerDtoResult questionAnswerDetail(Long questionAnswerId);
+    
+    /**
+     * 备注问题提交记录
+     *
+     * @param dtoReq 请求参数
+     * @return {@link QuestionAnswerDtoResult}
+     */
+    QuestionAnswerDtoResult addQuestionAnswerNote(AddQuestionNoteDtoReq dtoReq);
     
     /**
      * 获取单个问题提交记录

@@ -11,12 +11,14 @@ import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageVOUtil;
 import com.yixihan.yicode.message.api.dto.request.MsgSendDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.AddQuestionNoteDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.AddQuestionNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
@@ -99,6 +101,17 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         dtoReq.setData (JSONUtil.toJsonStr (req));
         dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
         taskFeignClient.commit (dtoReq);
+    }
+    
+    @Override
+    public QuestionAnswerVO addQuestionAnswerNote(AddQuestionNoteReq req) {
+        // 构造请求 body
+        AddQuestionNoteDtoReq dtoReq = BeanUtil.toBean (req, AddQuestionNoteDtoReq.class);
+        
+        // 获取单个问题提交记录
+        QuestionAnswerDtoResult dtoResult = questionAnswerFeignClient.addQuestionAnswerNote (dtoReq).getResult ();
+        
+        return BeanUtil.toBean (dtoResult, QuestionAnswerVO.class);
     }
     
     @Override

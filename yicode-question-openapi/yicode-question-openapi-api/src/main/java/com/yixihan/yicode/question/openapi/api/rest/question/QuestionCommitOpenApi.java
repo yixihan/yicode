@@ -3,6 +3,7 @@ package com.yixihan.yicode.question.openapi.api.rest.question;
 
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.common.util.JsonResponse;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.AddQuestionNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
@@ -32,6 +33,10 @@ public interface QuestionCommitOpenApi {
     @ApiOperation("提交代码")
     @PostMapping(value = "/commit", produces = "application/json")
     void commit(@RequestBody CodeReq req);
+    
+    @ApiOperation("备注问题提交记录")
+    @PostMapping(value = "/add/note", produces = "application/json")
+    JsonResponse<QuestionAnswerVO> addQuestionAnswerNote(@RequestBody AddQuestionNoteReq req);
     
     @ApiOperation("获取单个问题提交记录")
     @PostMapping(value = "/result/question", produces = "application/json")

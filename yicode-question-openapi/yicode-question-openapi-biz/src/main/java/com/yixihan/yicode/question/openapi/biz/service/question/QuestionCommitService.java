@@ -2,6 +2,7 @@ package com.yixihan.yicode.question.openapi.biz.service.question;
 
 import com.yixihan.yicode.common.reset.vo.responce.PageVO;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
+import com.yixihan.yicode.question.openapi.api.vo.request.question.AddQuestionNoteReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.CodeReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.QuestionAnswerReq;
 import com.yixihan.yicode.question.openapi.api.vo.request.question.UserQuestionAnswerReq;
@@ -33,6 +34,13 @@ public interface QuestionCommitService {
      */
     void commit(CodeReq req);
     
+    /**
+     * 备注问题提交记录
+     *
+     * @param req 请求参数
+     * @return {@link QuestionAnswerVO}
+     */
+    QuestionAnswerVO addQuestionAnswerNote(AddQuestionNoteReq req);
     
     /**
      * 获取单个问题提交记录

@@ -13,10 +13,7 @@ import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.Assert;
 import com.yixihan.yicode.common.util.PageUtil;
-import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.*;
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
@@ -79,6 +76,17 @@ public class QuestionAnswerServiceImpl extends ServiceImpl<QuestionAnswerMapper,
         QuestionAnswer questionAnswer = getById (questionAnswerId);
         Assert.notNull (questionAnswer, new BizException ("没有该提交记录"));
     
+        return BeanUtil.toBean (questionAnswer, QuestionAnswerDtoResult.class);
+    }
+    
+    @Override
+    public QuestionAnswerDtoResult addQuestionAnswerNote(AddQuestionNoteDtoReq dtoReq) {
+        QuestionAnswer questionAnswer = getById (dtoReq.getId ());
+        questionAnswer.setAnswerNote (dtoReq.getAnswerNote ());
+        
+        // 更新
+        Assert.isTrue (updateById (questionAnswer), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        
         return BeanUtil.toBean (questionAnswer, QuestionAnswerDtoResult.class);
     }
     

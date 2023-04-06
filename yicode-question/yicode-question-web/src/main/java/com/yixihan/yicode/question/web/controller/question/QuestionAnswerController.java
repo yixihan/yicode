@@ -3,10 +3,7 @@ package com.yixihan.yicode.question.web.controller.question;
 
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.*;
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
@@ -41,6 +38,11 @@ public class QuestionAnswerController implements QuestionAnswerApi {
     @Override
     public ApiResult<QuestionAnswerDtoResult> questionAnswerDetail(Long questionAnswerId) {
         return ApiResult.create (service.questionAnswerDetail (questionAnswerId));
+    }
+    
+    @Override
+    public ApiResult<QuestionAnswerDtoResult> addQuestionAnswerNote(AddQuestionNoteDtoReq dtoReq) {
+        return ApiResult.create (service.addQuestionAnswerNote (dtoReq));
     }
     
     @Override

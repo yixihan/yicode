@@ -2,10 +2,7 @@ package com.yixihan.yicode.question.api.rest.question;
 
 import com.yixihan.yicode.common.reset.dto.responce.PageDtoResult;
 import com.yixihan.yicode.common.util.ApiResult;
-import com.yixihan.yicode.question.api.dto.request.question.AddQuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.CodeCommitCountDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.QuestionAnswerDtoReq;
-import com.yixihan.yicode.question.api.dto.request.question.UserQuestionAnswerDtoReq;
+import com.yixihan.yicode.question.api.dto.request.question.*;
 import com.yixihan.yicode.question.api.dto.response.question.CodeRateDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.CommitRecordDtoResult;
 import com.yixihan.yicode.question.api.dto.response.question.QuestionAnswerDtoResult;
@@ -34,6 +31,10 @@ public interface QuestionAnswerApi {
     @ApiOperation("获取问题答案详情")
     @PostMapping(value = "/detail", produces = "application/json")
     ApiResult<QuestionAnswerDtoResult> questionAnswerDetail (@RequestBody Long questionAnswerId);
+    
+    @ApiOperation("备注问题提交记录")
+    @PostMapping(value = "/add/note", produces = "application/json")
+    ApiResult<QuestionAnswerDtoResult> addQuestionAnswerNote (@RequestBody AddQuestionNoteDtoReq dtoReq);
     
     @ApiOperation("获取单个问题提交记录")
     @PostMapping(value = "/result/question", produces = "application/json")
