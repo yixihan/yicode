@@ -105,18 +105,24 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     
     @Override
     public PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req) {
-        UserDtoResult user = userService.getUser (req.getUserId ());
         FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
-        dtoReq.setUserId (req.getUserId () == null ? userService.getUserId () : req.getUserId ());
-
-        PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
-        dtoResult.getRecords ().parallelStream ().forEach (o -> o.setUserName (user.getUserName ()));
-        return PageVOUtil.pageDtoToPageVO (
-                dtoResult,
-                o -> BeanUtil.toBean (o, FavoriteVO.class)
-        );
+        return getFavorites(dtoReq);
     }
-    
+
+    @Override
+    public PageVO<FavoriteVO> getQuestionFavorites(FavoriteQueryReq req) {
+        FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
+        dtoReq.setFavoriteType(FavoriteTypeEnums.QUESTION.getType());
+        return getFavorites(dtoReq);
+    }
+
+    @Override
+    public PageVO<FavoriteVO> getNoteFavorites(FavoriteQueryReq req) {
+        FavoriteQueryDtoReq dtoReq = BeanUtil.toBean (req, FavoriteQueryDtoReq.class);
+        dtoReq.setFavoriteType(FavoriteTypeEnums.NOTE.getType());
+        return getFavorites(dtoReq);
+    }
+
     @Override
     public PageVO<CollectionVO> getCollections(CollectionQueryReq req) {
         CollectionQueryDtoReq dtoReq = BeanUtil.toBean (req, CollectionQueryDtoReq.class);
@@ -155,5 +161,23 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         dtoReq.setUserId (userService.getUserId ());
         
         collectionFeignClient.delCollection (dtoReq);
+    }
+
+    /**
+     * 通用方法 => 获取所有收藏夹
+     *
+     * @param dtoReq 请求参数
+     * @return {@link FavoriteVO}
+     */
+    private PageVO<FavoriteVO> getFavorites(FavoriteQueryDtoReq dtoReq) {
+        UserDtoResult user = userService.getUser (dtoReq.getUserId ());
+        dtoReq.setUserId (dtoReq.getUserId () == null ? userService.getUserId () : dtoReq.getUserId ());
+
+        PageDtoResult<FavoriteDtoResult> dtoResult = favoriteFeignClient.getFavorites (dtoReq).getResult ();
+        dtoResult.getRecords ().parallelStream ().forEach (o -> o.setUserName (user.getUserName ()));
+        return PageVOUtil.pageDtoToPageVO (
+                dtoResult,
+                o -> BeanUtil.toBean (o, FavoriteVO.class)
+        );
     }
 }

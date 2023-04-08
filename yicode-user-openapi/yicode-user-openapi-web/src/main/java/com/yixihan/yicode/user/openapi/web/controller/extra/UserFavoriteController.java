@@ -49,7 +49,17 @@ public class UserFavoriteController implements UserFavoriteOpenApi {
     public JsonResponse<PageVO<FavoriteVO>> getFavorites(FavoriteQueryReq req) {
         return JsonResponse.ok (service.getFavorites (req));
     }
-    
+
+    @Override
+    public JsonResponse<PageVO<FavoriteVO>> getQuestionFavorites(FavoriteQueryReq req) {
+        return JsonResponse.ok (service.getQuestionFavorites (req));
+    }
+
+    @Override
+    public JsonResponse<PageVO<FavoriteVO>> getNoteFavorites(FavoriteQueryReq req) {
+        return JsonResponse.ok (service.getNoteFavorites (req));
+    }
+
     @Override
     public JsonResponse<PageVO<CollectionVO>> getCollections(CollectionQueryReq req) {
         return JsonResponse.ok (service.getCollections (req));

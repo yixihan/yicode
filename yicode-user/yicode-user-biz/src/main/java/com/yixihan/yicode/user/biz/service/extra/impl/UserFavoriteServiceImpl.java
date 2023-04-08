@@ -1,6 +1,7 @@
 package com.yixihan.yicode.user.biz.service.extra.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
@@ -84,6 +85,7 @@ public class UserFavoriteServiceImpl extends ServiceImpl<UserFavoriteMapper, Use
     public PageDtoResult<FavoriteDtoResult> getFavorites(FavoriteQueryDtoReq dtoReq) {
         Page<UserFavorite> page = lambdaQuery ()
                 .eq (UserFavorite::getUserId, dtoReq.getUserId ())
+                .eq(StrUtil.isNotBlank(dtoReq.getFavoriteType()), UserFavorite::getFavoriteType, dtoReq.getFavoriteType())
                 .orderByDesc (UserFavorite::getCreateTime)
                 .page (PageUtil.toPage (dtoReq));
         

@@ -51,7 +51,23 @@ public interface UserFavoriteService {
      * @return {@link FavoriteVO}
      */
     PageVO<FavoriteVO> getFavorites(FavoriteQueryReq req);
-    
+
+    /**
+     * 获取用户问题收藏夹列表
+     *
+     * @param req 请求参数
+     * @return {@link FavoriteVO}
+     */
+    PageVO<FavoriteVO> getQuestionFavorites(FavoriteQueryReq req);
+
+    /**
+     * 获取用户题解收藏夹列表
+     *
+     * @param req 请求参数
+     * @return {@link FavoriteVO}
+     */
+    PageVO<FavoriteVO> getNoteFavorites(FavoriteQueryReq req);
+
     /**
      * 获取收藏夹内所有内容
      *
@@ -59,7 +75,7 @@ public interface UserFavoriteService {
      * @return {@link CollectionVO}
      */
     PageVO<CollectionVO> getCollections(CollectionQueryReq req);
-    
+
     /**
      * 取消收藏
      *

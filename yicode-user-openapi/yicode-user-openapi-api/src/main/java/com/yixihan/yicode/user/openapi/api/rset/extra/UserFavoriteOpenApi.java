@@ -38,6 +38,14 @@ public interface UserFavoriteOpenApi {
     @ApiOperation("获取所有收藏夹")
     @PostMapping(value = "/detail", produces = "application/json")
     JsonResponse<PageVO<FavoriteVO>> getFavorites (@RequestBody FavoriteQueryReq req);
+
+    @ApiOperation("获取所有问题收藏夹")
+    @PostMapping(value = "/detail/question", produces = "application/json")
+    JsonResponse<PageVO<FavoriteVO>> getQuestionFavorites (@RequestBody FavoriteQueryReq req);
+
+    @ApiOperation("获取所有题解收藏夹")
+    @PostMapping(value = "/detail/note", produces = "application/json")
+    JsonResponse<PageVO<FavoriteVO>> getNoteFavorites (@RequestBody FavoriteQueryReq req);
     
     @ApiOperation("获取收藏夹内容")
     @PostMapping(value = "/collection/detail", produces = "application/json")

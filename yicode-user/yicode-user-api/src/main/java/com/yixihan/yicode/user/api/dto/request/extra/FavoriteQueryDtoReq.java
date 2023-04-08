@@ -23,5 +23,8 @@ public class FavoriteQueryDtoReq extends PageDtoReq {
 
     @ApiModelProperty(value = "用户 id")
     private Long userId;
+
+    @ApiModelProperty(value = "收藏夹类型")
+    private String favoriteType;
 }
 
