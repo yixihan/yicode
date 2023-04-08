@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
@@ -28,10 +29,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote> implements LabelNoteService {
-    
+
     @Resource
     private LabelService labelService;
-    
+
     @Override
     @Transactional(rollbackFor = BizException.class)
     public List<LabelDtoResult>modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
@@ -51,20 +52,23 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);
 
-        List<LabelNote> labelNoteList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
-        
-        dtoReq.getLabelIdList ().forEach (item -> {
-            LabelNote labelNote = new LabelNote ();
-            labelNote.setNoteId (dtoReq.getNoteId ());
-            labelNote.setLabelId (item);
-            labelNoteList.add (labelNote);
-        });
-    
-        Assert.isTrue (saveBatch (labelNoteList), BizCodeEnum.FAILED_TYPE_BUSINESS);
-        
+        if (CollUtil.isNotEmpty(dtoReq.getLabelIdList())) {
+
+            List<LabelNote> labelNoteList = new ArrayList<>(dtoReq.getLabelIdList().size());
+
+            dtoReq.getLabelIdList().forEach(item -> {
+                LabelNote labelNote = new LabelNote();
+                labelNote.setNoteId(dtoReq.getNoteId());
+                labelNote.setLabelId(item);
+                labelNoteList.add(labelNote);
+            });
+
+            Assert.isTrue(saveBatch(labelNoteList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        }
         return noteLabelDetail (dtoReq.getNoteId ());
     }
-    
+
     @Override
     public List<LabelDtoResult> noteLabelDetail(Long noteId) {
         // 获取标签 id
@@ -76,10 +80,10 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
                 .stream ()
                 .map (LabelNote::getLabelId)
                 .collect (Collectors.toList ());
-                
+
         return labelService.labelDetail (labelIdList);
     }
-    
+
     @Override
     public List<LabelDtoResult> allNoteLabel(String labelName) {
         return baseMapper.allNoteLabel (labelName);

@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
@@ -50,17 +51,20 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);
-        List<LabelQuestion> labelQuestionList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
-        
-        dtoReq.getLabelIdList ().forEach (item -> {
-            LabelQuestion labelQuestion = new LabelQuestion ();
-            labelQuestion.setQuestionId (dtoReq.getQuestionId ());
-            labelQuestion.setLabelId (item);
-            labelQuestionList.add (labelQuestion);
-        });
-        
-        Assert.isTrue (saveBatch (labelQuestionList), BizCodeEnum.FAILED_TYPE_BUSINESS);
-        
+
+        if (CollUtil.isNotEmpty(dtoReq.getLabelIdList())) {
+            List<LabelQuestion> labelQuestionList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
+
+            dtoReq.getLabelIdList ().forEach (item -> {
+                LabelQuestion labelQuestion = new LabelQuestion ();
+                labelQuestion.setQuestionId (dtoReq.getQuestionId ());
+                labelQuestion.setLabelId (item);
+                labelQuestionList.add (labelQuestion);
+            });
+
+            Assert.isTrue (saveBatch (labelQuestionList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
+
         return questionLabelDetail (dtoReq.getQuestionId ());
     }
     
