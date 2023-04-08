@@ -198,7 +198,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     public void likeRootComment(LikeDtoReq dtoReq) {
         // 获取当前点赞数
         CommentRoot commentRoot = getById (dtoReq.getSourceId ());
-        commentRoot.setLikeCount (commentRoot.getLikeCount ());
+        commentRoot.setLikeCount (dtoReq.getLikeCount ());
     
         // 更新
         Assert.isTrue (updateById (commentRoot), BizCodeEnum.FAILED_TYPE_BUSINESS);
@@ -208,7 +208,7 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
     public void likeSonComment(LikeDtoReq dtoReq) {
         // 获取当前点赞数
         CommentReply commentReply = commentReplyService.getById (dtoReq.getSourceId ());
-        commentReply.setLikeCount (commentReply.getLikeCount ());
+        commentReply.setLikeCount (dtoReq.getLikeCount ());
     
         // 更新
         Assert.isTrue (commentReplyService.updateById (commentReply), BizCodeEnum.FAILED_TYPE_BUSINESS);
