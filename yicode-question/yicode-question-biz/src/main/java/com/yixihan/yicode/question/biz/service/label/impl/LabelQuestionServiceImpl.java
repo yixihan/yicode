@@ -47,7 +47,10 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
                 .stream()
                 .map(LabelQuestion::getId)
                 .collect(Collectors.toList());
-        Assert.isTrue (removeByIds (idList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        if (CollUtil.isNotEmpty(idList)) {
+            Assert.isTrue(removeByIds(idList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
     
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);

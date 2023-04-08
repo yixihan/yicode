@@ -47,7 +47,10 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
                 .stream()
                 .map(LabelNote::getId)
                 .collect(Collectors.toList());
-        Assert.isTrue (removeByIds (idList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        if (CollUtil.isNotEmpty(idList)) {
+            Assert.isTrue(removeByIds(idList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
 
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);
