@@ -35,6 +35,12 @@ public class NoteVO {
     
     @ApiModelProperty(value = "用户 id")
     private Long userId;
+
+    @ApiModelProperty(value = "用户 用户名")
+    private String userName;
+
+    @ApiModelProperty(value = "用户 头像")
+    private String userAvatar;
     
     @ApiModelProperty(value = "点赞数量")
     private Integer likeCount;

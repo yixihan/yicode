@@ -1,7 +1,7 @@
 package com.yixihan.yicode.question.openapi.biz.service.note.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
@@ -36,6 +36,7 @@ import com.yixihan.yicode.question.openapi.biz.service.note.NoteService;
 import com.yixihan.yicode.question.openapi.biz.service.user.UserService;
 import com.yixihan.yicode.user.api.dto.request.extra.ModifyCollectionDtoReq;
 import com.yixihan.yicode.user.api.dto.request.extra.VerifyFavoriteTypeDtoReq;
+import com.yixihan.yicode.user.api.dto.response.base.UserCommonDtoResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,7 @@ public class NoteServiceImpl implements NoteService {
         // 添加题解
         NoteDtoResult dtoResult = noteFeignClient.addNote (dtoReq).getResult ();
 
-        return BeanUtil.toBean (dtoResult, NoteVO.class);
+        return setUserCommonInfo(dtoResult);
     }
     
     @Override
@@ -113,14 +114,14 @@ public class NoteServiceImpl implements NoteService {
     
         // 修改题解
         NoteDtoResult dtoResult = noteFeignClient.modifyNote (dtoReq).getResult ();
-        
-        return BeanUtil.toBean (dtoResult, NoteVO.class);
+
+        return setUserCommonInfo(dtoResult);
     }
     
     @Override
     public void delNote(List<Long> noteIdList) {
         // 校验参数 (参数不为空)
-        Assert.isFalse (CollectionUtil.isEmpty (noteIdList));
+        Assert.isFalse (CollUtil.isEmpty (noteIdList));
     
         // 删除题解
         noteFeignClient.delNote (noteIdList);
@@ -219,7 +220,7 @@ public class NoteServiceImpl implements NoteService {
         
         // 添加题解标签
         List<LabelDtoResult> dtoResult = labelNoteFeignClient.modifyNoteLabel (dtoReq).getResult ();
-        
+
         return BeanUtil.copyToList (dtoResult, LabelVO.class);
     }
     
@@ -232,7 +233,7 @@ public class NoteServiceImpl implements NoteService {
         // 获取题解明细
         NoteDtoResult dtoResult = noteFeignClient.noteDetail (noteId).getResult ();
         
-        return BeanUtil.toBean (dtoResult, NoteVO.class);
+        return setUserCommonInfo(dtoResult);
     }
     
     @Override
@@ -243,10 +244,7 @@ public class NoteServiceImpl implements NoteService {
         // 搜索题解
         PageDtoResult<NoteDtoResult> dtoResult = noteFeignClient.queryNote (dtoReq).getResult ();
         
-        return PageVOUtil.pageDtoToPageVO (
-                dtoResult,
-                o -> BeanUtil.toBean (o, NoteVO.class)
-        );
+        return PageVOUtil.pageDtoToPageVO (dtoResult, this::setUserCommonInfo);
     }
     
     /**
@@ -263,5 +261,15 @@ public class NoteServiceImpl implements NoteService {
         messageReq.setSourceId (sourceId);
         messageReq.setReceiveUseId (userId);
         msgService.addMessage (messageReq);
+    }
+
+    private NoteVO setUserCommonInfo (NoteDtoResult dtoResult) {
+        UserCommonDtoResult commonInfo = userService.getUserCommonInfo(CollUtil.newArrayList(dtoResult.getUserId())).get(0);
+        NoteVO vo = BeanUtil.toBean(dtoResult, NoteVO.class);
+
+        vo.setUserName(commonInfo.getUserName());
+        vo.setUserAvatar(commonInfo.getUserAvatar());
+
+        return vo;
     }
 }
