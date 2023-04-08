@@ -318,10 +318,10 @@ public class CommentServiceImpl implements CommentService {
         
         // 设置用户名, 头像等信息
         pageVO.getRecords ().parallelStream ().forEach (son -> {
-            UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
+            UserCommonDtoResult sunCommentUser = commonInfoMap.getOrDefault (son.getUserId (), new UserCommonDtoResult());
             son.setUserName (sunCommentUser.getUserName ());
             son.setUserAvatar (sunCommentUser.getUserAvatar ());
-            UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
+            UserCommonDtoResult sunReplyUser = commonInfoMap.getOrDefault (son.getReplyUserId(), new UserCommonDtoResult());
             son.setReplyUserName (sunReplyUser.getUserName ());
             son.setReplyUserAvatar (sunReplyUser.getUserAvatar ());
         });
