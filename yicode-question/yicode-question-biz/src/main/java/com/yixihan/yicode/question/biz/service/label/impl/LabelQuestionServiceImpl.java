@@ -37,6 +37,10 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     public List<LabelDtoResult> modifyQuestionLabel(ModifyLabelQuestionDtoReq dtoReq) {
         // 新建未有标签
         List<Long> newLabelIdList = labelService.addLabelBatch (dtoReq.getLabelNameList ());
+
+        // 删除已有标签
+        List<Long> labelIdList = questionLableIdList(dtoReq.getQuestionId());
+        Assert.isTrue (removeByIds (labelIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
     
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);
@@ -57,13 +61,7 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     @Override
     public List<LabelDtoResult> questionLabelDetail(Long questionId) {
         // 获取标签 id
-        List<Long> labelIdList = lambdaQuery ()
-                .eq (LabelQuestion::getQuestionId, questionId)
-                .orderByDesc (LabelQuestion::getCreateTime)
-                .list ()
-                .stream ()
-                .map (LabelQuestion::getLabelId)
-                .collect (Collectors.toList ());
+        List<Long> labelIdList = questionLableIdList (questionId);
     
         return labelService.labelDetail (labelIdList);
     }
@@ -71,5 +69,21 @@ public class LabelQuestionServiceImpl extends ServiceImpl<LabelQuestionMapper, L
     @Override
     public List<LabelDtoResult> allQuestionLabel(String labelName) {
         return baseMapper.allQuestionLabel (labelName);
+    }
+
+    /**
+     * 获取问题标签 id 列表
+     *
+     * @param questionId 问题 id
+     * @return 问题标签 id
+     */
+    private List<Long> questionLableIdList(Long questionId) {
+        return lambdaQuery ()
+                .eq (LabelQuestion::getQuestionId, questionId)
+                .orderByDesc (LabelQuestion::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelQuestion::getLabelId)
+                .collect (Collectors.toList ());
     }
 }

@@ -34,12 +34,17 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     
     @Override
     @Transactional(rollbackFor = BizException.class)
-    public List<LabelDtoResult> modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
+    public List<LabelDtoResult>modifyNoteLabel(ModifyLabelNoteDtoReq dtoReq) {
         // 新建未有标签
         List<Long> newLabelIdList = labelService.addLabelBatch (dtoReq.getLabelNameList ());
-        
+
+        // 删除已有标签
+        List<Long> labelIdList = noteLableIdList(dtoReq.getNoteId());
+        Assert.isTrue (removeByIds (labelIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
         // 保存标签
         dtoReq.getLabelIdList ().addAll (newLabelIdList);
+
         List<LabelNote> labelNoteList = new ArrayList<> (dtoReq.getLabelIdList ().size ());
         
         dtoReq.getLabelIdList ().forEach (item -> {
@@ -57,13 +62,7 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     @Override
     public List<LabelDtoResult> noteLabelDetail(Long noteId) {
         // 获取标签 id
-        List<Long> labelIdList = lambdaQuery ()
-                .eq (LabelNote::getNoteId, noteId)
-                .orderByDesc (LabelNote::getCreateTime)
-                .list ()
-                .stream ()
-                .map (LabelNote::getLabelId)
-                .collect (Collectors.toList ());
+        List<Long> labelIdList = noteLableIdList(noteId);
                 
         return labelService.labelDetail (labelIdList);
     }
@@ -71,5 +70,21 @@ public class LabelNoteServiceImpl extends ServiceImpl<LabelNoteMapper, LabelNote
     @Override
     public List<LabelDtoResult> allNoteLabel(String labelName) {
         return baseMapper.allNoteLabel (labelName);
+    }
+
+    /**
+     * 获取题解标签 id 列表
+     *
+     * @param noteId 题解 id
+     * @return 题解标签 id
+     */
+    private List<Long> noteLableIdList(Long noteId) {
+        return lambdaQuery ()
+                .eq (LabelNote::getNoteId, noteId)
+                .orderByDesc (LabelNote::getCreateTime)
+                .list ()
+                .stream ()
+                .map (LabelNote::getLabelId)
+                .collect (Collectors.toList ());
     }
 }
