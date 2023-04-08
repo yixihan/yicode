@@ -34,13 +34,19 @@ public class SonCommentDetailVO {
     
     @ApiModelProperty(value = "评论者 用户名")
     private String userName;
+
+    @ApiModelProperty(value = "评论者 用户头像")
+    private String userAvatar;
     
     @ApiModelProperty(value = "回复用户 id")
     private Long replyUserId;
     
     @ApiModelProperty(value = "回复用户 用户名")
     private String replyUserName;
-    
+
+    @ApiModelProperty(value = "回复用户 用户头像")
+    private String replyUserAvatar;
+
     @ApiModelProperty(value = "评论内容")
     private String content;
     

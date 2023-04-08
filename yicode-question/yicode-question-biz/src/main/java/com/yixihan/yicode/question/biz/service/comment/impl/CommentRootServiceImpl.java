@@ -100,8 +100,11 @@ public class CommentRootServiceImpl extends ServiceImpl<CommentRootMapper, Comme
                 .stream ()
                 .map (SonCommentDetailDtoResult::getReplyId)
                 .collect(Collectors.toList());
-        // 删除子评论
-        Assert.isTrue (commentReplyService.removeByIds (sonCommentIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        if (CollUtil.isNotEmpty(sonCommentIdList)) {
+            // 删除子评论
+            Assert.isTrue(commentReplyService.removeByIds(sonCommentIdList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
     
     
         // 异步更新评论内容评论数

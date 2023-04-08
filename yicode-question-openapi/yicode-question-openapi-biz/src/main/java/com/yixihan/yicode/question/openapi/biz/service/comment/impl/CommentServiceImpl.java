@@ -2,7 +2,6 @@ package com.yixihan.yicode.question.openapi.biz.service.comment.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yixihan.yicode.common.enums.MsgTypeEnums;
 import com.yixihan.yicode.common.enums.question.AnswerTypeEnums;
@@ -319,8 +318,10 @@ public class CommentServiceImpl implements CommentService {
         pageVO.getRecords ().parallelStream ().forEach (son -> {
             UserCommonDtoResult sunCommentUser = commonInfoMap.get (son.getUserId ());
             son.setUserName (sunCommentUser.getUserName ());
+            son.setUserAvatar (sunCommentUser.getUserAvatar ());
             UserCommonDtoResult sunReplyUser = commonInfoMap.get (son.getReplyUserId ());
             son.setReplyUserName (sunReplyUser.getUserName ());
+            son.setReplyUserAvatar (sunReplyUser.getUserAvatar ());
         });
         return pageVO;
     }
