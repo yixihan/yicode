@@ -115,6 +115,12 @@ public class RunCodeService {
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
             log.error ("出现异常", e);
+            try {
+                channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
+            } catch (IOException ex) {
+                log.error ("出现异常", e);
+                throw new BizException(BizCodeEnum.CODE_RUN_ERR);
+            }
             throw new BizException (BizCodeEnum.CODE_RUN_ERR);
         }
     }
