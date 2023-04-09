@@ -2,6 +2,7 @@ package com.yixihan.yicode.user.openapi.biz.service.msg.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.constant.SseEmitterConstant;
+import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
 import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import com.yixihan.yicode.user.openapi.biz.service.msg.SseEmitterService;
@@ -47,6 +48,13 @@ public class SseEmitterServiceImpl implements SseEmitterService {
         SSE_CACHE.put(userId, sseEmitter);
         log.info ("sseCache : {}", SSE_CACHE);
         log.info("创建新的sse连接，当前用户：{}", userId);
+
+        try {
+            sseEmitter.send(SseEmitter.event().data("连接成功"));
+        } catch (IOException e) {
+            log.error("SseEmitterServiceImpl[createSseConnect] : 创建长链接异常, 用户 ID : {}", userId, e);
+            throw new BizException("创建连接异常！");
+        }
         return sseEmitter;
     }
     
