@@ -1,5 +1,6 @@
 package com.yixihan.yicode.question.biz.service.label.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yixihan.yicode.common.exception.BizCodeEnum;
 import com.yixihan.yicode.common.exception.BizException;
@@ -11,6 +12,7 @@ import com.yixihan.yicode.question.biz.service.label.LabelUserService;
 import com.yixihan.yicode.question.dal.mapper.label.LabelUserMapper;
 import com.yixihan.yicode.question.dal.pojo.label.LabelUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,14 +33,17 @@ public class LabelUserServiceImpl extends ServiceImpl<LabelUserMapper, LabelUser
     private LabelService labelService;
     
     @Override
+    @Transactional(rollbackFor = BizException.class)
     public List<LabelDtoResult> addUserLabel(ModifyLabelUserDtoReq dtoReq) {
         List<LabelUser> labelUserList = dtoReq.getLabelId ()
                 .stream ()
                 .map (labelId -> assembleLabelUser (dtoReq.getUserId (), labelId))
                 .collect(Collectors.toList());
-        
-        // 保存
-        Assert.isTrue (saveBatch (labelUserList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+
+        if (CollUtil.isNotEmpty(labelUserList)) {
+            // 保存
+            Assert.isTrue(saveBatch(labelUserList), BizCodeEnum.FAILED_TYPE_BUSINESS);
+        }
         
         return userLabelDetail (dtoReq.getUserId ());
     }

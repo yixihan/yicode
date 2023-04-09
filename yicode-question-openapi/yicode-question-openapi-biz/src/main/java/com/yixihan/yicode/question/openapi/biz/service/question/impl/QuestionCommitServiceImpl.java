@@ -96,6 +96,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
     
         // 发送到任务队列
+        req.setUserId(userId);
         MsgSendDtoReq dtoReq = new MsgSendDtoReq ();
         dtoReq.setData (JSONUtil.toJsonStr (req));
         dtoReq.setMessageId (String.valueOf (userId + System.currentTimeMillis ()));
