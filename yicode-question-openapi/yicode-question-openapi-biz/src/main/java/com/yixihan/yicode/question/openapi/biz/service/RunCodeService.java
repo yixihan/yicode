@@ -108,7 +108,7 @@ public class RunCodeService {
             
             // 运行代码
             CodeRunDtoResult result = codeRunFeignClient.runCode (dtoReq).getResult ();
-    
+            log.info("自测代码, 用户 id : {}, 运行结果 : {}", req.getUserId(), result);
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
             sseEmitterService.sendMsgToClient (vo);
@@ -147,7 +147,7 @@ public class RunCodeService {
     
             // 测评代码
             status = judgeCode (result, questionCase);
-            
+            log.info("提交代码, 用户 id : {}, 运行结果 : {}, 测评结果 : {}", req.getUserId(), result, status);
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
             vo.setStatus (status);
