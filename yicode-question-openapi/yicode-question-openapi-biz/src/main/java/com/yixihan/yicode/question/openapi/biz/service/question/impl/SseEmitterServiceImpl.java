@@ -69,7 +69,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     
     @Override
     public void sendMsgToClient(CodeRunVO result) {
-        Long userId = userService.getUserId ();
+        Long userId = result.getUserId();
         if (CollectionUtil.isEmpty(SSE_CACHE)) {
             return;
         }

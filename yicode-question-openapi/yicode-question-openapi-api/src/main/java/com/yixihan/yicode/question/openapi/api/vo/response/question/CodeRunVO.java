@@ -20,6 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 @ApiModel("代码运行-vo")
 public class CodeRunVO {
+
+    @ApiModelProperty(value = "用户 id")
+    private Long userId;
     
     @ApiModelProperty(value = "代码测评结果")
     CodeAnswerEnums status;
