@@ -111,6 +111,7 @@ public class RunCodeService {
             log.info("自测代码, 用户 id : {}, 运行结果 : {}", req.getUserId(), result);
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
+            vo.setUserId(req.getUserId());
             sseEmitterService.sendMsgToClient (vo);
             channel.basicAck (message.getMessageProperties ().getDeliveryTag (), false);
         } catch (Exception e) {
@@ -151,6 +152,7 @@ public class RunCodeService {
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
             vo.setStatus (status);
+            vo.setUserId(req.getUserId());
             sseEmitterService.sendMsgToClient (vo);
             
             // 保存到数据库
@@ -175,6 +177,7 @@ public class RunCodeService {
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
             vo.setStatus (status);
+            vo.setUserId(req.getUserId());
             sseEmitterService.sendMsgToClient (vo);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
@@ -190,6 +193,7 @@ public class RunCodeService {
             // 推送给前端
             CodeRunVO vo = BeanUtil.toBean (result, CodeRunVO.class);
             vo.setStatus (status);
+            vo.setUserId(req.getUserId());
             sseEmitterService.sendMsgToClient (vo);
             // 保存到数据库
             saveQuestionAnswer (req, result, status);
