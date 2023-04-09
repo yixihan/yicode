@@ -167,7 +167,7 @@ public class CodeRunService {
             String tmp;
             StringBuilder sb = new StringBuilder ();
             while ((tmp = reader.readLine ()) != null) {
-                sb.append (new String (tmp.getBytes ())).append ("\n");
+                sb.append (new String (tmp.getBytes ()));
             }
             
             if (modify != NumConstant.NUM_0) {

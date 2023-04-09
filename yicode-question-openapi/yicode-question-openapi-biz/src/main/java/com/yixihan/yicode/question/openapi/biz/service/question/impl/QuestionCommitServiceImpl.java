@@ -73,7 +73,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         Long userId = userService.getUserId ();
         String key = String.format (TEST_RUN_CODE_KEY, userId);
         Assert.isFalse (redisTemplate.hasKey (key), BizCodeEnum.CODE_FLOW_ERR);
-        redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
+        redisTemplate.opsForValue ().set (key, key, 5, TimeUnit.SECONDS);
         
         // 发送到任务队列
         req.setUserId(userId);
@@ -94,7 +94,7 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         Long userId = userService.getUserId ();
         String key = String.format (COMMIT_RUN_CODE_KEY, userId);
         Assert.isFalse (redisTemplate.hasKey (key), BizCodeEnum.CODE_FLOW_ERR);
-        redisTemplate.opsForValue ().set (key, key, 15, TimeUnit.SECONDS);
+        redisTemplate.opsForValue ().set (key, key, 5, TimeUnit.SECONDS);
     
         // 发送到任务队列
         req.setUserId(userId);
