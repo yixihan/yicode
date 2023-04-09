@@ -50,7 +50,7 @@ public class FeignConfig implements RequestInterceptor {
                 HttpServletRequest request = attributes.getRequest();
                 requestTemplate.header(HttpHeaders.AUTHORIZATION, request.getHeader(HttpHeaders.AUTHORIZATION));
             } catch (Exception e) {
-                log.info("定时任务介入，授权异常, {}", e.getMessage(), e);
+                log.info("定时任务介入，授权异常");
             }
 
         } else {
