@@ -2,7 +2,6 @@ package com.yixihan.yicode.run;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -83,6 +82,18 @@ class CustomTest {
         String questionCase = Base64.encode ("5\\nRenlaoshi123\\nYixihan123\\njiege\\nxiaoMa12\\nlaoBai");
         System.out.println (questionCase);
         System.out.println (Base64.decodeStr (questionCase));
+        Assertions.assertTrue (Boolean.TRUE);
+    }
+
+    @Test
+    void testHello () {
+        String code = Base64.encode("public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        System.out.println(\"hello world！\");\n" +
+                "    }\n" +
+                "}");
+
+        System.out.println(code);
         Assertions.assertTrue (Boolean.TRUE);
     }
 }

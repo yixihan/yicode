@@ -68,7 +68,6 @@ public class QuestionCommitServiceImpl implements QuestionCommitService {
         // 参数校验
         Assert.notNull (req.getQuestionId ());
         Assert.isFalse (StrUtil.isBlank (req.getCode ()));
-        Assert.isFalse (StrUtil.isBlank (req.getParam ()));
         
         // redis 限流
         Long userId = userService.getUserId ();
