@@ -142,10 +142,10 @@ public class RunCodeService {
             dtoReq.setCodeType (req.getType ());
             dtoReq.setParamList (questionCase.stream ()
                     .map (QuestionCaseDtoResult::getCaseParams).collect (Collectors.toList ()));
-            
+            log.info("提交代码, 形参 : {}", dtoReq.getParamList());
             // 运行代码
             result = codeRunFeignClient.runCode (dtoReq).getResult ();
-    
+            log.info("提交代码, 用户 id : {}, 运行结果 : {}", req.getUserId(), result);
             // 测评代码
             status = judgeCode (result, questionCase);
             log.info("提交代码, 用户 id : {}, 运行结果 : {}, 测评结果 : {}", req.getUserId(), result, status);
