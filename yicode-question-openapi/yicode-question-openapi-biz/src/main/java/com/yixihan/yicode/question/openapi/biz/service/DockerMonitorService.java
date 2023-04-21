@@ -47,6 +47,9 @@ public class DockerMonitorService {
     
     @Value ("${docker.network-mode}")
     private String networkMode;
+
+    @Value(("${docker.profiles}"))
+    private String profiles;
     
     /**
      * 容器 ID
@@ -177,6 +180,7 @@ public class DockerMonitorService {
                             .withName ("yicode-run-" + number)
                             // 主机配置
                             .withHostConfig (hostConfig)
+                            .withEnv("SPRING_PROFILES_ACTIVE=" + profiles)
                             // 运行时环境配置
                             .withEnv (env).exec ();
                     

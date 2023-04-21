@@ -23,13 +23,13 @@ public class SseEmitterController implements SseEmitterOpenApi {
     private SseEmitterService service;
     
     @Override
-    public SseEmitter connectSse() {
-        return service.connectSse ();
+    public SseEmitter connectSse(Long userId) {
+        return service.connectSse (userId);
     }
     
     @CrossOrigin
     @Override
-    public void closeSse() {
-        service.closeSse ();
+    public void closeSse(Long userId) {
+        service.closeSse (userId);
     }
 }

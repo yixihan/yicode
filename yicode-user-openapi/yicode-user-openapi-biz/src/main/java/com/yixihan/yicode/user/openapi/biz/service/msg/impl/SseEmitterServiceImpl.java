@@ -4,14 +4,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.yixihan.yicode.common.constant.SseEmitterConstant;
 import com.yixihan.yicode.common.exception.BizException;
 import com.yixihan.yicode.user.openapi.api.vo.response.msg.MessageDetailVO;
-import com.yixihan.yicode.user.openapi.biz.service.base.UserService;
 import com.yixihan.yicode.user.openapi.biz.service.msg.SseEmitterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -27,18 +25,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class SseEmitterServiceImpl implements SseEmitterService {
     
-    @Resource
-    private UserService userService;
-    
     /**
      * 容器, 保存连接, 用于输出返回
      */
     private static final Map<Long, SseEmitter> SSE_CACHE = new ConcurrentHashMap<> ();
     
     @Override
-    public SseEmitter connectSse() {
-        Long userId = userService.getUserId ();
-
+    public SseEmitter connectSse(Long userId) {
         // 设置超时时间, 0 表示不过期, 默认 30 秒, 超过时间未完成会抛出异常 : AsyncRequestTimeoutException
         SseEmitter sseEmitter = new SseEmitter(0L);
     
@@ -59,8 +52,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     }
     
     @Override
-    public void closeSse() {
-        Long userId = userService.getUserId ();
+    public void closeSse(Long userId) {
         SseEmitter sseEmitter = SSE_CACHE.get(userId);
         if (sseEmitter != null) {
             sseEmitter.complete();

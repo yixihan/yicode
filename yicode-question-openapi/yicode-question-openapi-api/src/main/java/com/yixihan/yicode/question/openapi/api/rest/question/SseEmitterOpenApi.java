@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
@@ -18,10 +19,10 @@ public interface SseEmitterOpenApi {
     
     @ApiOperation ("建立 sse 连接")
     @GetMapping(value = "/connect", produces = "text/event-stream")
-    SseEmitter connectSse();
+    SseEmitter connectSse(@RequestParam("userId") Long userId);
     
     @ApiOperation ("关闭 sse 连接")
     @GetMapping(value = "/close", produces = "application/json")
-    void closeSse();
+    void closeSse(@RequestParam("userId") Long userId);
     
 }
